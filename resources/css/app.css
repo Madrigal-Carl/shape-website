@@ -1,0 +1,167 @@
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../**/*.blade.php';
+@source '../**/*.js';
+
+* {
+  transition: none !important;
+}
+body,
+html {
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  /* color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424; */
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@theme {
+  --font-poppins: "Poppins", "sans-serif";
+  --breakpoint-3xl: 120rem;
+
+  /* Fonts Color */
+  --color-heading-dark: #3a3a3a;
+  --color-paragraph: #7b7676;
+
+  /* Colors */
+  --color-blue-button: #247bff;
+  --color-card: #f8f8f8;
+  --color-lime: #1ec515;
+  --color-yellowOrange: #ffb120;
+  --color-danger: #ed234f;
+  --color-active: #7adb37;
+
+  --color-avocado-100: oklch(0.99 0 0);
+  --color-avocado-200: oklch(0.98 0.04 113.22);
+  --color-avocado-300: oklch(0.94 0.11 115.03);
+  --color-avocado-400: oklch(0.92 0.19 114.08);
+  --color-avocado-500: oklch(0.84 0.18 117.33);
+  --color-avocado-600: oklch(0.53 0.12 118.34);
+  --ease-fluid: cubic-bezier(0.3, 0, 0, 1);
+  --ease-snappy: cubic-bezier(0.2, 0, 0, 1);
+  /* ... */
+}
+
+/* Prevent any transition during resizing/zooming */
+
+.material-symbols-rounded {
+  font-variation-settings: "FILL" 1, "wght" 400, "GRAD" 0, "opsz" 24;
+}
+
+.icon {
+  font-size: 28px;
+}
+
+.small-icons {
+  font-size: 0.8rem;
+}
+
+.inputs .small-icons {
+  font-size: 1rem;
+}
+
+.active-nav {
+  background-color: var(--color-blue-button);
+  color: white;
+}
+
+.playBtn {
+  font-size: 2rem;
+}
+
+.remove-icon {
+  font-size: 1rem;
+}
+
+/* Custom Scrollbar */
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+  padding: 2rem;
+  /* display: none; */
+}
+::-webkit-scrollbar-track {
+  background-color: rgba(221, 229, 236, 0.3);
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(205, 213, 219, 0.5);
+  border-radius: 2rem;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(155, 180, 201, 0.897);
+}
+
+.reward-sum::-webkit-scrollbar-track {
+  background-color: rgba(221, 229, 236, 0.15);
+}
+
+.reward-sum::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.4);
+}
+
+.reward-sum::-webkit-scrollbar-thumb:hover {
+  background-color: white;
+}
+
+.Addlesson::-webkit-scrollbar {
+  width: 0;
+}
+
+/* @media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+  a:hover {
+    color: #747bff;
+  }
+  button {
+    background-color: #f9f9f9;
+  }
+} */
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+.animate-fade-in {
+  animation: fade-in 0.25s ease-out;
+}
+
+#secondForm input[type="text"],
+#secondForm input[list],
+#secondForm select {
+  height: 40px;
+  padding: 0 12px;
+  border: none;
+  background-color: #f8f9fa; /* matches bg-card */
+  border-radius: 0.5rem;
+  font-size: 0.95rem;
+  font-family: inherit;
+  width: 100%;
+  box-sizing: border-box;
+}
+

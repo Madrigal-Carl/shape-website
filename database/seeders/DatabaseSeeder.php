@@ -1,0 +1,126 @@
+<?php
+
+namespace Database\Seeders;
+
+// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Admin;
+use App\Models\Instructor;
+use App\Models\Curriculum;
+use App\Models\Subject;
+use App\Models\CurriculumSubject;
+use App\Models\Student;
+use App\Models\Account;
+use App\Models\Guardian;
+use App\Models\Profile;
+use App\Models\Address;
+use App\Models\Lesson;
+use App\Models\Feed;
+use Illuminate\Database\Seeder;
+
+class DatabaseSeeder extends Seeder
+{
+    /**
+     * Seed the application's database.
+     */
+    public function run(): void
+    {
+        // 1. Create 3 Instructors
+        $instructors = Instructor::factory()->count(3)->create();
+
+        // 2. Create 3 Admins
+        $admins = Admin::factory()->count(3)->create();
+
+        // 3. Create Curriculums for each instructor
+        $curriculums = $instructors->map(function ($instructor) {
+            return Curriculum::factory()->count(2)->create(['instructor_id' => $instructor->id]);
+        })->flatten();
+
+        // 4. Create All Subjects
+        Subject::factory()->allSubjects();
+
+        // 5. Create CurriculumSubject links
+        $subjectIds = Subject::pluck('id')->toArray();
+
+        $curriculums->each(function ($curriculum) use ($subjectIds) {
+            // Pick a random subset of subjects, e.g., 5-8 subjects per curriculum
+            $randomSubjects = collect($subjectIds)->shuffle()->take(rand(5, 8));
+
+            foreach ($randomSubjects as $subjectId) {
+                CurriculumSubject::create([
+                    'curriculum_id' => $curriculum->id,
+                    'subject_id' => $subjectId,
+                ]);
+            }
+        });
+
+        // 6. Create 10 Students per curriculum
+        $students = $curriculums->map(function ($curriculum) {
+            return Student::factory()->count(10)->create(['curriculum_id' => $curriculum->id, 'instructor_id' => $curriculum->instructor_id]);
+        })->flatten();
+
+        // 7. Create Accounts
+        // Instructor accounts
+        $instructors->each(function ($instructor) {
+        Account::factory()->instructor($instructor)->create([
+            'username' => strtolower($instructor->first_name . $instructor->id),
+            'password' => 'password123',
+        ]);
+    });
+
+        // Admin accounts
+        $admins->each(function ($admin) {
+            Account::factory()->admin($admin)->create([
+                'username' => strtolower($admin->first_name . $admin->id),
+                'password' => 'password123',
+            ]);
+        });
+
+        // Student accounts
+        $students->each(function ($student) {
+            Account::factory()->student($student)->create([
+                'username' => strtolower($student->first_name . $student->id),
+                'password' => 'password123',
+            ]);
+        });
+
+        // 8. Create Guardians
+        $students->each(function ($student) {
+            Guardian::factory()->create(['student_id' => $student->id]);
+        });
+
+        // 9. Create Profiles
+        $students->each(function ($student) {
+            Profile::factory()->create(['student_id' => $student->id]);
+        });
+
+        // 10. Create Addresses
+        $students->each(function ($student) {
+            Address::factory()->student()->create(['owner_id' => $student->id, 'owner_type' => 'App\Models\Student']);
+        });
+
+        $instructors->each(function ($instructor) {
+            Address::factory()->instructor()->create(['owner_id' => $instructor->id, 'owner_type' => 'App\Models\Instructor']);
+        });
+
+        // 11. Create Lessons (2 per student per subject)
+        $subjects = Subject::all();
+        $students->each(function ($student) use ($subjects) {
+            // Pick 2 random subjects for this student
+            $randomSubjects = $subjects->shuffle()->take(2);
+
+            foreach ($randomSubjects as $subject) {
+                Lesson::factory()->create([
+                    'student_id' => $student->id,
+                    'subject_id' => $subject->id,
+                ]);
+            }
+        });
+
+        // 12. Create Feeds
+        $students->each(function ($student) {
+            Feed::factory()->create(['notifiable_id' => $student->id, 'group' => 'students']);
+        });
+
+        Feed::factory()->count(10)->create(); // general/teacher feeds
+    }
+}
