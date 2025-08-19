@@ -25,7 +25,7 @@ class AccountFactory extends Factory
     {
         return [
             'username' => $this->faker->unique()->userName,
-            'password' => Hash::make('password123'),
+            'password' => 'password123',
         ];
     }
 

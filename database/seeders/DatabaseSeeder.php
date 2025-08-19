@@ -3,19 +3,26 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use App\Models\Admin;
-use App\Models\Instructor;
-use App\Models\Curriculum;
-use App\Models\Subject;
-use App\Models\CurriculumSubject;
-use App\Models\Student;
-use App\Models\Account;
-use App\Models\Guardian;
-use App\Models\Profile;
-use App\Models\Address;
-use App\Models\Lesson;
+use App\Models\Log;
 use App\Models\Feed;
+use App\Models\Quiz;
+use App\Models\Admin;
+use App\Models\Video;
+use App\Models\Lesson;
+use App\Models\Option;
+use App\Models\Account;
+use App\Models\Address;
+use App\Models\Profile;
+use App\Models\Student;
+use App\Models\Subject;
+use App\Models\Activity;
+use App\Models\Guardian;
+use App\Models\Progress;
+use App\Models\Question;
+use App\Models\Curriculum;
+use App\Models\Instructor;
 use Illuminate\Database\Seeder;
+use App\Models\CurriculumSubject;
 
 class DatabaseSeeder extends Seeder
 {
@@ -105,13 +112,54 @@ class DatabaseSeeder extends Seeder
         // 11. Create Lessons (2 per student per subject)
         $subjects = Subject::all();
         $students->each(function ($student) use ($subjects) {
-            // Pick 2 random subjects for this student
             $randomSubjects = $subjects->shuffle()->take(2);
 
             foreach ($randomSubjects as $subject) {
-                Lesson::factory()->create([
+                $lesson = Lesson::factory()->create([
                     'student_id' => $student->id,
                     'subject_id' => $subject->id,
+                ]);
+
+                Video::factory()->create([
+                    'lesson_id' => $lesson->id,
+                ]);
+
+                $quiz = Quiz::factory()->create([
+                    'lesson_id' => $lesson->id,
+                ]);
+
+                $questions = Question::factory(3)->create([
+                    'quiz_id' => $quiz->id,
+                ]);
+
+                $questions->each(function ($question) {
+                    Option::factory(4)->create([
+                        'question_id' => $question->id,
+                    ]);
+                });
+
+                $activity = Activity::factory()->create([
+                    'lesson_id' => $lesson->id,
+                ]);
+
+                Log::factory()->create([
+                    'item_id' => $quiz->id,
+                    'item_type' => Quiz::class,
+                ]);
+
+                Progress::factory()->create([
+                    'item_id' => $quiz->id,
+                    'item_type' => Quiz::class,
+                ]);
+
+                Log::factory()->create([
+                    'item_id' => $activity->id,
+                    'item_type' => Activity::class,
+                ]);
+
+                Progress::factory()->create([
+                    'item_id' => $activity->id,
+                    'item_type' => Activity::class,
                 ]);
             }
         });

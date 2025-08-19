@@ -24,4 +24,19 @@ class Lesson extends Model
     {
         return $this->belongsTo(Student::class);
     }
+
+    public function videos()
+    {
+        return $this->hasMany(Video::class);
+    }
+
+    public function quizs()
+    {
+        return $this->hasMany(Quiz::class);
+    }
+
+    public function activities()
+    {
+        return $this->hasMany(Activity::class);
+    }
 }

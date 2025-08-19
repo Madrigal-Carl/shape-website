@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('last_name');
             $table->enum('sex', ['male', 'female'])->nullable();
             $table->date('birth_date');
-            $table->enum('status', ['active', 'inactive', 'graduated', 'dropped', 'transferred', 'dismissed'])->default('active');
+            $table->enum('status', ['active', 'inactive', 'graduated', 'dropped', 'transferred'])->default('active');
             $table->timestamps();
         });
     }

@@ -20,7 +20,7 @@ class Account extends Authenticatable
         'password',
     ];
 
-    protected function casts(): array
+    protected function casts()
     {
         return [
             'password' => 'hashed',
