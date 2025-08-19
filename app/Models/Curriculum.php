@@ -17,6 +17,10 @@ class Curriculum extends Model
         'status',
     ];
 
+    protected $casts = [
+        'specialization' => 'array',
+    ];
+
     public function students()
     {
         return $this->hasMany(Student::class);

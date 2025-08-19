@@ -64,8 +64,8 @@ class DatabaseSeeder extends Seeder
         Account::factory()->instructor($instructor)->create([
             'username' => strtolower($instructor->first_name . $instructor->id),
             'password' => 'password123',
-        ]);
-    });
+            ]);
+        });
 
         // Admin accounts
         $admins->each(function ($admin) {
@@ -118,9 +118,9 @@ class DatabaseSeeder extends Seeder
 
         // 12. Create Feeds
         $students->each(function ($student) {
-            Feed::factory()->create(['notifiable_id' => $student->id, 'group' => 'students']);
+            Feed::factory()->create(['notifiable_id' => $student->id, 'group' => 'student']);
         });
 
-        Feed::factory()->count(10)->create(); // general/teacher feeds
+        Feed::factory()->count(30)->create();
     }
 }

@@ -19,11 +19,11 @@ class FeedFactory extends Factory
     protected $model = Feed::class;
     public function definition(): array
     {
-        $student = $this->faker->boolean(70) ? Student::factory() : null;
+        $student = $this->faker->boolean(30) ? Student::factory() : null;
 
         return [
             'notifiable_id' => $student,
-            'group' => $student ? 'students' : $this->faker->randomElement(['general', 'teachers']),
+            'group' => $student ? 'student' : $this->faker->randomElement(['curriculum', 'lesson', 'award']),
             'title' => $this->faker->sentence(4),
             'message' => $this->faker->paragraph,
         ];

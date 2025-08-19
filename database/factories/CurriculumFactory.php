@@ -19,11 +19,17 @@ class CurriculumFactory extends Factory
     protected $model = Curriculum::class;
     public function definition(): array
     {
+        $specializations = [
+            'autism spectrum disorder',
+            'speech disorder',
+            'hearing impairment',
+        ];
+
         return [
             'instructor_id' => Instructor::factory(),
             'name' => $this->faker->sentence(3),
             'grade_level' => 'Kindergarten 1',
-            'specialization' => $this->faker->word,
+            'specialization' => $this->faker->randomElements($specializations, rand(1, 2)),
             'description' => $this->faker->paragraph,
             'status' => 'active',
         ];
