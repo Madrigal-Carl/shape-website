@@ -87,7 +87,6 @@
                                 <th class="px-4 pb-3 text-center font-semibold">
                                     Curriculum Name
                                 </th>
-                                <th class="px-4 pb-3 text-center font-semibold">Units</th>
                                 <th class="px-4 pb-3 text-center font-semibold">
                                     Specializzation
                                 </th>
@@ -105,7 +104,6 @@
                                     <!-- Your original cells -->
                                     <td class="px-4 py-3 text-center text-paragraph">{{ $curriculum->id }}</td>
                                     <td class="px-4 py-3 text-center text-paragraph">{{ $curriculum->name }}</td>
-                                    <td class="px-4 py-3 text-center text-paragraph">X</td>
                                     <td class="px-4 py-3 text-center text-paragraph">
                                         {{ collect($curriculum->specialization)->map(fn($s) => ucfirst(explode(' ', $s)[0]))->implode(', ') }}
                                     </td>
