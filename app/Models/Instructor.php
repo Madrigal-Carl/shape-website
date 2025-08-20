@@ -10,7 +10,7 @@ class Instructor extends Model
     use HasFactory;
     protected $fillable = [
         'license_number',
-        'image_src',
+        'path',
         'first_name',
         'middle_name',
         'last_name',

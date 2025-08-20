@@ -11,8 +11,9 @@ class Video extends Model
 
     protected $fillable = [
         'lesson_id',
-        'video_url',
-        'thumbnail_url',
+        'path',
+        'url',
+        'thumbnail',
     ];
 
     public function lesson()

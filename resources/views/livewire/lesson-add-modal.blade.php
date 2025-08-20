@@ -76,18 +76,11 @@
                             <h2 class="font-medium text-lg">Interactive Video Lessons</h2>
                             <div class="flex flex-col gap-2">
                                 <div class="flex items-center gap-2">
-                                    <div class="flex items-center justify-center gap-2 px-6 py-3 border-1 border-dashed rounded-lg w-full hover:text-blue-button"
+                                    <div class="flex items-center h-24 justify-center gap-2 px-6 py-3 border-1 border-dashed rounded-lg w-full hover:text-blue-button"
                                         id="dropzone">
                                         <!-- Image dropzone -->
                                         <h1 class="">Upload Video</h1>
                                         <span class="material-symbols-rounded">add_photo_alternate</span>
-                                        <input type="file" name="" id="" class="hidden" />
-                                    </div>
-                                    <div class="flex items-center justify-center gap-2 px-6 py-3 border-1 border-dashed rounded-lg w-full hover:text-blue-button"
-                                        id="dropzone">
-                                        <!-- Image dropzone -->
-                                        <h1 class="">Attach Link</h1>
-                                        <span class="material-symbols-rounded">link</span>
                                         <input type="file" name="" id="" class="hidden" />
                                     </div>
                                 </div>
@@ -226,123 +219,105 @@
                                 <textarea name="" id="" maxlength="200" placeholder="Description (Optional)"
                                     wire:model.live="quiz_description" class="placeholder-paragraph text-paragraph resize-none h-15 outline-none"></textarea>
                             </div>
+                            @foreach ($questions as $qIndex => $question)
+                                <div class="flex flex-col border-1 border-gray-300 p-5 rounded-2xl gap-4">
 
-                            <!-- Question Holder -->
-                            <div class="flex flex-col border-1 border-gray-300 p-5 rounded-2xl gap-4">
-                                <input type="text" placeholder="Question" wire:model.live="quiz_questions"
-                                    class="border-b-2 border-gray-400 px-3 py-1 bg-card placeholder-paragraph outline-none w-full" />
+                                    <!-- Question Input -->
+                                    <input type="text" placeholder="Question"
+                                        wire:model="questions.{{ $qIndex }}.question"
+                                        class="border-b-2 border-gray-400 px-3 py-1 bg-card placeholder-paragraph outline-none w-full" />
 
-                                <!-- Option Container -->
-                                <div class="flex flex-col">
-                                    <!-- Option Holder -->
-                                    <div class="flex items-center justify-between w-full p-2 rounded-lg">
-                                        <div class="flex items-center gap-4">
+                                    <!-- Option Container -->
+                                    <div class="flex flex-col">
+
+                                        @foreach ($question['options'] as $oIndex => $option)
+                                            <!-- Option Holder -->
                                             <div
-                                                class="w-5 h-5 border-1 border-gray-400 rounded-full p-0.5 flex items-center justify-center">
-                                                <span class="w-full h-full rounded-full bg-none"></span>
+                                                class="flex items-center justify-between w-full p-2 rounded-lg
+                                                    {{ $option['is_correct'] ? 'bg-[#CFF2D9]' : '' }}">
+
+                                                <div class="flex items-center gap-4 w-full">
+
+                                                    <!-- Circle (only this is clickable to set answer) -->
+                                                    <div wire:click="setCorrectAnswer({{ $qIndex }}, {{ $oIndex }})"
+                                                        class="w-5 h-5 border-1 rounded-full p-0.5 flex items-center justify-center cursor-pointer
+                                                            {{ $option['is_correct'] ? 'border-[#11BC3F]' : 'border-gray-400' }}">
+
+                                                        @if ($option['is_correct'])
+                                                            <span
+                                                                class="w-full h-full rounded-full bg-[#11BC3F]"></span>
+                                                        @endif
+                                                    </div>
+
+                                                    <!-- Option text -->
+                                                    <input type="text"
+                                                        wire:model="questions.{{ $qIndex }}.options.{{ $oIndex }}.text"
+                                                        placeholder="Option {{ $oIndex + 1 }}"
+                                                        class="placeholder-paragraph text-sm outline-none
+                                                            {{ $option['is_correct'] ? 'text-[#11BC3F] font-medium' : '' }}" />
+                                                </div>
+
+                                                <!-- Right side icon -->
+                                                @if ($option['is_correct'])
+                                                    <span class="material-symbols-rounded text-[#11BC3F]">check</span>
+                                                @else
+                                                    <span
+                                                        wire:click="removeOption({{ $qIndex }}, {{ $oIndex }})"
+                                                        class="material-symbols-rounded text-paragraph cursor-pointer hover:text-danger">
+                                                        close
+                                                    </span>
+                                                @endif
                                             </div>
-                                            <input type="text" placeholder="Option 1"
-                                                class="placeholder-paragraph text-sm outline-none" />
+                                            <!-- End of Option Holder -->
+                                        @endforeach
+
+
+
+                                        <!-- Add option -->
+                                        <div class="flex items-center justify-between w-full p-2 rounded-lg">
+                                            <div class="flex items-center gap-4">
+                                                <div
+                                                    class="w-5 h-5 border-1 border-gray-400 rounded-full p-0.5 flex items-center justify-center">
+                                                </div>
+                                                <button type="button" wire:click="addOption({{ $qIndex }})"
+                                                    class="text-blue-button outline-none text-sm">
+                                                    Add Option
+                                                </button>
+                                            </div>
                                         </div>
-                                        <span class="material-symbols-rounded text-paragraph">close</span>
-                                    </div>
-                                    <!--End of Option Holder -->
+                                        <!-- End of Add option -->
 
-                                    <!-- Add option -->
-                                    <div class="flex items-center justify-between w-full p-2 rounded-lg">
-                                        <div class="flex items-center gap-4">
-                                            <div
-                                                class="w-5 h-5 border-1 border-gray-400 rounded-full p-0.5 flex items-center justify-center">
-                                                <span class="w-full h-full rounded-full bg-none"></span>
-                                            </div>
-                                            <button type="text" class="text-blue-button outline-none text-sm">
-                                                Add Option
+                                        <div class="flex items-center justify-between pt-6">
+                                            <button
+                                                class="w-fit h-fit flex items-center justify-center gap-2 cursor-pointer">
+                                                <span
+                                                    class="material-symbols-rounded text-blue-button">assignment_turned_in</span>
+                                                <h1 class="text-blue-button">Answer Key</h1>
+                                                <p class="pl-3 text-paragraph text-sm">
+                                                    (<span>
+                                                        {{ collect($question['options'])->firstWhere('is_correct', true)['text'] ?? 'None' }}
+                                                    </span>)
+                                                </p>
                                             </button>
-                                        </div>
-                                    </div>
-                                    <!--End of Add option -->
-
-                                    <div class="flex items-center justify-between pt-6">
-                                        <button
-                                            class="w-fit h-fit flex items-center justify-center gap-2 cursor-pointer">
-                                            <span
-                                                class="material-symbols-rounded text-blue-button">assignment_turned_in</span>
-                                            <h1 class="text-blue-button">Answere Key</h1>
-                                            <p class="pl-3 text-paragraph text-sm">
-                                                (<span>0</span> points)
-                                            </p>
-                                        </button>
-                                        <button
-                                            class="w-fit h-fit cursor-pointer p-0 flex items-center justify-center text-paragraph hover:text-danger hover:scale-120">
-                                            <span class="material-symbols-rounded">delete</span>
-                                        </button>
-                                    </div>
-                                </div>
-                                <!--End 0f Option Container -->
-                            </div>
-                            <!--End Question Holder -->
-
-                            <!-- Answer Holder -->
-                            <div class="flex flex-col border-1 border-gray-300 p-5 rounded-2xl gap-4">
-                                <div
-                                    class="flex items-center justify-between gap-2 pb-3 mb-3 border-b-2 border-gray-400">
-                                    <div class="flex items-center gap-2">
-                                        <span
-                                            class="material-symbols-rounded text-blue-button">assignment_turned_in</span>
-                                        <h1>Choose Correct Answer:</h1>
-                                    </div>
-                                    <div class="w-fit flex items-center gap-2">
-                                        <input type="number" class="w-9 outline-none pl-1 border-b-1 border-gray-400"
-                                            placeholder="0" name="" id="" />
-                                        <p>points</p>
-                                    </div>
-                                </div>
-
-                                <!-- Answer Container -->
-                                <div class="flex flex-col">
-                                    <div class="w-full flex items-center justify-between mb-6">
-                                        <p>Question Here</p>
-                                    </div>
-                                    <!-- Selected Anwer-->
-                                    <div class="flex items-center justify-between w-full bg-[#CFF2D9] p-2 rounded-lg">
-                                        <div class="flex items-center gap-4">
-                                            <div
-                                                class="w-5 h-5 border-1 border-[#11BC3F] rounded-full p-0.5 flex items-center justify-center">
-                                                <span class="w-full h-full rounded-full bg-[#11BC3F]"></span>
+                                            <div class="flex items-center gap-6">
+                                                <div class="w-fit flex items-center gap-2">
+                                                    <input type="number"
+                                                        class="w-9 outline-none pl-1 border-b-1 border-gray-400"
+                                                        placeholder="0" name="" id="" />
+                                                    <p>points</p>
+                                                </div>
+                                                <button wire:click="removeQuestion({{ $qIndex }})"
+                                                    class="w-fit h-fit cursor-pointer p-0 flex items-center justify-center text-paragraph hover:text-danger hover:scale-120">
+                                                    <span class="material-symbols-rounded">delete</span>
+                                                </button>
                                             </div>
-                                            <p class="text-paragraph text-sm">Option 1</p>
                                         </div>
-                                        <span class="material-symbols-rounded text-[#11BC3F]">check</span>
                                     </div>
-                                    <!--End of Option Holder -->
-
-                                    <!-- Default unselected answer -->
-                                    <div class="flex items-center justify-between w-full p-2 rounded-lg">
-                                        <div class="flex items-center gap-4">
-                                            <div
-                                                class="w-5 h-5 border-1 border-gray-400 rounded-full p-0.5 flex items-center justify-center">
-                                                <span class="w-full h-full rounded-full bg-none"></span>
-                                            </div>
-                                            <p class="text-paragraph text-sm">Option 1</p>
-                                        </div>
-
-                                        <!-- Uncomment if this selected -->
-                                        <!-- <span class="material-symbols-rounded text-[#11BC3F]">check</span> -->
-                                    </div>
-                                    <!--End of Option Holder -->
-
-                                    <div
-                                        class="flex items-center justify-end mt-4 pt-5 w-full border-t-1 border-gray-300">
-                                        <button
-                                            class="flex w-fit items-center justify-center border-1 border-gray-300 py-2 px-3 rounded-2xl gap-2 self-center text-paragraph text-sm hover:border-blue-button hover:text-white hover:bg-blue-button hover:scale-110 cursor-pointer">
-                                            <p>Done</p>
-                                        </button>
-                                    </div>
+                                    <!-- End of Option Container -->
                                 </div>
-                                <!--End 0f Option Container -->
-                            </div>
+                            @endforeach
                             <!--End Question Holder -->
-                            <button
+                            <button wire:click="addQuestion"
                                 class="flex w-fit items-center justify-center border-1 border-gray-300 py-2 px-3 rounded-2xl gap-2 self-center text-paragraph text-sm hover:border-blue-button hover:text-white hover:bg-blue-button hover:scale-110 cursor-pointer">
                                 <span class="material-symbols-rounded">add_circle</span>
                                 <p>Add Question</p>

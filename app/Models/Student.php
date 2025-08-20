@@ -10,7 +10,7 @@ class Student extends Model
     use HasFactory;
     protected $fillable = [
         'instructor_id',
-        'image_src',
+        'path',
         'first_name',
         'middle_name',
         'last_name',

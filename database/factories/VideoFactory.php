@@ -21,8 +21,9 @@ class VideoFactory extends Factory
     {
         return [
             'lesson_id' => Lesson::factory(),
-            'video_url' => $this->faker->url(),
-            'thumbnail_url' => $this->faker->optional()->imageUrl(640, 480, 'education'),
+            'path' => null,
+            'url' => null,
+            'thumbnail' => $this->faker->imageUrl(640, 480, 'education'),
         ];
     }
 }

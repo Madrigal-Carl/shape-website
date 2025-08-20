@@ -22,7 +22,7 @@ class StudentFactory extends Factory
     {
         return [
             'instructor_id' => Instructor::factory(),
-            'image_src' => null,
+            'path' => null,
             'first_name' => $this->faker->firstName,
             'middle_name' => $this->faker->firstName,
             'last_name' => $this->faker->lastName,

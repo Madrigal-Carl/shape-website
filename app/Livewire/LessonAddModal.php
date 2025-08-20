@@ -25,7 +25,15 @@ class LessonAddModal extends Component
     public $selected_activities = [];
     public $quiz_name;
     public $quiz_description;
-    public $quiz_questions = [];
+    public $questions = [
+        [
+            'question' => '',
+            'options' => [
+                ['text' => '', 'is_correct' => false],
+                ['text' => '', 'is_correct' => false],
+            ],
+        ],
+    ];
 
 
     #[On('openModal')]
@@ -61,6 +69,65 @@ class LessonAddModal extends Component
         $this->selected_activities = array_values($this->selected_activities);
     }
 
+    public function addQuestion()
+    {
+        if (!empty($this->questions)) {
+            $lastQuestion = end($this->questions);
+
+            $hasQuestionText = trim($lastQuestion['question']) !== '';
+
+            $filledOptions = collect($lastQuestion['options'])
+                ->filter(fn($opt) => trim($opt['text']) !== '')
+                ->count();
+
+            $hasCorrectAnswer = collect($lastQuestion['options'])
+                ->contains(fn($opt) => $opt['is_correct'] === true);
+
+            if (!$hasQuestionText) {
+                return $this->dispatch('swal-toast', icon: 'error', title: 'Fill in the question field first.');
+            }
+
+            if ($filledOptions < 2) {
+                return $this->dispatch('swal-toast', icon: 'error', title: 'Add at least 2 options.');
+            }
+
+            if (!$hasCorrectAnswer) {
+                return $this->dispatch('swal-toast', icon: 'error', title: 'Please select a correct answer.');
+            }
+        }
+
+        $this->questions[] = [
+            'question' => '',
+            'options' => [
+                ['text' => '', 'is_correct' => false],
+                ['text' => '', 'is_correct' => false],
+            ],
+        ];
+    }
+
+    public function removeQuestion($index)
+    {
+        unset($this->questions[$index]);
+        $this->questions = array_values($this->questions);
+    }
+
+    public function addOption($qIndex)
+    {
+        $this->questions[$qIndex]['options'][] = ['text' => '', 'is_correct' => false];
+    }
+
+    public function removeOption($qIndex, $oIndex)
+    {
+        unset($this->questions[$qIndex]['options'][$oIndex]);
+        $this->questions[$qIndex]['options'] = array_values($this->questions[$qIndex]['options']);
+    }
+
+    public function setCorrectAnswer($qIndex, $oIndex)
+    {
+        foreach ($this->questions[$qIndex]['options'] as $key => $option) {
+            $this->questions[$qIndex]['options'][$key]['is_correct'] = ($key === $oIndex);
+        }
+    }
     public function mount()
     {
         $this->subjects = Subject::orderBy('name')->get();

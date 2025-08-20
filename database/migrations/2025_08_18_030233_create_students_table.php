@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('students', function (Blueprint $table) {
             $table->id();
             $table->foreignId('instructor_id')->nullable()->constrained()->onDelete('set null');
-            $table->string('image_src')->nullable();
+            $table->string('path')->nullable();
             $table->string('first_name');
             $table->string('middle_name');
             $table->string('last_name');

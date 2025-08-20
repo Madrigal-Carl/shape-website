@@ -26,7 +26,7 @@ class InstructorFactory extends Factory
 
         return [
             'license_number' => $this->faker->unique()->bothify('LIC-####'),
-            'image_src' => null,
+            'path' => null,
             'first_name' => $this->faker->firstName,
             'middle_name' => $this->faker->firstName,
             'last_name' => $this->faker->lastName,
