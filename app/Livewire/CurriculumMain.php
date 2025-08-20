@@ -12,6 +12,7 @@ class CurriculumMain extends Component
 {
     use WithPagination, WithoutUrlPagination;
     public $status = 'all';
+    public $search = '';
     public $listeners = ["refresh" => '$refresh'];
 
     public function openAddCurriculumModal()
@@ -35,6 +36,9 @@ class CurriculumMain extends Component
             ->where('instructor_id', Auth::id())
             ->when($this->status !== 'all', function ($query) {
                 $query->where('status', $this->status);
+            })
+            ->when(!empty($this->search), function ($query) {
+                $query->where('name', 'like', '%' . $this->search . '%');
             })
             ->orderByDesc('created_at')
             ->paginate(10);

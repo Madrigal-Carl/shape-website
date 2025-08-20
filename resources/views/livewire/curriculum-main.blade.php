@@ -49,7 +49,7 @@
             <h1 class="text-4xl font-medium">Curriculum List</h1>
             <div class="flex gap-4">
                 <div
-                class="flex items-center bg-white py-3 px-5 rounded-full shadow-2xl text-paragraph hover:bg-blue-button hover:text-white cursor-pointer">
+                    class="flex items-center bg-white py-3 px-5 rounded-full shadow-2xl text-paragraph hover:bg-blue-button hover:text-white cursor-pointer">
                     <select wire:change="$set('status', $event.target.value)" name="" id=""
                         class="w-25 outline-none">
                         <option value="pending" class="text-sm text-heading-dark" selected disabled>
@@ -67,9 +67,11 @@
                         <span class="material-symbols-rounded">search</span> -->
                 </div>
 
-                <div class="flex gap-2 items-center bg-white py-3 px-5 rounded-full shadow-2xl text-paragraph border-2 border-white hover:border-blue-button cursor-pointer">
+                <div
+                    class="flex gap-2 items-center bg-white py-3 px-5 rounded-full shadow-2xl text-paragraph border-2 border-white hover:border-blue-button cursor-pointer">
                     <span class="material-symbols-rounded">search</span>
-                    <input type="text" class="outline-none w-20 focus:w-60 placeholder-paragraph" placeholder="Search" >
+                    <input type="text" class="outline-none w-20 focus:w-60 placeholder-paragraph"
+                        wire:model.live="search" placeholder="Search">
                 </div>
             </div>
 
