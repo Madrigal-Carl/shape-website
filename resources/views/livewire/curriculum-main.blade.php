@@ -47,28 +47,36 @@
     <div class="flex flex-col gap-4 min-h-[20%]">
         <div class="side flex items-center justify-between gap-2">
             <h1 class="text-4xl font-medium">Curriculum List</h1>
-            <div
+            <div class="flex gap-4">
+                <div
                 class="flex items-center bg-white py-3 px-5 rounded-full shadow-2xl text-paragraph hover:bg-blue-button hover:text-white cursor-pointer">
-                <select wire:change="$set('status', $event.target.value)" name="" id=""
-                    class="w-25 outline-none">
-                    <option value="pending" class="text-sm text-heading-dark" selected disabled>
-                        Filter by
-                    </option>
-                    <option value="all" class="text-sm text-heading-dark">
-                        All
-                    </option>
-                    <option value="active" class="text-sm text-lime">Active</option>
-                    <option value="inactive" class="text-sm text-paragraph">
-                        Inactive
-                    </option>
-                </select>
-                <!-- <span class="material-symbols-rounded">more_horiz</span>
-                    <span class="material-symbols-rounded">search</span> -->
+                    <select wire:change="$set('status', $event.target.value)" name="" id=""
+                        class="w-25 outline-none">
+                        <option value="pending" class="text-sm text-heading-dark" selected disabled>
+                            Filter by
+                        </option>
+                        <option value="all" class="text-sm text-heading-dark">
+                            All
+                        </option>
+                        <option value="active" class="text-sm text-lime">Active</option>
+                        <option value="inactive" class="text-sm text-paragraph">
+                            Inactive
+                        </option>
+                    </select>
+                    <!-- <span class="material-symbols-rounded">more_horiz</span>
+                        <span class="material-symbols-rounded">search</span> -->
+                </div>
+
+                <div class="flex gap-2 items-center bg-white py-3 px-5 rounded-full shadow-2xl text-paragraph border-2 border-white hover:border-blue-button cursor-pointer">
+                    <span class="material-symbols-rounded">search</span>
+                    <input type="text" class="outline-none w-20 focus:w-60 placeholder-paragraph" placeholder="Search" >
+                </div>
             </div>
+
         </div>
 
-        <div class="flex flex-col items-center min-h-[20%] p-6 bg-white rounded-3xl">
-            <div class="flex flex-col overflow-y-scroll">
+        <div class="flex flex-col items-center min-h-[20%] p-6 bg-white rounded-3xl w-full">
+            <div class="flex flex-col overflow-y-scroll w-full">
                 <div class="flex flex-col bg-whitel rounded-3xl bg-white">
                     <table class="table-auto border-collapse border-0">
                         <thead class="sticky top-0 left-0 z-40 bg-white">
@@ -84,9 +92,6 @@
                                 <th class="px-4 pb-3 text-center font-semibold w-20">
                                     No. of Subjects
                                 </th>
-                                <th class="px-4 pb-3 text-center font-semibold w-20">
-                                    No. of Students
-                                </th>
                                 <th class="px-4 pb-3 text-center font-semibold">Status</th>
                                 <th class="px-4 pb-3 text-center font-semibold">Actions</th>
                             </tr>
@@ -96,15 +101,14 @@
                             @forelse ($curriculums as $curriculum)
                                 <tr>
                                     <!-- Your original cells -->
-                                    <td class="px-4 py-3 text-center">{{ $curriculum->id }}</td>
-                                    <td class="px-4 py-3 text-center">{{ $curriculum->name }}</td>
-                                    <td class="px-4 py-3 text-center">X</td>
-                                    <td class="px-4 py-3 text-center">
+                                    <td class="px-4 py-3 text-center text-paragraph">{{ $curriculum->id }}</td>
+                                    <td class="px-4 py-3 text-center text-paragraph">{{ $curriculum->name }}</td>
+                                    <td class="px-4 py-3 text-center text-paragraph">X</td>
+                                    <td class="px-4 py-3 text-center text-paragraph">
                                         {{ collect($curriculum->specialization)->map(fn($s) => ucfirst(explode(' ', $s)[0]))->implode(', ') }}
                                     </td>
-                                    <td class="px-4 py-3 text-center">
+                                    <td class="px-4 py-3 text-center text-paragraph">
                                         {{ $curriculum->subjects_count }}</td>
-                                    <td class="px-4 py-3 text-center">X</td>
                                     <td class="px-4 py-3 text-center">
                                         <div class="flex justify-center items-center">
                                             <div

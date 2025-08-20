@@ -47,23 +47,30 @@
     <div class="flex flex-col gap-4 min-h-[20%]">
         <div class="side flex items-center justify-between gap-2">
             <h1 class="text-4xl font-medium">Lesson List</h1>
-            <div
+            <div class="flex gap-4">
+                <div
                 class="flex items-center bg-white py-3 px-5 rounded-full shadow-2xl text-paragraph hover:bg-blue-button hover:text-white cursor-pointer">
-                <select wire:change="$set('status', $event.target.value)" name="" id=""
-                    class="w-25 outline-none">
-                    <option value="pending" class="text-sm text-heading-dark" selected disabled>
-                        Filter by
-                    </option>
-                    <option value="pending" class="text-sm text-heading-dark">
-                        All
-                    </option>
-                    <option value="pending" class="text-sm text-lime">Active</option>
-                    <option value="pending" class="text-sm text-paragraph">
-                        Inactive
-                    </option>
-                </select>
-                <!-- <span class="material-symbols-rounded">more_horiz</span>
-                    <span class="material-symbols-rounded">search</span> -->
+                    <select wire:change="$set('status', $event.target.value)" name="" id=""
+                        class="w-25 outline-none">
+                        <option value="pending" class="text-sm text-heading-dark" selected disabled>
+                            Filter by
+                        </option>
+                        <option value="all" class="text-sm text-heading-dark">
+                            All
+                        </option>
+                        <option value="active" class="text-sm text-lime">Active</option>
+                        <option value="inactive" class="text-sm text-paragraph">
+                            Inactive
+                        </option>
+                    </select>
+                    <!-- <span class="material-symbols-rounded">more_horiz</span>
+                        <span class="material-symbols-rounded">search</span> -->
+                </div>
+
+                <div class="flex gap-2 items-center bg-white py-3 px-5 rounded-full shadow-2xl text-paragraph border-2 border-white hover:border-blue-button cursor-pointer">
+                    <span class="material-symbols-rounded">search</span>
+                    <input type="text" class="outline-none w-20 focus:w-60 placeholder-paragraph" placeholder="Search" >
+                </div>
             </div>
         </div>
 
@@ -97,20 +104,20 @@
                         <tbody>
                             @forelse ($lessons as $lesson)
                                 <tr>
-                                    <td class="px-4 py-3 text-center">{{ $lesson->id }}</td>
-                                    <td class="px-4 py-3 text-center">{{ ucwords($lesson->title) }}</td>
-                                    <td class="px-4 py-3 text-center">
+                                    <td class="px-4 py-3 text-center text-paragraph">{{ $lesson->id }}</td>
+                                    <td class="px-4 py-3 text-center text-paragraph">{{ ucwords($lesson->title) }}</td>
+                                    <td class="px-4 py-3 text-center text-paragraph">
                                         @foreach ($lesson->subject->curriculums as $curriculum)
                                             {{ ucwords($curriculum->name) }}@if (!$loop->last)
                                                 ,
                                             @endif
                                         @endforeach
                                     </td>
-                                    <td class="px-4 py-3 text-center">{{ ucwords($lesson->subject->name) }}</td>
-                                    <td class="px-4 py-3 text-center">{{ $lesson->students_count }}</td>
-                                    <td class="px-4 py-3 text-center">{{ $lesson->videos_count }}</td>
-                                    <td class="px-4 py-3 text-center">{{ $lesson->activities_count }}</td>
-                                    <td class="px-4 py-3 text-center">{{ $lesson->quizzes_count }}</td>
+                                    <td class="px-4 py-3 text-center text-paragraph">{{ ucwords($lesson->subject->name) }}</td>
+                                    <td class="px-4 py-3 text-center text-paragraph">{{ $lesson->students_count }}</td>
+                                    <td class="px-4 py-3 text-center text-paragraph">{{ $lesson->videos_count }}</td>
+                                    <td class="px-4 py-3 text-center text-paragraph">{{ $lesson->activities_count }}</td>
+                                    <td class="px-4 py-3 text-center text-paragraph">{{ $lesson->quizzes_count }}</td>
                                     <td class="px-4 py-3 text-center">
                                         <div class="flex justify-center items-center">
                                             <div

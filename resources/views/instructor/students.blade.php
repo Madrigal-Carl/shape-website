@@ -79,11 +79,16 @@
                         </option>
                     </select>
                 </div>
+
+                <div class="flex gap-2 items-center bg-white py-3 px-5 rounded-full shadow-2xl text-paragraph border-2 border-white hover:border-blue-button cursor-pointer">
+                    <span class="material-symbols-rounded">search</span>
+                    <input type="text" class="outline-none w-20 focus:w-60 placeholder-paragraph" placeholder="Search" >
+                </div>
             </div>
         </div>
 
-        <div class="flex flex-col min-h-[20%] p-6 bg-white rounded-3xl">
-            <div class="flex flex-col overflow-y-scroll min-h-[20%]">
+        <div class="flex flex-col min-h-[20%] p-6 bg-white rounded-3xl w-full">
+            <div class="flex flex-col overflow-y-scroll min-h-[20%] w-full">
                 <div class="flex flex-col bg-whitel rounded-3xl bg-white">
                     <table class="table-auto border-separate relative">
                         <thead class="sticky top-0 left-0 z-40 bg-white">
@@ -109,12 +114,12 @@
 
                         <tbody>
                             <tr>
-                                <td class="px-4 py-3 text-center">01</td>
-                                <td class="px-4 py-3 text-center">Carl S. Madrigal</td>
-                                <td class="px-4 py-3 text-center">Hearing Impairement</td>
-                                <td class="px-4 py-3 text-center">4/10</td>
-                                <td class="px-4 py-3 text-center">14/20</td>
-                                <td class="px-4 py-3 text-center">4/10</td>
+                                <td class="px-4 py-3 text-center text-paragraph">01</td>
+                                <td class="px-4 py-3 text-center text-paragraph">Carl S. Madrigal</td>
+                                <td class="px-4 py-3 text-center text-paragraph">Hearing Impairement</td>
+                                <td class="px-4 py-3 text-center text-paragraph">4/10</td>
+                                <td class="px-4 py-3 text-center text-paragraph">14/20</td>
+                                <td class="px-4 py-3 text-center text-paragraph">4/10</td>
                                 <td class="px-4 py-3 text-center">
                                     <div class="flex justify-center items-center">
                                         <div class="gap-2 bg-[#D2FBD0] px-2 py-1 rounded-full flex items-center w-fit">
@@ -137,12 +142,12 @@
                             </tr>
 
                             <tr>
-                                <td class="px-4 py-3 text-center">01</td>
-                                <td class="px-4 py-3 text-center">Carl S. Madrigal</td>
-                                <td class="px-4 py-3 text-center">Hearing Impairement</td>
-                                <td class="px-4 py-3 text-center">4/10</td>
-                                <td class="px-4 py-3 text-center">14/20</td>
-                                <td class="px-4 py-3 text-center">4/10</td>
+                                <td class="px-4 py-3 text-center text-paragraph">01</td>
+                                <td class="px-4 py-3 text-center text-paragraph">Carl S. Madrigal</td>
+                                <td class="px-4 py-3 text-center text-paragraph">Hearing Impairement</td>
+                                <td class="px-4 py-3 text-center text-paragraph">4/10</td>
+                                <td class="px-4 py-3 text-center text-paragraph">14/20</td>
+                                <td class="px-4 py-3 text-center text-paragraph">4/10</td>
                                 <td class="px-4 py-3 text-center">
                                     <div class="flex justify-center items-center">
                                         <div class="gap-2 bg-[#D2FBD0] px-2 py-1 rounded-full flex items-center w-fit">
