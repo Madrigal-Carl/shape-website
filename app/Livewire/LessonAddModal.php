@@ -6,7 +6,6 @@ use App\Models\Profile;
 use App\Models\Subject;
 use Livewire\Component;
 use App\Models\Activity;
-use App\Models\Instructor;
 use Livewire\Attributes\On;
 use Illuminate\Support\Facades\Auth;
 
@@ -23,7 +22,10 @@ class LessonAddModal extends Component
     public $selected_student;
     public $description;
     public $activity;
-    public $selectedActivity = [];
+    public $selected_activities = [];
+    public $quiz_name;
+    public $quiz_description;
+    public $quiz_questions = [];
 
 
     #[On('openModal')]
@@ -42,6 +44,21 @@ class LessonAddModal extends Component
     public function addLesson()
     {
 
+    }
+
+    public function updatedActivity($value)
+    {
+        $activity = Activity::find($value);
+
+        if ($activity && !collect($this->selected_activities)->pluck('id')->contains($activity->id)) {
+            $this->selected_activities[] = $activity;
+        }
+    }
+
+    public function removeActivity($index)
+    {
+        unset($this->selected_activities[$index]);
+        $this->selected_activities = array_values($this->selected_activities);
     }
 
     public function mount()

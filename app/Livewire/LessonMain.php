@@ -26,7 +26,7 @@ class LessonMain extends Component
         ->withCount([
             'students',
             'videos',
-            'activities',
+            'activityLessons',
             'quizzes'
         ])->orderByDesc('created_at')->get();
         return view('livewire.lesson-main', compact('lessons'));

@@ -10,7 +10,6 @@ class Activity extends Model
     use HasFactory;
 
     protected $fillable = [
-        'lesson_id',
         'name',
         'category',
     ];
@@ -19,28 +18,8 @@ class Activity extends Model
         'category' => 'array',
     ];
 
-    public function lesson()
+    public function activityLessons()
     {
-        return $this->belongsTo(Lesson::class);
-    }
-
-    public function logs()
-    {
-        return $this->morphMany(Log::class, 'item');
-    }
-
-    public function latestLog()
-    {
-        return $this->morphOne(Log::class, 'item')->latestOfMany();
-    }
-
-    public function progress()
-    {
-        return $this->morphMany(Progress::class, 'item');
-    }
-
-    public function latestProgress()
-    {
-        return $this->morphOne(Progress::class, 'item')->latestOfMany();
+        return $this->hasMany(ActivityLesson::class);
     }
 }

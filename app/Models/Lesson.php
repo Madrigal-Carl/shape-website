@@ -34,8 +34,8 @@ class Lesson extends Model
         return $this->hasMany(Quiz::class);
     }
 
-    public function activities()
+    public function activityLessons()
     {
-        return $this->hasMany(Activity::class);
+        return $this->hasMany(ActivityLesson::class);
     }
 }

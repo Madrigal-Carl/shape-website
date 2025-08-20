@@ -177,48 +177,28 @@
                                 </div>
                             </div>
 
-                            <!-- Default when no game is added -->
-                            <div class="bg-card w-full h-30 hidden items-center justify-center rounded-lg">
-                                <h1 class="text-paragraph">No Game added</h1>
-                            </div>
-
-                            <!-- Game container -->
                             <div class="w-full grid grid-cols-2 gap-2 items-center justify-center rounded-lg">
-                                <!-- Game Holder -->
-                                <div class="flex w-full justify-between bg-card p-2 rounded-lg">
-                                    <div class="flex gap-2">
-                                        <img src="{{ asset('images/game-icons/hayday.jpeg') }}" alt=""
-                                            class="h-12 rounded-md aspect-square object-cover" />
-                                        <div>
-                                            <h1 class="font-medium">HayDay</h1>
-                                            <p class="text-sm text-paragraph">Science</p>
+                                @forelse ($selected_activities as $i => $act)
+                                    <div wire:key="activity-{{ $i }}"
+                                        class="flex w-full justify-between bg-card p-2 rounded-lg">
+                                        <div class="flex gap-2">
+                                            <img src="{{ asset('images/game-icons/hayday.jpeg') }}" alt=""
+                                                class="h-12 rounded-md aspect-square object-cover" />
+                                            <div>
+                                                <h1 class="font-medium">{{ $act->name }}</h1>
+                                            </div>
                                         </div>
+
+                                        <button type="button" wire:click="removeActivity({{ $i }})"
+                                            class="flex items-center w-fit h-fit justify-center cursor-pointer hover:scale-120">
+                                            <span class="material-symbols-rounded remove-icon">close</span>
+                                        </button>
                                     </div>
-
-                                    <button
-                                        class="flex items-center w-fit h-fit justify-center cursor-pointer hover:scale-120">
-                                        <span class="material-symbols-rounded remove-icon">close</span>
-                                    </button>
-                                </div>
-                                <!-- End of Game Holder -->
-
-                                <!-- Game Holder -->
-                                <div class="flex w-full justify-between bg-card p-2 rounded-lg">
-                                    <div class="flex gap-2">
-                                        <img src="{{ asset('images/game-icons/worldMole.jpeg') }}" alt=""
-                                            class="h-12 rounded-md aspect-square object-cover" />
-                                        <div>
-                                            <h1 class="font-medium">World Mole</h1>
-                                            <p class="text-sm text-paragraph">Math</p>
-                                        </div>
+                                @empty
+                                    <div class="bg-card col-span-2 h-30 flex items-center justify-center rounded-lg">
+                                        <h1 class="text-paragraph">No Game added</h1>
                                     </div>
-
-                                    <button
-                                        class="flex items-center w-fit h-fit justify-center cursor-pointer hover:scale-120">
-                                        <span class="material-symbols-rounded remove-icon">close</span>
-                                    </button>
-                                </div>
-                                <!-- End of Game Holder -->
+                                @endforelse
                             </div>
                             <!--End of Game container -->
                         </div>
@@ -241,14 +221,15 @@
                         <div class="flex flex-col gap-4">
                             <div class="flex flex-col border-1 border-gray-300 py-4 px-5 rounded-2xl">
                                 <input type="text" name="" id="" placeholder="Quiz Name"
+                                    wire:model.live="quiz_name"
                                     class="text-2xl outline-none placeholder-heading-dark" />
                                 <textarea name="" id="" maxlength="200" placeholder="Description (Optional)"
-                                    class="placeholder-paragraph text-paragraph resize-none h-15 outline-none"></textarea>
+                                    wire:model.live="quiz_description" class="placeholder-paragraph text-paragraph resize-none h-15 outline-none"></textarea>
                             </div>
 
                             <!-- Question Holder -->
                             <div class="flex flex-col border-1 border-gray-300 p-5 rounded-2xl gap-4">
-                                <input type="text" placeholder="Question"
+                                <input type="text" placeholder="Question" wire:model.live="quiz_questions"
                                     class="border-b-2 border-gray-400 px-3 py-1 bg-card placeholder-paragraph outline-none w-full" />
 
                                 <!-- Option Container -->

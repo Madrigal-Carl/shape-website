@@ -57,8 +57,6 @@ class CurriculumAddModal extends Component
         if ($value && !in_array($value, $this->selectedSpecializations)) {
             $this->selectedSpecializations[] = $value;
         }
-
-        $this->add_specialization = '';
     }
 
     public function removeSpecialization($index)
@@ -72,8 +70,6 @@ class CurriculumAddModal extends Component
         if ($value && !in_array($value, $this->selectedSubjects)) {
             $this->selectedSubjects[] = $value;
         }
-
-        $this->add_subject = '';
     }
 
     public function removeSubject($index)

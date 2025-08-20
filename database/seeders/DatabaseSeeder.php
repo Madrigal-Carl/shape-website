@@ -21,6 +21,7 @@ use App\Models\Progress;
 use App\Models\Question;
 use App\Models\Curriculum;
 use App\Models\Instructor;
+use App\Models\ActivityLesson;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -103,8 +104,12 @@ class DatabaseSeeder extends Seeder
         });
 
         // 11. Create Lessons (2 per student per subject)
+
+
+        $activities = Activity::factory()->count(20)->create();
+
         $subjects = Subject::all();
-        $students->each(function ($student) use ($subjects) {
+        $students->each(function ($student) use ($subjects, $activities) {
             $randomSubjects = $subjects->shuffle()->take(2);
 
             foreach ($randomSubjects as $subject) {
@@ -116,6 +121,12 @@ class DatabaseSeeder extends Seeder
 
                 Video::factory()->create([
                     'lesson_id' => $lesson->id,
+                ]);
+
+                $activity = $activities->random();
+                $activityLesson = ActivityLesson::factory()->create([
+                    'lesson_id'   => $lesson->id,
+                    'activity_id' => $activity->id,
                 ]);
 
                 $quiz = Quiz::factory()->create([
@@ -132,10 +143,6 @@ class DatabaseSeeder extends Seeder
                     ]);
                 });
 
-                $activity = Activity::factory()->create([
-                    'lesson_id' => $lesson->id,
-                ]);
-
                 Log::factory()->create([
                     'item_id' => $quiz->id,
                     'item_type' => Quiz::class,
@@ -147,13 +154,13 @@ class DatabaseSeeder extends Seeder
                 ]);
 
                 Log::factory()->create([
-                    'item_id' => $activity->id,
-                    'item_type' => Activity::class,
+                    'item_id'   => $activityLesson->id,
+                    'item_type' => ActivityLesson::class,
                 ]);
 
                 Progress::factory()->create([
-                    'item_id' => $activity->id,
-                    'item_type' => Activity::class,
+                    'item_id'   => $activityLesson->id,
+                    'item_type' => ActivityLesson::class,
                 ]);
             }
         });
