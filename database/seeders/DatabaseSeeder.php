@@ -22,7 +22,6 @@ use App\Models\Question;
 use App\Models\Curriculum;
 use App\Models\Instructor;
 use Illuminate\Database\Seeder;
-use App\Models\CurriculumSubject;
 
 class DatabaseSeeder extends Seeder
 {
@@ -45,24 +44,18 @@ class DatabaseSeeder extends Seeder
         // 4. Create All Subjects
         Subject::factory()->allSubjects();
 
-        // 5. Create CurriculumSubject links
+        // 5. Create Curriculum_Subject links
         $subjectIds = Subject::pluck('id')->toArray();
 
         $curriculums->each(function ($curriculum) use ($subjectIds) {
             // Pick a random subset of subjects, e.g., 5-8 subjects per curriculum
-            $randomSubjects = collect($subjectIds)->shuffle()->take(rand(5, 8));
-
-            foreach ($randomSubjects as $subjectId) {
-                CurriculumSubject::create([
-                    'curriculum_id' => $curriculum->id,
-                    'subject_id' => $subjectId,
-                ]);
-            }
+            $randomSubjects = collect($subjectIds)->shuffle()->take(rand(5, 8))->toArray();
+            $curriculum->subjects()->attach($randomSubjects);
         });
 
         // 6. Create 10 Students per curriculum
         $students = $curriculums->map(function ($curriculum) {
-            return Student::factory()->count(10)->create(['curriculum_id' => $curriculum->id, 'instructor_id' => $curriculum->instructor_id]);
+            return Student::factory()->count(10)->create(['instructor_id' => $curriculum->instructor_id]);
         })->flatten();
 
         // 7. Create Accounts
@@ -116,9 +109,10 @@ class DatabaseSeeder extends Seeder
 
             foreach ($randomSubjects as $subject) {
                 $lesson = Lesson::factory()->create([
-                    'student_id' => $student->id,
                     'subject_id' => $subject->id,
                 ]);
+
+                $student->lessons()->attach($lesson->id);
 
                 Video::factory()->create([
                     'lesson_id' => $lesson->id,
@@ -163,6 +157,7 @@ class DatabaseSeeder extends Seeder
                 ]);
             }
         });
+
 
         // 12. Create Feeds
         $students->each(function ($student) {

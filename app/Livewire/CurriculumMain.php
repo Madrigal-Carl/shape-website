@@ -11,6 +11,8 @@ use Livewire\WithoutUrlPagination;
 class CurriculumMain extends Component
 {
     use WithPagination, WithoutUrlPagination;
+    public $status = 'all';
+    public $listeners = ["refresh" => '$refresh'];
 
     public function openAddCurriculumModal()
     {
@@ -29,8 +31,11 @@ class CurriculumMain extends Component
 
     public function render()
     {
-        $curriculums = Curriculum::withCount(['curriculumSubjects', 'students'])
+        $curriculums = Curriculum::withCount('subjects')
             ->where('instructor_id', Auth::id())
+            ->when($this->status !== 'all', function ($query) {
+                $query->where('status', $this->status);
+            })
             ->orderByDesc('created_at')
             ->paginate(10);
 

@@ -21,13 +21,13 @@ class Curriculum extends Model
         'specialization' => 'array',
     ];
 
-    public function students()
+    public function instructor()
     {
-        return $this->hasMany(Student::class);
+        return $this->belongsTo(Instructor::class);
     }
 
-    public function curriculumSubjects()
+    public function subjects()
     {
-        return $this->hasMany(CurriculumSubject::class);
+        return $this->belongsToMany(Subject::class)->withTimestamps();
     }
 }

@@ -9,7 +9,6 @@ class Student extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'curriculum_id',
         'instructor_id',
         'image_src',
         'first_name',
@@ -40,13 +39,8 @@ class Student extends Model
         return $this->hasOne(Guardian::class);
     }
 
-    public function curriculum()
-    {
-        return $this->belongsTo(Curriculum::class);
-    }
-
     public function lessons()
     {
-        return $this->hasMany(Lesson::class);
+        return $this->belongsToMany(Lesson::class)->withTimestamps();
     }
 }

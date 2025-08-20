@@ -21,7 +21,6 @@ class StudentFactory extends Factory
     public function definition(): array
     {
         return [
-            'curriculum_id' => Curriculum::factory(),
             'instructor_id' => Instructor::factory(),
             'image_src' => null,
             'first_name' => $this->faker->firstName,

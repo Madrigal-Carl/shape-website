@@ -3,16 +3,19 @@
 namespace App\Livewire;
 
 use App\Models\Feed;
-use Livewire\Component;
+use App\Models\Account;
+use App\Models\Profile;
 use App\Models\Subject;
+use Livewire\Component;
 use App\Models\Curriculum;
-use App\Models\CurriculumSubject;
-use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\On;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
 
 class CurriculumAddModal extends Component
 {
     public $subjects;
+    public $grade_levels;
     public $isOpen = false;
     public $add_name;
     public $add_grade_level;
@@ -31,6 +34,8 @@ class CurriculumAddModal extends Component
     public function closeModal()
     {
         $this->resetVariables();
+        $this->dispatch('refresh')->to('curriculum-main');
+        $this->dispatch('refresh')->to('curriculum-aside');
         $this->isOpen = false;
     }
 
@@ -101,7 +106,9 @@ class CurriculumAddModal extends Component
             return $this->dispatch('swal-toast', icon : 'error', title : $message);
         }
 
+        $user = Account::with('accountable')->find(Auth::user()->id);
         $curriculum = Curriculum::create([
+            'instructor_id' => $user->accountable->id,
             'name' => $this->add_name,
             'grade_level' => $this->add_grade_level,
             'specialization' => $this->selectedSpecializations,
@@ -110,10 +117,7 @@ class CurriculumAddModal extends Component
 
         foreach ($this->selectedSubjects as $subject) {
             $subj = Subject::where('name', $subject)->first();
-            CurriculumSubject::create([
-                'curriculum_id' => $curriculum->id,
-                'subject_id' => $subj->id,
-            ]);
+            $curriculum->subjects()->attach($subj);
         }
 
         Feed::create([
@@ -129,6 +133,7 @@ class CurriculumAddModal extends Component
     public function mount()
     {
         $this->subjects = Subject::orderBy('name')->get();
+        $this->grade_levels = Profile::orderBy('grade_level')->pluck('grade_level')->unique()->values()->toArray();
     }
 
     public function render()

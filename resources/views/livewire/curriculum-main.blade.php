@@ -8,7 +8,7 @@
             <span class="w-1 h-full bg-blue-button rounded-full"></span>
             <div>
                 <h1 class="text-2xl font-medium">
-                    Welcome back, Sir
+                    Welcome back,
                     <span class="font-bold text-blue-button">{{ $user->accountable->first_name }}</span>
                 </h1>
                 <p class="text-sm text-paragraph">Here is your summary today</p>
@@ -49,15 +49,16 @@
             <h1 class="text-4xl font-medium">Curriculum List</h1>
             <div
                 class="flex items-center bg-white py-3 px-5 rounded-full shadow-2xl text-paragraph hover:bg-blue-button hover:text-white cursor-pointer">
-                <select name="" id="" class="w-25 outline-none">
+                <select wire:change="$set('status', $event.target.value)" name="" id=""
+                    class="w-25 outline-none">
                     <option value="pending" class="text-sm text-heading-dark" selected disabled>
                         Filter by
                     </option>
-                    <option value="pending" class="text-sm text-heading-dark">
+                    <option value="all" class="text-sm text-heading-dark">
                         All
                     </option>
-                    <option value="pending" class="text-sm text-lime">Active</option>
-                    <option value="pending" class="text-sm text-paragraph">
+                    <option value="active" class="text-sm text-lime">Active</option>
+                    <option value="inactive" class="text-sm text-paragraph">
                         Inactive
                     </option>
                 </select>
@@ -102,8 +103,8 @@
                                         {{ collect($curriculum->specialization)->map(fn($s) => ucfirst(explode(' ', $s)[0]))->implode(', ') }}
                                     </td>
                                     <td class="px-4 py-3 text-center">
-                                        {{ $curriculum->curriculum_subjects_count }}</td>
-                                    <td class="px-4 py-3 text-center">{{ $curriculum->students_count }}</td>
+                                        {{ $curriculum->subjects_count }}</td>
+                                    <td class="px-4 py-3 text-center">X</td>
                                     <td class="px-4 py-3 text-center">
                                         <div class="flex justify-center items-center">
                                             <div

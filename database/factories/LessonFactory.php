@@ -21,7 +21,6 @@ class LessonFactory extends Factory
     public function definition(): array
     {
         return [
-            'student_id' => Student::factory(),
             'subject_id' => Subject::factory(),
             'title' => $this->faker->sentence(3),
             'description' => $this->faker->paragraph,

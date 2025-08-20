@@ -33,14 +33,14 @@ class CurriculumEditModal extends Component
         $this->curriculum_id = $id;
         $this->isOpen = true;
 
-        $curriculum = Curriculum::with('curriculumSubjects.subject')->find($this->curriculum_id);
+        $curriculum = Curriculum::with('subjects')->find($this->curriculum_id);
 
         $this->edit_name = $curriculum->name;
         $this->edit_grade_level = $curriculum->grade_level;
         $this->edit_description = $curriculum->description;
         $this->selectedSpecializations = $curriculum->specialization;
 
-        $this->selectedSubjects = $curriculum->curriculumSubjects->pluck('subject.name')->toArray();
+        $this->selectedSubjects = $curriculum->subjects->pluck('name')->toArray();
 
         $this->original = [
             'name'           => $this->edit_name,
@@ -53,6 +53,8 @@ class CurriculumEditModal extends Component
 
     public function closeModal()
     {
+        $this->dispatch('refresh')->to('curriculum-main');
+        $this->dispatch('refresh')->to('curriculum-aside');
         $this->isOpen = false;
     }
 
@@ -112,15 +114,8 @@ class CurriculumEditModal extends Component
             'description' => $this->edit_description,
         ]);
 
-        CurriculumSubject::where('curriculum_id', $this->curriculum_id)->delete();
-
         $subjects = Subject::whereIn('name', $this->selectedSubjects)->pluck('id');
-        foreach ($subjects as $subject) {
-            CurriculumSubject::create([
-                'curriculum_id' => $curriculum->id,
-                'subject_id' => $subject,
-            ]);
-        }
+        $curriculum->subjects()->sync($subjects);
 
         $this->dispatch('swal-toast', icon : 'success', title : 'Curriculum has been updated successfully.');
         return $this->closeModal();

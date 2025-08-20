@@ -5,7 +5,7 @@
                 <div class="flex items-center gap-4">
                     <img src="{{ asset('images/book.png') }}" alt="" />
                     <h1 class="text-2xl font-semibold text-heading-dark">
-                        {{ ucfirst($curriculum->name) }}
+                        Curriculum
                     </h1>
                 </div>
 
@@ -15,7 +15,7 @@
                         <div class="flex justify-between w-40">
                             <div>
                                 <p class="text-xs leading-snug font-normal">Total Students</p>
-                                <h1 class="text-lg font-semibold leading-6">ENROLLED</h1>
+                                <h1 class="text-lg font-semibold leading-6">{{ ucfirst($curriculum->name) }}</h1>
                             </div>
                             <span class="material-symbols-rounded icon">people</span>
                         </div>
@@ -57,12 +57,12 @@
                 <div class="flex flex-col gap-2">
                     <h1 class="text-lg font-medium">Subjects</h1>
                     <div class="grid grid-cols-4 gap-4">
-                        @foreach ($curriculum->curriculumSubjects as $curriculumSubject)
+                        @foreach ($curriculum->subjects as $subject)
                             <div class="flex flex-col items-center gap-6 bg-gray-100 rounded-3xl p-4 col-span-1">
-                                <h2 class="text-base">{{ ucfirst($curriculumSubject->subject->name) }}</h2>
+                                <h2 class="text-base">{{ ucfirst($subject->name) }}</h2>
                                 <div class="text-center">
                                     <h1 class="text-xl font-semibold">X Units</h1>
-                                    <p class="text-sm text-paragraph">{{ count($curriculumSubject->subject->lessons) }}
+                                    <p class="text-sm text-paragraph">{{ count($subject->lessons) }}
                                         Lessons</p>
                                 </div>
                             </div>

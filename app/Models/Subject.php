@@ -12,9 +12,9 @@ class Subject extends Model
         'name',
     ];
 
-    public function curriculumSubjects()
+    public function curriculums()
     {
-        return $this->hasMany(CurriculumSubject::class);
+        return $this->belongsToMany(Curriculum::class)->withTimestamps();
     }
 
     public function lessons()

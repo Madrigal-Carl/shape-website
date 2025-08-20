@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('curriculum_subjects', function (Blueprint $table) {
+        Schema::create('curriculum_subject', function (Blueprint $table) {
             $table->foreignId('curriculum_id')->constrained()->onDelete('cascade');
             $table->foreignId('subject_id')->constrained()->onDelete('cascade');
-            $table->unique(['curriculum_id', 'subject_id']);
             $table->timestamps();
+            $table->unique(['curriculum_id', 'subject_id']);
         });
     }
 

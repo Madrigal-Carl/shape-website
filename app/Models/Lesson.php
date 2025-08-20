@@ -9,7 +9,6 @@ class Lesson extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'student_id',
         'subject_id',
         'title',
         'description',
@@ -20,9 +19,9 @@ class Lesson extends Model
         return $this->belongsTo(Subject::class);
     }
 
-    public function student()
+    public function students()
     {
-        return $this->belongsTo(Student::class);
+        return $this->belongsToMany(Student::class)->withTimestamps();
     }
 
     public function videos()
@@ -30,7 +29,7 @@ class Lesson extends Model
         return $this->hasMany(Video::class);
     }
 
-    public function quizs()
+    public function quizzes()
     {
         return $this->hasMany(Quiz::class);
     }

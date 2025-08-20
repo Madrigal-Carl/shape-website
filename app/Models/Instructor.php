@@ -34,6 +34,13 @@ class Instructor extends Model
         return $this->hasMany(Curriculum::class);
     }
 
+    public function lessons()
+    {
+        return Lesson::whereHas('subject.curriculums', function ($query) {
+            $query->where('instructor_id', $this->id);
+        });
+    }
+
     public function address()
     {
         return $this->morphOne(Address::class, 'accountable');

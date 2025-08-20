@@ -20,9 +20,16 @@ class ActivityFactory extends Factory
 
     public function definition(): array
     {
+        $categories = [
+            'autism',
+            'speech',
+            'hearing',
+        ];
+
         return [
             'lesson_id' => Lesson::factory(),
-            'category' => json_encode([$this->faker->randomElement(['autism','hearing','speech'])]),
+            'name' => $this->faker->words(2, true),
+            'category' => $this->faker->randomElements($categories, rand(1, 2)),
         ];
     }
 }
