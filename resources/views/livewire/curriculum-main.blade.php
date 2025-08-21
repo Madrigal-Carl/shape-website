@@ -87,9 +87,6 @@
                                 <th class="px-4 pb-3 text-center font-semibold">
                                     Curriculum Name
                                 </th>
-                                <th class="px-4 pb-3 text-center font-semibold">
-                                    Specializzation
-                                </th>
                                 <th class="px-4 pb-3 text-center font-semibold w-20">
                                     No. of Subjects
                                 </th>
@@ -104,9 +101,6 @@
                                     <!-- Your original cells -->
                                     <td class="px-4 py-3 text-center text-paragraph">{{ $curriculum->id }}</td>
                                     <td class="px-4 py-3 text-center text-paragraph">{{ ucwords($curriculum->name) }}
-                                    </td>
-                                    <td class="px-4 py-3 text-center text-paragraph">
-                                        {{ collect($curriculum->specialization)->map(fn($s) => ucfirst(explode(' ', $s)[0]))->implode(', ') }}
                                     </td>
                                     <td class="px-4 py-3 text-center text-paragraph">
                                         {{ count($curriculum->curriculumSubjects) }}</td>
