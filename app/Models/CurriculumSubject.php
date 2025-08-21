@@ -23,4 +23,21 @@ class CurriculumSubject extends Model
     {
         return $this->belongsTo(Subject::class);
     }
+
+    public function lessonSubjects()
+    {
+        return $this->hasMany(LessonSubject::class);
+    }
+
+    public function lessons()
+    {
+        return $this->hasManyThrough(
+            Lesson::class,
+            LessonSubject::class,
+            'curriculum_subject_id',
+            'lesson_subject_id',
+            'id',
+            'id'
+        );
+    }
 }
