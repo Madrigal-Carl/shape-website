@@ -62,7 +62,8 @@
                                 <h2 class="text-base font-semibold">{{ ucfirst($curriculumSubject->subject->name) }}
                                 </h2>
                                 <div>
-                                    <p class="text-sm text-paragraph">{{ $curriculumSubject->subject->lessons ?? 0 }}
+                                    <p class="text-sm text-paragraph">
+                                        {{ count($curriculumSubject->lessons) ?? 0 }}
                                         Lessons</p>
                                 </div>
                             </div>
