@@ -12,6 +12,7 @@ class Question extends Model
     protected $fillable = [
         'quiz_id',
         'question_text',
+        'point',
     ];
 
     public function quiz()

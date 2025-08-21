@@ -9,21 +9,17 @@ use App\Models\Subject;
 use Livewire\Component;
 use App\Models\Curriculum;
 use Livewire\Attributes\On;
+use App\Models\CurriculumSubject;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 
 class CurriculumAddModal extends Component
 {
-    public $subjects;
-    public $grade_levels;
     public $isOpen = false;
-    public $add_name;
-    public $add_grade_level;
-    public $add_specialization;
-    public $selectedSpecializations = [];
-    public $add_description;
-    public $add_subject;
-    public $selectedSubjects = [];
+
+    public $add_name, $add_grade_level, $add_specialization, $add_description, $add_subject, $subjects, $grade_levels;
+
+    public $selectedSpecializations = [], $selectedSubjects = [];
 
     #[On('openModal')]
     public function openModal()
@@ -111,9 +107,12 @@ class CurriculumAddModal extends Component
             'description' => $this->add_description ?? '',
         ]);
 
-        foreach ($this->selectedSubjects as $subject) {
-            $subj = Subject::where('name', $subject)->first();
-            $curriculum->subjects()->attach($subj);
+        foreach ($this->selectedSubjects as $subjectName) {
+            $subject = Subject::where('name', $subjectName)->first();
+            CurriculumSubject::create([
+                'curriculum_id' => $curriculum->id,
+                'subject_id' => $subject->id,
+            ]);
         }
 
         Feed::create([

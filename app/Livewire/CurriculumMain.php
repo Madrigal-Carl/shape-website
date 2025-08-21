@@ -5,8 +5,8 @@ namespace App\Livewire;
 use Livewire\Component;
 use App\Models\Curriculum;
 use Livewire\WithPagination;
-use Illuminate\Support\Facades\Auth;
 use Livewire\WithoutUrlPagination;
+use Illuminate\Support\Facades\Auth;
 
 class CurriculumMain extends Component
 {
@@ -32,7 +32,7 @@ class CurriculumMain extends Component
 
     public function render()
     {
-        $curriculums = Curriculum::withCount('subjects')
+        $curriculums = Curriculum::with('curriculumSubjects')
             ->where('instructor_id', Auth::id())
             ->when($this->status !== 'all', function ($query) {
                 $query->where('status', $this->status);

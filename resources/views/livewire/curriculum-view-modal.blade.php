@@ -19,7 +19,7 @@
                             </div>
                             <span class="material-symbols-rounded icon">subject</span>
                         </div>
-                        <h1 class="text-4xl font-semibold">{{ $curriculum->subjects_count }}</h1>
+                        <h1 class="text-4xl font-semibold">{{ count($curriculum->curriculumSubjects) }}</h1>
                     </div>
 
                     <div class="border-1 border-gray-300 p-6 rounded-3xl w-full flex flex-col justify-between">
@@ -57,11 +57,12 @@
                 <div class="flex flex-col gap-2">
                     <h1 class="text-lg font-medium">Subjects</h1>
                     <div class="grid grid-cols-3 gap-4">
-                        @foreach ($curriculum->subjects as $subject)
+                        @foreach ($curriculum->curriculumSubjects as $curriculumSubject)
                             <div class="flex flex-col gap-6 bg-gray-100 rounded-3xl p-4 col-span-1 justify-between">
-                                <h2 class="text-base font-semibold">{{ ucfirst($subject->name) }}</h2>
+                                <h2 class="text-base font-semibold">{{ ucfirst($curriculumSubject->subject->name) }}
+                                </h2>
                                 <div>
-                                    <p class="text-sm text-paragraph">{{ count($subject->lessons) }}
+                                    <p class="text-sm text-paragraph">{{ $curriculumSubject->subject->lessons ?? 0 }}
                                         Lessons</p>
                                 </div>
                             </div>

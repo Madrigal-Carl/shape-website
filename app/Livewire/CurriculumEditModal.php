@@ -10,17 +10,9 @@ use App\Models\CurriculumSubject;
 
 class CurriculumEditModal extends Component
 {
-    public $isOpen = false;
-    public $subjects;
-    public $curriculum_id = null;
-    public $edit_name;
-    public $edit_grade_level;
-    public $edit_specialization;
-    public $selectedSpecializations = [];
-    public $edit_description;
-    public $edit_subject;
-    public $selectedSubjects = [];
-    public $original = [];
+    public $isOpen = false, $curriculum_id = null;
+    public $subjects, $edit_name, $edit_grade_level, $edit_specialization, $edit_description, $edit_subject;
+    public $selectedSpecializations = [], $selectedSubjects = [], $original = [];
 
     public function mount()
     {
@@ -33,14 +25,14 @@ class CurriculumEditModal extends Component
         $this->curriculum_id = $id;
         $this->isOpen = true;
 
-        $curriculum = Curriculum::with('subjects')->find($this->curriculum_id);
+        $curriculum = Curriculum::with('curriculumSubjects.subject')->find($this->curriculum_id);
 
         $this->edit_name = $curriculum->name;
         $this->edit_grade_level = $curriculum->grade_level;
         $this->edit_description = $curriculum->description;
         $this->selectedSpecializations = $curriculum->specialization;
 
-        $this->selectedSubjects = $curriculum->subjects->pluck('name')->toArray();
+        $this->selectedSubjects = $curriculum->curriculumSubjects->pluck('subject.name')->toArray();
 
         $this->original = [
             'name'           => $this->edit_name,
@@ -106,16 +98,22 @@ class CurriculumEditModal extends Component
             return;
         }
 
-        $curriculum = Curriculum::find($this->curriculum_id);
-        $curriculum->update([
-            'name' => $this->edit_name,
-            'grade_level' => $this->edit_grade_level,
-            'specialization' => $this->selectedSpecializations,
-            'description' => $this->edit_description,
-        ]);
+            $curriculum = Curriculum::find($this->curriculum_id);
+            $curriculum->update([
+                'name' => $this->edit_name,
+                'grade_level' => $this->edit_grade_level,
+                'specialization' => $this->selectedSpecializations,
+                'description' => $this->edit_description,
+            ]);
 
-        $subjects = Subject::whereIn('name', $this->selectedSubjects)->pluck('id');
-        $curriculum->subjects()->sync($subjects);
+            $curriculum->curriculumSubjects()->delete();
+            $subjectIds = Subject::whereIn('name', $this->selectedSubjects)->pluck('id');
+            foreach ($subjectIds as $subjectId) {
+                CurriculumSubject::create([
+                    'curriculum_id' => $curriculum->id,
+                    'subject_id' => $subjectId,
+                ]);
+            }
 
         $this->dispatch('swal-toast', icon : 'success', title : 'Curriculum has been updated successfully.');
         return $this->closeModal();

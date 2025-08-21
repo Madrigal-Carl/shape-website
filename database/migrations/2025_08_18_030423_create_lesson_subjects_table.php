@@ -11,11 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('curriculum_subject', function (Blueprint $table) {
-            $table->foreignId('curriculum_id')->constrained()->onDelete('cascade');
-            $table->foreignId('subject_id')->constrained()->onDelete('cascade');
+        Schema::create('lesson_subjects', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('curriculum_subject_id')->constrained()->onDelete('cascade');
+            $table->foreignId('student_id')->constrained()->onDelete('cascade');
             $table->timestamps();
-            $table->unique(['curriculum_id', 'subject_id']);
+            $table->unique(['curriculum_subject_id', 'student_id']);
         });
     }
 
@@ -24,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('curriculum_subjects');
+        Schema::dropIfExists('lesson_subjects');
     }
 };

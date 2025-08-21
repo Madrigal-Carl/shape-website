@@ -103,17 +103,18 @@
                                 <tr>
                                     <!-- Your original cells -->
                                     <td class="px-4 py-3 text-center text-paragraph">{{ $curriculum->id }}</td>
-                                    <td class="px-4 py-3 text-center text-paragraph">{{ $curriculum->name }}</td>
+                                    <td class="px-4 py-3 text-center text-paragraph">{{ ucwords($curriculum->name) }}
+                                    </td>
                                     <td class="px-4 py-3 text-center text-paragraph">
                                         {{ collect($curriculum->specialization)->map(fn($s) => ucfirst(explode(' ', $s)[0]))->implode(', ') }}
                                     </td>
                                     <td class="px-4 py-3 text-center text-paragraph">
-                                        {{ $curriculum->subjects_count }}</td>
+                                        {{ count($curriculum->curriculumSubjects) }}</td>
                                     <td class="px-4 py-3 text-center">
                                         <div class="flex justify-center items-center">
                                             <div
                                                 class="gap-2 bg-[#D2FBD0] px-2 py-1 rounded-full flex items-center w-fit">
-                                                <small class="text-[#0D5F07]">{{ $curriculum->status }}</small>
+                                                <small class="text-[#0D5F07]">{{ ucwords($curriculum->status) }}</small>
                                             </div>
                                         </div>
                                     </td>

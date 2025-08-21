@@ -3,8 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Lesson;
-use App\Models\Student;
-use App\Models\Subject;
+use App\Models\LessonSubject;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -21,7 +20,7 @@ class LessonFactory extends Factory
     public function definition(): array
     {
         return [
-            'subject_id' => Subject::factory(),
+            'lesson_subject_id' => LessonSubject::factory(),
             'title' => $this->faker->sentence(3),
             'description' => $this->faker->paragraph,
         ];

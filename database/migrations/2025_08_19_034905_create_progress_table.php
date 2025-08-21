@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('progress', function (Blueprint $table) {
             $table->id();
             $table->unsignedInteger('best_time_spent')->nullable();
-            $table->enum('status', ['ongoing','finished'])->default('ongoing');
+            $table->enum('status', ['incomplete','completed'])->default('incomplete');
             $table->morphs('item');
             $table->timestamps();
         });

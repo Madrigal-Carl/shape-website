@@ -23,6 +23,7 @@ class QuizFactory extends Factory
         return [
             'lesson_id' => Lesson::factory(),
             'title' => $this->faker->sentence(3),
+            'score' => $this->faker->numberBetween(10,20),
             'description' => $this->faker->optional()->paragraph(),
         ];
     }

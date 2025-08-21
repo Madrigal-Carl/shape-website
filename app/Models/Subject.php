@@ -12,13 +12,20 @@ class Subject extends Model
         'name',
     ];
 
-    public function curriculums()
+    public function curriculumStudentSubject()
     {
-        return $this->belongsToMany(Curriculum::class)->withTimestamps();
+        return $this->hasMany(CurriculumSubject::class);
     }
 
-    public function lessons()
-    {
-        return $this->hasMany(Lesson::class);
-    }
+    // public function lessons()
+    // {
+    //     return $this->hasManyThrough(
+    //         Lesson::class,
+    //         LessonSubject::class,
+    //         'subject_id',
+    //         'curriculum_subject_id',
+    //         'id',
+    //         'id'
+    //     );
+    // }
 }

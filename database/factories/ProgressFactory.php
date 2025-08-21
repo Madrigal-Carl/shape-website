@@ -21,7 +21,7 @@ class ProgressFactory extends Factory
     {
         return [
             'best_time_spent' => $this->faker->optional()->numberBetween(60, 5000),
-            'status' => $this->faker->randomElement(['ongoing','finished']),
+            'status' => $this->faker->randomElement(['incomplete','completed']),
             'item_id' => null,
             'item_type' => null,
         ];

@@ -39,8 +39,53 @@ class Student extends Model
         return $this->hasOne(Guardian::class);
     }
 
-    public function lessons()
+    public function lessonSubject()
     {
-        return $this->belongsToMany(Lesson::class)->withTimestamps();
+        return $this->hasMany(LessonSubject::class);
     }
+
+    // public function getCompletedLessonsCountAttribute()
+    // {
+    //     return $this->lessons->filter(function ($lesson) {
+    //         $quizzesDone = $lesson->quizzes->every(fn($quiz) =>
+    //             $quiz->progress->where('status', 'completed')->isNotEmpty()
+    //         );
+
+    //         $activitiesDone = $lesson->activityLessons->every(fn($activity) =>
+    //             $activity->progress->where('status', 'completed')->isNotEmpty()
+    //         );
+
+    //         return $quizzesDone && $activitiesDone;
+    //     })->count();
+    // }
+
+    // public function getTotalLessonsCountAttribute()
+    // {
+    //     return $this->lessons->count();
+    // }
+
+    // public function getCompletedQuizzesCountAttribute()
+    // {
+    //     return $this->lessons->flatMap->quizzes->filter(fn($quiz) =>
+    //         $quiz->progress->where('status', 'completed')->isNotEmpty()
+    //     )->count();
+    // }
+
+    // public function getTotalQuizzesCountAttribute()
+    // {
+    //     return $this->lessons->flatMap->quizzes->count();
+    // }
+
+    // public function getCompletedActivitiesCountAttribute()
+    // {
+    //     return $this->lessons->flatMap->activityLessons->filter(fn($activity) =>
+    //         $activity->progress->where('status', 'completed')->isNotEmpty()
+    //     )->count();
+    // }
+
+    // public function getTotalActivitiesCountAttribute()
+    // {
+    //     return $this->lessons->flatMap->activityLessons->count();
+    // }
+
 }

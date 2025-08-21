@@ -26,8 +26,8 @@ class Curriculum extends Model
         return $this->belongsTo(Instructor::class);
     }
 
-    public function subjects()
+    public function curriculumSubjects()
     {
-        return $this->belongsToMany(Subject::class)->withTimestamps();
+        return $this->hasMany(CurriculumSubject::class);
     }
 }

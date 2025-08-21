@@ -22,6 +22,7 @@ class QuestionFactory extends Factory
     {
         return [
             'quiz_id' => Quiz::factory(),
+            'point' => $this->faker->numberBetween(1,2),
             'question_text' => $this->faker->sentence(8),
         ];
     }

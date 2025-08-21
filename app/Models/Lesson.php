@@ -9,19 +9,14 @@ class Lesson extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'subject_id',
+        'lesson_subject_id',
         'title',
         'description',
     ];
 
-    public function subject()
+    public function curriculumSubject()
     {
-        return $this->belongsTo(Subject::class);
-    }
-
-    public function students()
-    {
-        return $this->belongsToMany(Student::class)->withTimestamps();
+        return $this->belongsTo(CurriculumSubject::class);
     }
 
     public function videos()
