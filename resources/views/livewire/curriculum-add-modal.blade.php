@@ -33,15 +33,11 @@
                                 <option class="text-sm text-black" disabled selected>
                                     Specialization
                                 </option>
-                                <option value="autism" class="text-sm text-paragraph">
-                                    Autism Spectrum Disorder
-                                </option>
-                                <option value="speech" class="text-sm text-paragraph">
-                                    Speech Disorder
-                                </option>
-                                <option value="hearing" class="text-sm text-paragraph">
-                                    Hearing Impairment
-                                </option>
+                                @foreach ($specializations as $specialization)
+                                    <option value="{{ $specialization }}" class="text-sm text-paragraph">
+                                        {{ ucwords($specialization) }}
+                                    </option>
+                                @endforeach
                             </select>
                         </div>
 

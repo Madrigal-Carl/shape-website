@@ -41,9 +41,19 @@ class Instructor extends Model
         });
     }
 
-    public function address()
+    public function addresses()
     {
-        return $this->morphOne(Address::class, 'accountable');
+        return $this->morphMany(Address::class, 'owner');
+    }
+
+    public function permanentAddress()
+    {
+        return $this->morphOne(Address::class, 'owner')->where('type', 'permanent');
+    }
+
+    public function currentAddress()
+    {
+        return $this->morphOne(Address::class, 'owner')->where('type', 'current');
     }
 
     public function students()

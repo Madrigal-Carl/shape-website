@@ -16,6 +16,7 @@ use Illuminate\Validation\ValidationException;
 class CurriculumAddModal extends Component
 {
     public $isOpen = false;
+    public $specializations;
 
     public $add_name, $add_grade_level, $add_specialization, $add_description, $add_subject, $subjects, $grade_levels;
 
@@ -129,6 +130,8 @@ class CurriculumAddModal extends Component
     {
         $this->subjects = Subject::orderBy('name')->get();
         $this->grade_levels = Profile::orderBy('grade_level')->pluck('grade_level')->unique()->values()->toArray();
+        $user = Account::with('accountable')->find(Auth::user()->id);
+        $this->specializations = $user->accountable->specialization;
     }
 
     public function render()

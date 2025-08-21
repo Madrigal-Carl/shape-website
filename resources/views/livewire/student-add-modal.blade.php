@@ -27,77 +27,67 @@
                     <div class="flex flex-col gap-3">
                         <h2 class="font-medium text-lg">Learners Information</h2>
                         <div class="flex flex-col gap-2">
-                            <input type="text" placeholder="LRN"
+                            <input type="text" placeholder="LRN" wire:model.live='lrn' maxlength="12"
                                 class="px-3 py-1 rounded-lg bg-card placeholder-paragraph outline-none w-full" />
 
                             <div class="flex items-center gap-2 w-full">
-                                <input type="text" placeholder="First name"
+                                <input type="text" placeholder="First name" wire:model.live='first_name'
                                     class="px-3 py-1 rounded-lg bg-card placeholder-paragraph outline-none w-full" />
-                                <input type="text" placeholder="Middle name"
+                                <input type="text" placeholder="Middle name" wire:model.live='middle_name'
                                     class="px-3 py-1 rounded-lg bg-card placeholder-paragraph outline-none w-full" />
-                                <input type="text" placeholder="Last name"
+                                <input type="text" placeholder="Last name" wire:model.live='last_name'
                                     class="px-3 py-1 rounded-lg bg-card placeholder-paragraph outline-none w-full" />
                             </div>
 
-                            <input type="text" placeholder="Birthdate"
+                            <input type="text" placeholder="Birthdate" wire:model.live='birthdate'
                                 class="px-2.5 py-1 rounded-lg bg-card placeholder-paragraph outline-none w-full text-paragraph"
                                 onfocus="this.type='date'" onblur="if(!this.value) this.type='text'" />
 
                             <div class="px-2 py-1 rounded-lg bg-card">
-                                <select name="" id="" class="w-full outline-none text-paragraph">
-                                    <option value="pending" class="text-sm text-black" selected disabled>
+                                <select name="" id="" class="w-full outline-none text-paragraph"
+                                    wire:change="$set('sex', $event.target.value)">
+                                    <option class="text-sm text-black" selected disabled>
                                         Sex
                                     </option>
-                                    <option value="pending" class="text-sm text-paragraph">
+                                    <option value="male" class="text-sm text-paragraph">
                                         Male
                                     </option>
-                                    <option value="pending" class="text-sm text-paragraph">
+                                    <option value="female" class="text-sm text-paragraph">
                                         Female
                                     </option>
                                 </select>
                             </div>
 
                             <div class="px-2 py-1 rounded-lg bg-card">
-                                <select name="" id="" class="w-full outline-none text-paragraph">
-                                    <option value="pending" class="text-sm text-black" selected disabled>
+                                <select name="" id="" class="w-full outline-none text-paragraph"
+                                    wire:change="$set('grade_level', $event.target.value)">
+                                    <option class="text-sm text-black" selected disabled>
                                         Grade Level
                                     </option>
-                                    <option value="pending" class="text-sm text-paragraph">
-                                        1
-                                    </option>
-                                    <option value="pending" class="text-sm text-paragraph">
-                                        2
-                                    </option>
-                                    <option value="pending" class="text-sm text-paragraph">
-                                        3
-                                    </option>
-                                    <option value="pending" class="text-sm text-paragraph">
-                                        4
-                                    </option>
+                                    @foreach ($grade_levels as $grade_level)
+                                        <option value="{{ $grade_level }}" class="text-sm text-paragraph">
+                                            {{ ucwords($grade_level) }}
+                                        </option>
+                                    @endforeach
                                 </select>
                             </div>
 
                             <div class="px-2 py-1 rounded-lg bg-card">
-                                <select name="" id="" class="w-full outline-none text-paragraph">
-                                    <option value="pending" class="text-sm text-black" selected disabled>
+                                <select name="" id="" class="w-full outline-none text-paragraph"
+                                    wire:change="$set('disability', $event.target.value)">
+                                    <option class="text-sm text-black" selected disabled>
                                         Disability
                                     </option>
-                                    <option value="pending" class="text-sm text-paragraph">
-                                        1
-                                    </option>
-                                    <option value="pending" class="text-sm text-paragraph">
-                                        2
-                                    </option>
-                                    <option value="pending" class="text-sm text-paragraph">
-                                        3
-                                    </option>
-                                    <option value="pending" class="text-sm text-paragraph">
-                                        4
-                                    </option>
+                                    @foreach ($specializations as $specialization)
+                                        <option value="{{ $specialization }}" class="text-sm text-paragraph">
+                                            {{ ucwords($specialization) }}
+                                        </option>
+                                    @endforeach
                                 </select>
                             </div>
 
                             <textarea name="" id="" maxlength="200" placeholder="Description (Optional)"
+                                wire:model.live='description'
                                 class="px-3 py-2 rounded-lg bg-card placeholder-paragraph resize-none h-24 outline-none"></textarea>
                         </div>
                     </div>
@@ -119,7 +109,7 @@
 
             <!-- Second form -->
             @if ($step === 2)
-                <div class="bg-white p-8 rounded-4xl w-150 hidden flex-col gap-8">
+                <div class="bg-white p-8 rounded-4xl w-150 flex flex-col gap-8">
                     <div class="flex items-center gap-2">
                         <img src="{{ asset('images/form.png') }}" alt="" />
                         <h1 class="text-2xl font-semibold text-heading-dark">
@@ -267,7 +257,7 @@
                                 class="px-3 py-1 rounded-lg bg-card placeholder-paragraph outline-none w-full" />
                             <input type="email" name="" id="" placeholder="Email"
                                 class="px-3 py-1 rounded-lg bg-card placeholder-paragraph outline-none w-full" />
-                            <input type="number" name="" id="" placeholder="Phone no."
+                            <input type="text" name="" id="" placeholder="Phone no. (Optional)"
                                 class="px-3 py-1 rounded-lg bg-card placeholder-paragraph outline-none w-full" />
                         </div>
                     </div>
@@ -295,7 +285,7 @@
 
             <!-- Third form -->
             @if ($step === 3)
-                <div class="bg-white p-8 rounded-4xl w-150 hidden flex-col gap-8">
+                <div class="bg-white p-8 rounded-4xl w-150 flex flex-col gap-8">
                     <div class="flex items-center gap-2">
                         <img src="{{ asset('images/form.png') }}" alt="" />
                         <h1 class="text-2xl font-semibold text-heading-dark">
