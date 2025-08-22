@@ -427,6 +427,7 @@ const barangayData = {
     "Taytay",
   ],
 };
+
 function populateBarangays(muniId, datalistId) {
   const muni = document.getElementById(muniId).value;
   const datalist = document.getElementById(datalistId);

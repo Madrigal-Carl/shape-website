@@ -52,27 +52,34 @@
                                 <select name="" id="" class="w-full outline-none text-paragraph"
                                     wire:change="$set('sex', $event.target.value)">
                                     <option class="text-sm text-black" selected disabled>
-                                        Sex
+                                        {{ ucfirst($sex) }}
                                     </option>
-                                    <option value="male" class="text-sm text-paragraph">
-                                        Male
-                                    </option>
-                                    <option value="female" class="text-sm text-paragraph">
-                                        Female
-                                    </option>
+                                    @if ($sex === 'male')
+                                        <option value="female" class="text-sm text-paragraph">
+                                            Female
+                                        </option>
+                                    @else
+                                        <option value="male" class="text-sm text-paragraph">
+                                            Male
+                                        </option>
+                                    @endif
                                 </select>
                             </div>
 
                             <div class="px-2 py-1 rounded-lg bg-card">
                                 <select name="" id="" class="w-full outline-none text-paragraph"
                                     wire:change="$set('grade_level', $event.target.value)">
-                                    <option class="text-sm text-black" selected disabled>
-                                        Grade Level
-                                    </option>
-                                    @foreach ($grade_levels as $grade_level)
-                                        <option value="{{ $grade_level }}" class="text-sm text-paragraph">
-                                            {{ ucwords($grade_level) }}
-                                        </option>
+                                    @foreach ($grade_levels as $level)
+                                        @if ($grade_level === $level)
+                                            <option value="{{ $grade_level }}" class="text-sm text-black" selected
+                                                disabled>
+                                                {{ ucwords($grade_level) }}
+                                            </option>
+                                        @else
+                                            <option value="{{ $level }}" class="text-sm text-paragraph">
+                                                {{ ucwords($level) }}
+                                            </option>
+                                        @endif
                                     @endforeach
                                 </select>
                             </div>
@@ -80,13 +87,17 @@
                             <div class="px-2 py-1 rounded-lg bg-card">
                                 <select name="" id="" class="w-full outline-none text-paragraph"
                                     wire:change="$set('disability', $event.target.value)">
-                                    <option class="text-sm text-black" selected disabled>
-                                        Disability
-                                    </option>
                                     @foreach ($specializations as $specialization)
-                                        <option value="{{ $specialization }}" class="text-sm text-paragraph">
-                                            {{ ucwords($specialization) }}
-                                        </option>
+                                        @if ($disability === $specialization)
+                                            <option value="{{ $disability }}" class="text-sm text-black" selected
+                                                disabled>
+                                                {{ ucwords($disability) }}
+                                            </option>
+                                        @else
+                                            <option value="{{ $specialization }}" class="text-sm text-paragraph">
+                                                {{ ucwords($specialization) }}
+                                            </option>
+                                        @endif
                                     @endforeach
                                 </select>
                             </div>

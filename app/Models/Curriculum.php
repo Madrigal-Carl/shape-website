@@ -12,8 +12,13 @@ class Curriculum extends Model
         'instructor_id',
         'name',
         'grade_level',
+        'specialization',
         'description',
         'status',
+    ];
+
+    protected $casts = [
+        'specialization' => 'array',
     ];
 
     public function instructor()

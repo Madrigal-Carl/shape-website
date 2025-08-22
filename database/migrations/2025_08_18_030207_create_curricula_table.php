@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('grade_level');
             $table->text('description')->nullable();
+            $table->json('specialization');
             $table->enum('status', ['active', 'inactive'])->default('active');
             $table->timestamps();
         });
