@@ -109,11 +109,31 @@ class DatabaseSeeder extends Seeder
 
         // 10. Create Addresses
         $students->each(function ($student) {
-            Address::factory()->student()->create(['owner_id' => $student->id, 'owner_type' => 'App\Models\Student']);
+            Address::factory()->student()->create([
+                'owner_id' => $student->id,
+                'owner_type' => \App\Models\Student::class,
+                'type' => 'permanent',
+            ]);
+
+            Address::factory()->student()->create([
+                'owner_id' => $student->id,
+                'owner_type' => \App\Models\Student::class,
+                'type' => 'current',
+            ]);
         });
 
         $instructors->each(function ($instructor) {
-            Address::factory()->instructor()->create(['owner_id' => $instructor->id, 'owner_type' => 'App\Models\Instructor']);
+            Address::factory()->instructor()->create([
+                'owner_id' => $instructor->id,
+                'owner_type' => \App\Models\Instructor::class,
+                'type' => 'permanent',
+            ]);
+
+            Address::factory()->instructor()->create([
+                'owner_id' => $instructor->id,
+                'owner_type' => \App\Models\Instructor::class,
+                'type' => 'current',
+            ]);
         });
 
         // 11. Create Lessons

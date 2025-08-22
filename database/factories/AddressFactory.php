@@ -20,11 +20,45 @@ class AddressFactory extends Factory
     protected $model = Address::class;
     public function definition(): array
     {
+        $barangayData = [
+            "boac" => [
+                "agot","agumaymayan","apitong","balagasan","balaring","balimbing","bangbang","bantad","bayanan",
+                "binunga","boi","boton","caganhao","canat","catubugan","cawit","daig","duyay","hinapulan","ibaba",
+                "isok i","isok ii","laylay","libtangin","lupac","mahinhin","malbog","malindig","maligaya","mansiwat",
+                "mercado","murallon","pawa","poras","pulang lupa","puting buhangin","san miguel","tabi","tabigue",
+                "tampus","tambunan","tugos","tumalum",
+            ],
+            "mogpog" => [
+                "bintakay","bocboc","butansapa","candahon","capayang","danao","dulong bayan","gitnang bayan",
+                "hinadharan","hinanggayon","ino","janagdong","malayak","mampaitan","market site","nangka i","nangka ii",
+                "silangan","sumangga","tabi","tarug","villa mendez",
+            ],
+            "gasan" => [
+                "antipolo","bachao ibaba","bachao ilaya","bacong-bacong","bahi","banot","banuyo","cabugao","dawis","ipil",
+                "mangili","masiga","mataas na bayan","pangi","pinggan","tabionan","tiguion",
+            ],
+            "buenavista" => [
+                "bagacay","bagtingon","bicas-bicas","caigangan","daykitin","libas","malbog","sihi","timbo","tungib-lipata","yook",
+            ],
+            "torrijos" => [
+                "bangwayin","bayakbakin","bolo","buangan","cagpo","dampulan","kay duke","macawayan","malibago","malinao",
+                "marlangga","matuyatuya","poblacion","poctoy","sibuyao","suha","talawan","tigwi",
+            ],
+            "santa cruz" => [
+                "alobo","angas","aturan","baguidbirin","banahaw","bangcuangan","biga","bolo","bonliw","botilao","buyabod",
+                "dating bayan","devilla","dolores","haguimit","ipil","jolo","kaganhao","kalangkang","kasily","kilo-kilo",
+                "kinyaman","lamesa","lapu-lapu","lipata","lusok","maharlika","maniwaya","masaguisi","matalaba","mongpong",
+                "pantayin","pili","poblacion","punong","san antonio","tagum","tamayo","tawiran","taytay",
+            ],
+        ];
+
+        $municipality = $this->faker->randomElement(array_keys($barangayData));
+        $barangay = $this->faker->randomElement($barangayData[$municipality]);
         return [
-            'province' => $this->faker->state,
-            'municipality' => $this->faker->city,
-            'barangay' => $this->faker->streetName,
-            'type' => $this->faker->randomElement(['current', 'permanent']),
+            'province' => 'marinduque',
+            'municipality' => $municipality,
+            'barangay' => $barangay,
+            'type' => null,
             'owner_id' => Student::factory(),
             'owner_type' => Student::class,
         ];

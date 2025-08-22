@@ -147,24 +147,32 @@
                             <div class="px-2 py-1 rounded-lg bg-card w-full">
                                 <select name="" id="" class="w-full outline-none text-paragraph"
                                     wire:change="$set('permanent_municipal', $event.target.value)">
-                                    <option class="text-sm text-black" selected disabled>
-                                        Municipal
-                                    </option>
                                     @foreach ($municipalities as $municipality)
-                                        <option value="{{ $municipality }}" class="text-sm text-paragraph">
-                                            {{ $municipality }}</option>
+                                        @if ($permanent_municipal === $municipality)
+                                            <option value="{{ $permanent_municipal }}" class="text-sm text-black"
+                                                selected disabled>
+                                                {{ ucwords($permanent_municipal) }}
+                                            </option>
+                                        @else
+                                            <option value="{{ $municipality }}" class="text-sm text-paragraph">
+                                                {{ ucwords($municipality) }}</option>
+                                        @endif
                                     @endforeach
                                 </select>
                             </div>
                             <div class="px-2 py-1 rounded-lg bg-card w-full">
                                 <select name="" id="" class="w-full outline-none text-paragraph"
                                     wire:change="$set('permanent_barangay', $event.target.value)">
-                                    <option class="text-sm text-black" selected disabled>
-                                        Barangay
-                                    </option>
-                                    @foreach ($barangays as $barangay)
-                                        <option value="{{ $barangay }}" class="text-sm text-paragraph">
-                                            {{ $barangay }}</option>
+                                    @foreach ($permanent_barangays as $pbarangay)
+                                        @if ($permanent_barangay === $pbarangay)
+                                            <option value="{{ $permanent_barangay }}" class="text-sm text-black"
+                                                selected disabled>
+                                                {{ ucwords($permanent_barangay) }}
+                                            </option>
+                                        @else
+                                            <option value="{{ $pbarangay }}" class="text-sm text-paragraph">
+                                                {{ ucwords($pbarangay) }}</option>
+                                        @endif
                                     @endforeach
                                 </select>
                             </div>
@@ -183,24 +191,32 @@
                             <div class="px-2 py-1 rounded-lg bg-card w-full">
                                 <select name="" id="" class="w-full outline-none text-paragraph"
                                     wire:change="$set('current_municipal', $event.target.value)">
-                                    <option class="text-sm text-black" selected disabled>
-                                        Municipal
-                                    </option>
                                     @foreach ($municipalities as $municipality)
-                                        <option value="{{ $municipality }}" class="text-sm text-paragraph">
-                                            {{ $municipality }}</option>
+                                        @if ($current_municipal === $municipality)
+                                            <option value="{{ $current_municipal }}" class="text-sm text-black"
+                                                selected disabled>
+                                                {{ ucwords($current_municipal) }}
+                                            </option>
+                                        @else
+                                            <option value="{{ $municipality }}" class="text-sm text-paragraph">
+                                                {{ ucwords($municipality) }}</option>
+                                        @endif
                                     @endforeach
                                 </select>
                             </div>
                             <div class="px-2 py-1 rounded-lg bg-card w-full">
                                 <select name="" id="" class="w-full outline-none text-paragraph"
                                     wire:change="$set('current_barangay', $event.target.value)">
-                                    <option class="text-sm text-black" selected disabled>
-                                        Barangay
-                                    </option>
-                                    @foreach ($barangays as $barangay)
-                                        <option value="{{ $barangay }}" class="text-sm text-paragraph">
-                                            {{ $barangay }}</option>
+                                    @foreach ($current_barangays as $cbarangay)
+                                        @if ($current_barangay === $cbarangay)
+                                            <option value="{{ $current_barangay }}" class="text-sm text-black"
+                                                selected disabled>
+                                                {{ ucwords($current_barangay) }}
+                                            </option>
+                                        @else
+                                            <option value="{{ $cbarangay }}" class="text-sm text-paragraph">
+                                                {{ ucwords($cbarangay) }}</option>
+                                        @endif
                                     @endforeach
                                 </select>
                             </div>
@@ -283,8 +299,8 @@
                         </button>
                         <button type="button"
                             class="bg-blue-button py-1.5 px-3 w-full rounded-xl text-white font-medium"
-                            wire:click="addStudent">
-                            Register
+                            wire:click="editStudent">
+                            Save
                         </button>
                     </div>
                 </div>

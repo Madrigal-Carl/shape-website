@@ -136,12 +136,12 @@
                             <div class="px-2 py-1 rounded-lg bg-card w-full">
                                 <select name="" id="" class="w-full outline-none text-paragraph"
                                     wire:change="$set('permanent_municipal', $event.target.value)">
-                                    <option class="text-sm text-black" selected disabled>
+                                    <option value='pending' class="text-sm text-black" selected disabled>
                                         Municipal
                                     </option>
                                     @foreach ($municipalities as $municipality)
                                         <option value="{{ $municipality }}" class="text-sm text-paragraph">
-                                            {{ $municipality }}</option>
+                                            {{ ucwords($municipality) }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -151,9 +151,9 @@
                                     <option class="text-sm text-black" selected disabled>
                                         Barangay
                                     </option>
-                                    @foreach ($barangays as $barangay)
-                                        <option value="{{ $barangay }}" class="text-sm text-paragraph">
-                                            {{ $barangay }}</option>
+                                    @foreach ($permanent_barangays as $pbarangay)
+                                        <option value="{{ $pbarangay }}" class="text-sm text-paragraph">
+                                            {{ ucwords($pbarangay) }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -172,12 +172,12 @@
                             <div class="px-2 py-1 rounded-lg bg-card w-full">
                                 <select name="" id="" class="w-full outline-none text-paragraph"
                                     wire:change="$set('current_municipal', $event.target.value)">
-                                    <option class="text-sm text-black" selected disabled>
+                                    <option value='pending' class="text-sm text-black" selected disabled>
                                         Municipal
                                     </option>
                                     @foreach ($municipalities as $municipality)
                                         <option value="{{ $municipality }}" class="text-sm text-paragraph">
-                                            {{ $municipality }}</option>
+                                            {{ ucwords($municipality) }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -187,9 +187,9 @@
                                     <option class="text-sm text-black" selected disabled>
                                         Barangay
                                     </option>
-                                    @foreach ($barangays as $barangay)
-                                        <option value="{{ $barangay }}" class="text-sm text-paragraph">
-                                            {{ $barangay }}</option>
+                                    @foreach ($current_barangays as $cbarangay)
+                                        <option value="{{ $cbarangay }}" class="text-sm text-paragraph">
+                                            {{ ucwords($cbarangay) }}</option>
                                     @endforeach
                                 </select>
                             </div>

@@ -16,7 +16,7 @@ class StudentAddModal extends Component
     use WithFileUploads;
     public $step = 0;
     public $grade_levels = [], $specializations;
-    public $barangayData = [], $municipalities = [], $barangays = [];
+    public $barangayData = [], $municipalities = [], $permanent_barangays = [], $current_barangays = [];
     public $photo, $lrn, $first_name, $middle_name, $last_name, $birthdate, $sex, $grade_level, $disability, $description;
     public $province = "marinduque";
     public $permanent_barangay, $permanent_municipal, $current_barangay, $current_municipal, $guardian_first_name, $guardian_middle_name, $guardian_last_name, $guardian_email, $guardian_phone;
@@ -216,45 +216,51 @@ class StudentAddModal extends Component
 
     public function updatedPermanentMunicipal($value)
     {
-        $this->barangays = $this->barangayData[$value] ?? [];
+        $this->permanent_barangays = $this->barangayData[$value] ?? [];
         $this->permanent_barangay = null;
+    }
+
+    public function updatedCurrentMunicipal($value)
+    {
+        $this->current_barangays = $this->barangayData[$value] ?? [];
+        $this->current_barangay = null;
     }
 
     public function render()
     {
         $this->barangayData = [
-            "Boac" => [
-                "Agot","Agumaymayan","Apitong","Balagasan","Balaring","Balimbing","Bangbang","Bantad","Bayanan",
-                "Binunga","Boi","Boton","Caganhao","Canat","Catubugan","Cawit","Daig","Duyay","Hinapulan","Ibaba",
-                "Isok I","Isok II","Laylay","Libtangin","Lupac","Mahinhin","Malbog","Malindig","Maligaya","Mansiwat",
-                "Mercado","Murallon","Pawa","Poras","Pulang Lupa","Puting Buhangin","San Miguel","Tabi","Tabigue",
-                "Tampus","Tambunan","Tugos","Tumalum",
+            "boac" => [
+                "agot","agumaymayan","apitong","balagasan","balaring","balimbing","bangbang","bantad","bayanan",
+                "binunga","boi","boton","caganhao","canat","catubugan","cawit","daig","duyay","hinapulan","ibaba",
+                "isok i","isok ii","laylay","libtangin","lupac","mahinhin","malbog","malindig","maligaya","mansiwat",
+                "mercado","murallon","pawa","poras","pulang lupa","puting buhangin","san miguel","tabi","tabigue",
+                "tampus","tambunan","tugos","tumalum",
             ],
-            "Mogpog" => [
-                "Bintakay","Bocboc","Butansapa","Candahon","Capayang","Danao","Dulong Bayan","Gitnang Bayan",
-                "Hinadharan","Hinanggayon","Ino","Janagdong","Malayak","Mampaitan","Market Site","Nangka I","Nangka II",
-                "Silangan","Sumangga","Tabi","Tarug","Villa Mendez",
+            "mogpog" => [
+                "bintakay","bocboc","butansapa","candahon","capayang","danao","dulong bayan","gitnang bayan",
+                "hinadharan","hinanggayon","ino","janagdong","malayak","mampaitan","market site","nangka i","nangka ii",
+                "silangan","sumangga","tabi","tarug","villa mendez",
             ],
-            "Gasan" => [
-                "Antipolo","Bachao Ibaba","Bachao Ilaya","Bacong-Bacong","Bahi","Banot","Banuyo","Cabugao","Dawis","Ipil",
-                "Mangili","Masiga","Mataas na Bayan","Pangi","Pinggan","Tabionan","Tiguion",
+            "gasan" => [
+                "antipolo","bachao ibaba","bachao ilaya","bacong-bacong","bahi","banot","banuyo","cabugao","dawis","ipil",
+                "mangili","masiga","mataas na bayan","pangi","pinggan","tabionan","tiguion",
             ],
-            "Buenavista" => [
-                "Bagacay","Bagtingon","Bicas-Bicas","Caigangan","Daykitin","Libas","Malbog","Sihi","Timbo","Tungib-Lipata","Yook",
+            "buenavista" => [
+                "bagacay","bagtingon","bicas-bicas","caigangan","daykitin","libas","malbog","sihi","timbo","tungib-lipata","yook",
             ],
-            "Torrijos" => [
-                "Bangwayin","Bayakbakin","Bolo","Buangan","Cagpo","Dampulan","Kay Duke","Macawayan","Malibago","Malinao",
-                "Marlangga","Matuyatuya","Poblacion","Poctoy","Sibuyao","Suha","Talawan","Tigwi",
+            "torrijos" => [
+                "bangwayin","bayakbakin","bolo","buangan","cagpo","dampulan","kay duke","macawayan","malibago","malinao",
+                "marlangga","matuyatuya","poblacion","poctoy","sibuyao","suha","talawan","tigwi",
             ],
-            "Santa Cruz" => [
-                "Alobo","Angas","Aturan","Baguidbirin","Banahaw","Bangcuangan","Biga","Bolo","Bonliw","Botilao","Buyabod",
-                "Dating Bayan","Devilla","Dolores","Haguimit","Ipil","Jolo","Kaganhao","Kalangkang","Kasily","Kilo-kilo",
-                "Kinyaman","Lamesa","Lapu-lapu","Lipata","Lusok","Maharlika","Maniwaya","Masaguisi","Matalaba","Mongpong",
-                "Pantayin","Pili","Poblacion","Punong","San Antonio","Tagum","Tamayo","Tawiran","Taytay",
+            "santa cruz" => [
+                "alobo","angas","aturan","baguidbirin","banahaw","bangcuangan","biga","bolo","bonliw","botilao","buyabod",
+                "dating bayan","devilla","dolores","haguimit","ipil","jolo","kaganhao","kalangkang","kasily","kilo-kilo",
+                "kinyaman","lamesa","lapu-lapu","lipata","lusok","maharlika","maniwaya","masaguisi","matalaba","mongpong",
+                "pantayin","pili","poblacion","punong","san antonio","tagum","tamayo","tawiran","taytay",
             ],
         ];
-
         $this->municipalities = array_keys($this->barangayData);
+
         $this->grade_levels = Profile::orderBy('grade_level')->pluck('grade_level')->unique()->values()->toArray();
         $user = Account::with('accountable')->find(Auth::user()->id);
         $this->specializations = $user->accountable->specialization;
