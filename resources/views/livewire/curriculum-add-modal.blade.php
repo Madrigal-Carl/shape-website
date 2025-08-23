@@ -93,10 +93,10 @@
                 <!-- buttons -->
                 <div class="flex items-center gap-2">
                     <button wire:click='closeModal' type="button"
-                        class="bg-gray-100 py-1.5 px-3 w-full rounded-xl text-heading-dark font-medium">
+                        class="bg-gray-100 py-1.5 px-3 w-full rounded-xl text-heading-dark font-medium cursor-pointer hover:scale-103">
                         Cancel
                     </button>
-                    <button type="submit" class="bg-blue-button py-1.5 px-3 w-full rounded-xl text-white font-medium">
+                    <button type="submit" class="bg-blue-button py-1.5 px-3 w-full rounded-xl text-white font-medium cursor-pointer hover:scale-103">
                         Save
                     </button>
                 </div>

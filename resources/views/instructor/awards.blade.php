@@ -1,4 +1,4 @@
-<main class="col-span-5 px-8 py-4 flex flex-col h-dvh gap-16 overflow-y-none">
+<main class="col-span-5 pl-8 pr-4 py-4 flex flex-col h-dvh gap-16 overflow-y-auto">
     <!-- Greetings -->
     <div class="flex gap-2 w-auto justify-between">
         <div class="flex gap-4">
@@ -20,10 +20,10 @@
         </button>
     </div>
 
-    <!-- curriculumn Table -->
-    <div class="flex flex-col gap-4 min-h-[20%]">
+    <!-- Award inventory -->
+    <div class="flex flex-col gap-4">
         <div class="side flex items-center justify-between gap-2">
-            <h1 class="text-4xl font-medium">Rewards Inventory</h1>
+            <h1 class="text-4xl font-medium">Awards Inventory</h1>
             <div
                 class="flex items-center bg-white py-3 px-5 rounded-full shadow-2xl text-paragraph cursor-pointer hover:text-white hover:bg-blue-button">
                 <select name="" id="" class="w-25 outline-none">
@@ -43,193 +43,41 @@
             </div>
         </div>
 
-        <div class="flex flex-col min-h-[20%] p-6 bg-white rounded-3xl">
-            <div class="flex flex-col overflow-y-scroll">
-                <div class="flex flex-col bg-whitel rounded-3xl bg-white">
-                    <table class="table-auto border-separate relative">
-                        <thead class="sticky top-0 left-0 z-40 bg-white">
-                            <tr>
-                                <th class="px-4 pb-3 text-center font-semibold">ID</th>
-                                <th class="px-4 pb-3 text-center font-semibold">
-                                    Reward Name
-                                </th>
-                                <th class="px-4 pb-3 text-center font-semibold">
-                                    Student Claimes
-                                </th>
-                                <th class="px-4 pb-3 text-center font-semibold">
-                                    Quantity
-                                </th>
-                                <th class="px-4 pb-3 text-center font-semibold">Status</th>
-                                <th class="px-4 pb-3 text-center font-semibold">Actions</th>
-                            </tr>
-                        </thead>
 
-                        <tbody>
-                            <tr>
-                                <td class="px-4 py-3 text-center">01</td>
-                                <td class="px-4 py-3 text-center">Ice-cream</td>
-                                <td class="px-4 py-3 text-center">45</td>
-                                <td class="px-4 py-3 text-center">100</td>
-
-                                <td class="px-4 py-3 text-center">
-                                    <div class="flex justify-center items-center">
-                                        <div class="gap-2 bg-[#D2FBD0] px-2 py-1 rounded-full flex items-center w-fit">
-                                            <small class="text-[#0D5F07]">Active</small>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="px-4 py-3 text-center">
-                                    <div class="flex justify-center items-center gap-1 text-white">
-                                        <button class="bg-danger px-2 py-1 flex gap-2 items-center rounded-lg">
-                                            <small>Edit</small>
-                                        </button>
-                                        <button class="bg-blue-button px-2 py-1 flex gap-2 items-center rounded-lg">
-                                            <small>View</small>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td class="px-4 py-3 text-center">02</td>
-                                <td class="px-4 py-3 text-center">Cupcake</td>
-                                <td class="px-4 py-3 text-center">45</td>
-                                <td class="px-4 py-3 text-center">100</td>
-
-                                <td class="px-4 py-3 text-center">
-                                    <div class="flex justify-center items-center">
-                                        <div class="gap-2 bg-[#D2FBD0] px-2 py-1 rounded-full flex items-center w-fit">
-                                            <small class="text-[#0D5F07]">Active</small>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="px-4 py-3 text-center">
-                                    <div class="flex justify-center items-center gap-1 text-white">
-                                        <button
-                                            class="bg-danger px-2 py-1 flex gap-2 items-center rounded-lg cursor-pointer hover:scale-110">
-                                            <small>Edit</small>
-                                        </button>
-                                        <button
-                                            class="bg-blue-button px-2 py-1 flex gap-2 items-center rounded-lg cursor-pointer hover:scale-110">
-                                            <small>View</small>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td class="px-4 py-3 text-center">03</td>
-                                <td class="px-4 py-3 text-center">Chocolate</td>
-                                <td class="px-4 py-3 text-center">45</td>
-                                <td class="px-4 py-3 text-center">100</td>
-
-                                <td class="px-4 py-3 text-center">
-                                    <div class="flex justify-center items-center">
-                                        <div class="gap-2 bg-[#D2FBD0] px-2 py-1 rounded-full flex items-center w-fit">
-                                            <small class="text-[#0D5F07]">Active</small>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="px-4 py-3 text-center">
-                                    <div class="flex justify-center items-center gap-1 text-white">
-                                        <button
-                                            class="bg-danger px-2 py-1 flex gap-2 items-center rounded-lg cursor-pointer hover:scale-110">
-                                            <small>Edit</small>
-                                        </button>
-                                        <button
-                                            class="bg-blue-button px-2 py-1 flex gap-2 items-center rounded-lg cursor-pointer hover:scale-110">
-                                            <small>View</small>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td class="px-4 py-3 text-center">04</td>
-                                <td class="px-4 py-3 text-center">Cookie</td>
-                                <td class="px-4 py-3 text-center">45</td>
-                                <td class="px-4 py-3 text-center">100</td>
-                                <td class="px-4 py-3 text-center">
-                                    <div class="flex justify-center items-center">
-                                        <div class="gap-2 bg-[#D2FBD0] px-2 py-1 rounded-full flex items-center w-fit">
-                                            <small class="text-[#0D5F07]">Active</small>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="px-4 py-3 text-center">
-                                    <div class="flex justify-center items-center gap-1 text-white">
-                                        <button
-                                            class="bg-danger px-2 py-1 flex gap-2 items-center rounded-lg cursor-pointer hover:scale-110">
-                                            <small>Edit</small>
-                                        </button>
-                                        <button
-                                            class="bg-blue-button px-2 py-1 flex gap-2 items-center rounded-lg cursor-pointer hover:scale-110">
-                                            <small>View</small>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td class="px-4 py-3 text-center">05</td>
-                                <td class="px-4 py-3 text-center">Candy</td>
-                                <td class="px-4 py-3 text-center">45</td>
-                                <td class="px-4 py-3 text-center">100</td>
-                                <td class="px-4 py-3 text-center">
-                                    <div class="flex justify-center items-center">
-                                        <div class="gap-2 bg-[#D2FBD0] px-2 py-1 rounded-full flex items-center w-fit">
-                                            <small class="text-[#0D5F07]">Active</small>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="px-4 py-3 text-center">
-                                    <div class="flex justify-center items-center gap-1 text-white">
-                                        <button
-                                            class="bg-danger px-2 py-1 flex gap-2 items-center rounded-lg cursor-pointer hover:scale-110">
-                                            <small>Edit</small>
-                                        </button>
-                                        <button
-                                            class="bg-blue-button px-2 py-1 flex gap-2 items-center rounded-lg cursor-pointer hover:scale-110">
-                                            <small>View</small>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="px-4 py-3 text-center">06</td>
-                                <td class="px-4 py-3 text-center">Lollipop</td>
-                                <td class="px-4 py-3 text-center">45</td>
-                                <td class="px-4 py-3 text-center">100</td>
-                                <td class="px-4 py-3 text-center">
-                                    <div class="flex justify-center items-center">
-                                        <div class="gap-2 bg-[#D2FBD0] px-2 py-1 rounded-full flex items-center w-fit">
-                                            <small class="text-[#0D5F07]">Active</small>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="px-4 py-3 text-center">
-                                    <div class="flex justify-center items-center gap-1 text-white">
-                                        <button
-                                            class="bg-danger px-2 py-1 flex gap-2 items-center rounded-lg cursor-pointer hover:scale-110">
-                                            <small>Edit</small>
-                                        </button>
-                                        <button
-                                            class="bg-blue-button px-2 py-1 flex gap-2 items-center rounded-lg cursor-pointer hover:scale-110">
-                                            <small>View</small>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+        <!-- Award Grid -->
+        <div class="w-full  grid grid-cols-4 gap-4">
+            <!-- Award card -->
+            <div class="max-w-100 flex flex-col gap-8 items-center bg-[radial-gradient(circle_at_center,_#93CEF5,_#006FDF)] p-4 rounded-3xl">
+                <div class="flex flex-col items-center gap-2 pt-8">
+                    <img src="{{ asset('images/Awards_icons/medal.png') }}" alt="" class="h-35 mb-4">
+                    <p class="font-medium text-xl text-white w-full">Best in Kagaguhan</p>
+                    <div class="flex items-center w-full justify-center gap-4 text-white">
+                        <p class="text-sm">Awardees:</p>
+                        <p class="text-sm">24</p>
+                    </div>
                 </div>
-            </div>
+
+
+
+                <div class="flex items-center gap-2 w-full">
+                    <button class="w-full flex items-center justify-center gap-1 px-3 py-2 bg-white rounded-xl text-paragraph">
+                        <span class="material-symbols-rounded award-icon">print</span>
+                        <p class="text-sm">Print</p>
+                    </button>
+                    <button class="w-full flex items-center justify-center gap-1 px-3 py-2 bg-yellowOrange rounded-xl text-white">
+                        <span class="material-symbols-rounded award-icon">visibility</span>
+                        <p class="text-sm">View</p>
+                    </button>
+                </div>
+            </div><!--End of Award card -->
+
+
         </div>
     </div>
 </main>
 
 <!-- Aside -->
-<aside class="col-span-2 grid grid-cols-1 grid-rows-2 pr-4 py-4 gap-4 h-dvh">
+<aside class="col-span-2 grid grid-cols-1 grid-rows-2 pr-4 pl-4 py-4 gap-4 h-dvh">
     <!-- Student Feed -->
     <div
         class="bg-gradient-to-tr from-blue-button to-[#2BB4EE] w-full h-full rounded-3xl px-3 pt-3 pb-6 flex flex-col gap-3">
@@ -447,3 +295,117 @@
         </div>
     </div>
 </aside>
+
+<!-- Awards View -->
+<section class="bg-black/30 absolute w-dvw h-dvh p-10 top-0 left-0 z-50 backdrop-blur-xs hidden justify-center gap-6">
+    <!-- Awards View Info-->
+    <div class="w-150 max-h-full Addlesson bg-white py-8 rounded-4xl relative flex">
+        <div class="Addlesson w-full h-full flex flex-col px-8 pb-18 gap-8 self-center-safe overflow-y-auto">
+
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                    <img src="{{ asset('images/award-icon.png') }}" alt="" class="h-10">
+                    <h1 class=" text-2xl font-semibold text-heading-dark">Awards View</h1>
+                </div>
+                <!-- Buttons -->
+                <div class="flex gap-4">
+                    <button class="flex items-center bg-white py-2 px-5 rounded-full gap-2 shadow-2xl text-paragraph cursor-pointer hover:text-white hover:bg-blue-button hover:shadow-xl/35 hover:shadow-blue-button hover:scale-105">
+                        <span class="material-symbols-rounded">calendar_month</span>
+                        <p class="text-sm">Select Date</p>
+                    </button>
+                </div>
+            </div>
+
+
+            <div class="w-full flex flex-col gap-4 items-center justify-center">
+                <img src="{{ asset('images/Awards_icons/medal.png') }}" alt="" class="h-50">
+                <h1 class="text-5xl font-semibold text-center w-80%">Best in Math</h1>
+            </div>
+
+            <div class="w-full flex items-center gap-4 justify-center text-xl text-paragraph">
+                <p class="font-semibold">Total Awardees:</p>
+                <p>24</p>
+            </div>
+
+            <!-- student list of awardees -->
+            <div class="w-full grid grid-cols-2 gap-2">
+                <!-- Student name tag -->
+                <div class="w-full bg-card p-2 text-center rounded-2xl">
+                    <p class="font-semibold text-lg">Carl S. Madrigal</p>
+                </div>
+
+                <!-- Student name tag -->
+                <div class="w-full bg-card p-2 text-center rounded-2xl">
+                    <p class="font-semibold text-lg">Carl S. Madrigal</p>
+                </div>
+
+                <!-- Student name tag -->
+                <div class="w-full bg-card p-2 text-center rounded-2xl">
+                    <p class="font-semibold text-lg">Carl S. Madrigal</p>
+                </div>
+
+                <!-- Student name tag -->
+                <div class="w-full bg-card p-2 text-center rounded-2xl">
+                    <p class="font-semibold text-lg">Carl S. Madrigal</p>
+                </div>
+
+                <!-- Student name tag -->
+                <div class="w-full bg-card p-2 text-center rounded-2xl">
+                    <p class="font-semibold text-lg">Carl S. Madrigal</p>
+                </div>
+
+                <!-- Student name tag -->
+                <div class="w-full bg-card p-2 text-center rounded-2xl">
+                    <p class="font-semibold text-lg">Carl S. Madrigal</p>
+                </div>
+
+                <!-- Student name tag -->
+                <div class="w-full bg-card p-2 text-center rounded-2xl">
+                    <p class="font-semibold text-lg">Carl S. Madrigal</p>
+                </div>
+
+                <!-- Student name tag -->
+                <div class="w-full bg-card p-2 text-center rounded-2xl">
+                    <p class="font-semibold text-lg">Carl S. Madrigal</p>
+                </div>
+
+                <!-- Student name tag -->
+                <div class="w-full bg-card p-2 text-center rounded-2xl">
+                    <p class="font-semibold text-lg">Carl S. Madrigal</p>
+                </div>
+
+                <!-- Student name tag -->
+                <div class="w-full bg-card p-2 text-center rounded-2xl">
+                    <p class="font-semibold text-lg">Carl S. Madrigal</p>
+                </div>
+
+                <!-- Student name tag -->
+                <div class="w-full bg-card p-2 text-center rounded-2xl">
+                    <p class="font-semibold text-lg">Carl S. Madrigal</p>
+                </div>
+
+                <!-- Student name tag -->
+                <div class="w-full bg-card p-2 text-center rounded-2xl">
+                    <p class="font-semibold text-lg">Carl S. Madrigal</p>
+                </div>
+
+                <!-- Student name tag -->
+                <div class="w-full bg-card p-2 text-center rounded-2xl">
+                    <p class="font-semibold text-lg">Carl S. Madrigal</p>
+                </div>
+
+                <!-- Student name tag -->
+                <div class="w-full bg-card p-2 text-center rounded-2xl">
+                    <p class="font-semibold text-lg">Carl S. Madrigal</p>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-2 absolute w-full left-0 bottom-0 px-5 pb-5 pt-10  rounded-b-4xl bg-gradient-to-t from-white via-white to-white/50">
+                <button class=" bg-gray-100 py-1.5 px-3 w-full rounded-xl text-heading-dark font-medium">Cancel</button>
+                <button type="submit" class="bg-blue-button py-1.5 px-3 w-full rounded-xl text-white font-medium">Print</button>
+            </div>
+        </div>
+    </div><!--End of Awards View Info-->
+
+
+</section><!-- Awards View -->

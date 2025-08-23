@@ -106,10 +106,15 @@
                                         {{ count($curriculum->curriculumSubjects) }}</td>
                                     <td class="px-4 py-3 text-center">
                                         <div class="flex justify-center items-center">
-                                            <div
+
+                                            <div>
+                                                <input type="checkbox" id="checkboxInput">
+                                                <label for="checkboxInput" class="toggleSwitch"></label>
+                                            </div>
+                                            {{-- <div
                                                 class="gap-2 bg-[#D2FBD0] px-2 py-1 rounded-full flex items-center w-fit">
                                                 <small class="text-[#0D5F07]">{{ ucwords($curriculum->status) }}</small>
-                                            </div>
+                                            </div> --}}
                                         </div>
                                     </td>
                                     <td class="px-4 py-3 text-center">

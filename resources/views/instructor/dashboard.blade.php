@@ -1,4 +1,4 @@
-<main class="col-span-5 px-8 py-4 flex flex-col h-dvh gap-4 overflow-y-auto">
+<main class="col-span-5 pl-8 pr-4 py-4 flex flex-col h-dvh gap-4 overflow-y-auto">
     <!-- Greetings -->
     <div class="flex gap-2 w-auto justify-between">
         <div class="flex gap-4">
@@ -169,7 +169,7 @@
                     fill: { opacity: 1 },
                     tooltip: { y: { formatter: val => `$ ${val} thousands` } },
                 };
-            
+
                 var chart = new ApexCharts(document.querySelector('#Barchart'), options);
                 chart.render();
             }">
@@ -195,7 +195,7 @@
                         }
                     }]
                 };
-            
+
                 var chart = new ApexCharts(document.querySelector('#Piechart'), options);
                 chart.render();
             }">
@@ -234,7 +234,7 @@
                         x: { format: 'dd/MM/yy HH:mm' }
                     }
                 };
-            
+
                 var chart = new ApexCharts(document.querySelector('#Linechart'), options);
                 chart.render();
             }">
@@ -245,7 +245,7 @@
 </main>
 
 <!-- Aside -->
-<aside class="col-span-2 grid grid-cols-1 grid-rows-2 pr-4 py-4 gap-4 h-dvh">
+<aside class="col-span-2 grid grid-cols-1 grid-rows-2 pl-4 pr-4 py-4 gap-4 h-dvh">
     <!-- Student Feed -->
     <div class="bg-white w-full h-full rounded-3xl px-3 pt-3 pb-6 flex flex-col gap-3">
         <div class="flex gap-2 items-center p-3">
