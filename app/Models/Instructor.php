@@ -36,7 +36,7 @@ class Instructor extends Model
 
     public function lessons()
     {
-        return Lesson::whereHas('subject.curriculums', function ($query) {
+        return Lesson::whereHas('lessonSubject.curriculumSubject.curriculum', function ($query) {
             $query->where('instructor_id', $this->id);
         });
     }

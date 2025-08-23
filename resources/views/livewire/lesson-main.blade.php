@@ -109,13 +109,10 @@
                                     <td class="px-4 py-3 text-center text-paragraph">{{ $lesson->id }}</td>
                                     <td class="px-4 py-3 text-center text-paragraph">{{ ucwords($lesson->title) }}</td>
                                     <td class="px-4 py-3 text-center text-paragraph">
-                                        @foreach ($lesson->subject->curriculums as $curriculum)
-                                            {{ ucwords($curriculum->name) }}@if (!$loop->last)
-                                                ,
-                                            @endif
-                                        @endforeach
+                                        {{ $lesson->lessonSubject->curriculumSubject->curriculum->name }}
                                     </td>
-                                    <td class="px-4 py-3 text-center">{{ ucwords($lesson->subject->name) }}</td>
+                                    <td class="px-4 py-3 text-center">
+                                        {{ ucwords($lesson->lessonSubject->curriculumSubject->subject->name) }}</td>
                                     <td class="px-4 py-3 text-center">{{ $lesson->students_count }}</td>
                                     <td class="px-4 py-3 text-center">{{ $lesson->videos_count }}</td>
                                     <td class="px-4 py-3 text-center">{{ $lesson->activity_lessons_count }}</td>
@@ -141,18 +138,41 @@
                                         </div>
                                     </td>
                                 </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="10" class="px-4 py-6 text-center text-gray-500">
-                                            No lessons found.
-                                        </td>
-                                    </tr>
-                                @endforelse
-                        </table>
-                    </div>
+                            @empty
+                                <tr>
+                                    <td colspan="10" class="px-4 py-6 text-center text-gray-500">
+                                        No lessons found.
+                                    </td>
+                                </tr>
+                            @endforelse
+                    </table>
                 </div>
             </div>
-        </div>
 
-        <livewire:lesson-add-modal />
-    </main>
+            @if ($lessons->lastPage() > 1)
+                <div class="rounded-full border border-[#E8E8E8] p-2 w-fit flex items-center text-sm">
+                    <button class="py-1 px-3 {{ $lessons->onFirstPage() ? 'hidden' : '' }}"
+                        @if (!$lessons->onFirstPage()) wire:click="gotoPage({{ $lessons->currentPage() - 1 }})" @endif>
+                        <span class="material-symbols-outlined">chevron_backward</span>
+                    </button>
+
+                    @foreach ($lessons->getUrlRange(1, $lessons->lastPage()) as $page => $url)
+                        @if ($page == $lessons->currentPage())
+                            <button class="bg-[#7A7A7A1F] py-1 px-4 rounded-full">{{ $page }}</button>
+                        @else
+                            <button wire:click="gotoPage({{ $page }})"
+                                class="py-1 px-4">{{ $page }}</button>
+                        @endif
+                    @endforeach
+
+                    <button class="py-1 px-3 {{ $lessons->hasMorePages() ? '' : 'hidden' }}"
+                        @if ($lessons->hasMorePages()) wire:click="gotoPage({{ $lessons->currentPage() + 1 }})" @endif>
+                        <span class="material-symbols-outlined">chevron_forward</span>
+                    </button>
+                </div>
+            @endif
+        </div>
+    </div>
+
+    <livewire:lesson-add-modal />
+</main>

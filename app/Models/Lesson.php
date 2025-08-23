@@ -14,9 +14,19 @@ class Lesson extends Model
         'description',
     ];
 
-    public function curriculumSubject()
+    public function lessonSubject()
     {
-        return $this->belongsTo(CurriculumSubject::class);
+        return $this->belongsTo(LessonSubject::class);
+    }
+
+    public function student()
+    {
+        return $this->lessonSubject->student();
+    }
+
+    public function studentCount()
+    {
+        return $this->lessonSubject->curriculumSubject->students()->count();
     }
 
     public function videos()
