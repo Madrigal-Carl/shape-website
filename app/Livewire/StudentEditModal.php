@@ -2,20 +2,22 @@
 
 namespace App\Livewire;
 
-use App\Models\Student;
-use App\Models\Profile;
 use App\Models\Account;
+use App\Models\Profile;
+use App\Models\Student;
 use Livewire\Component;
-use Livewire\WithFileUploads;
 use Livewire\Attributes\On;
+use Livewire\WithFileUploads;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class StudentEditModal extends Component
 {
     use WithFileUploads;
 
     public $step = 0, $isOpen = false, $student_id = null;
-    public $photo, $lrn, $first_name, $middle_name, $last_name, $birthdate, $sex, $grade_level, $disability, $description;
+    public $photo, $currentPhoto, $lrn, $first_name, $middle_name, $last_name, $birthdate, $sex, $grade_level, $disability, $description;
     public $province = "marinduque";
     public $permanent_barangay, $permanent_municipal, $current_barangay, $current_municipal;
     public $guardian_first_name, $guardian_middle_name, $guardian_last_name, $guardian_email, $guardian_phone;
@@ -38,6 +40,7 @@ class StudentEditModal extends Component
         $this->last_name  = $student->last_name;
         $this->birthdate  = $student->birth_date;
         $this->sex        = $student->sex;
+        $this->currentPhoto = $student->path;
 
         $this->lrn         = $student->profile->lrn;
         $this->grade_level = $student->profile->grade_level;
@@ -104,6 +107,16 @@ class StudentEditModal extends Component
     {
         $student = Student::with(['profile','guardian','addresses','account'])->findOrFail($this->student_id);
 
+        if ($this->photo instanceof \Illuminate\Http\UploadedFile) {
+            if ($student->path && Storage::disk('public')->exists($student->path)) {
+                Storage::disk('public')->delete($student->path);
+            }
+
+            // Save new photo
+            $path = $this->photo->store('photos', 'public');
+            $student->path = $path;
+        }
+
         $changes = collect([
             'lrn'        => [$this->lrn, $this->original['lrn']],
             'first_name' => [$this->first_name, $this->original['first_name']],
@@ -129,7 +142,8 @@ class StudentEditModal extends Component
         ->map(fn($pair) => $pair[0])
         ->toArray();
 
-        if (empty($changes)) {
+        $photoChanged = $this->photo instanceof UploadedFile;
+        if (!$photoChanged && empty($changes)) {
             $this->dispatch('swal-toast', icon:'info', title:'No changes detected.');
             return;
         }

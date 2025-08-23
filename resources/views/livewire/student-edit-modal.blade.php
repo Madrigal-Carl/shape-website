@@ -14,8 +14,11 @@
 
                     <div class="flex items-center gap-4">
                         <div>
-                            @if ($photo)
+                            @if ($photo instanceof \Illuminate\Http\UploadedFile)
                                 <img src="{{ $photo->temporaryUrl() }}" class="w-15 h-15 rounded-full object-cover" />
+                            @elseif ($currentPhoto)
+                                <img src="{{ Storage::url($currentPhoto) }}"
+                                    class="w-15 h-15 rounded-full object-cover" />
                             @else
                                 <img src="https://placehold.co/100x100" class="w-15 h-15 rounded-full object-cover" />
                             @endif
