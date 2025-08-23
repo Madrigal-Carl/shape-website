@@ -31,7 +31,7 @@ class CurriculumFactory extends Factory
             'grade_level' => 'Kindergarten 1',
             'specialization' => $this->faker->randomElements($specializations, rand(1, 2)),
             'description' => $this->faker->paragraph,
-            'status' => 'active',
+            'status' => 'inactive',
         ];
     }
 }

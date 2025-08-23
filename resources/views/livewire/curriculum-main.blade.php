@@ -106,16 +106,13 @@
                                         {{ count($curriculum->curriculumSubjects) }}</td>
                                     <td class="px-4 py-3 text-center">
                                         <div class="flex justify-center items-center">
-
                                             <div>
-                                                <input type="checkbox" id="checkboxInput">
-                                                <label for="checkboxInput" class="toggleSwitch"></label>
+                                                <input type="checkbox" id="checkboxInput-{{ $curriculum->id }}"
+                                                    class="toggleInput" wire:click="toggleStatus({{ $curriculum->id }})"
+                                                    {{ $curriculum->status === 'active' ? 'checked' : '' }}>
+                                                <label for="checkboxInput-{{ $curriculum->id }}"
+                                                    class="toggleSwitch"></label>
                                             </div>
-                                            {{-- <div
-                                                class="gap-2 bg-[#D2FBD0] px-2 py-1 rounded-full flex items-center w-fit">
-                                                <small class="text-[#0D5F07]">{{ ucwords($curriculum->status) }}</small>
-                                            </div> --}}
-                                        </div>
                                     </td>
                                     <td class="px-4 py-3 text-center">
                                         <div class="flex justify-center items-center gap-1 text-white">

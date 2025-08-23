@@ -173,7 +173,7 @@ html {
 
 /* Curriculum Toggle switch */
 /* To hide the checkbox */
-#checkboxInput {
+.toggleInput {
   display: none;
 }
 
@@ -203,14 +203,16 @@ html {
   border: 5px solid white;
 }
 
-#checkboxInput:checked+.toggleSwitch::after {
+.toggleInput:checked + .toggleSwitch::after {
   transform: translateX(100%);
   transition-duration: .2s;
   background-color: white;
 }
+
 /* Switch background change */
-#checkboxInput:checked+.toggleSwitch {
+.toggleInput:checked + .toggleSwitch {
   background-color: var(--color-active);
   transition-duration: .2s;
 }
+
 /* End Of TOggle switch */

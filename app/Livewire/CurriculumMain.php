@@ -30,6 +30,24 @@ class CurriculumMain extends Component
         $this->dispatch('openModal', id: $id)->to('curriculum-view-modal');
     }
 
+    public function toggleStatus($id)
+    {
+        $curriculum = Curriculum::where('instructor_id', Auth::id())->findOrFail($id);
+        if ($curriculum->status === 'inactive') {
+            Curriculum::where('instructor_id', Auth::id())
+                ->where('id', '!=', $curriculum->id)
+                ->update(['status' => 'inactive']);
+
+            $curriculum->update(['status' => 'active']);
+            $this->dispatch('swal-toast', icon : 'success', title : 'Curriculum has been activated.');
+            return $this->resetPage();
+        }
+        $curriculum->update(['status' => 'inactive']);
+        $this->dispatch('swal-toast', icon : 'warning', title : 'Curriculum has been deactived.');
+        return $this->resetPage();
+    }
+
+
     public function render()
     {
         $curriculums = Curriculum::with('curriculumSubjects')
@@ -40,6 +58,7 @@ class CurriculumMain extends Component
             ->when(!empty($this->search), function ($query) {
                 $query->where('name', 'like', '%' . $this->search . '%');
             })
+            ->orderByRaw("FIELD(status, 'active', 'inactive')")
             ->orderByDesc('created_at')
             ->paginate(10);
 
