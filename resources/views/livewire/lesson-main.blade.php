@@ -153,7 +153,9 @@
                 <div class="rounded-full border border-[#E8E8E8] p-2 w-fit flex items-center text-sm">
                     <button class="py-1 px-3 {{ $lessons->onFirstPage() ? 'hidden' : '' }}"
                         @if (!$lessons->onFirstPage()) wire:click="gotoPage({{ $lessons->currentPage() - 1 }})" @endif>
-                        <span class="material-symbols-outlined">chevron_backward</span>
+                        <span class="material-symbols-outlined">
+                            keyboard_double_arrow_right
+                        </span>
                     </button>
 
                     @foreach ($lessons->getUrlRange(1, $lessons->lastPage()) as $page => $url)
@@ -167,7 +169,9 @@
 
                     <button class="py-1 px-3 {{ $lessons->hasMorePages() ? '' : 'hidden' }}"
                         @if ($lessons->hasMorePages()) wire:click="gotoPage({{ $lessons->currentPage() + 1 }})" @endif>
-                        <span class="material-symbols-outlined">chevron_forward</span>
+                        <span class="material-symbols-outlined">
+                            keyboard_double_arrow_right
+                        </span>
                     </button>
                 </div>
             @endif

@@ -182,7 +182,9 @@
                 <div class="rounded-full border border-[#E8E8E8] p-2 w-fit flex items-center text-sm">
                     <button class="py-1 px-3 {{ $curriculums->onFirstPage() ? 'hidden' : '' }}"
                         @if (!$curriculums->onFirstPage()) wire:click="gotoPage({{ $curriculums->currentPage() - 1 }})" @endif>
-                        <span class="material-symbols-outlined">chevron_backward</span>
+                        <span class="material-symbols-outlined">
+                            keyboard_double_arrow_right
+                        </span>
                     </button>
 
                     @foreach ($curriculums->getUrlRange(1, $curriculums->lastPage()) as $page => $url)
@@ -196,7 +198,9 @@
 
                     <button class="py-1 px-3 {{ $curriculums->hasMorePages() ? '' : 'hidden' }}"
                         @if ($curriculums->hasMorePages()) wire:click="gotoPage({{ $curriculums->currentPage() + 1 }})" @endif>
-                        <span class="material-symbols-outlined">chevron_forward</span>
+                        <span class="material-symbols-outlined">
+                            keyboard_double_arrow_right
+                        </span>
                     </button>
                 </div>
             @endif
