@@ -180,6 +180,35 @@
                 </div>
             </div>
         </div>
+        @if ($students->lastPage() > 1)
+            <div class="rounded-full bg-white gap-1 p-2 w-fit self-center-safe flex items-center text-sm shadow-2xl">
+                <button
+                    class="cursor-pointer py-1 flex items-center px-3 {{ $students->onFirstPage() ? 'hidden' : '' }}"
+                    @if (!$students->onFirstPage()) wire:click="gotoPage({{ $students->currentPage() - 1 }})" @endif>
+                    <span class="material-symbols-outlined">
+                        chevron_left
+                    </span>
+                </button>
+
+                @foreach ($students->getUrlRange(1, $students->lastPage()) as $page => $url)
+                    @if ($page == $students->currentPage())
+                        <button
+                            class=" bg-blue-button text-white py-1 px-4 rounded-full cursor-pointer">{{ $page }}</button>
+                    @else
+                        <button wire:click="gotoPage({{ $page }})"
+                            class="py-1 px-4 hover:bg-blue-button rounded-full hover:text-white cursor-pointer">{{ $page }}</button>
+                    @endif
+                @endforeach
+
+                <button
+                    class="cursor-pointer py-1 flex items-center px-3 {{ $students->hasMorePages() ? '' : 'hidden' }}"
+                    @if ($students->hasMorePages()) wire:click="gotoPage({{ $students->currentPage() + 1 }})" @endif>
+                    <span class="material-symbols-outlined">
+                        chevron_right
+                    </span>
+                </button>
+            </div>
+        @endif
     </div>
 
     <livewire:student-add-modal />

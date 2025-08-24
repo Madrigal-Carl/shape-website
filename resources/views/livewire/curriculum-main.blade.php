@@ -178,35 +178,37 @@
                     </table>
                 </div>
             </div>
-            @if ($curriculums->lastPage() > 1)
-                <div class="rounded-full border border-[#E8E8E8] p-2 w-fit flex items-center text-sm">
-                    <button class="py-1 px-3 {{ $curriculums->onFirstPage() ? 'hidden' : '' }}"
-                        @if (!$curriculums->onFirstPage()) wire:click="gotoPage({{ $curriculums->currentPage() - 1 }})" @endif>
-                        <span class="material-symbols-outlined">
-                            keyboard_double_arrow_right
-                        </span>
-                    </button>
-
-                    @foreach ($curriculums->getUrlRange(1, $curriculums->lastPage()) as $page => $url)
-                        @if ($page == $curriculums->currentPage())
-                            <button class="bg-[#7A7A7A1F] py-1 px-4 rounded-full">{{ $page }}</button>
-                        @else
-                            <button wire:click="gotoPage({{ $page }})"
-                                class="py-1 px-4">{{ $page }}</button>
-                        @endif
-                    @endforeach
-
-                    <button class="py-1 px-3 {{ $curriculums->hasMorePages() ? '' : 'hidden' }}"
-                        @if ($curriculums->hasMorePages()) wire:click="gotoPage({{ $curriculums->currentPage() + 1 }})" @endif>
-                        <span class="material-symbols-outlined">
-                            keyboard_double_arrow_right
-                        </span>
-                    </button>
-                </div>
-            @endif
-
-
         </div>
+
+        @if ($curriculums->lastPage() > 1)
+            <div class="rounded-full bg-white gap-1 p-2 w-fit self-center-safe flex items-center text-sm shadow-2xl">
+                <button
+                    class="cursor-pointer py-1 flex items-center px-3 {{ $curriculums->onFirstPage() ? 'hidden' : '' }}"
+                    @if (!$curriculums->onFirstPage()) wire:click="gotoPage({{ $curriculums->currentPage() - 1 }})" @endif>
+                    <span class="material-symbols-outlined">
+                        chevron_left
+                    </span>
+                </button>
+
+                @foreach ($curriculums->getUrlRange(1, $curriculums->lastPage()) as $page => $url)
+                    @if ($page == $curriculums->currentPage())
+                        <button
+                            class=" bg-blue-button text-white py-1 px-4 rounded-full cursor-pointer">{{ $page }}</button>
+                    @else
+                        <button wire:click="gotoPage({{ $page }})"
+                            class="py-1 px-4 hover:bg-blue-button rounded-full hover:text-white cursor-pointer">{{ $page }}</button>
+                    @endif
+                @endforeach
+
+                <button
+                    class="cursor-pointer py-1 flex items-center px-3 {{ $curriculums->hasMorePages() ? '' : 'hidden' }}"
+                    @if ($curriculums->hasMorePages()) wire:click="gotoPage({{ $curriculums->currentPage() + 1 }})" @endif>
+                    <span class="material-symbols-outlined">
+                        chevron_right
+                    </span>
+                </button>
+            </div>
+        @endif
     </div>
 
     <livewire:curriculum-add-modal />
