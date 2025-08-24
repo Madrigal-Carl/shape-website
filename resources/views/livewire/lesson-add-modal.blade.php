@@ -124,14 +124,17 @@
 
                                 <div class="flex grid-cols-2 gap-2">
                                     @foreach ($uploadedVideos as $index => $video)
-                                        <div class="flex flex-col gap-2 relative">
+                                        <div class="flex flex-col gap-2 relative video-container-{{ $index }}">
                                             <div class="flex flex-col items-center justify-center">
                                                 <img src="{{ $video['thumbnail'] }}"
-                                                    class="aspect-video w-full h-fit rounded-lg object-cover" />
-                                                <button
-                                                    class="absolute rounded-full cursor-pointer hover:scale-120 shadow-xl/40 z-10">
+                                                    class="aspect-video w-full h-fit rounded-lg object-cover video-thumb-{{ $index }}" />
+                                                <button type="button"
+                                                    class="absolute rounded-full cursor-pointer hover:scale-120 shadow-xl/40 z-10 playBtn-{{ $index }}"
+                                                    onclick="playVideo({{ $index }}, '{{ $video['video'] }}')">
                                                     <span
-                                                        class="material-symbols-rounded p-2 rounded-full playBtn text-white bg-white/20 backdrop-blur-[3px] shadow-white shadow-inner">play_arrow</span>
+                                                        class="material-symbols-rounded p-2 rounded-full text-white bg-white/20 backdrop-blur-[3px] shadow-white shadow-inner">
+                                                        play_arrow
+                                                    </span>
                                                 </button>
                                             </div>
 
@@ -139,7 +142,8 @@
                                                 class="absolute bottom-0 bg-gradient-to-t from-black/80 via-black/0 to-black/0 w-full h-full rounded-lg">
                                                 <div class="h-full w-full flex items-end justify-between p-3">
                                                     <h1 class="text-white font-medium text-sm ml-1">
-                                                        {{ $video['title'] }}</h1>
+                                                        {{ $video['title'] }}
+                                                    </h1>
                                                     <button wire:click="removeVideo({{ $index }})"
                                                         type="button"
                                                         class="cursor-pointer p-0 flex items-center justify-center text-white hover:text-danger hover:scale-120">
@@ -151,7 +155,14 @@
                                     @endforeach
                                 </div>
                             </div>
-
+                            <div class="flex flex-col gap-2">
+                                <input type="text" placeholder="Paste YouTube Link" wire:model="youtube_link"
+                                    class="px-3 py-1 rounded-lg bg-card placeholder-paragraph outline-none w-full" />
+                                <button type="button" wire:click="addYoutubeVideo"
+                                    class="bg-blue-button text-white px-3 py-1 rounded-lg w-fit">
+                                    Add YouTube Video
+                                </button>
+                            </div>
                         </div>
 
                         <div class="flex flex-col gap-3">
@@ -392,4 +403,58 @@
             }));
         }
     });
+
+    function playVideo(index, videoUrl) {
+        const container = document.querySelector(`.video-container-${index}`);
+        const thumb = container.querySelector(`.video-thumb-${index}`);
+        const playBtn = container.querySelector(`.playBtn-${index}`);
+
+        thumb.style.display = 'none';
+        playBtn.style.display = 'none';
+
+        let existingMedia = container.querySelector('video, iframe');
+        if (existingMedia) existingMedia.remove();
+
+        let mediaEl;
+
+        if (videoUrl.includes('youtube.com') || videoUrl.includes('youtu.be')) {
+            const videoIdMatch = videoUrl.match(/(?:youtube\.com\/(?:watch\?v=|shorts\/)|youtu\.be\/)([^\?&]+)/);
+            const videoId = videoIdMatch ? videoIdMatch[1] : null;
+            if (!videoId) return;
+
+            mediaEl = document.createElement('iframe');
+            mediaEl.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&controls=1`;
+            mediaEl.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
+            mediaEl.allowFullscreen = true;
+
+        } else {
+            // Normal video file
+            mediaEl = document.createElement('video');
+            mediaEl.src = videoUrl;
+            mediaEl.controls = true;
+            mediaEl.autoplay = true;
+
+            mediaEl.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (mediaEl.paused) mediaEl.play();
+                else mediaEl.pause();
+            });
+        }
+
+        mediaEl.classList.add('aspect-video', 'w-full', 'rounded-lg', 'object-cover');
+
+        container.querySelector('div').appendChild(mediaEl);
+
+        function handleClickOutside(e) {
+            if (!container.contains(e.target)) {
+                if (mediaEl.tagName === 'VIDEO') mediaEl.pause();
+                mediaEl.remove();
+                thumb.style.display = 'block';
+                playBtn.style.display = 'flex';
+                document.removeEventListener('click', handleClickOutside);
+            }
+        }
+
+        setTimeout(() => document.addEventListener('click', handleClickOutside), 0);
+    }
 </script>

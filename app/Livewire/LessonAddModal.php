@@ -25,7 +25,7 @@ use Illuminate\Validation\ValidationException;
 class LessonAddModal extends Component
 {
     use WithFileUploads;
-    public $subjects, $grade_levels, $students, $activities, $activity, $curriculums;
+    public $subjects, $grade_levels, $students, $activities, $activity, $curriculums, $youtube_link;
     public $videos = [];
     public $isOpen = true;
     public $lesson_name, $curriculum, $subject, $grade_level, $description, $quiz_name, $quiz_description;
@@ -108,6 +108,51 @@ class LessonAddModal extends Component
             }
         }
         $this->videos = [];
+    }
+
+    public function addYoutubeVideo()
+    {
+        $url = trim($this->youtube_link);
+
+        if (empty($url)) {
+            return $this->dispatch('swal-toast', icon: 'error', title: 'Please enter a YouTube link.');
+        }
+
+        if (!filter_var($url, FILTER_VALIDATE_URL) || (!str_contains($url, 'youtube.com') && !str_contains($url, 'youtu.be'))) {
+            return $this->dispatch('swal-toast', icon: 'error', title: 'Invalid YouTube link.');
+        }
+
+        try {
+            $videoId = $this->getYoutubeId($url);
+
+            if (!$videoId) {
+                return $this->dispatch('swal-toast', icon: 'error', title: 'Cannot extract YouTube video ID.');
+            }
+
+            $oembedUrl = "https://www.youtube.com/oembed?url={$url}&format=json";
+            $data = json_decode(file_get_contents($oembedUrl), true);
+
+            $this->uploadedVideos[] = [
+                'video' => $url,
+                'thumbnail' => "https://img.youtube.com/vi/{$videoId}/hqdefault.jpg",
+                'title' => $data['title'] ?? 'YouTube Video',
+            ];
+
+            $this->youtube_link = '';
+        } catch (\Exception $e) {
+            $this->dispatch('swal-toast', icon: 'error', title: 'Could not fetch video info.');
+        }
+    }
+
+    private function getYoutubeId($url)
+    {
+        preg_match(
+            '/(?:youtube\.com\/(?:watch\?v=|shorts\/)|youtu\.be\/)([^\?&]+)/',
+            $url,
+            $matches
+        );
+
+        return $matches[1] ?? null;
     }
 
     public function removeVideo($index)
