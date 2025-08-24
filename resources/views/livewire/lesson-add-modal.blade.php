@@ -3,7 +3,7 @@
         <section class="bg-black/30 fixed w-dvw h-dvh p-10 top-0 left-0 z-50 backdrop-blur-xs flex justify-center gap-6">
             <!-- Add lesson container -->
             <form wire:submit='addLesson' class="flex justify-center gap-6">
-                <div class="w-150 h-full Addlesson bg-white p-8 rounded-4xl">
+                <div class="w-180 h-full Addlesson bg-white p-8 rounded-4xl relative">
                     <!-- first form -->
                     <div class="Addlesson w-full h-[100%] flex flex-col gap-8 self-center-safe overflow-y-auto">
                         <div class="flex items-center gap-2">
@@ -193,8 +193,9 @@
                                             <img src="{{ asset('images/game-icons/hayday.jpeg') }}" alt=""
                                                 class="h-12 rounded-md aspect-square object-cover" />
                                             <div>
-                                                <h1 class="font-medium">{{ $act->name }}</h1>
-                                                <p>{{ collect($act->category ?? [])->map(fn($cat) => ucfirst(Str::of($cat)->explode(' ')->first()))->implode(', ') }}
+                                                <h1 class="font-medium text-sm">{{ $act->name }}</h1>
+                                                <p class="text-xs">
+                                                    {{ collect($act->category ?? [])->map(fn($cat) => ucfirst(Str::of($cat)->explode(' ')->first()))->implode(', ') }}
                                                 </p>
                                             </div>
                                         </div>
@@ -211,15 +212,256 @@
                                     </div>
                                 @endforelse
                             </div>
-                            <!--End of Game container -->
-                        </div>
-                    </div>
-                    <!-- End of first form -->
+
+
+                            <div
+                                class="flex flex-col w-full h-160 gap-4 bg-white shadow-2xl rounded-4xl absolute left-0 top-0 p-8">
+                                <div class="w-full flex items-center justify-between">
+                                    <p class="font-semibold text-2xl">Game Hub</p>
+                                    <span class="material-symbols-rounded">close</span>
+                                </div>
+
+                                <div class="w-full flex flex-col gap-2">
+                                    <h1 class="text-lg font-medium">Game Categories:</h1>
+                                    <!--Categories-->
+                                    <div class="w-full flex items-center gap-2 gameCategories overflow-x-auto pb-2">
+                                        <div
+                                            class="w-fi shrink-0 flex items-center gap-2 bg-card px-3 py-1 rounded-xl text-paragraph hover:bg-blue-button hover:text-white cursor-pointer">
+                                            <img src="{{ asset('images/game-icons/game-categories-icons/arts.png') }}"
+                                                alt="" class="h-6">
+                                            <p class="text-base">Math</p>
+                                        </div>
+
+                                        <div
+                                            class="w-fit shrink-0 flex items-center gap-2 bg-card px-3 py-1 rounded-xl  text-paragraph hover:bg-blue-button hover:text-white cursor-pointer">
+                                            <img src="{{ asset('images/game-icons/game-categories-icons/arts.png') }}"
+                                                alt="" class="h-6">
+                                            <p class="text-base">Science</p>
+                                        </div>
+
+                                        <div
+                                            class="w-fit shrink-0 flex items-center gap-2 bg-card px-3 py-1 rounded-xl  text-paragraph hover:bg-blue-button hover:text-white cursor-pointer">
+                                            <img src="{{ asset('images/game-icons/game-categories-icons/arts.png') }}"
+                                                alt="" class="h-6">
+                                            <p class="text-base">Self Care</p>
+                                        </div>
+
+                                        <div
+                                            class="w-fit shrink-0 flex items-center gap-2 bg-card px-3 py-1 rounded-xl  text-paragraph hover:bg-blue-button hover:text-white cursor-pointer">
+                                            <img src="{{ asset('images/game-icons/game-categories-icons/arts.png') }}"
+                                                alt="" class="h-6">
+                                            <p class="text-base">English</p>
+                                        </div>
+
+                                        <div
+                                            class="w-fit shrink-0 flex items-center gap-2 bg-card px-3 py-1 rounded-xl  text-paragraph hover:bg-blue-button hover:text-white cursor-pointer">
+                                            <img src="{{ asset('images/game-icons/game-categories-icons/arts.png') }}"
+                                                alt="" class="h-6">
+                                            <p class="text-base">Filipino Sign Language</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="grid grid-cols-2 gap-2 overflow-y-auto rounded-xl gamesGrid">
+                                    <!--Game container at game hub-->
+                                    <div class="w-fit shrink-0 flex flex-col gap-2 relative cursor-pointer">
+                                        <img src="{{ asset('images/game-icons/game-posters/mario-kart-world-review-1.jpg') }}"
+                                            class="aspect-video w-auto h-fit rounded-xl object-cover" />
+
+                                        <div
+                                            class="absolute bottom-0 bg-gradient-to-t from-black/80 via-black/10 to-black/0 w-full h-full rounded-xl items-center">
+                                            <div class="h-full w-full flex items-end justify-between p-3">
+                                                <div class="flex items-center w-full justify-between">
+                                                    <div class="w-full flex items-center gap-2">
+                                                        <img src="{{ asset('images/game-icons/mario.jpeg') }}"
+                                                            alt=""
+                                                            class="h-10 rounded-lg aspect-square object-cover">
+                                                        <div class="flex flex-col">
+                                                            <h1 class="text-white font-medium text-sm truncate">Mario
+                                                                cart: World Tour</h1>
+                                                            <p class="text-white/60 text-xs truncate font-light">Lorem
+                                                                ipsum dolor sit amet.</p>
+                                                        </div>
+                                                    </div>
+
+                                                    <button type="button"
+                                                        class="cursor-pointer bg-white/40 backdrop-blur-sm px-3 py-1 rounded-full p-0 flex items-center justify-center text-white hover:bg-blue-button hover:scale-110">
+                                                        <p class="text-sm">Add</p>
+                                                    </button>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div><!--End Game container at game hub-->
+
+                                    <!--Game container at game hub-->
+                                    <div class="w-fit shrink-0 flex flex-col gap-2 relative cursor-pointer">
+                                        <img src="{{ asset('images/game-icons/game-posters/mario-kart-world-review-1.jpg') }}"
+                                            class="aspect-video w-auto h-fit rounded-xl object-cover" />
+
+                                        <div
+                                            class="absolute bottom-0 bg-gradient-to-t from-black/80 via-black/10 to-black/0 w-full h-full rounded-xl items-center">
+                                            <div class="h-full w-full flex items-end justify-between p-3">
+                                                <div class="flex items-center w-full justify-between">
+                                                    <div class="w-full flex items-center gap-2">
+                                                        <img src="{{ asset('images/game-icons/mario.jpeg') }}"
+                                                            alt=""
+                                                            class="h-10 rounded-lg aspect-square object-cover">
+                                                        <div class="flex flex-col">
+                                                            <h1 class="text-white font-medium text-sm truncate">Mario
+                                                                cart: World Tour</h1>
+                                                            <p class="text-white/60 text-xs truncate font-light">Lorem
+                                                                ipsum dolor sit amet.</p>
+                                                        </div>
+                                                    </div>
+
+                                                    <button type="button"
+                                                        class="cursor-pointer bg-white/40 backdrop-blur-sm px-3 py-1 rounded-full p-0 flex items-center justify-center text-white hover:bg-blue-button hover:scale-110">
+                                                        <p class="text-sm">Add</p>
+                                                    </button>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div><!--End Game container at game hub-->
+
+                                    <!--Game container at game hub-->
+                                    <div class="w-fit shrink-0 flex flex-col gap-2 relative cursor-pointer">
+                                        <img src="{{ asset('images/game-icons/game-posters/mario-kart-world-review-1.jpg') }}"
+                                            class="aspect-video w-auto h-fit rounded-xl object-cover" />
+
+                                        <div
+                                            class="absolute bottom-0 bg-gradient-to-t from-black/80 via-black/10 to-black/0 w-full h-full rounded-xl items-center">
+                                            <div class="h-full w-full flex items-end justify-between p-3">
+                                                <div class="flex items-center w-full justify-between">
+                                                    <div class="w-full flex items-center gap-2">
+                                                        <img src="{{ asset('images/game-icons/mario.jpeg') }}"
+                                                            alt=""
+                                                            class="h-10 rounded-lg aspect-square object-cover">
+                                                        <div class="flex flex-col">
+                                                            <h1 class="text-white font-medium text-sm truncate">Mario
+                                                                cart: World Tour</h1>
+                                                            <p class="text-white/60 text-xs truncate font-light">Lorem
+                                                                ipsum dolor sit amet.</p>
+                                                        </div>
+                                                    </div>
+
+                                                    <button type="button"
+                                                        class="cursor-pointer bg-white/40 backdrop-blur-sm px-3 py-1 rounded-full p-0 flex items-center justify-center text-white hover:bg-blue-button hover:scale-110">
+                                                        <p class="text-sm">Add</p>
+                                                    </button>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div><!--End Game container at game hub-->
+
+                                    <!--Game container at game hub-->
+                                    <div class="w-fit shrink-0 flex flex-col gap-2 relative cursor-pointer">
+                                        <img src="{{ asset('images/game-icons/game-posters/mario-kart-world-review-1.jpg') }}"
+                                            class="aspect-video w-auto h-fit rounded-xl object-cover" />
+
+                                        <div
+                                            class="absolute bottom-0 bg-gradient-to-t from-black/80 via-black/10 to-black/0 w-full h-full rounded-xl items-center">
+                                            <div class="h-full w-full flex items-end justify-between p-3">
+                                                <div class="flex items-center w-full justify-between">
+                                                    <div class="w-full flex items-center gap-2">
+                                                        <img src="{{ asset('images/game-icons/mario.jpeg') }}"
+                                                            alt=""
+                                                            class="h-10 rounded-lg aspect-square object-cover">
+                                                        <div class="flex flex-col">
+                                                            <h1 class="text-white font-medium text-sm truncate">Mario
+                                                                cart: World Tour</h1>
+                                                            <p class="text-white/60 text-xs truncate font-light">Lorem
+                                                                ipsum dolor sit amet.</p>
+                                                        </div>
+                                                    </div>
+
+                                                    <button type="button"
+                                                        class="cursor-pointer bg-white/40 backdrop-blur-sm px-3 py-1 rounded-full p-0 flex items-center justify-center text-white hover:bg-blue-button hover:scale-110">
+                                                        <p class="text-sm">Add</p>
+                                                    </button>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div><!--End Game container at game hub-->
+
+                                    <!--Game container at game hub-->
+                                    <div class="w-fit shrink-0 flex flex-col gap-2 relative cursor-pointer">
+                                        <img src="{{ asset('images/game-icons/game-posters/mario-kart-world-review-1.jpg') }}"
+                                            class="aspect-video w-auto h-fit rounded-xl object-cover" />
+
+                                        <div
+                                            class="absolute bottom-0 bg-gradient-to-t from-black/80 via-black/10 to-black/0 w-full h-full rounded-xl items-center">
+                                            <div class="h-full w-full flex items-end justify-between p-3">
+                                                <div class="flex items-center w-full justify-between">
+                                                    <div class="w-full flex items-center gap-2">
+                                                        <img src="{{ asset('images/game-icons/mario.jpeg') }}"
+                                                            alt=""
+                                                            class="h-10 rounded-lg aspect-square object-cover">
+                                                        <div class="flex flex-col">
+                                                            <h1 class="text-white font-medium text-sm truncate">Mario
+                                                                cart: World Tour</h1>
+                                                            <p class="text-white/60 text-xs truncate font-light">Lorem
+                                                                ipsum dolor sit amet.</p>
+                                                        </div>
+                                                    </div>
+
+                                                    <button type="button"
+                                                        class="cursor-pointer bg-white/40 backdrop-blur-sm px-3 py-1 rounded-full p-0 flex items-center justify-center text-white hover:bg-blue-button hover:scale-110">
+                                                        <p class="text-sm">Add</p>
+                                                    </button>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div><!--End Game container at game hub-->
+
+                                    <!--Game container at game hub-->
+                                    <div class="w-fit shrink-0 flex flex-col gap-2 relative cursor-pointer">
+                                        <img src="{{ asset('images/game-icons/game-posters/mario-kart-world-review-1.jpg') }}"
+                                            class="aspect-video w-auto h-fit rounded-xl object-cover" />
+
+                                        <div
+                                            class="absolute bottom-0 bg-gradient-to-t from-black/80 via-black/10 to-black/0 w-full h-full rounded-xl items-center">
+                                            <div class="h-full w-full flex items-end justify-between p-3">
+                                                <div class="flex items-center w-full justify-between">
+                                                    <div class="w-full flex items-center gap-2">
+                                                        <img src="{{ asset('images/game-icons/mario.jpeg') }}"
+                                                            alt=""
+                                                            class="h-10 rounded-lg aspect-square object-cover">
+                                                        <div class="flex flex-col">
+                                                            <h1 class="text-white font-medium text-sm truncate">Mario
+                                                                cart: World Tour</h1>
+                                                            <p class="text-white/60 text-xs truncate font-light">Lorem
+                                                                ipsum dolor sit amet.</p>
+                                                        </div>
+                                                    </div>
+
+                                                    <button type="button"
+                                                        class="cursor-pointer bg-white/40 backdrop-blur-sm px-3 py-1 rounded-full p-0 flex items-center justify-center text-white hover:bg-blue-button hover:scale-110">
+                                                        <p class="text-sm">Add</p>
+                                                    </button>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div><!--End Game container at game hub-->
+
+                                </div>
+
+
+                            </div>
+
+                        </div><!--End of Game container -->
+                    </div><!-- End of first form -->
+
                 </div>
                 <!-- End Add lesson container -->
 
                 <!-- Create Quiz Container -->
-                <div class="w-150 h-full Addlesson bg-white p-8 rounded-4xl relative">
+                <div class="w-180 h-full Addlesson bg-white p-8 rounded-4xl relative">
                     <div class="Addlesson w-full h-[100%] flex flex-col pb-18 gap-8 self-center-safe overflow-y-auto">
                         <div class="flex items-center gap-2">
                             <img src="{{ asset('images/quizzes.png') }}" alt="" />
@@ -233,7 +475,7 @@
                             <div class="flex flex-col border-1 border-gray-300 py-4 px-5 rounded-2xl">
                                 <input type="text" name="" id="" placeholder="Quiz Name"
                                     wire:model.live="quiz_name"
-                                    class="text-2xl outline-none placeholder-heading-dark" />
+                                    class="text-xl outline-none placeholder-heading-dark" />
                                 <textarea name="" id="" maxlength="200" placeholder="Description (Optional)"
                                     wire:model.live="quiz_description" class="placeholder-paragraph text-paragraph resize-none h-15 outline-none"></textarea>
                             </div>
