@@ -6,7 +6,7 @@ use Livewire\Component;
 use App\Models\Activity;
 use Livewire\Attributes\On;
 
-class GameHub extends Component
+class ActivityHub extends Component
 {
     public $isOpen = false;
     public $activities = [];
@@ -56,6 +56,6 @@ class GameHub extends Component
 
     public function render()
     {
-        return view('livewire.game-hub');
+        return view('livewire.activity-hub');
     }
 }
