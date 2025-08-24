@@ -161,10 +161,10 @@
 
                 @foreach ($lessons->getUrlRange(1, $lessons->lastPage()) as $page => $url)
                     @if ($page == $lessons->currentPage())
-                        <button class=" bg-blue-button text-white py-1 px-4 rounded-full">{{ $page }}</button>
+                        <button class=" bg-blue-button text-white py-1 px-4 rounded-full cursor-pointer">{{ $page }}</button>
                     @else
                         <button wire:click="gotoPage({{ $page }})"
-                            class="py-1 px-4 hover:bg-blue-button rounded-full hover:text-white">{{ $page }}</button>
+                            class="py-1 px-4 hover:bg-blue-button rounded-full hover:text-white cursor-pointer">{{ $page }}</button>
                     @endif
                 @endforeach
 
