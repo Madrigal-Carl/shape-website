@@ -204,8 +204,7 @@ class LessonAddModal extends Component
         return $validQuestions;
     }
 
-
-    public function addLesson()
+    public function validateLesson(): bool
     {
         try {
             $this->validate([
@@ -213,38 +212,52 @@ class LessonAddModal extends Component
                 'grade_level'        => 'required',
                 'curriculum'         => 'required',
                 'subject'            => 'required',
-                'selected_student'   => 'nullable',
-                'description'        => 'nullable|max:255',
                 'selected_activities'=> 'required',
                 'quiz_name'          => 'required|min:3|max:100',
-                'quiz_description'   => 'nullable|max:255',
                 'questions'          => 'required|min:1',
             ], [
                 'lesson_name.required' => 'Lesson name is required.',
                 'lesson_name.min'      => 'Lesson name must be at least 5 characters.',
                 'lesson_name.max'      => 'Lesson name must not exceed 100 characters.',
                 'grade_level.required' => 'Grade & Section is required.',
-                'curriculum.required'     => 'Please select a curriculum.',
+                'curriculum.required'  => 'Please select a curriculum.',
                 'subject.required'     => 'Please select a subject.',
-                'description.max'      => 'Description cannot exceed 255 characters.',
-                'selected_activities.required'   => 'You must add at least one activity.',
+                'selected_activities.required' => 'You must add at least one activity.',
                 'quiz_name.required'   => 'Quiz name is required.',
                 'quiz_name.min'        => 'Quiz name must be at least 3 characters.',
-                'quiz_name.max'        => 'Quiz name must not exceed 100 characters.',
                 'questions.required'   => 'You must add at least one question.',
             ]);
         } catch (ValidationException $e) {
             $message = $e->validator->errors()->first();
-            return $this->dispatch('swal-toast', icon: 'error', title: $message);
+            $this->dispatch('swal-toast', icon: 'error', title: $message);
+            return false;
         }
 
-        $validQuestions = $this->validateQuestions();
+        // 2. Videos validation
+        if (empty($this->uploadedVideos)) {
+            $this->dispatch('swal-toast', icon: 'error', title: 'Please upload at least one video or provide a YouTube link.');
+            return false;
+        }
 
+        // 3. Questions validation
+        $validQuestions = $this->validateQuestions();
         if (empty($validQuestions)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public function addLesson()
+    {
+        if (!$this->validateLesson()) {
             return;
         }
 
-        $curriculumSubject = CurriculumSubject::where('curriculum_id', $this->curriculum)->where('subject_id', $this->subject)->first();
+        $curriculumSubject = CurriculumSubject::where('curriculum_id', $this->curriculum)
+            ->where('subject_id', $this->subject)
+            ->first();
+
         $studentsToAssign = empty($this->selected_student)
             ? $this->students
             : Student::whereIn('id', $this->selected_student)->get();
@@ -271,8 +284,8 @@ class LessonAddModal extends Component
 
             foreach ($this->selected_activities as $activity) {
                 $lesson->activityLessons()->create([
-                    'lesson_id' => $lesson->id,
-                    'activity_id' => $activity->id,
+                    'lesson_id'    => $lesson->id,
+                    'activity_id'  => $activity->id,
                 ]);
             }
 
@@ -280,6 +293,7 @@ class LessonAddModal extends Component
                 'title'       => $this->quiz_name,
                 'description' => $this->quiz_description,
             ]);
+
             LessonQuiz::create([
                 'lesson_id' => $lesson->id,
                 'quiz_id'   => $quiz->id,
@@ -289,7 +303,7 @@ class LessonAddModal extends Component
             foreach ($this->questions as $questionData) {
                 $question = $quiz->questions()->create([
                     'question_text' => $questionData['question'],
-                    'point' => $questionData['point'],
+                    'point'         => $questionData['point'],
                 ]);
 
                 foreach ($questionData['options'] as $optionData) {
@@ -305,6 +319,7 @@ class LessonAddModal extends Component
         $this->dispatch('swal-toast', icon: 'success', title: 'Lesson added successfully!');
         return $this->closeModal();
     }
+
 
     #[On('addActivity')]
     public function addSelectedActivity($activity)
