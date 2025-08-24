@@ -5,13 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class ActivityLesson extends Model
+class LessonQuiz extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'activity_id',
         'lesson_id',
+        'quiz_id',
+        'score',
     ];
 
     public function lesson()
@@ -19,9 +20,9 @@ class ActivityLesson extends Model
         return $this->belongsTo(Lesson::class);
     }
 
-    public function activity()
+    public function quiz()
     {
-        return $this->belongsTo(Activity::class);
+        return $this->belongsTo(Quiz::class);
     }
 
     public function logs()

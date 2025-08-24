@@ -69,7 +69,7 @@ class Student extends Model
     public function getCompletedLessonsCountAttribute()
     {
         return $this->lessons->filter(function ($lesson) {
-            $quizzesDone = $lesson->quizzes->every(fn($quiz) =>
+            $quizzesDone = $lesson->lessonQuizzes->every(fn($quiz) =>
                 $quiz->progress->where('status', 'completed')->isNotEmpty()
             );
 
@@ -88,14 +88,14 @@ class Student extends Model
 
     public function getCompletedQuizzesCountAttribute()
     {
-        return $this->lessons->flatMap->quizzes->filter(fn($quiz) =>
+        return $this->lessons->flatMap->lessonQuizzes->filter(fn($quiz) =>
             $quiz->progress->where('status', 'completed')->isNotEmpty()
         )->count();
     }
 
     public function getTotalQuizzesCountAttribute()
     {
-        return $this->lessons->flatMap->quizzes->count();
+        return $this->lessons->flatMap->lessonQuizzes->count();
     }
 
     public function getCompletedActivitiesCountAttribute()

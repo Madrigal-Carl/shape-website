@@ -2,28 +2,28 @@
 
 namespace Database\Factories;
 
+use App\Models\Quiz;
 use App\Models\Lesson;
-use App\Models\Activity;
-use App\Models\ActivityLesson;
+use App\Models\LessonQuiz;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\ActivityLesson>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\LessonQuiz>
  */
-class ActivityLessonFactory extends Factory
+class LessonQuizFactory extends Factory
 {
     /**
      * Define the model's default state.
      *
      * @return array<string, mixed>
      */
-    protected $model = ActivityLesson::class;
-
+    protected $model = LessonQuiz::class;
     public function definition(): array
     {
         return [
+            'quiz_id' => null,
             'lesson_id'   => null,
-            'activity_id' => null,
+            'score' => $this->faker->numberBetween(10, 20),
         ];
     }
 }

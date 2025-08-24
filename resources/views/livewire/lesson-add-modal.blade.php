@@ -19,24 +19,6 @@
                                 <input type="text" placeholder="Lesson Name" wire:model.live="lesson_name"
                                     class="px-3 py-1 rounded-lg bg-card placeholder-paragraph outline-none w-full" />
 
-                                <div class="flex items-center gap-2 w-full">
-                                    <div class="px-2 py-1 rounded-lg bg-card w-full">
-                                        <select name="" id=""
-                                            wire:change="$set('subject', $event.target.value)"
-                                            class="w-full outline-none text-paragraph">
-                                            <option value="pending" class="text-sm text-black" selected disabled>
-                                                Subject
-                                            </option>
-                                            @foreach ($subjects as $subject)
-                                                <option value="{{ $subject->name }}" class="text-sm text-paragraph">
-                                                    {{ ucwords($subject->name) }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    <!-- <div class="px-2 py-1 rounded-lg bg-card w-full">                                                                       </div> -->
-                                </div>
-
                                 <div class="px-2 py-1 rounded-lg bg-card">
                                     <select wire:change="$set('grade_level', $event.target.value)" name=""
                                         id="" class="w-full outline-none text-paragraph">
@@ -49,6 +31,38 @@
                                             </option>
                                         @endforeach
                                     </select>
+                                </div>
+                                <div class="flex items-center gap-2 w-full">
+                                    <div class="px-2 py-1 rounded-lg bg-card w-full">
+                                        <select name="" id=""
+                                            wire:change="$set('curriculum', $event.target.value)"
+                                            class="w-full outline-none text-paragraph">
+                                            <option value="pending" class="text-sm text-black" selected disabled>
+                                                Curriculum
+                                            </option>
+                                            @foreach ($curriculums as $curriculum)
+                                                <option value="{{ $curriculum->id }}" class="text-sm text-paragraph">
+                                                    {{ ucwords($curriculum->name) }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-2 w-full">
+                                    <div class="px-2 py-1 rounded-lg bg-card w-full">
+                                        <select name="" id=""
+                                            wire:change="$set('subject', $event.target.value)"
+                                            class="w-full outline-none text-paragraph">
+                                            <option value="pending" class="text-sm text-black" selected disabled>
+                                                Subject
+                                            </option>
+                                            @foreach ($subjects as $subject)
+                                                <option value="{{ $subject->id }}" class="text-sm text-paragraph">
+                                                    {{ ucwords($subject->name) }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
                                 </div>
 
                                 <div class="px-2 py-1 rounded-lg bg-card">
@@ -75,83 +89,63 @@
                         <div class="flex flex-col gap-3">
                             <h2 class="font-medium text-lg">Interactive Video Lessons</h2>
                             <div class="flex flex-col gap-2">
-                                <div class="flex items-center gap-2">
-                                    <div class="flex items-center h-24 justify-center gap-2 px-6 py-3 border-1 border-dashed rounded-lg w-full hover:text-blue-button"
-                                        id="dropzone">
-                                        <!-- Image dropzone -->
-                                        <h1 class="">Upload Video</h1>
+                                <div class="flex items-center h-24 justify-center gap-2 px-6 py-3 border-1 border-dashed rounded-lg w-full hover:text-blue-button"
+                                    id="dropzone">
+                                    <label for="videoUpload" class="cursor-pointer flex items-center gap-2">
+                                        <h1>Upload Video</h1>
                                         <span class="material-symbols-rounded">add_photo_alternate</span>
-                                        <input type="file" name="" id="" class="hidden" />
+                                    </label>
+                                    <input type="file" wire:model="videos" multiple class="hidden"
+                                        id="videoUpload" />
+                                </div>
+
+                                <div wire:loading wire:target="videos" class="w-full mt-3">
+                                    <div class="bg-gray-200 rounded-full h-3 overflow-hidden">
+                                        <div class="bg-blue-500 h-3 animate-progress-bar"></div>
                                     </div>
+                                    <p class="text-sm text-blue-600 mt-1 text-center">Uploading...</p>
                                 </div>
 
-                                <!-- Default when no video is added -->
-                                <div class="bg-card w-full h-30 hidden items-center justify-center rounded-lg">
-                                    <h1 class="text-paragraph">No Video added</h1>
-                                </div>
+                                @if (empty($uploadedVideos))
+                                    <div class="bg-card w-full h-30 flex items-center justify-center rounded-lg">
+                                        <h1 class="text-paragraph">No Video added</h1>
+                                    </div>
+                                @endif
 
-                                <!-- Video Container -->
                                 <div class="flex grid-cols-2 gap-2">
-                                    <div class="flex flex-col gap-2 relative">
-                                        <!-- Video Holder -->
-                                        <div class="flex flex-col items-center justify-center">
-                                            <img src="{{ asset('images/video_posters/bighero6.jpeg') }}" alt=""
-                                                class="aspect-video w-full h-fit rounded-lg object-cover" />
-                                            <button
-                                                class="absolute rounded-full cursor-pointer hover:scale-120 shadow-xl/40 z-10">
-                                                <span
-                                                    class="material-symbols-rounded p-2 rounded-full playBtn text-white bg-white/20 backdrop-blur-[3px] shadow-white shadow-inner">play_arrow</span>
-                                            </button>
-                                        </div>
-
-                                        <div
-                                            class="absolute bottom-0 bg-gradient-to-t from-black/80 via-black/0 to-black/0 w-full h-full rounded-lg">
-                                            <div class="h-full w-full flex items-end justify-between p-3">
-                                                <h1 class="text-white font-medium text-sm ml-1">
-                                                    Big Hero 6
-                                                </h1>
+                                    @foreach ($uploadedVideos as $index => $video)
+                                        <div class="flex flex-col gap-2 relative">
+                                            <div class="flex flex-col items-center justify-center">
+                                                <img src="{{ $video['thumbnail'] }}"
+                                                    class="aspect-video w-full h-fit rounded-lg object-cover" />
                                                 <button
-                                                    class="cursor-pointer p-0 flex items-center justify-center text-white hover:text-danger hover:scale-120">
-                                                    <span class="material-symbols-rounded">delete</span>
+                                                    class="absolute rounded-full cursor-pointer hover:scale-120 shadow-xl/40 z-10">
+                                                    <span
+                                                        class="material-symbols-rounded p-2 rounded-full playBtn text-white bg-white/20 backdrop-blur-[3px] shadow-white shadow-inner">play_arrow</span>
                                                 </button>
                                             </div>
-                                        </div>
-                                    </div>
-                                    <!-- End of Video Holder -->
 
-                                    <div class="flex flex-col gap-2 relative">
-                                        <!-- Video Holder -->
-                                        <div class="flex flex-col items-center justify-center">
-                                            <img src="{{ asset('images/video_posters/httyd3.jpeg') }}" alt=""
-                                                class="aspect-video w-full h-fit rounded-lg object-cover" />
-                                            <button
-                                                class="absolute rounded-full cursor-pointer hover:scale-120 shadow-xl/40 z-10">
-                                                <span
-                                                    class="material-symbols-rounded p-2 rounded-full playBtn text-white bg-white/20 backdrop-blur-[3px] shadow-white shadow-inner">play_arrow</span>
-                                            </button>
-                                        </div>
-
-                                        <div
-                                            class="absolute bottom-0 bg-gradient-to-t from-black/80 via-black/0 to-black/0 w-full h-full rounded-lg">
-                                            <div class="h-full w-full flex items-end justify-between p-3">
-                                                <h1 class="text-white font-medium text-sm ml-1">
-                                                    How to train your Dragon 3
-                                                </h1>
-                                                <button
-                                                    class="cursor-pointer p-0 flex items-center justify-center text-white hover:text-danger hover:scale-120">
-                                                    <span class="material-symbols-rounded">delete</span>
-                                                </button>
+                                            <div
+                                                class="absolute bottom-0 bg-gradient-to-t from-black/80 via-black/0 to-black/0 w-full h-full rounded-lg">
+                                                <div class="h-full w-full flex items-end justify-between p-3">
+                                                    <h1 class="text-white font-medium text-sm ml-1">
+                                                        {{ $video['title'] }}</h1>
+                                                    <button wire:click="removeVideo({{ $index }})"
+                                                        type="button"
+                                                        class="cursor-pointer p-0 flex items-center justify-center text-white hover:text-danger hover:scale-120">
+                                                        <span class="material-symbols-rounded">delete</span>
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <!-- End of Video Holder -->
+                                    @endforeach
                                 </div>
-                                <!-- End of Video Container -->
                             </div>
+
                         </div>
 
                         <div class="flex flex-col gap-3">
-                            <h2 class="font-medium text-lg">Games & Activities</h2>
+                            <h2 class="font-medium text-lg">Activities</h2>
 
                             <div class="flex flex-col gap-2">
                                 <div class="px-2 py-1 rounded-lg bg-card">
@@ -159,7 +153,7 @@
                                         wire:change="$set('activity', $event.target.value)"
                                         class="w-full outline-none text-paragraph">
                                         <option value="pending" class="text-sm text-black" selected disabled>
-                                            Choose Games
+                                            Choose Activities
                                         </option>
                                         @foreach ($activities as $activity)
                                             <option value="{{ $activity->id }}" class="text-sm text-paragraph">
@@ -179,17 +173,20 @@
                                                 class="h-12 rounded-md aspect-square object-cover" />
                                             <div>
                                                 <h1 class="font-medium">{{ $act->name }}</h1>
+                                                <p>{{ collect($act->category ?? [])->map(fn($cat) => ucfirst(Str::of($cat)->explode(' ')->first()))->implode(', ') }}
+                                                </p>
                                             </div>
                                         </div>
 
                                         <button type="button" wire:click="removeActivity({{ $i }})"
+                                            type="button"
                                             class="flex items-center w-fit h-fit justify-center cursor-pointer hover:scale-120">
                                             <span class="material-symbols-rounded remove-icon">close</span>
                                         </button>
                                     </div>
                                 @empty
                                     <div class="bg-card col-span-2 h-30 flex items-center justify-center rounded-lg">
-                                        <h1 class="text-paragraph">No Game added</h1>
+                                        <h1 class="text-paragraph">No Activity added</h1>
                                     </div>
                                 @endforelse
                             </div>
@@ -288,7 +285,7 @@
                                         <!-- End of Add option -->
 
                                         <div class="flex items-center justify-between pt-6">
-                                            <button
+                                            <button type="button"
                                                 class="w-fit h-fit flex items-center justify-center gap-2 cursor-pointer">
                                                 <span
                                                     class="material-symbols-rounded text-blue-button">assignment_turned_in</span>
@@ -302,11 +299,14 @@
                                             <div class="flex items-center gap-6">
                                                 <div class="w-fit flex items-center gap-2">
                                                     <input type="number"
+                                                        wire:model.live="questions.{{ $qIndex }}.point"
                                                         class="w-9 outline-none pl-1 border-b-1 border-gray-400"
-                                                        placeholder="0" name="" id="" />
+                                                        min="1" step="1" name="" value="1"
+                                                        id="" />
                                                     <p>points</p>
                                                 </div>
                                                 <button wire:click="removeQuestion({{ $qIndex }})"
+                                                    type="button"
                                                     class="w-fit h-fit cursor-pointer p-0 flex items-center justify-center text-paragraph hover:text-danger hover:scale-120">
                                                     <span class="material-symbols-rounded">delete</span>
                                                 </button>
@@ -317,7 +317,7 @@
                                 </div>
                             @endforeach
                             <!--End Question Holder -->
-                            <button wire:click="addQuestion"
+                            <button wire:click="addQuestion" type="button"
                                 class="flex w-fit items-center justify-center border-1 border-gray-300 py-2 px-3 rounded-2xl gap-2 self-center text-paragraph text-sm hover:border-blue-button hover:text-white hover:bg-blue-button hover:scale-110 cursor-pointer">
                                 <span class="material-symbols-rounded">add_circle</span>
                                 <p>Add Question</p>
@@ -327,7 +327,7 @@
 
                         <div
                             class="flex items-center gap-2 absolute w-full left-0 bottom-0 px-5 pb-5 pt-10 rounded-b-4xl bg-gradient-to-t from-white via-white to-white/50">
-                            <button wire:click='closeModal'
+                            <button wire:click='closeModal' type="button"
                                 class="bg-gray-100 py-1.5 px-3 w-full rounded-xl text-heading-dark font-medium">
                                 Cancel
                             </button>
@@ -339,7 +339,7 @@
                     </div>
                 </div>
             </form>
-            <div wire:loading wire:target="addCurriculum"
+            <div wire:loading wire:target="addLesson"
                 class="bg-black/10 fixed top-0 left-0 w-dvw h-dvh z-50 flex justify-center items-center backdrop-blur-sm">
                 <svg aria-hidden="true"
                     class="w-12 h-12 text-gray-200 animate-spin fill-blue-600 absolute top-1/2 left-[49%]"

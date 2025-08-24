@@ -22,7 +22,6 @@ class LessonMain extends Component
 
     public function render()
     {
-        $user = Account::with('accountable')->find( Auth::user()->id );
         $lessons = Lesson::with([
             'lessonSubject.curriculumSubject.subject',
             'lessonSubject.curriculumSubject.curriculum',
@@ -31,10 +30,10 @@ class LessonMain extends Component
         ->withCount([
             'videos',
             'activityLessons',
-            'quizzes',
+            'lessonQuizzes',
         ])
-        ->whereHas('lessonSubject.curriculumSubject.curriculum', function ($q) use ($user) {
-            $q->where('instructor_id', $user->accountable->id);
+        ->whereHas('lessonSubject.curriculumSubject.curriculum', function ($q) {
+            $q->where('instructor_id', Auth::user()->accountable->id);
         })
         ->orderByDesc('created_at')
         ->paginate(10)

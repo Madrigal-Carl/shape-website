@@ -10,39 +10,17 @@ class Quiz extends Model
     use HasFactory;
 
     protected $fillable = [
-        'lesson_id',
         'title',
-        'score',
         'description',
     ];
-
-    public function lesson()
-    {
-        return $this->belongsTo(Lesson::class);
-    }
 
     public function questions()
     {
         return $this->hasMany(Question::class);
     }
 
-    public function logs()
+    public function lessonQuizzes()
     {
-        return $this->morphMany(Log::class, 'item');
-    }
-
-    public function latestLog()
-    {
-        return $this->morphOne(Log::class, 'item')->latestOfMany();
-    }
-
-    public function progress()
-    {
-        return $this->morphMany(Progress::class, 'item');
-    }
-
-    public function latestProgress()
-    {
-        return $this->morphOne(Progress::class, 'item')->latestOfMany();
+        return $this->hasMany(LessonQuiz::class);
     }
 }

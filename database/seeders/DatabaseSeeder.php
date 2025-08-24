@@ -21,11 +21,11 @@ use App\Models\Progress;
 use App\Models\Question;
 use App\Models\Curriculum;
 use App\Models\Instructor;
+use App\Models\LessonQuiz;
 use App\Models\LessonSubject;
 use App\Models\ActivityLesson;
 use Illuminate\Database\Seeder;
 use App\Models\CurriculumSubject;
-use App\Models\CurriculumStudentSubject;
 
 class DatabaseSeeder extends Seeder
 {
@@ -111,13 +111,13 @@ class DatabaseSeeder extends Seeder
         $students->each(function ($student) {
             Address::factory()->student()->create([
                 'owner_id' => $student->id,
-                'owner_type' => \App\Models\Student::class,
+                'owner_type' => Student::class,
                 'type' => 'permanent',
             ]);
 
             Address::factory()->student()->create([
                 'owner_id' => $student->id,
-                'owner_type' => \App\Models\Student::class,
+                'owner_type' => Student::class,
                 'type' => 'current',
             ]);
         });
@@ -125,22 +125,22 @@ class DatabaseSeeder extends Seeder
         $instructors->each(function ($instructor) {
             Address::factory()->instructor()->create([
                 'owner_id' => $instructor->id,
-                'owner_type' => \App\Models\Instructor::class,
+                'owner_type' => Instructor::class,
                 'type' => 'permanent',
             ]);
 
             Address::factory()->instructor()->create([
                 'owner_id' => $instructor->id,
-                'owner_type' => \App\Models\Instructor::class,
+                'owner_type' => Instructor::class,
                 'type' => 'current',
             ]);
         });
 
         // 11. Create Lessons
         $activities = Activity::factory()->count(20)->create();
-
-        $students->each(function ($student) use ($activities, $curriculums) {
-            $curriculums->each(function ($curriculum) use ($student, $activities) {
+        $quizzes = Quiz::factory()->count(20)->create();
+        $students->each(function ($student) use ($activities, $curriculums, $quizzes) {
+            $curriculums->each(function ($curriculum) use ($student, $activities, $quizzes) {
                 // Get subjects that belong to THIS curriculum only
                 $curriculumSubjectIds = CurriculumSubject::where('curriculum_id', $curriculum->id)
                     ->pluck('id')
@@ -176,7 +176,9 @@ class DatabaseSeeder extends Seeder
                     ]);
 
                     // Create quiz
-                    $quiz = Quiz::factory()->create([
+                    $quiz = $quizzes->random();
+                    $lessonQuiz = LessonQuiz::factory()->create([
+                        'quiz_id' => $quiz->id,
                         'lesson_id' => $lesson->id,
                     ]);
 
@@ -193,13 +195,13 @@ class DatabaseSeeder extends Seeder
 
                     // Logs + progress
                     Log::factory()->create([
-                        'item_id'   => $quiz->id,
-                        'item_type' => Quiz::class,
+                        'item_id'   => $lessonQuiz->id,
+                        'item_type' => LessonQuiz::class,
                     ]);
 
                     Progress::factory()->create([
-                        'item_id'   => $quiz->id,
-                        'item_type' => Quiz::class,
+                        'item_id'   => $lessonQuiz->id,
+                        'item_type' => LessonQuiz::class,
                     ]);
 
                     Log::factory()->create([

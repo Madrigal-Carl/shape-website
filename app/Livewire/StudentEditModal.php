@@ -107,7 +107,7 @@ class StudentEditModal extends Component
     {
         $student = Student::with(['profile','guardian','addresses','account'])->findOrFail($this->student_id);
 
-        if ($this->photo instanceof \Illuminate\Http\UploadedFile) {
+        if ($this->photo instanceof UploadedFile) {
             if ($student->path && Storage::disk('public')->exists($student->path)) {
                 Storage::disk('public')->delete($student->path);
             }
@@ -238,8 +238,7 @@ class StudentEditModal extends Component
         $this->municipalities = array_keys($this->barangayData);
         $this->grade_levels = Profile::orderBy('grade_level')->pluck('grade_level')->unique()->values()->toArray();
 
-        $user = Account::with('accountable')->find(Auth::user()->id);
-        $this->specializations = $user->accountable->specialization;
+        $this->specializations = Auth::user()->accountable->specialization;
 
         return view('livewire.student-edit-modal');
     }

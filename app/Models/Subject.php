@@ -12,20 +12,8 @@ class Subject extends Model
         'name',
     ];
 
-    public function curriculumStudentSubject()
+    public function curriculumSubjects()
     {
         return $this->hasMany(CurriculumSubject::class);
     }
-
-    // public function lessons()
-    // {
-    //     return $this->hasManyThrough(
-    //         Lesson::class,
-    //         LessonSubject::class,
-    //         'subject_id',
-    //         'curriculum_subject_id',
-    //         'id',
-    //         'id'
-    //     );
-    // }
 }

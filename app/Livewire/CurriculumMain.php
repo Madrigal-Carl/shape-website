@@ -34,17 +34,11 @@ class CurriculumMain extends Component
     {
         $curriculum = Curriculum::where('instructor_id', Auth::id())->findOrFail($id);
         if ($curriculum->status === 'inactive') {
-            Curriculum::where('instructor_id', Auth::id())
-                ->where('id', '!=', $curriculum->id)
-                ->update(['status' => 'inactive']);
-
             $curriculum->update(['status' => 'active']);
-            $this->dispatch('swal-toast', icon : 'success', title : 'Curriculum has been activated.');
-            return $this->resetPage();
+            return $this->dispatch('swal-toast', icon : 'success', title : 'Curriculum has been activated.');
         }
         $curriculum->update(['status' => 'inactive']);
         $this->dispatch('swal-toast', icon : 'warning', title : 'Curriculum has been deactived.');
-        return $this->resetPage();
     }
 
 
@@ -58,7 +52,6 @@ class CurriculumMain extends Component
             ->when(!empty($this->search), function ($query) {
                 $query->where('name', 'like', '%' . $this->search . '%');
             })
-            ->orderByRaw("FIELD(status, 'active', 'inactive')")
             ->orderByDesc('created_at')
             ->paginate(10);
 

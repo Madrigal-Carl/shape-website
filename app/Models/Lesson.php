@@ -14,11 +14,6 @@ class Lesson extends Model
         'description',
     ];
 
-    public function lessonSubject()
-    {
-        return $this->belongsTo(LessonSubject::class);
-    }
-
     public function student()
     {
         return $this->lessonSubject->student();
@@ -34,13 +29,18 @@ class Lesson extends Model
         return $this->hasMany(Video::class);
     }
 
-    public function quizzes()
+    public function lessonSubject()
     {
-        return $this->hasMany(Quiz::class);
+        return $this->belongsTo(LessonSubject::class);
     }
 
     public function activityLessons()
     {
         return $this->hasMany(ActivityLesson::class);
+    }
+
+    public function lessonQuizzes()
+    {
+        return $this->hasMany(LessonQuiz::class);
     }
 }

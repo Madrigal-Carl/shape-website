@@ -28,11 +28,10 @@ class StudentMain extends Component
 
     public function render()
     {
-        $user = Account::with('accountable')->find( Auth::user()->id );
-        $students = $user->accountable
+        $students = Auth::user()->accountable
         ->students()
         ->with([
-            'lessons.quizzes.progress',
+            'lessons.lessonQuizzes.progress',
             'lessons.activityLessons.progress',
             'profile'
         ])

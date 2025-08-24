@@ -156,9 +156,8 @@ class StudentAddModal extends Component
             $filename = $this->photo->store('students', 'public');
         }
 
-        $instructor = Auth::user()->accountable;
         $student = \App\Models\Student::create([
-            'instructor_id' => $instructor->id,
+            'instructor_id' => Auth::user()->accountable->id,
             'path'          => $filename,
             'first_name'    => $this->first_name,
             'middle_name'   => $this->middle_name,
@@ -262,8 +261,7 @@ class StudentAddModal extends Component
         $this->municipalities = array_keys($this->barangayData);
 
         $this->grade_levels = Profile::orderBy('grade_level')->pluck('grade_level')->unique()->values()->toArray();
-        $user = Account::with('accountable')->find(Auth::user()->id);
-        $this->specializations = $user->accountable->specialization;
+        $this->specializations = Auth::user()->accountable->specialization;
         return view('livewire.student-add-modal');
     }
 }

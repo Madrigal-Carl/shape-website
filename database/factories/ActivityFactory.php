@@ -21,13 +21,14 @@ class ActivityFactory extends Factory
     public function definition(): array
     {
         $categories = [
-            'autism',
-            'speech',
-            'hearing',
+            'autism spectrum disorder',
+            'speech disorder',
+            'hearing impairment',
         ];
 
         return [
             'name' => $this->faker->words(2, true),
+            'description' => $this->faker->paragraph(),
             'category' => $this->faker->randomElements($categories, rand(1, 2)),
         ];
     }

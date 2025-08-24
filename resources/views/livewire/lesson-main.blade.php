@@ -116,7 +116,7 @@
                                     <td class="px-4 py-3 text-center">{{ $lesson->students_count }}</td>
                                     <td class="px-4 py-3 text-center">{{ $lesson->videos_count }}</td>
                                     <td class="px-4 py-3 text-center">{{ $lesson->activity_lessons_count }}</td>
-                                    <td class="px-4 py-3 text-center">{{ $lesson->quizzes_count }}</td>
+                                    <td class="px-4 py-3 text-center">{{ $lesson->lesson_quizzes_count }}</td>
                                     <td class="px-4 py-3 text-center">
                                         <div class="flex justify-center items-center">
                                             <div

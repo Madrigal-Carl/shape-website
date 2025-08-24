@@ -2,7 +2,6 @@
 
 namespace Database\Factories;
 
-use App\Models\Student;
 use App\Models\Subject;
 use App\Models\Curriculum;
 use App\Models\CurriculumSubject;

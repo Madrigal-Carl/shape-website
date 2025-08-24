@@ -30,13 +30,13 @@ class CurriculumAddModal extends Component
 
     public function closeModal()
     {
-        $this->resetVariables();
+        $this->resetFields();
         $this->dispatch('refresh')->to('curriculum-main');
         $this->dispatch('refresh')->to('curriculum-aside');
         $this->isOpen = false;
     }
 
-    public function resetVariables()
+    public function resetFields()
     {
         $this->reset([
             'add_name',
@@ -99,9 +99,8 @@ class CurriculumAddModal extends Component
             return $this->dispatch('swal-toast', icon : 'error', title : $message);
         }
 
-        $user = Account::with('accountable')->find(Auth::user()->id);
         $curriculum = Curriculum::create([
-            'instructor_id' => $user->accountable->id,
+            'instructor_id' => Auth::user()->accountable->id,
             'name' => $this->add_name,
             'grade_level' => $this->add_grade_level,
             'specialization' => $this->selectedSpecializations,
@@ -130,8 +129,7 @@ class CurriculumAddModal extends Component
     {
         $this->subjects = Subject::orderBy('name')->get();
         $this->grade_levels = Profile::orderBy('grade_level')->pluck('grade_level')->unique()->values()->toArray();
-        $user = Account::with('accountable')->find(Auth::user()->id);
-        $this->specializations = $user->accountable->specialization;
+        $this->specializations = Auth::user()->accountable->specialzation;
     }
 
     public function render()
