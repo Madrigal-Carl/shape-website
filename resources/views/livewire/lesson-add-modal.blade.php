@@ -174,7 +174,7 @@
                                 class="bg-blue-button py-1.5 px-3 w-full rounded-xl text-white font-medium">
                                 Add Activity
                             </button>
-                            <livewire:game-hub />
+                            <livewire:activity-hub />
                             <div class="w-full grid grid-cols-2 gap-2 items-center justify-center rounded-lg">
                                 @forelse ($selected_activities as $i => $act)
                                     <div wire:key="activity-{{ $i }}"
