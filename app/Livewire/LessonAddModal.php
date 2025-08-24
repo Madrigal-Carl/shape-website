@@ -27,7 +27,7 @@ class LessonAddModal extends Component
     use WithFileUploads;
     public $subjects, $grade_levels, $students, $activities, $curriculums, $youtube_link, $selected_student;
     public $videos = [];
-    public $isOpen = true;
+    public $isOpen = false;
     public $lesson_name, $curriculum, $subject, $grade_level, $description, $quiz_name, $quiz_description;
     public $uploadedVideos = [], $selected_activities = [], $selected_students = [];
     public $questions = [
