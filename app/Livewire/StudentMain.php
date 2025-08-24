@@ -2,12 +2,14 @@
 
 namespace App\Livewire;
 
-use App\Models\Account;
 use Livewire\Component;
+use Livewire\WithPagination;
+use Livewire\WithoutUrlPagination;
 use Illuminate\Support\Facades\Auth;
 
 class StudentMain extends Component
 {
+    use WithPagination, WithoutUrlPagination;
     public $search = '';
     public $status = 'all';
 
@@ -25,6 +27,16 @@ class StudentMain extends Component
     {
         $this->dispatch('openModal', id: $id)->to('student-view-modal');
     }
+
+    // public function updatingSearch()
+    // {
+    //     $this->resetPage();
+    // }
+
+    // public function updatingStatus()
+    // {
+    //     $this->resetPage();
+    // }
 
     public function render()
     {
@@ -48,7 +60,7 @@ class StudentMain extends Component
             });
         })
         ->orderBy('first_name')
-        ->get();
+        ->paginate(10);
         return view('livewire.student-main', compact('students'));
     }
 }

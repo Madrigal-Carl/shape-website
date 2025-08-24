@@ -129,7 +129,7 @@ class CurriculumAddModal extends Component
     {
         $this->subjects = Subject::orderBy('name')->get();
         $this->grade_levels = Profile::orderBy('grade_level')->pluck('grade_level')->unique()->values()->toArray();
-        $this->specializations = Auth::user()->accountable->specialzation;
+        $this->specializations = Auth::user()->accountable->specialization;
     }
 
     public function render()
