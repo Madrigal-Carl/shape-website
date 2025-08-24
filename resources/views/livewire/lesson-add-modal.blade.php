@@ -170,12 +170,13 @@
                         <div class="flex flex-col gap-3">
                             <h2 class="font-medium text-lg">Activities</h2>
 
-                            <button wire:click='openActivityHub' type="button"
-                                class="bg-blue-button py-1.5 px-3 w-full rounded-xl text-white font-medium">
-                                Add Activity
-                            </button>
-                            <livewire:activity-hub />
-                            <div class="w-full grid grid-cols-2 gap-2 items-center justify-center rounded-lg">
+
+                            <div class="w-full grid grid-cols-1 gap-2 items-center justify-center rounded-lg">
+                                <button wire:click='openActivityHub' type="button"
+                                    class="bg-blue-button py-1.5 px-3 w-full rounded-xl text-white font-medium">
+                                    Add Activity
+                                </button>
+                                <livewire:activity-hub />
                                 @forelse ($selected_activities as $i => $act)
                                     <div wire:key="activity-{{ $i }}"
                                         class="flex w-full justify-between bg-card p-2 rounded-lg">

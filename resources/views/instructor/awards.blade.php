@@ -77,109 +77,7 @@
 </main>
 
 <!-- Aside -->
-<aside class="col-span-2 grid grid-cols-1 grid-rows-2 pr-4 pl-4 py-4 gap-4 h-dvh">
-    <!-- Student Feed -->
-    <div
-        class="bg-gradient-to-tr from-blue-button to-[#2BB4EE] w-full h-full rounded-3xl px-3 pt-3 pb-6 flex flex-col gap-3">
-        <div class="flex gap-2 items-center p-3">
-            <span class="material-symbols-rounded text-white">award_star</span>
-            <h1 class="text-xl font-semibold text-white">
-                Students Rewards Summary
-            </h1>
-        </div>
-
-        <!-- Student Notifications -->
-        <div class="flex flex-col gap-2 px-3 overflow-y-auto reward-sum">
-            <div class="flex gap-2 w-full bg-white/15 p-3 rounded-full">
-                <img src="{{ asset('images/profile.jpg') }}" class="rounded-full w-10" alt="" />
-                <!-- notification Details -->
-                <div class="w-full flex items-center justify-between pr-4 pl-2">
-                    <h2 class="leading-tight font-semibold text-md text-white">
-                        Juan Dela Cruz
-                    </h2>
-                    <p class="text-xs leading-tight text-white">15 Rewards</p>
-                </div>
-            </div>
-
-            <div class="flex gap-2 w-full bg-white/15 p-3 rounded-full">
-                <img src="{{ asset('images/profile.jpg') }}" class="rounded-full w-10" alt="" />
-                <!-- notification Details -->
-                <div class="w-full flex items-center justify-between pr-4 pl-2">
-                    <h2 class="leading-tight font-semibold text-md text-white">
-                        Juan Dela Cruz
-                    </h2>
-                    <p class="text-xs leading-tight text-white">15 Rewards</p>
-                </div>
-            </div>
-
-            <div class="flex gap-2 w-full bg-white/15 p-3 rounded-full">
-                <img src="{{ asset('images/profile.jpg') }}" class="rounded-full w-10" alt="" />
-                <!-- notification Details -->
-                <div class="w-full flex items-center justify-between pr-4 pl-2">
-                    <h2 class="leading-tight font-semibold text-md text-white">
-                        Juan Dela Cruz
-                    </h2>
-                    <p class="text-xs leading-tight text-white">15 Rewards</p>
-                </div>
-            </div>
-
-            <div class="flex gap-2 w-full bg-white/15 p-3 rounded-full">
-                <img src="{{ asset('images/profile.jpg') }}" class="rounded-full w-10" alt="" />
-                <!-- notification Details -->
-                <div class="w-full flex items-center justify-between pr-4 pl-2">
-                    <h2 class="leading-tight font-semibold text-md text-white">
-                        Juan Dela Cruz
-                    </h2>
-                    <p class="text-xs leading-tight text-white">15 Rewards</p>
-                </div>
-            </div>
-
-            <div class="flex gap-2 w-full bg-white/15 p-3 rounded-full">
-                <img src="{{ asset('images/profile.jpg') }}" class="rounded-full w-10" alt="" />
-                <!-- notification Details -->
-                <div class="w-full flex items-center justify-between pr-4 pl-2">
-                    <h2 class="leading-tight font-semibold text-md text-white">
-                        Juan Dela Cruz
-                    </h2>
-                    <p class="text-xs leading-tight text-white">15 Rewards</p>
-                </div>
-            </div>
-
-            <div class="flex gap-2 w-full bg-white/15 p-3 rounded-full">
-                <img src="{{ asset('images/profile.jpg') }}" class="rounded-full w-10" alt="" />
-                <!-- notification Details -->
-                <div class="w-full flex items-center justify-between pr-4 pl-2">
-                    <h2 class="leading-tight font-semibold text-md text-white">
-                        Juan Dela Cruz
-                    </h2>
-                    <p class="text-xs leading-tight text-white">15 Rewards</p>
-                </div>
-            </div>
-
-            <div class="flex gap-2 w-full bg-white/15 p-3 rounded-full">
-                <img src="{{ asset('images/profile.jpg') }}" class="rounded-full w-10" alt="" />
-                <!-- notification Details -->
-                <div class="w-full flex items-center justify-between pr-4 pl-2">
-                    <h2 class="leading-tight font-semibold text-md text-white">
-                        Juan Dela Cruz
-                    </h2>
-                    <p class="text-xs leading-tight text-white">15 Rewards</p>
-                </div>
-            </div>
-
-            <div class="flex gap-2 w-full bg-white/15 p-3 rounded-full">
-                <img src="{{ asset('images/profile.jpg') }}" class="rounded-full w-10" alt="" />
-                <!-- notification Details -->
-                <div class="w-full flex items-center justify-between pr-4 pl-2">
-                    <h2 class="leading-tight font-semibold text-md text-white">
-                        Juan Dela Cruz
-                    </h2>
-                    <p class="text-xs leading-tight text-white">15 Rewards</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
+<aside class="col-span-2 grid grid-cols-1 grid-rows-1 pr-4 pl-4 py-4 gap-4 h-dvh">
     <!-- System Feed -->
     <div class="bg-white w-full h-full rounded-3xl px-3 pt-3 pb-6 flex flex-col gap-3">
         <div class="flex gap-2 items-center p-3">
@@ -189,108 +87,17 @@
 
         <!-- System Notifications -->
         <div class="flex flex-col gap-2 px-3 overflow-y-auto">
-            <div class="flex gap-2 w-full bg-card p-3 rounded-full">
-                <img src="{{ asset('images/profile.jpg') }}" class="rounded-full w-10" alt="" />
-                <!-- notification Details -->
-                <div>
-                    <h2 class="leading-tight font-semibold text-md">
-                        Juan Dela Cruz
-                    </h2>
-                    <p class="text-xs leading-tight text-paragraph">
-                        exchange 3 cookies for 1 chocolate
-                    </p>
-                </div>
+            <div class="flex flex-col gap-2 w-full bg-card p-3 rounded-lg">
+                <!-- System Details -->
+                <h2 class="leading-tight font-medium text-md">
+                    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nobis, officiis? Amet asperiores in esse tempore deleniti. Dolor maxime nemo at?
+                </h2>
+                <p class="text-xs leading-tight text-paragraph">
+                    20-20-20
+                </p>
             </div>
-
-            <div class="flex gap-2 w-full bg-card p-3 rounded-full">
-                <img src="{{ asset('images/profile.jpg') }}" class="rounded-full w-10" alt="" />
-                <!-- notification Details -->
-                <div>
-                    <h2 class="leading-tight font-semibold text-md">
-                        Juan Dela Cruz
-                    </h2>
-                    <p class="text-xs leading-tight text-paragraph">
-                        exchange 3 cookies for 1 chocolate
-                    </p>
-                </div>
-            </div>
-
-            <div class="flex gap-2 w-full bg-card p-3 rounded-full">
-                <img src="{{ asset('images/profile.jpg') }}" class="rounded-full w-10" alt="" />
-                <!-- notification Details -->
-                <div>
-                    <h2 class="leading-tight font-semibold text-md">
-                        Juan Dela Cruz
-                    </h2>
-                    <p class="text-xs leading-tight text-paragraph">
-                        exchange 3 cookies for 1 chocolate
-                    </p>
-                </div>
-            </div>
-
-            <div class="flex gap-2 w-full bg-card p-3 rounded-full">
-                <img src="{{ asset('images/profile.jpg') }}" class="rounded-full w-10" alt="" />
-                <!-- notification Details -->
-                <div>
-                    <h2 class="leading-tight font-semibold text-md">
-                        Juan Dela Cruz
-                    </h2>
-                    <p class="text-xs leading-tight text-paragraph">
-                        exchange 3 cookies for 1 chocolate
-                    </p>
-                </div>
-            </div>
-
-            <div class="flex gap-2 w-full bg-card p-3 rounded-full">
-                <img src="{{ asset('images/profile.jpg') }}" class="rounded-full w-10" alt="" />
-                <!-- notification Details -->
-                <div>
-                    <h2 class="leading-tight font-semibold text-md">
-                        Juan Dela Cruz
-                    </h2>
-                    <p class="text-xs leading-tight text-paragraph">
-                        exchange 3 cookies for 1 chocolate
-                    </p>
-                </div>
-            </div>
-
-            <div class="flex gap-2 w-full bg-card p-3 rounded-full">
-                <img src="{{ asset('images/profile.jpg') }}" class="rounded-full w-10" alt="" />
-                <!-- notification Details -->
-                <div>
-                    <h2 class="leading-tight font-semibold text-md">
-                        Juan Dela Cruz
-                    </h2>
-                    <p class="text-xs leading-tight text-paragraph">
-                        exchange 3 cookies for 1 chocolate
-                    </p>
-                </div>
-            </div>
-
-            <div class="flex gap-2 w-full bg-card p-3 rounded-full">
-                <img src="{{ asset('images/profile.jpg') }}" class="rounded-full w-10" alt="" />
-                <!-- notification Details -->
-                <div>
-                    <h2 class="leading-tight font-semibold text-md">
-                        Juan Dela Cruz
-                    </h2>
-                    <p class="text-xs leading-tight text-paragraph">
-                        exchange 3 cookies for 1 chocolate
-                    </p>
-                </div>
-            </div>
-
-            <div class="flex gap-2 w-full bg-card p-3 rounded-full">
-                <img src="{{ asset('images/profile.jpg') }}" class="rounded-full w-10" alt="" />
-                <!-- notification Details -->
-                <div>
-                    <h2 class="leading-tight font-semibold text-md">
-                        Juan Dela Cruz
-                    </h2>
-                    <p class="text-xs leading-tight text-paragraph">
-                        exchange 3 cookies for 1 chocolate
-                    </p>
-                </div>
+            <div class="hidden h-full w-full text-center">
+                <p>Empty</p>
             </div>
         </div>
     </div>
