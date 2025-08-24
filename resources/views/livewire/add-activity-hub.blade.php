@@ -57,7 +57,7 @@
                                         </div>
 
                                         <div class="flex items-center gap-2">
-                                            <button type="button"
+                                            <button type="button" wire:click="viewActivity({{ $activity->id }})"
                                                 class="cursor-pointer bg-white/40 backdrop-blur-sm px-3 py-1 rounded-full p-0 flex items-center justify-center text-white hover:bg-blue-button hover:scale-110">
                                                 <p class="text-sm">View</p>
                                             </button>
@@ -77,48 +77,61 @@
                 </div>
             </div>
 
+            @if ($activity && $isOpenActivityView)
+                <div
+                    class="flex flex-col w-[30%] h-full bg-white shadow-2xl overflow-y-auto gamesGrid rounded-4xl relative">
+                    <div class="w-full flex items-center justify-between p-8 absolute top-0 left-0 z-10 text-white">
+                        <p class="font-semibold text-2xl">Activity Info</p>
+                        <button class="cursor-pointer" type="button" wire:click="closeActivityView">
+                            <span class="material-symbols-rounded">close</span>
+                        </button>
+                    </div>
 
-            <div class="flex flex-col w-[30%] h-full bg-white shadow-2xl overflow-y-auto gamesGrid rounded-4xl relative">
-                <button type="button" class="cursor-pointer w-full flex items-center justify-between p-8 absolute top-0 left-0 z-10 text-white"
-                    wire:click='closeModal'>
-                    <p class="font-semibold text-2xl">Activity Info</p>
-                    <span class="material-symbols-rounded">close</span>
-                </button>
-
-                <div class="relative">
-                    <img src="{{asset('images/game-icons/game-posters/mario-kart-world-review-1.jpg')}}" alt="" class=" aspect-[3/1.2] object-cover rounded-t-4xl">
-                    <div class="absolute bottom-0 bg-gradient-to-b from-black/80 via-black/0 to-black/0 w-full h-full rounded-t-4xl items-center"></div>
-                </div>
-
-                <div class="w-full p-8 flex flex-col gap-8">
-                    <div class="flex items-start gap-4">
-                        <img src="{{asset('images/game-icons/mario.jpeg')}}" alt="" class="h-20 aspect-square object-cover rounded-3xl">
-                        <div>
-                            <h1 class="font-semibold text-2xl w-full leading-7">Mario Cart: World Tour</h1>
-                            <p class="text-sm text-paragraph w-full">Lorem ipsum dolor sit amet.</p>
+                    <div class="relative">
+                        <img src="{{ asset('images/game-icons/game-posters/mario-kart-world-review-1.jpg') }}"
+                            alt="" class=" aspect-[3/1.2] object-cover rounded-t-4xl">
+                        <div
+                            class="absolute bottom-0 bg-gradient-to-b from-black/80 via-black/0 to-black/0 w-full h-full rounded-t-4xl items-center">
                         </div>
                     </div>
 
-                    <div class="flex flex-col gap-2">
-                        <h1 class="text-xl font-semibold">Preview:</h1>
-                        <div class="grid grid-cols-3 grid-rows-3 gap-1">
-                            <img src="{{asset('images/game-icons/game-posters/mario-kart-world-review-1.jpg')}}" alt="" class="w-full rounded-lg col-span-2 row-span-2">
-                            <img src="{{asset('images/game-icons/game-posters/mario-kart-world-review-1.jpg')}}" alt="" class="w-full rounded-lg col-span-1 row-span-1">
-                            <img src="{{asset('images/game-icons/game-posters/mario-kart-world-review-1.jpg')}}" alt="" class="w-full rounded-lg col-span-1 row-span-1">
-                            <img src="{{asset('images/game-icons/game-posters/mario-kart-world-review-1.jpg')}}" alt="" class="w-full rounded-lg col-span-1 row-span-1">
-                            <img src="{{asset('images/game-icons/game-posters/mario-kart-world-review-1.jpg')}}" alt="" class="w-full rounded-lg col-span-1 row-span-1">
-                            <img src="{{asset('images/game-icons/game-posters/mario-kart-world-review-1.jpg')}}" alt="" class="w-full rounded-lg col-span-1 row-span-1">
+                    <div class="w-full p-8 flex flex-col gap-8">
+                        <div class="flex items-start gap-4">
+                            <img src="{{ asset('images/game-icons/mario.jpeg') }}" alt=""
+                                class="h-20 aspect-square object-cover rounded-3xl">
+                            <div>
+                                <h1 class="font-semibold text-2xl w-full leading-7">{{ $act->name }}</h1>
+                                <p class="text-sm text-paragraph w-full">
+                                    {{ collect($act->category ?? [])->map(fn($cat) => ucwords($cat))->implode(', ') }}
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col gap-2">
+                            <h1 class="text-xl font-semibold">Preview:</h1>
+                            <div class="grid grid-cols-3 grid-rows-3 gap-1">
+                                <img src="{{ asset('images/game-icons/game-posters/mario-kart-world-review-1.jpg') }}"
+                                    alt="" class="w-full rounded-lg col-span-2 row-span-2">
+                                <img src="{{ asset('images/game-icons/game-posters/mario-kart-world-review-1.jpg') }}"
+                                    alt="" class="w-full rounded-lg col-span-1 row-span-1">
+                                <img src="{{ asset('images/game-icons/game-posters/mario-kart-world-review-1.jpg') }}"
+                                    alt="" class="w-full rounded-lg col-span-1 row-span-1">
+                                <img src="{{ asset('images/game-icons/game-posters/mario-kart-world-review-1.jpg') }}"
+                                    alt="" class="w-full rounded-lg col-span-1 row-span-1">
+                                <img src="{{ asset('images/game-icons/game-posters/mario-kart-world-review-1.jpg') }}"
+                                    alt="" class="w-full rounded-lg col-span-1 row-span-1">
+                                <img src="{{ asset('images/game-icons/game-posters/mario-kart-world-review-1.jpg') }}"
+                                    alt="" class="w-full rounded-lg col-span-1 row-span-1">
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col gap-2">
+                            <h1 class="text-xl font-semibold">Description</h1>
+                            <p class="text-sm text-paragraph">{{ $act->description }}</p>
                         </div>
                     </div>
-
-                    <div class="flex flex-col gap-2">
-                        <h1 class="text-xl font-semibold">Description</h1>
-                        <p class="text-sm text-paragraph">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Voluptatem consequuntur saepe deleniti ducimus architecto reprehenderit ratione perspiciatis sed repudiandae delectus in atque optio non veniam hic, rerum amet adipisci. Nihil culpa architecto accusantium nobis saepe, error suscipit quia ducimus inventore molestiae temporibus excepturi necessitatibus asperiores doloremque ea praesentium. Hic esse enim unde debitis facilis. Alias ab doloremque blanditiis quibusdam vel magni quasi veniam, dolor iusto aliquid maxime. Officia non optio aperiam vel perferendis incidunt voluptatem dolorum deserunt. Perspiciatis eos porro, vero voluptate veniam beatae amet repudiandae reprehenderit deleniti ratione laboriosam ipsam, nostrum a! Temporibus assumenda sit iste maiores quae expedita?</p>
-                    </div>
                 </div>
-
-
-            </div>
+            @endif
         </section>
     @endif
 </div>

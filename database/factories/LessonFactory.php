@@ -21,7 +21,7 @@ class LessonFactory extends Factory
     {
         return [
             'lesson_subject_id' => LessonSubject::factory(),
-            'title' => $this->faker->sentence(3),
+            'title' => $this->faker->unique()->sentence(2),
             'description' => $this->faker->paragraph,
         ];
     }

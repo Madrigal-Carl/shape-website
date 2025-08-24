@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Auth;
 class LessonMain extends Component
 {
     use WithPagination, WithoutUrlPagination;
-    public $status = 'all';
+    public $search = '';
     public $listeners = ['refresh' => '$refresh'];
 
     public function openAddLessonModal()
@@ -34,6 +34,9 @@ class LessonMain extends Component
         ])
         ->whereHas('lessonSubject.curriculumSubject.curriculum', function ($q) {
             $q->where('instructor_id', Auth::user()->accountable->id);
+        })
+        ->when($this->search, function ($q) {
+            $q->where('title', 'like', '%' . $this->search . '%');
         })
         ->orderByDesc('created_at')
         ->paginate(10)

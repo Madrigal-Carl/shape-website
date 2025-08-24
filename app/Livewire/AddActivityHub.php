@@ -6,11 +6,13 @@ use Livewire\Component;
 use App\Models\Activity;
 use Livewire\Attributes\On;
 
-class ActivityHub extends Component
+class AddActivityHub extends Component
 {
     public $isOpen = false;
+    public $isOpenActivityView = false;
     public $activities = [];
     public $selectedCategories = [];
+    public $act;
 
 
     #[On('openModal')]
@@ -25,10 +27,28 @@ class ActivityHub extends Component
         $this->isOpen = false;
     }
 
+    public function viewActivity($activityId)
+    {
+        $this->act = null;
+        $this->act = Activity::find($activityId);
+        $this->openViewActivity();
+    }
+
+    public function openViewActivity()
+    {
+        $this->isOpenActivityView = true;
+    }
+
+    public function closeActivityView()
+    {
+        $this->isOpenActivityView = false;
+        $this->act = null;
+    }
+
     public function addActivity($activityId)
     {
         $activity = Activity::find($activityId);
-
+        $this->dispatch('swal-toast', icon : 'success', title : 'Activity has been added successfully.');
         $this->dispatch('addActivity', activity: $activity)->to('lesson-add-modal');
     }
 
@@ -56,6 +76,6 @@ class ActivityHub extends Component
 
     public function render()
     {
-        return view('livewire.activity-hub');
+        return view('livewire.add-activity-hub');
     }
 }

@@ -25,11 +25,11 @@ use Illuminate\Validation\ValidationException;
 class LessonAddModal extends Component
 {
     use WithFileUploads;
-    public $subjects, $grade_levels, $students, $activities, $curriculums, $youtube_link;
+    public $subjects, $grade_levels, $students, $activities, $curriculums, $youtube_link, $selected_student;
     public $videos = [];
     public $isOpen = true;
     public $lesson_name, $curriculum, $subject, $grade_level, $description, $quiz_name, $quiz_description;
-    public $uploadedVideos = [], $selected_activities = [], $selected_student = [];
+    public $uploadedVideos = [], $selected_activities = [], $selected_students = [];
     public $questions = [
         [
             'question' => '',
@@ -47,6 +47,7 @@ class LessonAddModal extends Component
         $this->subject = null;
         $this->grade_level = null;
         $this->selected_student = null;
+        $this->selected_students = [];
         $this->description = null;
         $this->videos = [];
         $this->uploadedVideos = [];
@@ -81,7 +82,20 @@ class LessonAddModal extends Component
 
     public function openActivityHub()
     {
-        $this->dispatch('openModal')->to('activity-hub');
+        $this->dispatch('openModal')->to('add-activity-hub');
+    }
+
+    public function updatedSelectedStudent($value)
+    {
+        if ($value && !in_array($value, $this->selected_students)) {
+            $this->selected_students[] = $value;
+        }
+    }
+
+    public function removeStudent($index)
+    {
+        unset($this->selected_students[$index]);
+        $this->selected_students = array_values($this->selected_students);
     }
 
     public function updatedVideos()
@@ -258,9 +272,9 @@ class LessonAddModal extends Component
             ->where('subject_id', $this->subject)
             ->first();
 
-        $studentsToAssign = empty($this->selected_student)
+        $studentsToAssign = empty($this->selected_students)
             ? $this->students
-            : Student::whereIn('id', $this->selected_student)->get();
+            : Student::whereIn('id', $this->selected_students)->get();
 
         foreach ($studentsToAssign as $student) {
             $lessonSubject = LessonSubject::firstOrCreate([

@@ -49,29 +49,10 @@
             <h1 class="text-4xl font-medium">Lesson List</h1>
             <div class="flex gap-4">
                 <div
-                    class="flex items-center bg-white py-3 px-5 rounded-full shadow-2xl text-paragraph hover:bg-blue-button hover:text-white cursor-pointer">
-                    <select wire:change="$set('status', $event.target.value)" name="" id=""
-                        class="w-25 outline-none">
-                        <option value="pending" class="text-sm text-heading-dark" selected disabled>
-                            Filter by
-                        </option>
-                        <option value="all" class="text-sm text-heading-dark">
-                            All
-                        </option>
-                        <option value="active" class="text-sm text-lime">Active</option>
-                        <option value="inactive" class="text-sm text-paragraph">
-                            Inactive
-                        </option>
-                    </select>
-                    <!-- <span class="material-symbols-rounded">more_horiz</span>
-                        <span class="material-symbols-rounded">search</span> -->
-                </div>
-
-                <div
                     class="flex gap-2 items-center bg-white py-3 px-5 rounded-full shadow-2xl text-paragraph border-2 border-white hover:border-blue-button cursor-pointer">
                     <span class="material-symbols-rounded">search</span>
                     <input type="text" class="outline-none w-20 focus:w-60 placeholder-paragraph"
-                        placeholder="Search">
+                        wire:model.live="search" placeholder="Search">
                 </div>
             </div>
         </div>
@@ -98,7 +79,6 @@
                                 <th class="px-4 pb-3 text-center font-semibold">Videos</th>
                                 <th class="px-4 pb-3 text-center font-semibold">Games</th>
                                 <th class="px-4 pb-3 text-center font-semibold">Quizzes</th>
-                                <th class="px-4 pb-3 text-center font-semibold">Status</th>
                                 <th class="px-4 pb-3 text-center font-semibold">Actions</th>
                             </tr>
                         </thead>
@@ -117,14 +97,6 @@
                                     <td class="px-4 py-3 text-center">{{ $lesson->videos_count }}</td>
                                     <td class="px-4 py-3 text-center">{{ $lesson->activity_lessons_count }}</td>
                                     <td class="px-4 py-3 text-center">{{ $lesson->lesson_quizzes_count }}</td>
-                                    <td class="px-4 py-3 text-center">
-                                        <div class="flex justify-center items-center">
-                                            <div
-                                                class="gap-2 bg-[#D2FBD0] px-2 py-1 rounded-full flex items-center w-fit">
-                                                <small class="text-[#0D5F07]">Active</small>
-                                            </div>
-                                        </div>
-                                    </td>
                                     <td class="px-4 py-3 text-center">
                                         <div class="flex justify-center items-center gap-1 text-white">
                                             <button

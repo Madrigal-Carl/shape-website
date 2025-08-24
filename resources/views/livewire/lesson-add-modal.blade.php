@@ -79,6 +79,19 @@
                                         @endforeach
                                     </select>
                                 </div>
+                                <div class="flex flex-wrap gap-2">
+                                    @foreach ($selected_students as $i => $stud)
+                                        @php
+                                            $student = $students->firstWhere('id', $stud);
+                                        @endphp
+                                        <div class="flex items-center gap-2 px-3 py-1 bg-card rounded-full w-fit">
+                                            {{-- SHOULD BE STUDENT NAME --}}
+                                            <p class="text-sm">{{ $student->last_name }}</p>
+                                            <button wire:click="removeStudent({{ $i }})" type="button"
+                                                class="text-red-500 hover:text-red-700">✕</button>
+                                        </div>
+                                    @endforeach
+                                </div>
 
                                 <textarea name="" id="" maxlength="200" placeholder="Description (Optional)"
                                     wire:model.live="description"
@@ -176,7 +189,7 @@
                                     class="bg-blue-button py-1.5 px-3 w-full rounded-xl text-white font-medium">
                                     Add Activity
                                 </button>
-                                <livewire:activity-hub />
+                                <livewire:add-activity-hub />
                                 @forelse ($selected_activities as $i => $act)
                                     <div wire:key="activity-{{ $i }}"
                                         class="flex w-full justify-between bg-card p-2 rounded-lg">
