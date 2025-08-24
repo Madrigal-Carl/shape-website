@@ -2,7 +2,7 @@
 
 namespace App\Livewire;
 
-use FFMpeg;
+use FFMpeg\FFMpeg;
 use App\Models\Quiz;
 use App\Models\Lesson;
 use App\Models\Profile;
@@ -25,7 +25,7 @@ use Illuminate\Validation\ValidationException;
 class LessonAddModal extends Component
 {
     use WithFileUploads;
-    public $subjects, $grade_levels, $students, $activities, $activity, $curriculums, $youtube_link;
+    public $subjects, $grade_levels, $students, $activities, $curriculums, $youtube_link;
     public $videos = [];
     public $isOpen = true;
     public $lesson_name, $curriculum, $subject, $grade_level, $description, $quiz_name, $quiz_description;
@@ -50,7 +50,6 @@ class LessonAddModal extends Component
         $this->description = null;
         $this->videos = [];
         $this->uploadedVideos = [];
-        $this->activity = null;
         $this->selected_activities = [];
         $this->quiz_name = null;
         $this->quiz_description = null;
@@ -80,6 +79,11 @@ class LessonAddModal extends Component
         $this->isOpen = false;
     }
 
+    public function openGameHub()
+    {
+        $this->dispatch('openModal')->to('game-hub');
+    }
+
     public function updatedVideos()
     {
         foreach ($this->videos as $video) {
@@ -93,7 +97,7 @@ class LessonAddModal extends Component
                 $thumbnailName = Str::random(10) . '.jpg';
                 $thumbnailPath = storage_path('app/public/thumbnails/' . $thumbnailName);
 
-                $ffmpeg = \FFMpeg\FFMpeg::create();
+                $ffmpeg = FFMpeg::create();
                 $videoFFMpeg = $ffmpeg->open(storage_path('app/public/' . $videoPath));
                 $frame = $videoFFMpeg->frame(TimeCode::fromSeconds(2));
                 $frame->save($thumbnailPath);
@@ -300,6 +304,14 @@ class LessonAddModal extends Component
 
         $this->dispatch('swal-toast', icon: 'success', title: 'Lesson added successfully!');
         return $this->closeModal();
+    }
+
+    #[On('addActivity')]
+    public function addSelectedActivity($activity)
+    {
+        if (!collect($this->selected_activities)->pluck('id')->contains($activity['id'])) {
+            $this->selected_activities[] = (object) $activity;
+        }
     }
 
     public function updatedActivity($value)
