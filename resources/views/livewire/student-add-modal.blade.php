@@ -27,6 +27,20 @@
                             <input type="file" id="photo-upload" class="hidden" wire:model="photo"
                                 accept="image/*" />
                         </label>
+                        <div x-data="{ progress: 0 }"
+                            x-on:livewire-upload-progress.window="progress = $event.detail.progress"
+                            x-on:livewire-upload-start.window="progress = 0"
+                            x-on:livewire-upload-finish.window="progress = 0"
+                            x-on:livewire-upload-error.window="progress = 0" wire:loading wire:target="photo"
+                            class="mt-2 w-56 flex-col items-center">
+
+                            <div class="bg-gray-200 h-2 rounded-full overflow-hidden">
+                                <div class="bg-blue-500 h-2 transition-all duration-300"
+                                    :style="'width: ' + progress + '%'"></div>
+                            </div>
+                            <p class="text-xs text-blue-600 mt-1 text-center">Uploading... <span
+                                    x-text="progress"></span>%</p>
+                        </div>
                     </div>
 
                     <div class="flex flex-col gap-3">

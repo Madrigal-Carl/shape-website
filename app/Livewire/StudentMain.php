@@ -47,6 +47,7 @@ class StudentMain extends Component
                 $q->where('status', $this->status);
             });
         })
+        ->orderBy('first_name')
         ->get();
         return view('livewire.student-main', compact('students'));
     }

@@ -91,8 +91,8 @@ class StudentAddModal extends Component
                     'guardian_first_name'  => 'required|max:35',
                     'guardian_middle_name' => 'nullable|max:35',
                     'guardian_last_name'   => 'required|max:35',
-                    'guardian_email'       => 'required|email',
-                    'guardian_phone'       => 'nullable|digits:10',
+                    'guardian_email'       => 'required|email|unique:guardians,email',
+                    'guardian_phone'       => 'nullable|digits:10|unique:guardians,phone_number',
                 ], [
                     'permanent_municipal.required' => 'The permanent municipal is required.',
                     'permanent_barangay.required'  => 'The permanent barangay is required.',
@@ -106,7 +106,9 @@ class StudentAddModal extends Component
                     'guardian_last_name.max'     => 'The guardian last name is too long.',
                     'guardian_email.required'      => 'The guardian email is required.',
                     'guardian_email.email'         => 'The guardian email must be a valid email address.',
+                    'guardian_email.unique'      => 'The guardian email already existed.',
                     'guardian_phone.digits'        => 'The guardian phone must be exactly 10 digits.',
+                    'guardian_phone.unique'      => 'The guardian phone already existed.',
                 ]);
             } catch (ValidationException $e) {
                 $message = $e->validator->errors()->first();
@@ -153,7 +155,11 @@ class StudentAddModal extends Component
 
         $filename = null;
         if ($this->photo) {
-            $filename = $this->photo->store('students', 'public');
+            $studentName = preg_replace('/\s+/', '', "{$this->last_name}_{$this->first_name}_{$this->middle_name}");
+            $extension   = $this->photo->getClientOriginalExtension();
+            $customName  = "{$studentName}_Profile.{$extension}";
+
+            $filename = $this->photo->storeAs('students', $customName, 'public');
         }
 
         $student = \App\Models\Student::create([

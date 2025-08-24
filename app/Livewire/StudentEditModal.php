@@ -112,8 +112,11 @@ class StudentEditModal extends Component
                 Storage::disk('public')->delete($student->path);
             }
 
-            // Save new photo
-            $path = $this->photo->store('photos', 'public');
+            $studentName = preg_replace('/\s+/', '', "{$this->last_name}_{$this->first_name}_{$this->middle_name}");
+            $extension   = $this->photo->getClientOriginalExtension();
+            $customName  = "{$studentName}_Profile.{$extension}";
+
+            $path = $this->photo->storeAs('students', $customName, 'public');
             $student->path = $path;
         }
 
