@@ -170,7 +170,7 @@
                         <div class="flex flex-col gap-3">
                             <h2 class="font-medium text-lg">Activities</h2>
 
-                            <button wire:click='openGameHub' type="button"
+                            <button wire:click='openActivityHub' type="button"
                                 class="bg-blue-button py-1.5 px-3 w-full rounded-xl text-white font-medium">
                                 Add Activity
                             </button>

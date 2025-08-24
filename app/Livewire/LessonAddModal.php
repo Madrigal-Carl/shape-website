@@ -79,9 +79,9 @@ class LessonAddModal extends Component
         $this->isOpen = false;
     }
 
-    public function openGameHub()
+    public function openActivityHub()
     {
-        $this->dispatch('openModal')->to('game-hub');
+        $this->dispatch('openModal')->to('activity-hub');
     }
 
     public function updatedVideos()
