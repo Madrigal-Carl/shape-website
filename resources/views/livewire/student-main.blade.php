@@ -52,6 +52,10 @@
     <div class="flex flex-col gap-4 min-h-[20%]">
         <div class="side flex items-center justify-between gap-2">
             <h1 class="text-4xl font-medium">Student List</h1>
+
+            <livewire:student-add-modal />
+            <livewire:student-edit-modal />
+            <livewire:student-view-modal />
             <div class="flex items-center gap-4">
                 <div
                     class="flex items-center bg-white py-3 px-5 rounded-full shadow-2xl text-paragraph hover:bg-blue-button hover:text-white cursor-pointer">
@@ -211,7 +215,5 @@
         @endif
     </div>
 
-    <livewire:student-add-modal />
-    <livewire:student-edit-modal />
-    <livewire:student-view-modal />
+
 </main>
