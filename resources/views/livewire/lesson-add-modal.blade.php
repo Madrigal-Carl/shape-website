@@ -92,7 +92,7 @@
                                 <div class="flex items-center h-24 justify-center gap-2 px-6 py-3 border-1 border-dashed rounded-lg w-full hover:text-blue-button"
                                     id="dropzone">
                                     <label for="videoUpload" class="cursor-pointer flex items-center gap-2">
-                                        <h1>Upload Video</h1>
+                                        <h1>Drop or Click to Upload Video</h1>
                                         <span class="material-symbols-rounded">add_photo_alternate</span>
                                     </label>
                                     <input type="file" wire:model="videos" multiple class="hidden"
@@ -366,3 +366,30 @@
         </section>
     @endif
 </div>
+
+
+<script>
+    const dropzone = document.getElementById('dropzone');
+    const fileInput = document.getElementById('videoUpload');
+
+    dropzone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        dropzone.classList.add('bg-blue-50', 'border-blue-500');
+    });
+
+    dropzone.addEventListener('dragleave', () => {
+        dropzone.classList.remove('bg-blue-50', 'border-blue-500');
+    });
+
+    dropzone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropzone.classList.remove('bg-blue-50', 'border-blue-500');
+
+        if (e.dataTransfer.files.length > 0) {
+            fileInput.files = e.dataTransfer.files;
+            fileInput.dispatchEvent(new Event('change', {
+                bubbles: true
+            }));
+        }
+    });
+</script>
