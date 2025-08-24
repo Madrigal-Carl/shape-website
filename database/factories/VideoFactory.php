@@ -21,8 +21,8 @@ class VideoFactory extends Factory
     {
         return [
             'lesson_id' => Lesson::factory(),
-            'path' => null,
             'url' => null,
+            'title' => $this->faker->words(3, true),
             'thumbnail' => $this->faker->imageUrl(640, 480, 'education'),
         ];
     }
