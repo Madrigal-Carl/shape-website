@@ -148,34 +148,34 @@
                     </table>
                 </div>
             </div>
-
-            @if ($lessons->lastPage() > 1)
-                <div class="rounded-full border border-[#E8E8E8] p-2 w-fit flex items-center text-sm">
-                    <button class="py-1 px-3 {{ $lessons->onFirstPage() ? 'hidden' : '' }}"
-                        @if (!$lessons->onFirstPage()) wire:click="gotoPage({{ $lessons->currentPage() - 1 }})" @endif>
-                        <span class="material-symbols-outlined">
-                            keyboard_double_arrow_right
-                        </span>
-                    </button>
-
-                    @foreach ($lessons->getUrlRange(1, $lessons->lastPage()) as $page => $url)
-                        @if ($page == $lessons->currentPage())
-                            <button class="bg-[#7A7A7A1F] py-1 px-4 rounded-full">{{ $page }}</button>
-                        @else
-                            <button wire:click="gotoPage({{ $page }})"
-                                class="py-1 px-4">{{ $page }}</button>
-                        @endif
-                    @endforeach
-
-                    <button class="py-1 px-3 {{ $lessons->hasMorePages() ? '' : 'hidden' }}"
-                        @if ($lessons->hasMorePages()) wire:click="gotoPage({{ $lessons->currentPage() + 1 }})" @endif>
-                        <span class="material-symbols-outlined">
-                            keyboard_double_arrow_right
-                        </span>
-                    </button>
-                </div>
-            @endif
         </div>
+
+        @if ($lessons->lastPage() > 1)
+            <div class="rounded-full bg-white gap-1 p-2 w-fit self-center-safe flex items-center text-sm shadow-2xl">
+                <button class="py-1 flex items-center px-3 {{ $lessons->onFirstPage() ? 'hidden' : '' }}"
+                    @if (!$lessons->onFirstPage()) wire:click="gotoPage({{ $lessons->currentPage() - 1 }})" @endif>
+                    <span class="material-symbols-outlined">
+                        chevron_left
+                    </span>
+                </button>
+
+                @foreach ($lessons->getUrlRange(1, $lessons->lastPage()) as $page => $url)
+                    @if ($page == $lessons->currentPage())
+                        <button class=" bg-blue-button text-white py-1 px-4 rounded-full">{{ $page }}</button>
+                    @else
+                        <button wire:click="gotoPage({{ $page }})"
+                            class="py-1 px-4 hover:bg-blue-button rounded-full hover:text-white">{{ $page }}</button>
+                    @endif
+                @endforeach
+
+                <button class="py-1 flex items-center px-3 {{ $lessons->hasMorePages() ? '' : 'hidden' }}"
+                    @if ($lessons->hasMorePages()) wire:click="gotoPage({{ $lessons->currentPage() + 1 }})" @endif>
+                    <span class="material-symbols-outlined">
+                        chevron_right
+                    </span>
+                </button>
+            </div>
+        @endif
     </div>
 
     <livewire:lesson-add-modal />
