@@ -116,23 +116,19 @@
                                     </p>
                                 </div>
 
-                                @if (empty($uploadedVideos))
-                                    <div class="bg-card w-full h-30 flex items-center justify-center rounded-lg">
-                                        <h1 class="text-paragraph">No Video added</h1>
-                                    </div>
-                                @endif
 
-                                <div class="flex grid-cols-2 gap-2">
+
+                                <div class="w-full grid grid-cols-2 gap-2">
                                     @foreach ($uploadedVideos as $index => $video)
                                         <div class="flex flex-col gap-2 relative video-container-{{ $index }}">
-                                            <div class="flex flex-col items-center justify-center">
+                                            <div class="w-full flex flex-col items-center justify-center shrink-0">
                                                 <img src="{{ $video['thumbnail'] }}"
-                                                    class="aspect-video w-full h-fit rounded-lg object-cover video-thumb-{{ $index }}" />
+                                                    class="aspect-video w-max h-fit rounded-lg object-cover video-thumb-{{ $index }}" />
                                                 <button type="button"
                                                     class="absolute rounded-full cursor-pointer hover:scale-120 shadow-xl/40 z-10 playBtn-{{ $index }}"
                                                     onclick="playVideo({{ $index }}, '{{ $video['video'] }}')">
                                                     <span
-                                                        class="material-symbols-rounded p-2 rounded-full text-white bg-white/20 backdrop-blur-[3px] shadow-white shadow-inner">
+                                                        class="material-symbols-rounded p-2 rounded-full text-white bg-black/35 backdrop-blur-[3px] shadow-white/70 shadow-inner">
                                                         play_arrow
                                                     </span>
                                                 </button>
@@ -141,7 +137,7 @@
                                             <div
                                                 class="absolute bottom-0 bg-gradient-to-t from-black/80 via-black/0 to-black/0 w-full h-full rounded-lg">
                                                 <div class="h-full w-full flex items-end justify-between p-3">
-                                                    <h1 class="text-white font-medium text-sm ml-1">
+                                                    <h1 class="text-white font-medium text-sm ml-1 truncate w-[80%]">
                                                         {{ $video['title'] }}
                                                     </h1>
                                                     <button wire:click="removeVideo({{ $index }})"
@@ -154,15 +150,21 @@
                                         </div>
                                     @endforeach
                                 </div>
+
                             </div>
-                            <div class="flex flex-col gap-2">
+                            <div class="grid grid-cols-3 gap-2">
                                 <input type="text" placeholder="Paste YouTube Link" wire:model="youtube_link"
-                                    class="px-3 py-1 rounded-lg bg-card placeholder-paragraph outline-none w-full" />
+                                    class="px-3 py-1 rounded-lg bg-card placeholder-paragraph outline-none w-full col-span-2" />
                                 <button type="button" wire:click="addYoutubeVideo"
-                                    class="bg-blue-button text-white px-3 py-1 rounded-lg w-fit">
+                                    class="bg-blue-button text-white px-3 py-1 rounded-lg w-full col-span-1">
                                     Add YouTube Video
                                 </button>
                             </div>
+                            @if (empty($uploadedVideos))
+                                <div class="bg-card w-full h-30 flex items-center justify-center rounded-lg">
+                                    <h1 class="text-paragraph">No Video added</h1>
+                                </div>
+                            @endif
                         </div>
 
                         <div class="flex flex-col gap-3">
@@ -285,7 +287,7 @@
                                                     class="w-5 h-5 border-1 border-gray-400 rounded-full p-0.5 flex items-center justify-center">
                                                 </div>
                                                 <button type="button" wire:click="addOption({{ $qIndex }})"
-                                                    class="text-blue-button outline-none text-sm">
+                                                    class="text-blue-button outline-none text-sm cursor-pointer">
                                                     Add Option
                                                 </button>
                                             </div>
