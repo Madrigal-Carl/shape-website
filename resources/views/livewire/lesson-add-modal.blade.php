@@ -99,11 +99,21 @@
                                         id="videoUpload" />
                                 </div>
 
-                                <div wire:loading wire:target="videos" class="w-full mt-3">
-                                    <div class="bg-gray-200 rounded-full h-3 overflow-hidden">
-                                        <div class="bg-blue-500 h-3 animate-progress-bar"></div>
+                                <div wire:loading wire:target="videos" x-data="{ progress: 0 }"
+                                    x-on:livewire-upload-progress.window="progress = $event.detail.progress"
+                                    x-on:livewire-upload-start.window="progress = 0"
+                                    x-on:livewire-upload-finish.window="progress = 0"
+                                    x-on:livewire-upload-error.window="progress = 0"
+                                    class="w-full mt-3 flex-col items-center">
+
+                                    <div class="bg-gray-200 rounded-full h-2 overflow-hidden">
+                                        <div class="bg-blue-500 h-2 transition-all duration-300"
+                                            :style="'width: ' + progress + '%'"></div>
                                     </div>
-                                    <p class="text-sm text-blue-600 mt-1 text-center">Uploading...</p>
+
+                                    <p class="text-sm text-blue-600 text-center">
+                                        Uploading... <span x-text="progress"></span>%
+                                    </p>
                                 </div>
 
                                 @if (empty($uploadedVideos))

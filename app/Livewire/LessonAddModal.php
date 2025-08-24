@@ -101,7 +101,7 @@ class LessonAddModal extends Component
                 $this->uploadedVideos[] = [
                     'video' => 'storage/' . $videoPath,
                     'thumbnail' => 'storage/thumbnails/' . $thumbnailName,
-                    'title' => $video->getClientOriginalName()
+                    'title' => pathinfo($video->getClientOriginalName(), PATHINFO_FILENAME)
                 ];
             } else {
                 $this->dispatch('swal-toast', icon: 'error', title: 'File should be a video.');
@@ -214,9 +214,9 @@ class LessonAddModal extends Component
 
             foreach ($this->uploadedVideos as $videoData) {
                 $lesson->videos()->create([
-                    'path'      => $videoData['video'],
+                    'url' => $videoData['video'],
+                    'title' => $videoData['title'],
                     'thumbnail' => $videoData['thumbnail'],
-                    'url'       => $videoData['video'],
                 ]);
             }
 
