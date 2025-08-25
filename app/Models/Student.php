@@ -97,17 +97,22 @@ class Student extends Model
     // Total activities count
     public function getTotalActivitiesCountAttribute() {
         return $this->lessonSubjectStudents->sum(function($lss) {
-            return $lss->lesson->activities->count();
+            return $lss->lesson->activityLessons->count();
         });
     }
 
     // Completed activities count
     public function getCompletedActivitiesCountAttribute() {
         return $this->lessonSubjectStudents->sum(function($lss) {
-            return $lss->lesson->activities->filter(function($activity) {
-                $log = $activity->latestLogForStudent($this->id);
+            return $lss->lesson->activityLessons->filter(function($activityLesson) {
+                $log = $activityLesson->logs()
+                    ->where('student_id', $this->id)
+                    ->latest('attempt_number')
+                    ->first();
+
                 return $log && $log->status === 'completed';
             })->count();
         });
     }
+
 }

@@ -10,7 +10,9 @@ class Quiz extends Model
     use HasFactory;
 
     protected $fillable = [
+        'lesson_id',
         'title',
+        'score',
         'description',
     ];
 
@@ -24,18 +26,16 @@ class Quiz extends Model
         return $this->belongsTo(Lesson::class);
     }
 
-    public function activityLesson()
+    public function logs()
     {
-        return $this->hasOne(ActivityLesson::class);
+        return $this->morphMany(Log::class, 'loggable');
     }
 
     public function latestLogForStudent($studentId)
     {
-        if (!$this->lessonQuiz) return null;
-
-        return $this->lessonQuiz->logs()
+        return $this->logs()
             ->where('student_id', $studentId)
-            ->latest('attempt_number')
+            ->orderByDesc('attempt_number')
             ->first();
     }
 }

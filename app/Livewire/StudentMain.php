@@ -45,7 +45,7 @@ class StudentMain extends Component
         ->with([
             'profile',
             'lessonSubjectStudents.lesson.quizzes.logs',
-            'lessonSubjectStudents.lesson.activities.logs'
+            'lessonSubjectStudents.lesson.activityLessons.logs'
         ])
         ->withCount(['lessons'])
         ->when($this->search, function ($query) {
@@ -62,6 +62,7 @@ class StudentMain extends Component
         })
         ->orderBy('first_name')
         ->paginate(10);
+
 
 
         return view('livewire.student-main', compact('students'));

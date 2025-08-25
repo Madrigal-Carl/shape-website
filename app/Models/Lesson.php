@@ -23,9 +23,9 @@ class Lesson extends Model
         return $this->hasMany(LessonSubjectStudent::class);
     }
 
-    public function lessonQuizzes()
+    public function quizzes()
     {
-        return $this->hasMany(LessonQuiz::class);
+        return $this->hasMany(Quiz::class);
     }
 
     public function activityLessons()
@@ -36,8 +36,8 @@ class Lesson extends Model
     public function isCompletedByStudent($studentId)
     {
         // Check all quizzes
-        foreach ($this->lessonQuizzes as $lessonQuiz) {
-            $log = $lessonQuiz->logs()->where('student_id', $studentId)->latest('attempt_number')->first();
+        foreach ($this->quizzes as $quiz) {
+            $log = $quiz->logs()->where('student_id', $studentId)->latest('attempt_number')->first();
             if (!$log || $log->status !== 'completed') {
                 return false;
             }
@@ -53,6 +53,4 @@ class Lesson extends Model
 
         return true;
     }
-
-
 }

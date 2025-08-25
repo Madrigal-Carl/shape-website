@@ -27,6 +27,6 @@ class ActivityLesson extends Model
 
     public function logs()
     {
-        return $this->morphMany(Log::class, 'item');
+        return $this->morphMany(Log::class, 'loggable');
     }
 }

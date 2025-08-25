@@ -21,7 +21,9 @@ class QuizFactory extends Factory
     public function definition(): array
     {
         return [
+            'lesson_id' => null,
             'title' => $this->faker->sentence(3),
+            'score' => $this->faker->numberBetween(0, 100),
             'description' => $this->faker->optional()->paragraph(),
         ];
     }

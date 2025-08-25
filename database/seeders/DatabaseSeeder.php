@@ -130,27 +130,25 @@ class DatabaseSeeder extends Seeder
             // Create 20 activities but don't attach to lesson yet
             $activities = Activity::factory()->count(20)->create();
 
+            $lessonActivity = ActivityLesson::firstOrCreate([
+                'lesson_id' => $lesson->id,
+                'activity_id' => $activities->random()->id,
+            ]);
+            $lesson->setRelation('lessonActivity', $lessonActivity);
+
             // Create 20 quizzes with questions and options
-            $quizzes = Quiz::factory()->count(20)->create();
+            $quizzes = Quiz::factory()->create([
+                'lesson_id' => $lesson->id,
+            ]);
             $quizzes->each(function ($quiz) {
                 $questions = Question::factory(3)->create(['quiz_id' => $quiz->id]);
                 $questions->each(fn($question) => Option::factory(4)->create(['question_id' => $question->id]));
             });
 
-            // Assign one quiz and one activity per lesson
-            $lessonQuiz = LessonQuiz::firstOrCreate([
-                'lesson_id' => $lesson->id,
-                'quiz_id' => $quizzes->random()->id,
-            ]);
-
             $lessonActivity = ActivityLesson::firstOrCreate([
                 'lesson_id' => $lesson->id,
                 'activity_id' => $activities->random()->id,
             ]);
-
-            // Save for later student log creation
-            $lesson->setRelation('lessonQuiz', $lessonQuiz);
-            $lesson->setRelation('lessonActivity', $lessonActivity);
         });
         $lessons->each(function ($lesson) use ($curriculums) {
             $curriculum = $curriculums->random();
@@ -170,10 +168,13 @@ class DatabaseSeeder extends Seeder
                 ]);
 
                 // Create logs for lesson's quiz and activity
+                $randomQuiz = $lesson->quizzes()->inRandomOrder()->first();
+
+                // Create log for this quiz
                 Log::factory()->create([
                     'student_id' => $student->id,
-                    'loggable_id' => $lesson->lessonQuiz->id,
-                    'loggable_type' => LessonQuiz::class,
+                    'loggable_id' => $randomQuiz->id,
+                    'loggable_type' => Quiz::class,
                 ]);
 
                 Log::factory()->create([
