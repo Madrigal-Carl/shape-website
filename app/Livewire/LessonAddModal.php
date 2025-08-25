@@ -289,46 +289,40 @@ class LessonAddModal extends Component
                 'lesson_id' => $lesson->id,
                 'student_id' => $student->id,
             ]);
+        }
 
-            foreach ($this->uploadedVideos as $videoData) {
-                $lesson->videos()->create([
-                    'url' => $videoData['video'],
-                    'title' => $videoData['title'],
-                    'thumbnail' => $videoData['thumbnail'],
-                ]);
-            }
+        foreach ($this->uploadedVideos as $videoData) {
+            $lesson->videos()->create([
+                'url' => $videoData['video'],
+                'title' => $videoData['title'],
+                'thumbnail' => $videoData['thumbnail'],
+            ]);
+        }
 
-            foreach ($this->selected_activities as $activity) {
-                $lesson->activityLessons()->create([
-                    'lesson_id'    => $lesson->id,
-                    'activity_id'  => $activity->id,
-                ]);
-            }
+       foreach ($this->selected_activities as $activity) {
+            $lesson->activityLessons()->create([
+                'activity_id'  => $activity->id,
+            ]);
+        }
 
-            $quiz = Quiz::create([
-                'title'       => $this->quiz_name,
-                'description' => $this->quiz_description,
+        $quiz = Quiz::create([
+            'lesson_id' => $lesson->id,
+            'title'       => $this->quiz_name,
+            'description' => $this->quiz_description,
+        ]);
+
+        foreach ($this->questions as $questionData) {
+            $question = $quiz->questions()->create([
+                'question_text' => $questionData['question'],
+                'point'         => $questionData['point'],
             ]);
 
-            LessonQuiz::create([
-                'lesson_id' => $lesson->id,
-                'quiz_id'   => $quiz->id,
-                'score'     => 0,
-            ]);
-
-            foreach ($this->questions as $questionData) {
-                $question = $quiz->questions()->create([
-                    'question_text' => $questionData['question'],
-                    'point'         => $questionData['point'],
+            foreach ($questionData['options'] as $optionData) {
+                if (trim($optionData['text']) === '') continue;
+                $question->options()->create([
+                    'option_text' => $optionData['text'],
+                    'is_correct'  => $optionData['is_correct'],
                 ]);
-
-                foreach ($questionData['options'] as $optionData) {
-                    if (trim($optionData['text']) === '') continue;
-                    $question->options()->create([
-                        'option_text' => $optionData['text'],
-                        'is_correct'  => $optionData['is_correct'],
-                    ]);
-                }
             }
         }
 

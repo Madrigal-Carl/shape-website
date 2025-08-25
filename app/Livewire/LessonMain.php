@@ -3,7 +3,6 @@
 namespace App\Livewire;
 
 use App\Models\Lesson;
-use App\Models\Account;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Livewire\WithoutUrlPagination;
@@ -30,7 +29,7 @@ class LessonMain extends Component
             'lessonSubjectStudents',
             'videos',
             'quizzes',
-            'activities',
+            'activityLessons',
         ])
         ->whereHas('lessonSubjectStudents.curriculumSubject.curriculum', function ($q) {
             $q->where('instructor_id', Auth::user()->accountable->id);

@@ -12,6 +12,7 @@ class StudentMain extends Component
     use WithPagination, WithoutUrlPagination;
     public $search = '';
     public $status = 'all';
+    public $listeners = ["refresh" => '$refresh'];
 
     public function openAddStudentModal()
     {

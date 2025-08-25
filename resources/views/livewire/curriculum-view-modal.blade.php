@@ -45,7 +45,7 @@
 
                         <div class="flex items-center w-auto">
                             <h3 class="text-sm font-semibold w-25">Grade Level:</h3>
-                            <p class="text-sm">{{ $curriculum->grade_level }}</p>
+                            <p class="text-sm">{{ ucwords($curriculum->grade_level) }}</p>
                         </div>
                     </div>
                 </div>

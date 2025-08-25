@@ -5,6 +5,7 @@ namespace App\Livewire;
 use App\Models\Feed;
 use App\Models\Account;
 use App\Models\Profile;
+use App\Models\Student;
 use Livewire\Component;
 use Livewire\Attributes\On;
 use Livewire\WithFileUploads;
@@ -162,7 +163,7 @@ class StudentAddModal extends Component
             $filename = $this->photo->storeAs('students', $customName, 'public');
         }
 
-        $student = \App\Models\Student::create([
+        $student = Student::create([
             'instructor_id' => Auth::user()->accountable->id,
             'path'          => $filename,
             'first_name'    => $this->first_name,

@@ -28,7 +28,7 @@ class CurriculumFactory extends Factory
         return [
             'instructor_id' => Instructor::factory(),
             'name' => $this->faker->sentence(3),
-            'grade_level' => 'Kindergarten 1',
+            'grade_level' => 'kindergarten ' . $this->faker->numberBetween(1, 3),
             'specialization' => $this->faker->randomElements($specializations, rand(1, 2)),
             'description' => $this->faker->paragraph,
             'status' => 'inactive',
