@@ -125,62 +125,56 @@ class DatabaseSeeder extends Seeder
         $lessons = Lesson::factory()->count(30)->create();
 
         $lessons->each(function ($lesson) {
-            // Video per lesson
             Video::factory()->create(['lesson_id' => $lesson->id]);
-
-            // Activity per lesson
-            $activity = Activity::factory()->create(['lesson_id' => $lesson->id]);
-
-            // Quiz per lesson
+            Activity::factory()->create(['lesson_id' => $lesson->id]);
             $quiz = Quiz::factory()->create(['lesson_id' => $lesson->id]);
 
             // Questions + Options per quiz
             $questions = Question::factory(3)->create(['quiz_id' => $quiz->id]);
-            $questions->each(function ($question) {
-                Option::factory(4)->create(['question_id' => $question->id]);
-            });
+            $questions->each(fn($question) => Option::factory(4)->create(['question_id' => $question->id]));
         });
 
-        // 10. Assign Lessons to Students (pivot) + create logs
-        $students->each(function ($student) use ($curriculums, $lessons) {
-            $curriculums->each(function ($curriculum) use ($student, $lessons) {
-                $curriculumSubjectIds = CurriculumSubject::where('curriculum_id', $curriculum->id)->pluck('id');
+        // 10. Assign each lesson to a curriculumSubject (once)
+        $lessons->each(function ($lesson) use ($curriculums) {
+            // Pick a curriculum and one of its subjects for this lesson
+            $curriculum = $curriculums->random();
+            $curriculumSubject = $curriculum->curriculumSubjects->random();
 
-                foreach ($curriculumSubjectIds as $curriculumSubjectId) {
-                    $lesson = $lessons->random();
+            // Save curriculumSubject in lesson pivot (for students later)
+            $lesson->curriculum_subject_id = $curriculumSubject->id; // if you add column, or just remember mapping
+        });
 
-                    // Pivot
-                    LessonSubjectStudent::firstOrCreate([
-                        'curriculum_subject_id' => $curriculumSubjectId,
-                        'lesson_id' => $lesson->id,
+        // 11. Assign lessons to students (pivot)
+        $students->each(function ($student) use ($lessons) {
+            $lessons->each(function ($lesson) use ($student) {
+                LessonSubjectStudent::firstOrCreate([
+                    'curriculum_subject_id' => $lesson->curriculum_subject_id,
+                    'lesson_id' => $lesson->id,
+                    'student_id' => $student->id,
+                ]);
+
+                // Create logs
+                $quiz = $lesson->quizzes->first();
+                if ($quiz) {
+                    Log::factory()->create([
                         'student_id' => $student->id,
+                        'loggable_id' => $quiz->id,
+                        'loggable_type' => Quiz::class,
                     ]);
+                }
 
-                    // Logs for student
-                    // Quiz
-                    $quiz = $lesson->quizzes->first();
-                    if ($quiz) {
-                        Log::factory()->create([
-                            'student_id' => $student->id,
-                            'loggable_id' => $quiz->id,
-                            'loggable_type' => Quiz::class,
-                        ]);
-                    }
-
-                    // Activity
-                    $activity = $lesson->activities->first();
-                    if ($activity) {
-                        Log::factory()->create([
-                            'student_id' => $student->id,
-                            'loggable_id' => $activity->id,
-                            'loggable_type' => Activity::class,
-                        ]);
-                    }
+                $activity = $lesson->activities->first();
+                if ($activity) {
+                    Log::factory()->create([
+                        'student_id' => $student->id,
+                        'loggable_id' => $activity->id,
+                        'loggable_type' => Activity::class,
+                    ]);
                 }
             });
         });
 
-        // 11. Create Feeds
+        // 12. Create Feeds
         $students->each(function ($student) {
             Feed::factory()->create(['notifiable_id' => $student->id, 'group' => 'student']);
         });

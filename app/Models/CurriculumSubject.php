@@ -40,16 +40,4 @@ class CurriculumSubject extends Model
             'lesson_id'
         );
     }
-
-    // public function students()
-    // {
-    //     return $this->hasManyThrough(
-    //         Student::class,
-    //         LessonStudentSubject::class,
-    //         'curriculum_subject_id',
-    //         'id',
-    //         'id',
-    //         'student_id'
-    //     );
-    // }
 }

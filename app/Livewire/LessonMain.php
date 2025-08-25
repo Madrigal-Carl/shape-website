@@ -23,27 +23,23 @@ class LessonMain extends Component
     public function render()
     {
         $lessons = Lesson::with([
-            'lessonSubject.curriculumSubject.subject',
-            'lessonSubject.curriculumSubject.curriculum',
-            'lessonSubject.curriculumSubject.students',
+            'lessonSubjectStudents.curriculumSubject.subject',
+            'lessonSubjectStudents.curriculumSubject.curriculum',
         ])
         ->withCount([
+            'lessonSubjectStudents',
             'videos',
-            'activityLessons',
-            'lessonQuizzes',
+            'quizzes',
+            'activities',
         ])
-        ->whereHas('lessonSubject.curriculumSubject.curriculum', function ($q) {
+        ->whereHas('lessonSubjectStudents.curriculumSubject.curriculum', function ($q) {
             $q->where('instructor_id', Auth::user()->accountable->id);
         })
         ->when($this->search, function ($q) {
             $q->where('title', 'like', '%' . $this->search . '%');
         })
         ->orderByDesc('created_at')
-        ->paginate(10)
-        ->through(function ($lesson) {
-            $lesson->students_count = $lesson->lessonSubject->curriculumSubject->students->count();
-            return $lesson;
-        });
+        ->paginate(10);
 
         return view('livewire.lesson-main', compact('lessons'));
     }

@@ -89,14 +89,15 @@
                                     <td class="px-4 py-3 text-center text-paragraph">{{ $lesson->id }}</td>
                                     <td class="px-4 py-3 text-center text-paragraph">{{ ucwords($lesson->title) }}</td>
                                     <td class="px-4 py-3 text-center text-paragraph">
-                                        {{ $lesson->lessonSubject->curriculumSubject->curriculum->name }}
+                                        {{ ucwords($lesson->lessonSubjectStudents->first()->curriculumSubject->curriculum->name) }}
                                     </td>
                                     <td class="px-4 py-3 text-center">
-                                        {{ ucwords($lesson->lessonSubject->curriculumSubject->subject->name) }}</td>
-                                    <td class="px-4 py-3 text-center">{{ $lesson->students_count }}</td>
+                                        {{ ucwords($lesson->lessonSubjectStudents->first()->curriculumSubject->subject->name) }}
+                                    </td>
+                                    <td class="px-4 py-3 text-center">{{ $lesson->lesson_subject_students_count }}</td>
                                     <td class="px-4 py-3 text-center">{{ $lesson->videos_count }}</td>
-                                    <td class="px-4 py-3 text-center">{{ $lesson->activity_lessons_count }}</td>
-                                    <td class="px-4 py-3 text-center">{{ $lesson->lesson_quizzes_count }}</td>
+                                    <td class="px-4 py-3 text-center">{{ $lesson->activities_count }}</td>
+                                    <td class="px-4 py-3 text-center">{{ $lesson->quizzes_count }}</td>
                                     <td class="px-4 py-3 text-center">
                                         <div class="flex justify-center items-center gap-1 text-white">
                                             <button
