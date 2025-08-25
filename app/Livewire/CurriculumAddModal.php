@@ -30,10 +30,23 @@ class CurriculumAddModal extends Component
 
     public function closeModal()
     {
-        $this->reset();
+        $this->resetFields();
         $this->dispatch('refresh')->to('curriculum-main');
         $this->dispatch('refresh')->to('curriculum-aside');
         $this->isOpen = false;
+    }
+
+    public function resetFields()
+    {
+        $this->reset([
+            'add_name',
+            'add_grade_level',
+            'add_specialization',
+            'selectedSpecializations',
+            'add_description',
+            'add_subject',
+            'selectedSubjects',
+        ]);
     }
 
     public function updatedAddSpecialization($value)

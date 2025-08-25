@@ -19,6 +19,11 @@ class LessonMain extends Component
         $this->dispatch('openModal')->to('lesson-add-modal');
     }
 
+    public function openEditLessonModal()
+    {
+        $this->dispatch('openModal')->to('lesson-edit-modal');
+    }
+
     public function render()
     {
         $lessons = Lesson::with([

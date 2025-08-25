@@ -3,7 +3,6 @@
 namespace App\Livewire;
 
 use App\Models\Feed;
-use App\Models\Account;
 use App\Models\Profile;
 use App\Models\Student;
 use Livewire\Component;
