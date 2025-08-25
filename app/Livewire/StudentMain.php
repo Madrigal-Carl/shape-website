@@ -44,11 +44,8 @@ class StudentMain extends Component
         $students = Auth::user()->accountable
         ->students()
         ->with([
-            'profile',
-            'lessonSubjectStudents.lesson.quizzes.logs',
-            'lessonSubjectStudents.lesson.activityLessons.logs'
+            'profile'
         ])
-        ->withCount(['lessons'])
         ->when($this->search, function ($query) {
             $query->where(function ($q) {
                 $q->where('first_name', 'like', '%' . $this->search . '%')

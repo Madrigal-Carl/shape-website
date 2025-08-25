@@ -33,7 +33,7 @@ class LessonMain extends Component
         ->withCount([
             'lessonSubjectStudents',
             'videos',
-            'quizzes',
+            'quiz',
             'activityLessons',
         ])
         ->whereHas('lessonSubjectStudents.curriculumSubject.curriculum', function ($q) {

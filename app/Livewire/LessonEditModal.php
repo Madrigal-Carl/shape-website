@@ -39,7 +39,7 @@ class LessonEditModal extends Component
         $this->lesson_id = $id;
         $this->isOpen = true;
 
-        $lesson = Lesson::with('students', 'videos', 'quizzes.questions.options', 'activityLessons.activity', 'lessonSubjectStudents.curriculumSubject.curriculum', 'lessonSubjectStudents.curriculumSubject.subject')->find($id);
+        $lesson = Lesson::with('students', 'videos', 'quiz.questions.options', 'activityLessons.activity', 'lessonSubjectStudents.curriculumSubject.curriculum', 'lessonSubjectStudents.curriculumSubject.subject')->find($id);
         $this->lesson_name = $lesson->title;
         $this->grade_level = $lesson->lessonSubjectStudents->first()->curriculumSubject->curriculum->grade_level;
         $this->curriculum = $lesson->lessonSubjectStudents->first()->curriculumSubject->curriculum->name;
@@ -65,8 +65,8 @@ class LessonEditModal extends Component
             ];
         })->toArray();
 
-        if ($lesson->quizzes->isNotEmpty()) {
-            $quiz = $lesson->quizzes->first();
+        if ($lesson->quiz) {
+            $quiz = $lesson->quiz;
             $this->quiz_name = $quiz->title;
             $this->quiz_description = $quiz->description;
 
@@ -335,9 +335,9 @@ class LessonEditModal extends Component
         }
 
         // Update quiz
-        $lesson->quizzes()->delete();
+        $lesson->quiz()->delete();
         if (!empty($this->quiz_name)) {
-            $quiz = $lesson->quizzes()->create([
+            $quiz = $lesson->quiz()->create([
                 'title'       => $this->quiz_name,
                 'description' => $this->quiz_description,
             ]);

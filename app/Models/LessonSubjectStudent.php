@@ -30,9 +30,9 @@ class LessonSubjectStudent extends Model
         return $this->belongsTo(Student::class);
     }
 
-    public function quizzes()
+    public function quiz()
     {
-        return $this->hasManyThrough(
+        return $this->hasOneThrough(
             Quiz::class,
             Lesson::class,
             'id',

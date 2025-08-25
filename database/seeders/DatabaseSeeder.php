@@ -134,12 +134,12 @@ class DatabaseSeeder extends Seeder
             $lesson->setRelation('lessonActivity', $lessonActivity);
 
             // Create 20 quizzes with questions and options
-            $quizzes = Quiz::factory()->create([
+            $quiz = Quiz::factory()->create([
                 'lesson_id' => $lesson->id,
             ]);
-            $quizzes->each(function ($quiz) {
-                $questions = Question::factory(3)->create(['quiz_id' => $quiz->id]);
-                $questions->each(fn($question) => Option::factory(4)->create(['question_id' => $question->id]));
+            $questions = Question::factory(3)->create(['quiz_id' => $quiz->id]);
+            $questions->each(function ($question) {
+                Option::factory(4)->create(['question_id' => $question->id]);
             });
         });
         $lessons->each(function ($lesson) use ($curriculums) {
@@ -160,14 +160,14 @@ class DatabaseSeeder extends Seeder
                 ]);
 
                 // Create logs for lesson's quiz and activity
-                $randomQuiz = $lesson->quizzes()->inRandomOrder()->first();
-
-                // Create log for this quiz
-                Log::factory()->create([
-                    'student_id' => $student->id,
-                    'loggable_id' => $randomQuiz->id,
-                    'loggable_type' => Quiz::class,
-                ]);
+                $quiz = $lesson->quiz;
+                if ($quiz) {
+                    Log::factory()->create([
+                        'student_id' => $student->id,
+                        'loggable_id' => $quiz->id,
+                        'loggable_type' => Quiz::class,
+                    ]);
+                }
 
                 Log::factory()->create([
                     'student_id' => $student->id,
