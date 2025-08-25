@@ -29,17 +29,17 @@ class CurriculumSubject extends Model
         return $this->hasMany(LessonSubjectStudent::class);
     }
 
-    // public function lessons()
-    // {
-    //     return $this->hasManyThrough(
-    //         Lesson::class,
-    //         LessonStudentSubject::class,
-    //         'curriculum_subject_id',
-    //         'lesson_student_subject_id',
-    //         'id',
-    //         'id'
-    //     );
-    // }
+    public function lessons()
+    {
+        return $this->hasManyThrough(
+            Lesson::class,
+            LessonSubjectStudent::class,
+            'curriculum_subject_id',
+            'id',
+            'id',
+            'lesson_id'
+        );
+    }
 
     // public function students()
     // {

@@ -33,13 +33,25 @@ class Lesson extends Model
         return $this->hasMany(Activity::class);
     }
 
-    // public function student()
-    // {
-    //     return $this->lessonSubject->student();
-    // }
+    public function isCompletedByStudent($studentId)
+    {
+        // Check all quizzes
+        if ($this->quizzes->contains(function($quiz) use ($studentId) {
+            $log = $quiz->latestLogForStudent($studentId);
+            return !$log || $log->status !== 'completed';
+        })) {
+            return false;
+        }
 
-    // public function studentCount()
-    // {
-    //     return $this->lessonSubject->curriculumSubject->students()->count();
-    // }
+        // Check all activities
+        if ($this->activities->contains(function($activity) use ($studentId) {
+            $log = $activity->latestLogForStudent($studentId);
+            return !$log || $log->status !== 'completed';
+        })) {
+            return false;
+        }
+
+        return true;
+    }
+
 }

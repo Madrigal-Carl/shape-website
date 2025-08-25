@@ -28,4 +28,11 @@ class Activity extends Model
     {
         return $this->morphMany(Log::class, 'loggable');
     }
+    public function latestLogForStudent($studentId)
+    {
+        return $this->logs()
+            ->where('student_id', $studentId)
+            ->orderByDesc('attempt_number')
+            ->first();
+    }
 }

@@ -129,7 +129,8 @@
                                     <td class="px-4 py-3 text-center text-paragraph">
                                         {{ ucwords($student->profile->disability_type) }}</td>
                                     <td class="px-4 py-3 text-center text-paragraph">
-                                        {{ $student->completed_lessons_count }}/{{ $student->total_lessons_count }}</td>
+                                        {{ $student->completed_lessons_count }}/{{ $student->total_lessons_count }}
+                                    </td>
                                     <td class="px-4 py-3 text-center text-paragraph">
                                         {{ $student->completed_activities_count }}/{{ $student->total_activities_count }}
                                     </td>

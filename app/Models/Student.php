@@ -54,60 +54,60 @@ class Student extends Model
         return $this->hasMany(LessonSubjectStudent::class);
     }
 
-    // public function lessons()
-    // {
-    //     return $this->hasManyThrough(
-    //         Lesson::class,
-    //         LessonSubject::class,
-    //         'student_id',
-    //         'lesson_subject_id',
-    //         'id',
-    //         'id'
-    //     );
-    // }
+    public function lessons()
+    {
+        return $this->hasManyThrough(
+            Lesson::class,
+            LessonSubjectStudent::class,
+            'student_id',
+            'id',
+            'id',
+            'lesson_id'
+        );
+    }
 
-    // public function getCompletedLessonsCountAttribute()
-    // {
-    //     return $this->lessons->filter(function ($lesson) {
-    //         $quizzesDone = $lesson->lessonQuizzes->every(fn($quiz) =>
-    //             $quiz->progress->where('status', 'completed')->isNotEmpty()
-    //         );
+    public function getTotalLessonsCountAttribute() {
+        return $this->lessonSubjectStudents->count();
+    }
 
-    //         $activitiesDone = $lesson->activityLessons->every(fn($activity) =>
-    //             $activity->progress->where('status', 'completed')->isNotEmpty()
-    //         );
+    // Completed lessons count
+    public function getCompletedLessonsCountAttribute() {
+        return $this->lessonSubjectStudents->filter(function($lss) {
+            return $lss->lesson->isCompletedByStudent($this->id);
+        })->count();
+    }
 
-    //         return $quizzesDone && $activitiesDone;
-    //     })->count();
-    // }
+    // Total quizzes count
+    public function getTotalQuizzesCountAttribute() {
+        return $this->lessonSubjectStudents->sum(function($lss) {
+            return $lss->lesson->quizzes->count();
+        });
+    }
 
-    // public function getTotalLessonsCountAttribute()
-    // {
-    //     return $this->lessons->count();
-    // }
+    // Completed quizzes count
+    public function getCompletedQuizzesCountAttribute() {
+        return $this->lessonSubjectStudents->sum(function($lss) {
+            return $lss->lesson->quizzes->filter(function($quiz) {
+                $log = $quiz->latestLogForStudent($this->id);
+                return $log && $log->status === 'completed';
+            })->count();
+        });
+    }
 
-    // public function getCompletedQuizzesCountAttribute()
-    // {
-    //     return $this->lessons->flatMap->lessonQuizzes->filter(fn($quiz) =>
-    //         $quiz->progress->where('status', 'completed')->isNotEmpty()
-    //     )->count();
-    // }
+    // Total activities count
+    public function getTotalActivitiesCountAttribute() {
+        return $this->lessonSubjectStudents->sum(function($lss) {
+            return $lss->lesson->activities->count();
+        });
+    }
 
-    // public function getTotalQuizzesCountAttribute()
-    // {
-    //     return $this->lessons->flatMap->lessonQuizzes->count();
-    // }
-
-    // public function getCompletedActivitiesCountAttribute()
-    // {
-    //     return $this->lessons->flatMap->activityLessons->filter(fn($activity) =>
-    //         $activity->progress->where('status', 'completed')->isNotEmpty()
-    //     )->count();
-    // }
-
-    // public function getTotalActivitiesCountAttribute()
-    // {
-    //     return $this->lessons->flatMap->activityLessons->count();
-    // }
-
+    // Completed activities count
+    public function getCompletedActivitiesCountAttribute() {
+        return $this->lessonSubjectStudents->sum(function($lss) {
+            return $lss->lesson->activities->filter(function($activity) {
+                $log = $activity->latestLogForStudent($this->id);
+                return $log && $log->status === 'completed';
+            })->count();
+        });
+    }
 }

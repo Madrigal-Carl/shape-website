@@ -28,30 +28,31 @@ class StudentMain extends Component
         $this->dispatch('openModal', id: $id)->to('student-view-modal');
     }
 
-    // public function updatingSearch()
-    // {
-    //     $this->resetPage();
-    // }
+    public function updatingSearch()
+    {
+        $this->resetPage();
+    }
 
-    // public function updatingStatus()
-    // {
-    //     $this->resetPage();
-    // }
+    public function updatingStatus()
+    {
+        $this->resetPage();
+    }
 
     public function render()
     {
         $students = Auth::user()->accountable
         ->students()
         ->with([
-            'lessons.lessonQuizzes.progress',
-            'lessons.activityLessons.progress',
-            'profile'
+            'profile',
+            'lessonSubjectStudents.lesson.quizzes.logs',
+            'lessonSubjectStudents.lesson.activities.logs'
         ])
+        ->withCount(['lessons'])
         ->when($this->search, function ($query) {
             $query->where(function ($q) {
                 $q->where('first_name', 'like', '%' . $this->search . '%')
-                  ->orWhere('middle_name', 'like', '%' . $this->search . '%')
-                  ->orWhere('last_name', 'like', '%' . $this->search . '%');
+                    ->orWhere('middle_name', 'like', '%' . $this->search . '%')
+                    ->orWhere('last_name', 'like', '%' . $this->search . '%');
             });
         })
         ->when($this->status !== 'all', function ($query) {
@@ -61,6 +62,8 @@ class StudentMain extends Component
         })
         ->orderBy('first_name')
         ->paginate(10);
+
+
         return view('livewire.student-main', compact('students'));
     }
 }
