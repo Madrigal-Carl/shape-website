@@ -83,7 +83,7 @@ class LessonAddModal extends Component
 
     public function openActivityHub()
     {
-        $this->dispatch('openModal')->to('add-activity-hub');
+        $this->dispatch('openModal')->to('activity-hub');
     }
 
     public function updatedSelectedStudent($value)

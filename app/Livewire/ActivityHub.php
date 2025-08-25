@@ -6,9 +6,10 @@ use Livewire\Component;
 use App\Models\Activity;
 use Livewire\Attributes\On;
 
-class AddActivityHub extends Component
+class ActivityHub extends Component
 {
     public $isOpen = false;
+    public $targetComponent = null;
     public $isOpenActivityView = false;
     public $activities = [];
     public $selectedCategories = [];
@@ -49,7 +50,7 @@ class AddActivityHub extends Component
     {
         $activity = Activity::find($activityId);
         $this->dispatch('swal-toast', icon : 'success', title : 'Activity has been added successfully.');
-        $this->dispatch('addActivity', activity: $activity)->to('lesson-add-modal');
+        $this->dispatch('addActivity', activity: $activity)->to($this->targetComponent);
     }
 
     public function toggleCategory($category)
@@ -74,8 +75,13 @@ class AddActivityHub extends Component
         $this->activities = $q->orderByDesc('created_at')->get();
     }
 
+    public function mount($targetComponent = null)
+    {
+        $this->targetComponent = $targetComponent;
+    }
+
     public function render()
     {
-        return view('livewire.add-activity-hub');
+        return view('livewire.activity-hub');
     }
 }

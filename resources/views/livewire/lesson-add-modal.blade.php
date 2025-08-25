@@ -189,7 +189,7 @@
                                     class="bg-blue-button py-1.5 px-3 w-full rounded-xl text-white font-medium">
                                     Add Activity
                                 </button>
-                                <livewire:add-activity-hub />
+                                <livewire:activity-hub targetComponent="lesson-add-modal" />
                                 @forelse ($selected_activities as $i => $act)
                                     <div wire:key="activity-{{ $i }}"
                                         class="flex w-full justify-between bg-card p-2 rounded-lg">
