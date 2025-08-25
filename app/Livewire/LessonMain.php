@@ -19,9 +19,9 @@ class LessonMain extends Component
         $this->dispatch('openModal')->to('lesson-add-modal');
     }
 
-    public function openEditLessonModal()
+    public function openEditLessonModal($id)
     {
-        $this->dispatch('openModal')->to('lesson-edit-modal');
+        $this->dispatch('openModal', id: $id)->to('lesson-edit-modal');
     }
 
     public function render()

@@ -33,9 +33,19 @@ class Lesson extends Model
         return $this->hasMany(ActivityLesson::class);
     }
 
+    public function students()
+    {
+        return $this->hasManyThrough(
+            Student::class,
+            LessonSubjectStudent::class,
+            'lesson_id',
+            'id',
+            'id',
+            'student_id'
+        );
+    }
     public function isCompletedByStudent($studentId)
     {
-        // Check all quizzes
         foreach ($this->quizzes as $quiz) {
             $log = $quiz->logs()->where('student_id', $studentId)->latest('attempt_number')->first();
             if (!$log || $log->status !== 'completed') {
@@ -43,7 +53,6 @@ class Lesson extends Model
             }
         }
 
-        // Check all activities
         foreach ($this->activityLessons as $activityLesson) {
             $log = $activityLesson->logs()->where('student_id', $studentId)->latest('attempt_number')->first();
             if (!$log || $log->status !== 'completed') {

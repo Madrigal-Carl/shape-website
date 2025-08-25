@@ -2,15 +2,467 @@
 
 namespace App\Livewire;
 
+use FFMpeg\FFMpeg;
+use App\Models\Quiz;
+use App\Models\Lesson;
+use App\Models\Profile;
+use App\Models\Student;
+use App\Models\Subject;
 use Livewire\Component;
+use App\Models\Activity;
+use App\Models\Curriculum;
+use Illuminate\Support\Str;
+use Livewire\Attributes\On;
 use Livewire\WithFileUploads;
+use FFMpeg\Coordinate\TimeCode;
+use App\Models\CurriculumSubject;
+use App\Models\LessonSubjectStudent;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\ValidationException;
 
 class LessonEditModal extends Component
 {
     use WithFileUploads;
+    public $subjects, $grade_levels, $students, $activities, $curriculums, $youtube_link, $selected_student, $curriculum_id, $subject_id;
+    public $videos = [];
+    public $lesson_id = null;
     public $isOpen = false;
+    public $lesson_name, $curriculum, $subject, $grade_level, $description, $quiz_name, $quiz_description;
+    public $uploadedVideos = [], $selected_activities = [], $selected_students = [], $questions = [];
+    public $original = [];
+
+
+    #[On('openModal')]
+    public function openModal($id)
+    {
+        $this->lesson_id = $id;
+        $this->isOpen = true;
+
+        $lesson = Lesson::with('students', 'videos', 'quizzes.questions.options', 'activityLessons.activity', 'lessonSubjectStudents.curriculumSubject.curriculum', 'lessonSubjectStudents.curriculumSubject.subject')->find($id);
+        $this->lesson_name = $lesson->title;
+        $this->grade_level = $lesson->lessonSubjectStudents->first()->curriculumSubject->curriculum->grade_level;
+        $this->curriculum = $lesson->lessonSubjectStudents->first()->curriculumSubject->curriculum->name;
+        $this->curriculum_id = $lesson->lessonSubjectStudents->first()->curriculumSubject->curriculum->id;
+        $this->subject = $lesson->lessonSubjectStudents->first()->curriculumSubject->subject->name;
+        $this->subject_id = $lesson->lessonSubjectStudents->first()->curriculumSubject->subject->id;
+        $this->selected_students = $lesson->students->pluck('id')->toArray();
+        $this->description = $lesson->description;
+
+        $this->uploadedVideos = $lesson->videos->map(function ($video) {
+            return [
+                'video'     => $video->url,
+                'thumbnail' => $video->thumbnail,
+                'title'     => $video->title,
+            ];
+        })->toArray();
+
+        $this->selected_activities = $lesson->activityLessons->map(function ($al) {
+            return [
+                'id'       => $al->activity->id,
+                'name'     => $al->activity->name,
+                'category' => $al->activity->category,
+            ];
+        })->toArray();
+
+        if ($lesson->quizzes->isNotEmpty()) {
+            $quiz = $lesson->quizzes->first();
+            $this->quiz_name = $quiz->title;
+            $this->quiz_description = $quiz->description;
+
+            $this->questions = $quiz->questions->map(function ($q) {
+                return [
+                    'question' => $q->question_text,
+                    'point'    => $q->point,
+                    'options'  => $q->options->map(function ($opt) {
+                        return [
+                            'text'       => $opt->option_text,
+                            'is_correct' => (bool) $opt->is_correct,
+                        ];
+                    })->toArray(),
+                ];
+            })->toArray();
+        } else {
+            $this->quiz_name = '';
+            $this->quiz_description = '';
+            $this->questions = [];
+        }
+
+        $this->original = [
+            'lesson_name'   => $this->lesson_name,
+            'description'   => $this->description,
+            'grade_level'   => $this->grade_level,
+            'curriculum'    => $this->curriculum,
+            'subject'       => $this->subject,
+            'students'      => $this->selected_students,
+            'videos'        => $this->uploadedVideos,
+            'activities'    => $this->selected_activities,
+            'quiz_name'     => $this->quiz_name,
+            'quiz_desc'     => $this->quiz_description,
+            'questions'     => $this->questions,
+        ];
+    }
+
+    public function closeModal()
+    {
+        $this->dispatch('refresh')->to('lesson-main');
+        $this->isOpen = false;
+    }
+
+    public function openActivityHub()
+    {
+        $this->dispatch('openModal')->to('activity-hub');
+    }
+
+    #[On('addActivity')]
+    public function addSelectedActivity($activity)
+    {
+        if (!collect($this->selected_activities)->pluck('id')->contains($activity['id'])) {
+            $this->selected_activities[] = [
+                'id'       => $activity['id'],
+                'name'     => $activity['name'],
+                'category' => $activity['category'],
+            ];
+        }
+    }
+
+    public function updatedActivity($value)
+    {
+        $activity = Activity::find($value);
+
+        if ($activity && !collect($this->selected_activities)->pluck('id')->contains($activity->id)) {
+            $this->selected_activities[] = $activity;
+        }
+    }
+
+    public function removeActivity($index)
+    {
+        unset($this->selected_activities[$index]);
+        $this->selected_activities = array_values($this->selected_activities);
+    }
+
+    public function updatedSelectedStudent($value)
+    {
+        if ($value && !in_array($value, $this->selected_students)) {
+            $this->selected_students[] = $value;
+        }
+    }
+
+    public function removeStudent($index)
+    {
+        unset($this->selected_students[$index]);
+        $this->selected_students = array_values($this->selected_students);
+    }
+
+    public function updatedVideos()
+    {
+        foreach ($this->videos as $video) {
+            if (str_starts_with($video->getMimeType(), 'video/')) {
+
+                $videoName = Str::random(10) . '.' . $video->getClientOriginalExtension();
+                $videoPath = $video->storeAs('videos', $videoName, 'public');
+
+                Storage::makeDirectory('public/thumbnails');
+
+                $thumbnailName = Str::random(10) . '.jpg';
+                $thumbnailPath = storage_path('app/public/thumbnails/' . $thumbnailName);
+
+                $ffmpeg = FFMpeg::create();
+                $videoFFMpeg = $ffmpeg->open(storage_path('app/public/' . $videoPath));
+                $frame = $videoFFMpeg->frame(TimeCode::fromSeconds(2));
+                $frame->save($thumbnailPath);
+
+                $this->uploadedVideos[] = [
+                    'video' => 'storage/' . $videoPath,
+                    'thumbnail' => 'storage/thumbnails/' . $thumbnailName,
+                    'title' => pathinfo($video->getClientOriginalName(), PATHINFO_FILENAME)
+                ];
+            } else {
+                $this->dispatch('swal-toast', icon: 'error', title: 'File should be a video.');
+            }
+        }
+        $this->videos = [];
+    }
+
+    public function addYoutubeVideo()
+    {
+        $url = trim($this->youtube_link);
+
+        if (empty($url)) {
+            return $this->dispatch('swal-toast', icon: 'error', title: 'Please enter a YouTube link.');
+        }
+
+        if (!filter_var($url, FILTER_VALIDATE_URL) || (!str_contains($url, 'youtube.com') && !str_contains($url, 'youtu.be'))) {
+            return $this->dispatch('swal-toast', icon: 'error', title: 'Invalid YouTube link.');
+        }
+
+        try {
+            $videoId = $this->getYoutubeId($url);
+
+            if (!$videoId) {
+                return $this->dispatch('swal-toast', icon: 'error', title: 'Cannot extract YouTube video ID.');
+            }
+
+            $oembedUrl = "https://www.youtube.com/oembed?url={$url}&format=json";
+            $data = json_decode(file_get_contents($oembedUrl), true);
+
+            $this->uploadedVideos[] = [
+                'video' => $url,
+                'thumbnail' => "https://img.youtube.com/vi/{$videoId}/hqdefault.jpg",
+                'title' => $data['title'] ?? 'YouTube Video',
+            ];
+
+            $this->youtube_link = '';
+        } catch (\Exception $e) {
+            $this->dispatch('swal-toast', icon: 'error', title: 'Could not fetch video info.');
+        }
+    }
+
+    private function getYoutubeId($url)
+    {
+        preg_match(
+            '/(?:youtube\.com\/(?:watch\?v=|shorts\/)|youtu\.be\/)([^\?&]+)/',
+            $url,
+            $matches
+        );
+
+        return $matches[1] ?? null;
+    }
+
+    public function removeVideo($index)
+    {
+        unset($this->uploadedVideos[$index]);
+        $this->uploadedVideos = array_values($this->uploadedVideos);
+    }
+
+    private function validateQuestions(): array
+    {
+        $validQuestions = [];
+
+        foreach ($this->questions as $questionData) {
+            $questionText = trim($questionData['question']);
+
+            // Skip completely blank rows
+            if ($questionText === '') {
+                $this->dispatch('swal-toast', icon: 'error', title: "A question cannot be empty.");
+                return [];
+            }
+
+            // Collect only non-empty options
+            $filledOptions = collect($questionData['options'])
+                ->filter(fn($opt) => trim($opt['text']) !== '')
+                ->values();
+
+            if ($filledOptions->count() < 2) {
+                $this->dispatch('swal-toast', icon: 'error', title: "Question '{$questionText}' must have at least 2 options.");
+                return [];
+            }
+
+            // At least one correct option
+            if ($filledOptions->where('is_correct', true)->isEmpty()) {
+                $this->dispatch('swal-toast', icon: 'error', title: "Question '{$questionText}' must have at least one correct option.");
+                return [];
+            }
+
+            $validQuestions[] = [
+                'question' => $questionText,
+                'point'    => $questionData['point'] ?? 1,
+                'options'  => $filledOptions->toArray(),
+            ];
+        }
+
+        return $validQuestions;
+    }
+
+    public function editLesson()
+    {
+        // Check for changes
+        $current = [
+            'lesson_name'   => $this->lesson_name,
+            'description'   => $this->description,
+            'grade_level'   => $this->grade_level,
+            'curriculum'    => $this->curriculum,
+            'subject'       => $this->subject,
+            'students'      => $this->selected_students,
+            'videos'        => $this->uploadedVideos,
+            'activities'    => $this->selected_activities,
+            'quiz_name'     => $this->quiz_name,
+            'quiz_desc'     => $this->quiz_description,
+            'questions'     => $this->questions,
+        ];
+
+        if ($current == $this->original) {
+            $this->dispatch('swal-toast', icon: 'info', title: 'No changes detected.');
+            return;
+        }
+
+        $lesson = Lesson::findOrFail($this->lesson_id);
+        $lesson->update([
+            'title'       => $this->lesson_name,
+            'description' => $this->description,
+        ]);
+
+        // Update students
+        $lesson->lessonSubjectStudents()->delete();
+        $curriculumSubject = CurriculumSubject::where('subject_id', $this->subject_id)
+            ->where('curriculum_id', $this->curriculum_id)
+            ->first();
+
+        foreach ($this->selected_students as $studentId) {
+            $lesson->lessonSubjectStudents()->create([
+                'student_id' => $studentId,
+                'curriculum_subject_id' => $curriculumSubject->id,
+                'lesson_id'  => $lesson->id,
+            ]);
+        }
+
+        // Update videos
+        $lesson->videos()->delete();
+        foreach ($this->uploadedVideos as $videoData) {
+            $lesson->videos()->create([
+                'url'       => $videoData['video'],
+                'title'     => $videoData['title'],
+                'thumbnail' => $videoData['thumbnail'],
+            ]);
+        }
+
+        // Update activities
+        $lesson->activityLessons()->delete();
+        foreach ($this->selected_activities as $activity) {
+            $lesson->activityLessons()->create([
+                'activity_id' => $activity['id'],
+            ]);
+        }
+
+        // Update quiz
+        $lesson->quizzes()->delete();
+        if (!empty($this->quiz_name)) {
+            $quiz = $lesson->quizzes()->create([
+                'title'       => $this->quiz_name,
+                'description' => $this->quiz_description,
+            ]);
+
+            foreach ($this->questions as $questionData) {
+                $question = $quiz->questions()->create([
+                    'question_text' => $questionData['question'],
+                    'point'         => $questionData['point'],
+                ]);
+
+                foreach ($questionData['options'] as $optionData) {
+                    if (trim($optionData['text']) === '') continue;
+                    $question->options()->create([
+                        'option_text' => $optionData['text'],
+                        'is_correct'  => $optionData['is_correct'],
+                    ]);
+                }
+            }
+        }
+
+        $this->dispatch('swal-toast', icon: 'success', title: 'Lesson updated successfully!');
+        $this->closeModal();
+    }
+
+    public function addQuestion()
+    {
+        if (!empty($this->questions)) {
+            $lastQuestion = end($this->questions);
+
+            $hasQuestionText = trim($lastQuestion['question']) !== '';
+
+            $filledOptions = collect($lastQuestion['options'])
+                ->filter(fn($opt) => trim($opt['text']) !== '')
+                ->count();
+
+            $hasCorrectAnswer = collect($lastQuestion['options'])
+                ->contains(fn($opt) => $opt['is_correct'] === true);
+
+            if (!$hasQuestionText) {
+                return $this->dispatch('swal-toast', icon: 'error', title: 'Fill in the question field first.');
+            }
+
+            if ($filledOptions < 2) {
+                return $this->dispatch('swal-toast', icon: 'error', title: 'Add at least 2 options.');
+            }
+
+            if (!$hasCorrectAnswer) {
+                return $this->dispatch('swal-toast', icon: 'error', title: 'Please select a correct answer.');
+            }
+        }
+
+        $this->questions[] = [
+            'question' => '',
+            'point' => 1,
+            'options' => [
+                ['text' => '', 'is_correct' => false],
+                ['text' => '', 'is_correct' => false],
+            ],
+        ];
+    }
+
+    public function removeQuestion($index)
+    {
+        unset($this->questions[$index]);
+        $this->questions = array_values($this->questions);
+    }
+
+    public function addOption($qIndex)
+    {
+        $this->questions[$qIndex]['options'][] = ['text' => '', 'is_correct' => false];
+    }
+
+    public function removeOption($qIndex, $oIndex)
+    {
+        unset($this->questions[$qIndex]['options'][$oIndex]);
+        $this->questions[$qIndex]['options'] = array_values($this->questions[$qIndex]['options']);
+    }
+
+    public function setCorrectAnswer($qIndex, $oIndex)
+    {
+        foreach ($this->questions[$qIndex]['options'] as $key => $option) {
+            $this->questions[$qIndex]['options'][$key]['is_correct'] = ($key === $oIndex);
+        }
+    }
+
+    public function updatedGradeLevel()
+    {
+        $this->curriculums = Curriculum::where('instructor_id', Auth::id())->where('grade_level', $this->grade_level)->where('status', 'active')->get();
+        $this->students = Auth::user()->accountable->students()
+            ->where('status', 'active')
+            ->whereHas('profile', function ($query) {
+                $query->where('grade_level', $this->grade_level);
+            })
+            ->get();
+        $this->selected_students = [];
+    }
+
+    public function updatedCurriculum()
+    {
+        $this->curriculum_id = $this->curriculum;
+        $this->subjects = Subject::whereHas('curriculumSubjects', function ($query) {
+            $query->where('curriculum_id', $this->curriculum_id);
+        })->get();
+    }
+
     public function render()
     {
+        $this->activities = Activity::orderBy('id')->get();
+        $this->grade_levels = Curriculum::where('instructor_id', Auth::id())
+            ->where('status', 'active')
+            ->orderBy('grade_level')
+            ->pluck('grade_level')
+            ->unique()
+            ->values()
+            ->toArray();
+        $this->curriculums = Curriculum::where('instructor_id', Auth::id())->where('grade_level', $this->grade_level)->where('status', 'active')->get();
+        $this->subjects = Subject::whereHas('curriculumSubjects', function ($query) {
+            $query->where('curriculum_id', $this->curriculum_id);
+        })->get();
+        $this->students = Auth::user()->accountable->students()
+            ->where('status', 'active')
+            ->whereHas('profile', function ($query) {
+                $query->where('grade_level', $this->grade_level);
+            })
+            ->get();
         return view('livewire.lesson-edit-modal');
     }
 }

@@ -5,16 +5,13 @@ namespace App\Livewire;
 use FFMpeg\FFMpeg;
 use App\Models\Quiz;
 use App\Models\Lesson;
-use App\Models\Profile;
 use App\Models\Student;
 use App\Models\Subject;
 use Livewire\Component;
 use App\Models\Activity;
 use App\Models\Curriculum;
-use App\Models\LessonQuiz;
 use Illuminate\Support\Str;
 use Livewire\Attributes\On;
-use App\Models\LessonSubject;
 use Livewire\WithFileUploads;
 use FFMpeg\Coordinate\TimeCode;
 use App\Models\CurriculumSubject;
@@ -223,7 +220,7 @@ class LessonAddModal extends Component
     {
         try {
             $this->validate([
-                'lesson_name'        => 'required|min:5|max:100|unique:lessons,title',
+                'lesson_name'        => 'required|min:5|max:100',
                 'grade_level'        => 'required',
                 'curriculum'         => 'required',
                 'subject'            => 'required',
@@ -234,7 +231,6 @@ class LessonAddModal extends Component
                 'lesson_name.required' => 'Lesson name is required.',
                 'lesson_name.min'      => 'Lesson name must be at least 5 characters.',
                 'lesson_name.max'      => 'Lesson name must not exceed 100 characters.',
-                'lesson_name.unique'      => 'Lesson name has already been used.',
                 'grade_level.required' => 'Grade & Section is required.',
                 'curriculum.required'  => 'Please select a curriculum.',
                 'subject.required'     => 'Please select a subject.',
@@ -417,10 +413,8 @@ class LessonAddModal extends Component
     public function mount()
     {
         $this->activities = Activity::orderBy('id')->get();
-        $instructorId = Auth::user()->accountable_id;
-        $this->grade_levels = Profile::whereHas('student', function ($query) use ($instructorId) {
-                $query->where('instructor_id', $instructorId);
-            })
+        $this->grade_levels = Curriculum::where('instructor_id', Auth::id())
+            ->where('status', 'active')
             ->orderBy('grade_level')
             ->pluck('grade_level')
             ->unique()
@@ -440,6 +434,7 @@ class LessonAddModal extends Component
                 $query->where('grade_level', $this->grade_level);
             })
             ->get();
+        $this->selected_students = [];
     }
 
     public function updatedCurriculum()
