@@ -25,7 +25,6 @@ class LogFactory extends Factory
             'loggable_type' => null,
             'student_id' => Student::factory(),
             'attempt_number' => $this->faker->numberBetween(1, 5),
-            'score' => $this->faker->numberBetween(0, 100),
             'status' => $this->faker->randomElement(['in-progress', 'completed']),
         ];
     }

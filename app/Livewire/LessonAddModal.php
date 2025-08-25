@@ -18,6 +18,7 @@ use App\Models\LessonSubject;
 use Livewire\WithFileUploads;
 use FFMpeg\Coordinate\TimeCode;
 use App\Models\CurriculumSubject;
+use App\Models\LessonSubjectStudent;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
@@ -274,9 +275,8 @@ class LessonAddModal extends Component
             ->first();
 
         $lesson = Lesson::create([
-            'lesson_subject_id' => $curriculumSubject->id,
-            'title'             => $this->lesson_name,
-            'description'       => $this->description,
+            'title' => $this->lesson_name,
+            'description' => $this->description,
         ]);
 
         $studentsToAssign = empty($this->selected_students)
@@ -284,15 +284,10 @@ class LessonAddModal extends Component
             : Student::whereIn('id', $this->selected_students)->get();
 
         foreach ($studentsToAssign as $student) {
-            $lessonSubject = LessonSubject::firstOrCreate([
+            LessonSubjectStudent::create([
                 'curriculum_subject_id' => $curriculumSubject->id,
-                'student_id'            => $student->id,
-            ]);
-
-            $lesson = Lesson::create([
-                'lesson_subject_id' => $lessonSubject->id,
-                'title'             => $this->lesson_name,
-                'description'       => $this->description,
+                'lesson_id' => $lesson->id,
+                'student_id' => $student->id,
             ]);
 
             foreach ($this->uploadedVideos as $videoData) {

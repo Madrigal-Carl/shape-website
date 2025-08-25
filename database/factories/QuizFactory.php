@@ -21,7 +21,6 @@ class QuizFactory extends Factory
     public function definition(): array
     {
         return [
-            'lesson_id' => Lesson::factory(),
             'title' => $this->faker->sentence(3),
             'description' => $this->faker->optional()->paragraph(),
         ];

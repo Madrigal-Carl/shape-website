@@ -14,7 +14,6 @@ class Log extends Model
         'loggable_type',
         'student_id',
         'attempt_number',
-        'score',
         'status',
     ];
 

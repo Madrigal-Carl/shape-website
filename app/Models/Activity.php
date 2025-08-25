@@ -24,15 +24,18 @@ class Activity extends Model
         return $this->belongsTo(Lesson::class);
     }
 
-    public function logs()
+    public function activityLesson()
     {
-        return $this->morphMany(Log::class, 'loggable');
+        return $this->hasOne(ActivityLesson::class);
     }
+
     public function latestLogForStudent($studentId)
     {
-        return $this->logs()
+        if (!$this->activityLesson) return null;
+
+        return $this->activityLesson->logs()
             ->where('student_id', $studentId)
-            ->orderByDesc('attempt_number')
+            ->latest('attempt_number')
             ->first();
     }
 }

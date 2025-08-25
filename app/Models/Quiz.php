@@ -24,16 +24,18 @@ class Quiz extends Model
         return $this->belongsTo(Lesson::class);
     }
 
-    public function logs()
+    public function activityLesson()
     {
-        return $this->morphMany(Log::class, 'loggable');
+        return $this->hasOne(ActivityLesson::class);
     }
 
     public function latestLogForStudent($studentId)
     {
-        return $this->logs()
+        if (!$this->lessonQuiz) return null;
+
+        return $this->lessonQuiz->logs()
             ->where('student_id', $studentId)
-            ->orderByDesc('attempt_number')
+            ->latest('attempt_number')
             ->first();
     }
 }

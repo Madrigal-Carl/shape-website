@@ -23,35 +23,36 @@ class Lesson extends Model
         return $this->hasMany(LessonSubjectStudent::class);
     }
 
-    public function quizzes()
+    public function lessonQuizzes()
     {
-        return $this->hasMany(Quiz::class);
+        return $this->hasMany(LessonQuiz::class);
     }
 
-    public function activities()
+    public function activityLessons()
     {
-        return $this->hasMany(Activity::class);
+        return $this->hasMany(ActivityLesson::class);
     }
 
     public function isCompletedByStudent($studentId)
     {
         // Check all quizzes
-        if ($this->quizzes->contains(function($quiz) use ($studentId) {
-            $log = $quiz->latestLogForStudent($studentId);
-            return !$log || $log->status !== 'completed';
-        })) {
-            return false;
+        foreach ($this->lessonQuizzes as $lessonQuiz) {
+            $log = $lessonQuiz->logs()->where('student_id', $studentId)->latest('attempt_number')->first();
+            if (!$log || $log->status !== 'completed') {
+                return false;
+            }
         }
 
         // Check all activities
-        if ($this->activities->contains(function($activity) use ($studentId) {
-            $log = $activity->latestLogForStudent($studentId);
-            return !$log || $log->status !== 'completed';
-        })) {
-            return false;
+        foreach ($this->activityLessons as $activityLesson) {
+            $log = $activityLesson->logs()->where('student_id', $studentId)->latest('attempt_number')->first();
+            if (!$log || $log->status !== 'completed') {
+                return false;
+            }
         }
 
         return true;
     }
+
 
 }
