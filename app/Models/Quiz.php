@@ -19,8 +19,13 @@ class Quiz extends Model
         return $this->hasMany(Question::class);
     }
 
-    public function lessonQuizzes()
+    public function lesson()
     {
-        return $this->hasMany(LessonQuiz::class);
+        return $this->belongsTo(Lesson::class);
+    }
+
+    public function logs()
+    {
+        return $this->morphMany(Log::class, 'loggable');
     }
 }

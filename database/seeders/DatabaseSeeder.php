@@ -26,6 +26,7 @@ use App\Models\LessonSubject;
 use App\Models\ActivityLesson;
 use Illuminate\Database\Seeder;
 use App\Models\CurriculumSubject;
+use App\Models\LessonSubjectStudent;
 
 class DatabaseSeeder extends Seeder
 {
@@ -137,10 +138,13 @@ class DatabaseSeeder extends Seeder
         });
 
         // 11. Create Lessons
-        $activities = Activity::factory()->count(20)->create();
-        $quizzes = Quiz::factory()->count(20)->create();
-        $students->each(function ($student) use ($activities, $curriculums, $quizzes) {
-            $curriculums->each(function ($curriculum) use ($student, $activities, $quizzes) {
+
+        $lessons = Lesson::factory()->count(30)->create();
+        // $activities = Activity::factory()->count(20)->create();
+        // $quizzes = Quiz::factory()->count(20)->create();
+
+        $students->each(function ($student) use ($curriculums, $lessons) {
+            $curriculums->each(function ($curriculum) use ($student, $lessons) {
                 // Get subjects that belong to THIS curriculum only
                 $curriculumSubjectIds = CurriculumSubject::where('curriculum_id', $curriculum->id)
                     ->pluck('id')
@@ -152,15 +156,11 @@ class DatabaseSeeder extends Seeder
                     ->take(rand(3, 5)); // you can adjust how many
 
                 foreach ($randomSubjects as $curriculumSubjectId) {
-                    // Create or get lesson_subject
-                    $lessonSubject = LessonSubject::firstOrCreate([
+                    $lesson = $lessons->random();
+                    LessonSubjectStudent::firstOrCreate([
                         'curriculum_subject_id' => $curriculumSubjectId,
+                        'lesson_id'            => $lesson->id,
                         'student_id'            => $student->id,
-                    ]);
-
-                    // Create Lesson linked to this lesson_subject
-                    $lesson = Lesson::factory()->create([
-                        'lesson_subject_id' => $lessonSubject->id,
                     ]);
 
                     // Add video
@@ -168,17 +168,13 @@ class DatabaseSeeder extends Seeder
                         'lesson_id' => $lesson->id,
                     ]);
 
-                    // Attach random activity
-                    $activity = $activities->random();
-                    $activityLesson = ActivityLesson::factory()->create([
+                    // Create activity
+                    $activity = Activity::factory()->create([
                         'lesson_id'   => $lesson->id,
-                        'activity_id' => $activity->id,
                     ]);
 
                     // Create quiz
-                    $quiz = $quizzes->random();
-                    $lessonQuiz = LessonQuiz::factory()->create([
-                        'quiz_id' => $quiz->id,
+                    $quiz = Quiz::factory()->create([
                         'lesson_id' => $lesson->id,
                     ]);
 
@@ -195,23 +191,15 @@ class DatabaseSeeder extends Seeder
 
                     // Logs + progress
                     Log::factory()->create([
-                        'item_id'   => $lessonQuiz->id,
-                        'item_type' => LessonQuiz::class,
-                    ]);
-
-                    Progress::factory()->create([
-                        'item_id'   => $lessonQuiz->id,
-                        'item_type' => LessonQuiz::class,
+                        'student_id' => $student->id,
+                        'loggable_id'   => $quiz->id,
+                        'loggable_type' => Quiz::class,
                     ]);
 
                     Log::factory()->create([
-                        'item_id'   => $activityLesson->id,
-                        'item_type' => ActivityLesson::class,
-                    ]);
-
-                    Progress::factory()->create([
-                        'item_id'   => $activityLesson->id,
-                        'item_type' => ActivityLesson::class,
+                        'student_id' => $student->id,
+                        'loggable_id'   => $activity->id,
+                        'loggable_type' => Activity::class,
                     ]);
                 }
             });

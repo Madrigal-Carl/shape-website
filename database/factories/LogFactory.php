@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Log;
+use App\Models\Student;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -20,10 +21,12 @@ class LogFactory extends Factory
     public function definition(): array
     {
         return [
-            'attempt' => $this->faker->numberBetween(0, 5),
-            'success' => $this->faker->boolean(),
-            'item_id' => null,
-            'item_type' => null,
+            'loggable_id' => null,
+            'loggable_type' => null,
+            'student_id' => Student::factory(),
+            'attempt_number' => $this->faker->numberBetween(1, 5),
+            'score' => $this->faker->numberBetween(0, 100),
+            'status' => $this->faker->randomElement(['in-progress', 'completed']),
         ];
     }
 }

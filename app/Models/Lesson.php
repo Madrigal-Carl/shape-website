@@ -9,38 +9,37 @@ class Lesson extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'lesson_subject_id',
         'title',
         'description',
     ];
-
-    public function student()
-    {
-        return $this->lessonSubject->student();
-    }
-
-    public function studentCount()
-    {
-        return $this->lessonSubject->curriculumSubject->students()->count();
-    }
 
     public function videos()
     {
         return $this->hasMany(Video::class);
     }
 
-    public function lessonSubject()
+    public function lessonSubjectStudents()
     {
-        return $this->belongsTo(LessonSubject::class);
+        return $this->hasMany(LessonSubjectStudent::class);
     }
 
-    public function activityLessons()
+    public function quizzes()
     {
-        return $this->hasMany(ActivityLesson::class);
+        return $this->hasMany(Quiz::class);
     }
 
-    public function lessonQuizzes()
+    public function activities()
     {
-        return $this->hasMany(LessonQuiz::class);
+        return $this->hasMany(Activity::class);
     }
+
+    // public function student()
+    // {
+    //     return $this->lessonSubject->student();
+    // }
+
+    // public function studentCount()
+    // {
+    //     return $this->lessonSubject->curriculumSubject->students()->count();
+    // }
 }

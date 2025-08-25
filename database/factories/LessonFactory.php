@@ -20,7 +20,6 @@ class LessonFactory extends Factory
     public function definition(): array
     {
         return [
-            'lesson_subject_id' => LessonSubject::factory(),
             'title' => $this->faker->unique()->sentence(2),
             'description' => $this->faker->paragraph,
         ];

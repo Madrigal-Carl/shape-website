@@ -24,32 +24,32 @@ class CurriculumSubject extends Model
         return $this->belongsTo(Subject::class);
     }
 
-    public function lessonSubjects()
+    public function lessonSubjectStudents()
     {
-        return $this->hasMany(LessonSubject::class);
+        return $this->hasMany(LessonSubjectStudent::class);
     }
 
-    public function lessons()
-    {
-        return $this->hasManyThrough(
-            Lesson::class,
-            LessonSubject::class,
-            'curriculum_subject_id',
-            'lesson_subject_id',
-            'id',
-            'id'
-        );
-    }
+    // public function lessons()
+    // {
+    //     return $this->hasManyThrough(
+    //         Lesson::class,
+    //         LessonStudentSubject::class,
+    //         'curriculum_subject_id',
+    //         'lesson_student_subject_id',
+    //         'id',
+    //         'id'
+    //     );
+    // }
 
-    public function students()
-    {
-        return $this->hasManyThrough(
-            Student::class,
-            LessonSubject::class,
-            'curriculum_subject_id', // FK on LessonSubject
-            'id',                    // PK on Student
-            'id',                    // PK on CurriculumSubject
-            'student_id'             // FK on LessonSubject
-        );
-    }
+    // public function students()
+    // {
+    //     return $this->hasManyThrough(
+    //         Student::class,
+    //         LessonStudentSubject::class,
+    //         'curriculum_subject_id',
+    //         'id',
+    //         'id',
+    //         'student_id'
+    //     );
+    // }
 }

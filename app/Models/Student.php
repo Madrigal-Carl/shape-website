@@ -49,65 +49,65 @@ class Student extends Model
         return $this->hasOne(Guardian::class);
     }
 
-    public function lessonSubject()
+    public function lessonSubjectStudents()
     {
-        return $this->hasMany(LessonSubject::class);
+        return $this->hasMany(LessonSubjectStudent::class);
     }
 
-    public function lessons()
-    {
-        return $this->hasManyThrough(
-            Lesson::class,
-            LessonSubject::class,
-            'student_id',
-            'lesson_subject_id',
-            'id',
-            'id'
-        );
-    }
+    // public function lessons()
+    // {
+    //     return $this->hasManyThrough(
+    //         Lesson::class,
+    //         LessonSubject::class,
+    //         'student_id',
+    //         'lesson_subject_id',
+    //         'id',
+    //         'id'
+    //     );
+    // }
 
-    public function getCompletedLessonsCountAttribute()
-    {
-        return $this->lessons->filter(function ($lesson) {
-            $quizzesDone = $lesson->lessonQuizzes->every(fn($quiz) =>
-                $quiz->progress->where('status', 'completed')->isNotEmpty()
-            );
+    // public function getCompletedLessonsCountAttribute()
+    // {
+    //     return $this->lessons->filter(function ($lesson) {
+    //         $quizzesDone = $lesson->lessonQuizzes->every(fn($quiz) =>
+    //             $quiz->progress->where('status', 'completed')->isNotEmpty()
+    //         );
 
-            $activitiesDone = $lesson->activityLessons->every(fn($activity) =>
-                $activity->progress->where('status', 'completed')->isNotEmpty()
-            );
+    //         $activitiesDone = $lesson->activityLessons->every(fn($activity) =>
+    //             $activity->progress->where('status', 'completed')->isNotEmpty()
+    //         );
 
-            return $quizzesDone && $activitiesDone;
-        })->count();
-    }
+    //         return $quizzesDone && $activitiesDone;
+    //     })->count();
+    // }
 
-    public function getTotalLessonsCountAttribute()
-    {
-        return $this->lessons->count();
-    }
+    // public function getTotalLessonsCountAttribute()
+    // {
+    //     return $this->lessons->count();
+    // }
 
-    public function getCompletedQuizzesCountAttribute()
-    {
-        return $this->lessons->flatMap->lessonQuizzes->filter(fn($quiz) =>
-            $quiz->progress->where('status', 'completed')->isNotEmpty()
-        )->count();
-    }
+    // public function getCompletedQuizzesCountAttribute()
+    // {
+    //     return $this->lessons->flatMap->lessonQuizzes->filter(fn($quiz) =>
+    //         $quiz->progress->where('status', 'completed')->isNotEmpty()
+    //     )->count();
+    // }
 
-    public function getTotalQuizzesCountAttribute()
-    {
-        return $this->lessons->flatMap->lessonQuizzes->count();
-    }
+    // public function getTotalQuizzesCountAttribute()
+    // {
+    //     return $this->lessons->flatMap->lessonQuizzes->count();
+    // }
 
-    public function getCompletedActivitiesCountAttribute()
-    {
-        return $this->lessons->flatMap->activityLessons->filter(fn($activity) =>
-            $activity->progress->where('status', 'completed')->isNotEmpty()
-        )->count();
-    }
+    // public function getCompletedActivitiesCountAttribute()
+    // {
+    //     return $this->lessons->flatMap->activityLessons->filter(fn($activity) =>
+    //         $activity->progress->where('status', 'completed')->isNotEmpty()
+    //     )->count();
+    // }
 
-    public function getTotalActivitiesCountAttribute()
-    {
-        return $this->lessons->flatMap->activityLessons->count();
-    }
+    // public function getTotalActivitiesCountAttribute()
+    // {
+    //     return $this->lessons->flatMap->activityLessons->count();
+    // }
 
 }

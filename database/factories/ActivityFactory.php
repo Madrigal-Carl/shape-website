@@ -27,6 +27,7 @@ class ActivityFactory extends Factory
         ];
 
         return [
+            'lesson_id' => Lesson::factory(),
             'name' => $this->faker->words(2, true),
             'description' => $this->faker->paragraph(),
             'category' => $this->faker->randomElements($categories, rand(1, 2)),

@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('activities', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('lesson_id')->constrained()->onDelete('cascade');
             $table->string('name');
             $table->text('description');
             $table->json('category');

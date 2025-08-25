@@ -222,7 +222,7 @@ class LessonAddModal extends Component
     {
         try {
             $this->validate([
-                'lesson_name'        => 'required|min:5|max:100',
+                'lesson_name'        => 'required|min:5|max:100|unique:lessons,title',
                 'grade_level'        => 'required',
                 'curriculum'         => 'required',
                 'subject'            => 'required',
@@ -233,6 +233,7 @@ class LessonAddModal extends Component
                 'lesson_name.required' => 'Lesson name is required.',
                 'lesson_name.min'      => 'Lesson name must be at least 5 characters.',
                 'lesson_name.max'      => 'Lesson name must not exceed 100 characters.',
+                'lesson_name.unique'      => 'Lesson name has already been used.',
                 'grade_level.required' => 'Grade & Section is required.',
                 'curriculum.required'  => 'Please select a curriculum.',
                 'subject.required'     => 'Please select a subject.',
@@ -271,6 +272,12 @@ class LessonAddModal extends Component
         $curriculumSubject = CurriculumSubject::where('curriculum_id', $this->curriculum)
             ->where('subject_id', $this->subject)
             ->first();
+
+        $lesson = Lesson::create([
+            'lesson_subject_id' => $curriculumSubject->id,
+            'title'             => $this->lesson_name,
+            'description'       => $this->description,
+        ]);
 
         $studentsToAssign = empty($this->selected_students)
             ? $this->students

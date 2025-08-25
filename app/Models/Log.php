@@ -10,14 +10,21 @@ class Log extends Model
     use HasFactory;
 
     protected $fillable = [
-        'item_id',
-        'item_type',
-        'attempt',
-        'success',
+        'loggable_id',
+        'loggable_type',
+        'student_id',
+        'attempt_number',
+        'score',
+        'status',
     ];
 
-    public function item()
+    public function loggable()
     {
         return $this->morphTo();
+    }
+
+    public function student()
+    {
+        return $this->belongsTo(Student::class);
     }
 }

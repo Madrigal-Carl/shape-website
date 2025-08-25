@@ -19,8 +19,13 @@ class Activity extends Model
         'category' => 'array',
     ];
 
-    public function activityLessons()
+    public function lesson()
     {
-        return $this->hasMany(ActivityLesson::class);
+        return $this->belongsTo(Lesson::class);
+    }
+
+    public function logs()
+    {
+        return $this->morphMany(Log::class, 'loggable');
     }
 }
