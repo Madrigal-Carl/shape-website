@@ -122,13 +122,10 @@ class DatabaseSeeder extends Seeder
         });
 
         // 9. Create Lessons, Activities, Quizzes, Videos (once per lesson)
-        $lessons = Lesson::factory()->count(30)->create();
-
-        $lessons->each(function ($lesson) {
+        $lessons = Lesson::factory()->count(10)->create();
+        $activities = Activity::factory()->count(10)->create();
+        $lessons->each(function ($lesson) use($activities) {
             Video::factory()->create(['lesson_id' => $lesson->id]);
-
-            // Create 20 activities but don't attach to lesson yet
-            $activities = Activity::factory()->count(20)->create();
 
             $lessonActivity = ActivityLesson::firstOrCreate([
                 'lesson_id' => $lesson->id,
@@ -144,11 +141,6 @@ class DatabaseSeeder extends Seeder
                 $questions = Question::factory(3)->create(['quiz_id' => $quiz->id]);
                 $questions->each(fn($question) => Option::factory(4)->create(['question_id' => $question->id]));
             });
-
-            $lessonActivity = ActivityLesson::firstOrCreate([
-                'lesson_id' => $lesson->id,
-                'activity_id' => $activities->random()->id,
-            ]);
         });
         $lessons->each(function ($lesson) use ($curriculums) {
             $curriculum = $curriculums->random();
