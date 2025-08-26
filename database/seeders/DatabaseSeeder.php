@@ -17,17 +17,15 @@ use App\Models\Student;
 use App\Models\Subject;
 use App\Models\Activity;
 use App\Models\Guardian;
-use App\Models\Progress;
 use App\Models\Question;
 use App\Models\Curriculum;
 use App\Models\Instructor;
-use App\Models\LessonQuiz;
-use App\Models\LessonSubject;
 use App\Models\ActivityLesson;
 use App\Models\Specialization;
 use Illuminate\Database\Seeder;
 use App\Models\CurriculumSubject;
 use App\Models\LessonSubjectStudent;
+use App\Models\ActivityImage;
 
 class DatabaseSeeder extends Seeder
 {
@@ -146,6 +144,7 @@ class DatabaseSeeder extends Seeder
             $activity->specializations()->attach(
                 $specializations->random(rand(1, 2))->pluck('id')->toArray()
             );
+            ActivityImage::factory()->count(7)->create(['activity_id' => $activity->id]);
         });
 
         $lessons->each(function ($lesson) use($activities) {

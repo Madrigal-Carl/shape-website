@@ -11,6 +11,7 @@ class Activity extends Model
 
     protected $fillable = [
         'name',
+        'path',
         'description',
     ];
 
@@ -37,5 +38,10 @@ class Activity extends Model
             ->where('student_id', $studentId)
             ->latest('attempt_number')
             ->first();
+    }
+
+    public function activityImages()
+    {
+        return $this->hasMany(ActivityImage::class);
     }
 }

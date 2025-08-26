@@ -20,7 +20,7 @@ class ActivityHub extends Component
     public function openModal()
     {
         $this->isOpen = true;
-        $this->activities = Activity::all();
+        $this->activities = Activity::with('activityImages')->get();
         $this->loadActivities();
     }
 
@@ -32,7 +32,7 @@ class ActivityHub extends Component
     public function viewActivity($activityId)
     {
         $this->act = null;
-        $this->act = Activity::with('specializations')->find($activityId);
+        $this->act = Activity::with('specializations', 'activityImages')->find($activityId);
         $this->openViewActivity();
     }
 

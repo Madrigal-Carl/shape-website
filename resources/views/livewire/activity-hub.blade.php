@@ -29,15 +29,14 @@
                     <!--Game container at game hub-->
                     @foreach ($activities as $activity)
                         <div class="w-fit shrink-0 flex flex-col gap-2 relative cursor-pointer">
-                            <img src="{{ asset('images/game-icons/game-posters/mario-kart-world-review-1.jpg') }}"
+                            <img src="{{ asset($activity->activityImages->first()->path) }}"
                                 class="aspect-video w-auto h-fit rounded-xl object-cover" />
-
                             <div
                                 class="absolute bottom-0 bg-gradient-to-t from-black/80 via-black/10 to-black/0 w-full h-full rounded-xl items-center">
                                 <div class="h-full w-full flex items-end justify-between p-3">
                                     <div class="flex items-center w-full justify-between">
                                         <div class="w-full flex items-center gap-2">
-                                            <img src="{{ asset('images/game-icons/mario.jpeg') }}" alt=""
+                                            <img src="{{ asset($activity->path) }}" alt=""
                                                 class="h-10 rounded-lg aspect-square object-cover">
                                             <div class="flex flex-col">
                                                 <h1 class="text-white font-medium text-sm truncate">
@@ -58,10 +57,7 @@
                                                 <p class="text-sm">Add</p>
                                             </button>
                                         </div>
-
-
                                     </div>
-
                                 </div>
                             </div>
                         </div><!--End Game container at game hub-->
@@ -80,8 +76,8 @@
                     </div>
 
                     <div class="relative">
-                        <img src="{{ asset('images/game-icons/game-posters/mario-kart-world-review-1.jpg') }}"
-                            alt="" class=" aspect-[3/1.2] object-cover rounded-t-4xl">
+                        <img src="{{ asset($act->activityImages->first()->path) }}" alt=""
+                            class=" aspect-[3/1.2] object-cover rounded-t-4xl">
                         <div
                             class="absolute bottom-0 bg-gradient-to-b from-black/80 via-black/0 to-black/0 w-full h-full rounded-t-4xl items-center">
                         </div>
@@ -106,18 +102,16 @@
                         <div class="flex flex-col gap-2">
                             <h1 class="text-xl font-semibold">Preview:</h1>
                             <div class="grid grid-cols-3 grid-rows-3 gap-1">
-                                <img src="{{ asset('images/game-icons/game-posters/mario-kart-world-review-1.jpg') }}"
-                                    alt="" class="w-full rounded-lg col-span-2 row-span-2">
-                                <img src="{{ asset('images/game-icons/game-posters/mario-kart-world-review-1.jpg') }}"
-                                    alt="" class="w-full rounded-lg col-span-1 row-span-1">
-                                <img src="{{ asset('images/game-icons/game-posters/mario-kart-world-review-1.jpg') }}"
-                                    alt="" class="w-full rounded-lg col-span-1 row-span-1">
-                                <img src="{{ asset('images/game-icons/game-posters/mario-kart-world-review-1.jpg') }}"
-                                    alt="" class="w-full rounded-lg col-span-1 row-span-1">
-                                <img src="{{ asset('images/game-icons/game-posters/mario-kart-world-review-1.jpg') }}"
-                                    alt="" class="w-full rounded-lg col-span-1 row-span-1">
-                                <img src="{{ asset('images/game-icons/game-posters/mario-kart-world-review-1.jpg') }}"
-                                    alt="" class="w-full rounded-lg col-span-1 row-span-1">
+                                @foreach ($act->activityImages as $image)
+                                    @if ($loop->iteration == 2)
+                                        <img src="{{ asset($image->path) }}" alt=""
+                                            class="w-full rounded-lg col-span-2 row-span-2">
+                                    @elseif ($loop->iteration > 2)
+                                        <img src="{{ asset($image->path) }}" alt=""
+                                            class="w-full rounded-lg col-span-1 row-span-1">
+                                    @endif
+                                @endforeach
+
                             </div>
                         </div>
 

@@ -61,6 +61,7 @@ class LessonEditModal extends Component
             return (object) [
                 'id'              => $al->activity->id,
                 'name'            => $al->activity->name,
+                'path'            => $al->activity->path,
                 'specializations' => collect($al->activity->specializations ?? [])->pluck('name')->toArray(),
             ];
         })->toArray();
@@ -122,7 +123,7 @@ class LessonEditModal extends Component
             $this->selected_activities[] = (object) [
                 'id' => $activity['id'],
                 'name' => $activity['name'],
-                // Ensure specializations is an array of names
+                'path' => $activity['path'],
                 'specializations' => collect($activity['specializations'] ?? [])->pluck('name')->toArray(),
             ];
         }
@@ -315,7 +316,6 @@ class LessonEditModal extends Component
             return;
         }
 
-        // Check for changes
         $current = [
             'lesson_name'   => $this->lesson_name,
             'description'   => $this->description,

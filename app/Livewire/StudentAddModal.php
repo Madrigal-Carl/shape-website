@@ -206,7 +206,7 @@ class StudentAddModal extends Component
             'username'        => $this->account_username,
             'password'        => $this->account_password,
             'accountable_id'   => $student->id,
-            'accountable_type' => \App\Models\Student::class,
+            'accountable_type' => Student::class,
         ]);
 
         Feed::create([

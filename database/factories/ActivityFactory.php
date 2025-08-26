@@ -22,6 +22,7 @@ class ActivityFactory extends Factory
     {
         return [
             'name' => $this->faker->words(2, true),
+            'path' => 'images/game-icons/mario.jpeg',
             'description' => $this->faker->paragraph(),
         ];
     }

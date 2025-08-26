@@ -194,7 +194,7 @@
                                     <div wire:key="activity-{{ $i }}"
                                         class="flex w-full justify-between bg-card p-2 rounded-lg">
                                         <div class="flex gap-2">
-                                            <img src="{{ asset('images/game-icons/hayday.jpeg') }}" alt=""
+                                            <img src="{{ asset($act->path) }}" alt=""
                                                 class="h-12 rounded-md aspect-square object-cover" />
                                             <div>
                                                 <h1 class="font-medium text-sm">{{ $act->name }}</h1>
