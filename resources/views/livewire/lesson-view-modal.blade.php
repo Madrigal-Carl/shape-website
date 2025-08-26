@@ -63,14 +63,17 @@
                             <!-- Video Container -->
                             <div class="flex grid-cols-2 gap-2">
                                 @foreach ($lesson->videos as $video)
-                                    <div class="flex flex-col gap-2 relative">
+                                    <div class="flex flex-col gap-2 relative group">
                                         <div class="flex flex-col items-center justify-center">
+                                            {{-- Thumbnail --}}
                                             <img src="{{ $video->thumbnail }}" alt=""
                                                 class="aspect-video w-full h-fit rounded-lg object-cover">
-                                            <button
-                                                class="absolute rounded-full cursor-pointer hover:scale-120 shadow-xl/40 z-10">
+
+                                            {{-- Play button --}}
+                                            <button onclick="playFullscreen('{{ asset($video->url) }}')"
+                                                class="absolute rounded-full cursor-pointer hover:scale-110 shadow-xl/40 z-10">
                                                 <span
-                                                    class="material-symbols-rounded p-2 rounded-full  playBtn text-white bg-white/20 backdrop-blur-[3px] shadow-white shadow-inner">play_arrow</span>
+                                                    class="material-symbols-rounded p-2 rounded-full playBtn text-white bg-white/20 backdrop-blur-[3px] shadow-white shadow-inner">play_arrow</span>
                                             </button>
                                         </div>
 
@@ -82,6 +85,7 @@
                                         </div>
                                     </div>
                                 @endforeach
+
                             </div>
                         </div>
                     </div>
@@ -96,12 +100,12 @@
                             @foreach ($lesson->activityLessons as $act)
                                 <div class="flex w-full justify-between bg-card p-2 rounded-lg">
                                     <div class="flex gap-2">
-                                        <img src="src/images/game-icons/hayday.jpeg" alt=""
+                                        <img src="{{ $act->activity->path }}" alt=""
                                             class="h-12 rounded-md aspect-square object-cover">
                                         <div>
                                             <h1 class="font-medium">{{ $act->activity->name }}</h1>
                                             <p class="text-sm text-paragraph">
-                                                {{ collect($act->activity->category ?? [])->map(fn($cat) => ucfirst(Str::of($cat)->explode(' ')->first()))->implode(', ') }}
+                                                {{ $act->activity->specializations->pluck('name')->map(fn($s) => ucwords($s))->join(', ') }}
                                             </p>
                                         </div>
                                     </div>
@@ -141,3 +145,36 @@
         </section>
     @endif
 </div>
+
+<script>
+    function playFullscreen(path) {
+        // Create video dynamically
+        let video = document.createElement("video");
+        video.src = path;
+        video.controls = true;
+        video.autoplay = true;
+        video.style.width = "100%";
+        video.style.height = "100%";
+        video.style.background = "#000";
+
+        // Append to body
+        document.body.appendChild(video);
+
+        // Go fullscreen
+        if (video.requestFullscreen) {
+            video.requestFullscreen();
+        } else if (video.webkitRequestFullscreen) {
+            video.webkitRequestFullscreen();
+        } else if (video.msRequestFullscreen) {
+            video.msRequestFullscreen();
+        }
+
+        // Cleanup on exit
+        video.onfullscreenchange = () => {
+            if (!document.fullscreenElement) {
+                video.pause();
+                video.remove();
+            }
+        };
+    }
+</script>

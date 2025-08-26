@@ -111,10 +111,8 @@
                                             class="w-full rounded-lg col-span-1 row-span-1">
                                     @endif
                                 @endforeach
-
                             </div>
                         </div>
-
                         <div class="flex flex-col gap-2">
                             <h1 class="text-xl font-semibold">Description</h1>
                             <p class="text-sm text-paragraph">{{ $act->description }}</p>
