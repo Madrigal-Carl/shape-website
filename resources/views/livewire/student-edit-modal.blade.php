@@ -105,14 +105,14 @@
                                 <select name="" id="" class="w-full outline-none text-paragraph"
                                     wire:change="$set('disability', $event.target.value)">
                                     @foreach ($specializations as $specialization)
-                                        @if ($disability === $specialization)
+                                        @if ($disability === $specialization->name)
                                             <option value="{{ $disability }}" class="text-sm text-black" selected
                                                 disabled>
                                                 {{ ucwords($disability) }}
                                             </option>
                                         @else
-                                            <option value="{{ $specialization }}" class="text-sm text-paragraph">
-                                                {{ ucwords($specialization) }}
+                                            <option value="{{ $specialization->name }}" class="text-sm text-paragraph">
+                                                {{ ucwords($specialization->name) }}
                                             </option>
                                         @endif
                                     @endforeach

@@ -21,13 +21,17 @@
                                 <option class="text-sm text-black" selected disabled>
                                     {{ ucfirst($edit_grade_level) }}
                                 </option>
-                                @for ($i = 1; $i <= 3; $i++)
-                                    @if ($edit_grade_level != "kindergarten-$i")
-                                        <option value="kindergarten {{ $i }}" class="text-sm text-paragraph">
-                                            Kindergarten {{ $i }}
+                                @foreach ($grade_levels as $grade_level)
+                                    @if ($edit_grade_level === $grade_level)
+                                        <option value="{{ $edit_grade_level }}" class="text-sm text-paragraph">
+                                            {{ ucwords($edit_grade_level) }}
+                                        </option>
+                                    @else
+                                        <option value="{{ $grade_level }}" class="text-sm text-paragraph">
+                                            {{ ucwords($grade_level) }}
                                         </option>
                                     @endif
-                                @endfor
+                                @endforeach
                             </select>
                         </div>
 
@@ -38,23 +42,22 @@
                                 <option class="text-sm text-black" selected disabled>
                                     Specialization
                                 </option>
-                                <option value="autism spectrum disorder" class="text-sm text-paragraph">
-                                    Autism Spectrum Disorder
-                                </option>
-                                <option value="speech disorder" class="text-sm text-paragraph">
-                                    Speech Disorder
-                                </option>
-                                <option value="hearing impairment" class="text-sm text-paragraph">
-                                    Hearing Impairment
-                                </option>
+                                @foreach ($specializations as $specialization)
+                                    <option value="{{ $specialization->id }}" class="text-sm text-paragraph">
+                                        {{ ucwords($specialization->name) }}
+                                    </option>
+                                @endforeach
                             </select>
                         </div>
 
                         <div class="flex flex-wrap gap-2">
-                            @foreach ($selectedSpecializations as $i => $spec)
+                            @foreach ($selectedSpecializations as $i => $specId)
+                                @php
+                                    $spec = $specializations->firstWhere('id', $specId);
+                                @endphp
                                 <div wire:key="specialization-{{ $i }}"
                                     class="flex items-center gap-2 px-3 py-1 bg-card rounded-full w-fit">
-                                    <p class="text-sm">{{ ucwords($spec) }}</p>
+                                    <p class="text-sm">{{ ucwords($spec->name) }}</p>
                                     <button wire:click="removeSpecialization({{ $i }})" type="button"
                                         class="text-red-500 hover:text-red-700">✕</button>
                                 </div>

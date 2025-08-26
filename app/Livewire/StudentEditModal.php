@@ -34,7 +34,6 @@ class StudentEditModal extends Component
 
         $student = Student::with(['profile','guardian','addresses','account','permanentAddress', 'currentAddress'])->findOrFail($id);
 
-        $this->photo = $student->path;
         $this->first_name = $student->first_name;
         $this->middle_name = $student->middle_name;
         $this->last_name  = $student->last_name;
@@ -100,11 +99,105 @@ class StudentEditModal extends Component
         $this->isOpen = false;
     }
 
-    public function nextStep() { $this->step++; }
+    public function nextStep()
+    {
+        if ($this->validateEdit()) {
+            $this->step++;
+        }
+    }
+
     public function previousStep() { if ($this->step > 1) $this->step--; }
+
+    protected function validateEdit()
+    {
+        try {
+            if ($this->step === 1) {
+                $this->validate([
+                    'photo'       => 'nullable|image|max:5120',
+                    'lrn'         => 'required|digits:12',
+                    'first_name'  => 'required',
+                    'middle_name' => 'required',
+                    'last_name'   => 'required',
+                    'birthdate'   => 'required|date|before_or_equal:today',
+                    'sex'         => 'required',
+                    'grade_level' => 'required',
+                    'disability'  => 'required',
+                    'description' => 'nullable|max:255',
+                ], [
+                    'photo.image'             => 'The photo must be an image file.',
+                    'photo.max'               => 'The photo size must not exceed 5MB.',
+                    'lrn.required'            => 'The LRN field is required.',
+                    'lrn.digits'              => 'The LRN must be exactly 12 digits.',
+                    'first_name.required'     => 'The first name is required.',
+                    'middle_name.required'    => 'The middle name is required.',
+                    'last_name.required'      => 'The last name is required.',
+                    'birthdate.required'      => 'The birthdate is required.',
+                    'birthdate.date'          => 'The birthdate must be a valid date.',
+                    'birthdate.before_or_equal' => 'The birthdate cannot be in the future.',
+                    'sex.required'            => 'Please select a sex.',
+                    'grade_level.required'    => 'The grade level is required.',
+                    'disability.required'     => 'Please specify the disability.',
+                    'description.max'         => 'The description is too long.',
+                ]);
+            }
+
+            if ($this->step === 2) {
+                $this->validate([
+                    'permanent_municipal'  => 'required',
+                    'permanent_barangay'   => 'required',
+                    'current_municipal'    => 'required',
+                    'current_barangay'     => 'required',
+                    'guardian_first_name'  => 'required|max:35',
+                    'guardian_middle_name' => 'nullable|max:35',
+                    'guardian_last_name'   => 'required|max:35',
+                    'guardian_email'       => 'required|email|unique:guardians,email,' . $this->student_id . ',student_id',
+                    'guardian_phone'       => 'nullable|digits:10|unique:guardians,phone_number,' . $this->student_id . ',student_id',
+                ], [
+                    'permanent_municipal.required' => 'The permanent municipal is required.',
+                    'permanent_barangay.required'  => 'The permanent barangay is required.',
+                    'current_municipal.required'   => 'The current municipal is required.',
+                    'current_barangay.required'    => 'The current barangay is required.',
+                    'guardian_first_name.required' => 'The guardian first name is required.',
+                    'guardian_first_name.max'      => 'The guardian first name is too long.',
+                    'guardian_middle_name.max'     => 'The guardian middle name is too long.',
+                    'guardian_last_name.required'  => 'The guardian last name is required.',
+                    'guardian_last_name.max'       => 'The guardian last name is too long.',
+                    'guardian_email.required'      => 'The guardian email is required.',
+                    'guardian_email.email'         => 'The guardian email must be a valid email address.',
+                    'guardian_email.unique'        => 'The guardian email already exists.',
+                    'guardian_phone.digits'        => 'The guardian phone must be exactly 10 digits.',
+                    'guardian_phone.unique'        => 'The guardian phone already exists.',
+                ]);
+            }
+
+            if ($this->step === 3) {
+                $this->validate([
+                    'account_username' => 'required|min:5|max:18',
+                    'account_password' => 'nullable|min:5|max:18|regex:/^[a-zA-Z0-9]+$/',
+                ], [
+                    'account_username.required' => 'Username is required.',
+                    'account_username.min'      => 'Username must be at least 5 characters.',
+                    'account_username.max'      => 'Username must not be more than 18 characters.',
+                    'account_password.min'      => 'Password must be at least 5 characters.',
+                    'account_password.max'      => 'Password must not be more than 18 characters.',
+                    'account_password.regex'    => 'Password must contain only letters and numbers (no special characters).',
+                ]);
+            }
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            $message = $e->validator->errors()->first();
+            $this->dispatch('swal-toast', icon: 'error', title: $message);
+            return false;
+        }
+
+        return true;
+    }
 
     public function editStudent()
     {
+        if (!$this->validateEdit()) {
+            return;
+        }
+
         $student = Student::with(['profile','guardian','addresses','account'])->findOrFail($this->student_id);
 
         if ($this->photo instanceof UploadedFile) {
@@ -192,7 +285,6 @@ class StudentEditModal extends Component
         return $this->closeModal();
     }
 
-
     public function updatedPermanentMunicipal($value)
     {
         $this->permanent_barangays = $this->barangayData[$value] ?? [];
@@ -239,9 +331,17 @@ class StudentEditModal extends Component
             ],
         ];
         $this->municipalities = array_keys($this->barangayData);
-        $this->grade_levels = Profile::orderBy('grade_level')->pluck('grade_level')->unique()->values()->toArray();
+        $this->grade_levels = Student::where('instructor_id', Auth::user()->accountable->id)
+            ->with('profile')
+            ->get()
+            ->pluck('profile.grade_level')
+            ->filter()
+            ->unique()
+            ->sort()
+            ->values()
+            ->toArray();
 
-        $this->specializations = Auth::user()->accountable->specialization;
+        $this->specializations = Auth::user()->accountable->specializations;
 
         return view('livewire.student-edit-modal');
     }

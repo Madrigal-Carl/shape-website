@@ -2,15 +2,19 @@
 
 namespace App\Livewire;
 
+use App\Models\Profile;
+use App\Models\Student;
 use App\Models\Subject;
 use Livewire\Component;
 use App\Models\Curriculum;
 use Livewire\Attributes\On;
 use App\Models\CurriculumSubject;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
 
 class CurriculumEditModal extends Component
 {
-    public $isOpen = false, $curriculum_id = null;
+    public $isOpen = false, $curriculum_id = null, $specializations, $grade_levels;
     public $subjects, $edit_name, $edit_grade_level, $edit_specialization, $edit_description, $edit_subject;
     public $selectedSpecializations = [], $selectedSubjects = [], $original = [];
 
@@ -25,12 +29,12 @@ class CurriculumEditModal extends Component
         $this->curriculum_id = $id;
         $this->isOpen = true;
 
-        $curriculum = Curriculum::with('curriculumSubjects.subject')->find($this->curriculum_id);
+        $curriculum = Curriculum::with('specializations','curriculumSubjects.subject')->find($this->curriculum_id);
 
         $this->edit_name = $curriculum->name;
         $this->edit_grade_level = $curriculum->grade_level;
         $this->edit_description = $curriculum->description;
-        $this->selectedSpecializations = $curriculum->specialization;
+        $this->selectedSpecializations = $curriculum->specializations->pluck('id')->toArray();
 
         $this->selectedSubjects = $curriculum->curriculumSubjects->pluck('subject.name')->toArray();
 
@@ -82,6 +86,27 @@ class CurriculumEditModal extends Component
 
     public function editCurriculum()
     {
+        try {
+            $this->validate([
+                'edit_name'              => 'required|string|max:255',
+                'edit_grade_level'       => 'required|string|max:255',
+                'selectedSpecializations' => 'required|array|min:1',
+                'selectedSubjects'        => 'required|array|min:1',
+            ], [
+                'edit_name.required' => 'Name is required.',
+                'edit_grade_level.required' => 'Grade level is required.',
+                'selectedSpecializations.required' => 'Please select at least one specialization.',
+                'selectedSpecializations.min' => 'You must select at least one specialization.',
+                'selectedSubjects.required' => 'Please select at least one subject.',
+                'selectedSubjects.min' => 'You must select at least one subject.',
+            ]);
+        } catch (ValidationException $e) {
+            $message = $e->validator->errors()->first();
+            $this->dispatch('swal-toast', icon: 'error', title: $message);
+            return false;
+        }
+
+
         $changes = collect([
             'name'           => [$this->edit_name, $this->original['name']],
             'grade_level'    => [$this->edit_grade_level, $this->original['grade_level']],
@@ -102,9 +127,11 @@ class CurriculumEditModal extends Component
             $curriculum->update([
                 'name' => $this->edit_name,
                 'grade_level' => $this->edit_grade_level,
-                'specialization' => $this->selectedSpecializations,
                 'description' => $this->edit_description,
             ]);
+
+            // Sync specializations
+            $curriculum->specializations()->sync($this->selectedSpecializations);
 
             $curriculum->curriculumSubjects()->delete();
             $subjectIds = Subject::whereIn('name', $this->selectedSubjects)->pluck('id');
@@ -121,6 +148,16 @@ class CurriculumEditModal extends Component
 
     public function render()
     {
+        $this->grade_levels = Student::where('instructor_id', Auth::user()->accountable->id)
+            ->with('profile')
+            ->get()
+            ->pluck('profile.grade_level')
+            ->filter()
+            ->unique()
+            ->sort()
+            ->values()
+            ->toArray();
+        $this->specializations = Auth::user()->accountable->specializations;
         return view('livewire.curriculum-edit-modal');
     }
 }

@@ -20,7 +20,6 @@ return new class extends Migration
             $table->string('last_name');
             $table->enum('sex', ['male', 'female']);
             $table->date('birth_date');
-            $table->json('specialization');
             $table->enum('status', ['active', 'inactive', 'resigned', 'retired', 'terminated'])->default('active');
             $table->timestamps();
         });

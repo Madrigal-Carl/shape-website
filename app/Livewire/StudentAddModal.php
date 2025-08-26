@@ -266,8 +266,16 @@ class StudentAddModal extends Component
         ];
         $this->municipalities = array_keys($this->barangayData);
 
-        $this->grade_levels = Profile::orderBy('grade_level')->pluck('grade_level')->unique()->values()->toArray();
-        $this->specializations = Auth::user()->accountable->specialization;
+        $this->grade_levels = Student::where('instructor_id', Auth::user()->accountable->id)
+            ->with('profile')
+            ->get()
+            ->pluck('profile.grade_level')
+            ->filter()
+            ->unique()
+            ->sort()
+            ->values()
+            ->toArray();
+        $this->specializations = Auth::user()->accountable->specializations;
         return view('livewire.student-add-modal');
     }
 }

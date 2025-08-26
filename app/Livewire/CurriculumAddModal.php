@@ -3,8 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\Feed;
-use App\Models\Account;
-use App\Models\Profile;
+use App\Models\Student;
 use App\Models\Subject;
 use Livewire\Component;
 use App\Models\Curriculum;
@@ -103,9 +102,10 @@ class CurriculumAddModal extends Component
             'instructor_id' => Auth::user()->accountable->id,
             'name' => $this->add_name,
             'grade_level' => $this->add_grade_level,
-            'specialization' => $this->selectedSpecializations,
             'description' => $this->add_description ?? '',
         ]);
+
+        $curriculum->specializations()->attach($this->selectedSpecializations);
 
         foreach ($this->selectedSubjects as $subjectName) {
             $subject = Subject::where('name', $subjectName)->first();
@@ -128,8 +128,16 @@ class CurriculumAddModal extends Component
     public function mount()
     {
         $this->subjects = Subject::orderBy('name')->get();
-        $this->grade_levels = Profile::orderBy('grade_level')->pluck('grade_level')->unique()->values()->toArray();
-        $this->specializations = Auth::user()->accountable->specialization;
+        $this->grade_levels = Student::where('instructor_id', Auth::user()->accountable->id)
+            ->with('profile')
+            ->get()
+            ->pluck('profile.grade_level')
+            ->filter()
+            ->unique()
+            ->sort()
+            ->values()
+            ->toArray();
+        $this->specializations = Auth::user()->accountable->specializations;
     }
 
     public function render()

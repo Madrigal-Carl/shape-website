@@ -18,12 +18,6 @@ class InstructorFactory extends Factory
     protected $model = Instructor::class;
     public function definition(): array
     {
-        $specializations = [
-            'autism spectrum disorder',
-            'speech disorder',
-            'hearing impairment',
-        ];
-
         return [
             'license_number' => $this->faker->unique()->bothify('LIC-####'),
             'path' => null,
@@ -32,7 +26,6 @@ class InstructorFactory extends Factory
             'last_name' => $this->faker->lastName,
             'sex' => $this->faker->randomElement(['male', 'female']),
             'birth_date' => $this->faker->date(),
-            'specialization' => $this->faker->randomElements($specializations, rand(1, 2)),
             'status' => 'active',
         ];
     }

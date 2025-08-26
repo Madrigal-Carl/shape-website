@@ -12,16 +12,16 @@ class Activity extends Model
     protected $fillable = [
         'name',
         'description',
-        'category',
-    ];
-
-    protected $casts = [
-        'category' => 'array',
     ];
 
     public function lesson()
     {
         return $this->belongsTo(Lesson::class);
+    }
+
+    public function specializations()
+    {
+        return $this->morphToMany(Specialization::class, 'specializable');
     }
 
     public function activityLesson()

@@ -16,12 +16,7 @@ class Instructor extends Model
         'last_name',
         'sex',
         'birth_date',
-        'specialization',
         'status',
-    ];
-
-    protected $casts = [
-        'specialization' => 'array',
     ];
 
     public function account()
@@ -32,6 +27,11 @@ class Instructor extends Model
     public function curriculums()
     {
         return $this->hasMany(Curriculum::class);
+    }
+
+    public function specializations()
+    {
+        return $this->morphToMany(Specialization::class, 'specializable');
     }
 
     public function lessons()

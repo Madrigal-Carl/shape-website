@@ -12,18 +12,18 @@ class Curriculum extends Model
         'instructor_id',
         'name',
         'grade_level',
-        'specialization',
         'description',
         'status',
-    ];
-
-    protected $casts = [
-        'specialization' => 'array',
     ];
 
     public function instructor()
     {
         return $this->belongsTo(Instructor::class);
+    }
+
+    public function specializations()
+    {
+        return $this->morphToMany(Specialization::class, 'specializable');
     }
 
     public function curriculumSubjects()

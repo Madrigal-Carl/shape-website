@@ -24,6 +24,7 @@ use App\Models\Instructor;
 use App\Models\LessonQuiz;
 use App\Models\LessonSubject;
 use App\Models\ActivityLesson;
+use App\Models\Specialization;
 use Illuminate\Database\Seeder;
 use App\Models\CurriculumSubject;
 use App\Models\LessonSubjectStudent;
@@ -35,8 +36,19 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        $specializations = collect([
+            Specialization::firstOrCreate(['name' => 'autism spectrum disorder']),
+            Specialization::firstOrCreate(['name' => 'speech disorder']),
+            Specialization::firstOrCreate(['name' => 'hearing impairment']),
+        ]);
+
         // 1. Create Instructors
         $instructors = Instructor::factory()->count(3)->create();
+        $instructors->each(function ($instructor) use ($specializations) {
+            $instructor->specializations()->attach(
+                $specializations->random(rand(1, 2))->pluck('id')->toArray()
+            );
+        });
 
         // 2. Create Admins
         $admins = Admin::factory()->count(3)->create();
@@ -63,6 +75,12 @@ class DatabaseSeeder extends Seeder
                     'subject_id' => $subjectId
                 ]);
             }
+        });
+
+        $curriculums->each(function ($curriculum) use ($specializations) {
+            $curriculum->specializations()->attach(
+                $specializations->random(rand(1, 2))->pluck('id')->toArray()
+            );
         });
 
         // 6. Create Students
@@ -124,6 +142,12 @@ class DatabaseSeeder extends Seeder
         // 9. Create Lessons, Activities, Quizzes, Videos (once per lesson)
         $lessons = Lesson::factory()->count(10)->create();
         $activities = Activity::factory()->count(10)->create();
+        $activities->each(function ($activity) use ($specializations) {
+            $activity->specializations()->attach(
+                $specializations->random(rand(1, 2))->pluck('id')->toArray()
+            );
+        });
+
         $lessons->each(function ($lesson) use($activities) {
             Video::factory()->create(['lesson_id' => $lesson->id]);
 

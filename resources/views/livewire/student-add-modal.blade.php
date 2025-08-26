@@ -98,8 +98,8 @@
                                         Disability
                                     </option>
                                     @foreach ($specializations as $specialization)
-                                        <option value="{{ $specialization }}" class="text-sm text-paragraph">
-                                            {{ ucwords($specialization) }}
+                                        <option value="{{ $specialization->name }}" class="text-sm text-paragraph">
+                                            {{ ucwords($specialization->name) }}
                                         </option>
                                     @endforeach
                                 </select>

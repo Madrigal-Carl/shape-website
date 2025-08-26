@@ -34,18 +34,21 @@
                                     Specialization
                                 </option>
                                 @foreach ($specializations as $specialization)
-                                    <option value="{{ $specialization }}" class="text-sm text-paragraph">
-                                        {{ ucwords($specialization) }}
+                                    <option value="{{ $specialization->id }}" class="text-sm text-paragraph">
+                                        {{ ucwords($specialization->name) }}
                                     </option>
                                 @endforeach
                             </select>
                         </div>
 
                         <div class="flex flex-wrap gap-2">
-                            @foreach ($selectedSpecializations as $i => $spec)
+                            @foreach ($selectedSpecializations as $i => $specId)
+                                @php
+                                    $spec = $specializations->firstWhere('id', $specId);
+                                @endphp
                                 <div wire:key="specialization-{{ $i }}"
                                     class="flex items-center gap-2 px-3 py-1 bg-card rounded-full w-fit">
-                                    <p class="text-sm">{{ ucfirst($spec) }}</p>
+                                    <p class="text-sm">{{ ucwords($spec->name) }}</p>
                                     <button wire:click="removeSpecialization({{ $i }})" type="button"
                                         class="text-red-500 hover:text-red-700">✕</button>
                                 </div>
