@@ -1,12 +1,15 @@
 <main class="col-span-5 pl-8 pr-4 py-4 flex flex-col h-dvh gap-16 overflow-y-auto">
     <!-- Greetings -->
+    @php
+        $user = App\Models\Account::with('accountable')->find(auth()->id());
+    @endphp
     <div class="flex gap-2 w-auto justify-between">
         <div class="flex gap-4">
             <span class="w-1 h-full bg-blue-button rounded-full"></span>
             <div>
                 <h1 class="text-2xl font-medium">
                     Welcome back,
-                    <span class="font-bold text-blue-button">Dave</span>
+                    <span class="font-bold text-blue-button">{{ $user->accountable->first_name }}</span>
                 </h1>
                 <p class="text-sm text-paragraph">Here is your summary today</p>
             </div>
