@@ -266,8 +266,7 @@ class StudentAddModal extends Component
         ];
         $this->municipalities = array_keys($this->barangayData);
 
-        $this->grade_levels = Student::where('instructor_id', Auth::user()->accountable->id)
-            ->with('profile')
+        $this->grade_levels = Student::with('profile')
             ->get()
             ->pluck('profile.grade_level')
             ->filter()

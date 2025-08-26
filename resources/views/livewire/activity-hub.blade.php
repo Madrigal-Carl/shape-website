@@ -13,21 +13,13 @@
                     <h1 class="text-lg font-medium">Activity Categories:</h1>
                     <!--Categories-->
                     <div class="w-full flex items-center gap-2 gameCategories overflow-x-auto pb-2">
-                        @php
-                            $categories = [
-                                'autism spectrum disorder' => 'Autism Spectrum Disorder',
-                                'hearing impairment' => 'Hearing Impairment',
-                                'speech disorder' => 'Speech Disorder',
-                            ];
-                        @endphp
-
-                        @foreach ($categories as $slug => $label)
-                            <div wire:click="toggleCategory('{{ $slug }}')"
+                        @foreach ($categories as $name)
+                            <div wire:click="toggleCategory('{{ $name }}')"
                                 class="w-fit shrink-0 flex items-center gap-2 px-3 py-1 rounded-xl cursor-pointer
-                                {{ in_array($slug, $selectedCategories, true) ? 'bg-blue-button text-white' : 'bg-card hover:bg-blue-button hover:text-white' }}">
+                                    {{ in_array($name, $selectedCategories, true) ? 'bg-blue-button text-white' : 'bg-card hover:bg-blue-button hover:text-white' }}">
                                 <img src="{{ asset('images/game-icons/game-categories-icons/arts.png') }}"
                                     alt="" class="h-6">
-                                <p class="text-base">{{ $label }}</p>
+                                <p class="text-base">{{ ucwords($name) }}</p>
                             </div>
                         @endforeach
                     </div>
@@ -77,7 +69,7 @@
                 </div>
             </div>
 
-            @if ($activity && $isOpenActivityView)
+            @if ($act && $isOpenActivityView)
                 <div
                     class="flex flex-col w-[30%] h-full bg-white shadow-2xl overflow-y-auto gamesGrid rounded-4xl relative">
                     <div class="w-full flex items-center justify-between p-8 absolute top-0 left-0 z-10 text-white">
@@ -102,7 +94,11 @@
                             <div>
                                 <h1 class="font-semibold text-2xl w-full leading-7">{{ $act->name }}</h1>
                                 <p class="text-sm text-paragraph w-full">
-                                    {{ collect($act->category ?? [])->map(fn($cat) => ucwords($cat))->implode(', ') }}
+                                    @foreach ($act->specializations as $specialization)
+                                        {{ ucwords($specialization->name) }}@if (!$loop->last)
+                                            ,
+                                        @endif
+                                    @endforeach
                                 </p>
                             </div>
                         </div>

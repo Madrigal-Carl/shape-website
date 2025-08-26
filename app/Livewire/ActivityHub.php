@@ -5,14 +5,14 @@ namespace App\Livewire;
 use Livewire\Component;
 use App\Models\Activity;
 use Livewire\Attributes\On;
+use App\Models\Specialization;
 
 class ActivityHub extends Component
 {
     public $isOpen = false;
     public $targetComponent = null;
     public $isOpenActivityView = false;
-    public $activities = [];
-    public $selectedCategories = [];
+    public $activities = [], $categories = [], $selectedCategories = [];
     public $act;
 
 
@@ -21,6 +21,7 @@ class ActivityHub extends Component
     {
         $this->isOpen = true;
         $this->activities = Activity::all();
+        $this->loadActivities();
     }
 
     public function closeModal()
@@ -31,7 +32,7 @@ class ActivityHub extends Component
     public function viewActivity($activityId)
     {
         $this->act = null;
-        $this->act = Activity::find($activityId);
+        $this->act = Activity::with('specializations')->find($activityId);
         $this->openViewActivity();
     }
 
@@ -48,17 +49,17 @@ class ActivityHub extends Component
 
     public function addActivity($activityId)
     {
-        $activity = Activity::find($activityId);
+        $activity = Activity::with('specializations')->find($activityId);
         $this->dispatch('swal-toast', icon : 'success', title : 'Activity has been added successfully.');
         $this->dispatch('addActivity', activity: $activity)->to($this->targetComponent);
     }
 
-    public function toggleCategory($category)
+    public function toggleCategory($categoryId)
     {
-        if (in_array($category, $this->selectedCategories)) {
-            $this->selectedCategories = array_diff($this->selectedCategories, [$category]);
+        if (in_array($categoryId, $this->selectedCategories)) {
+            $this->selectedCategories = array_diff($this->selectedCategories, [$categoryId]);
         } else {
-            $this->selectedCategories[] = $category;
+            $this->selectedCategories[] = $categoryId;
         }
 
         $this->loadActivities();
@@ -66,18 +67,24 @@ class ActivityHub extends Component
 
     private function loadActivities()
     {
-        $q = Activity::query();
+        $q = Activity::with('specializations');
 
-        foreach ($this->selectedCategories as $cat) {
-            $q->whereJsonContains('category', $cat);
+        if (!empty($this->selectedCategories)) {
+            foreach ($this->selectedCategories as $catName) {
+                $q->whereHas('specializations', function ($query) use ($catName) {
+                    $query->where('specializations.name', $catName);
+                });
+            }
         }
 
         $this->activities = $q->orderByDesc('created_at')->get();
     }
 
+
     public function mount($targetComponent = null)
     {
         $this->targetComponent = $targetComponent;
+        $this->categories = Specialization::orderBy('name')->pluck('name')->toArray();
     }
 
     public function render()
