@@ -218,9 +218,11 @@
                                             <img src="{{ asset('images/game-icons/hayday.jpeg') }}" alt=""
                                                 class="h-12 rounded-md aspect-square object-cover" />
                                             <div>
-                                                <h1 class="font-medium text-sm">{{ $act['name'] }}</h1>
-                                                <p>{{ collect($act['category'] ?? [])->map(fn($cat) => ucfirst(Str::of($cat)->explode(' ')->first()))->implode(', ') }}
+                                                <h1 class="font-medium text-sm">{{ $act->name }}</h1>
+                                                <p>
+                                                    {{ collect($act->specializations ?? [])->map(fn($cat) => ucfirst(Str::of($cat)->explode(' ')->first()))->implode(', ') }}
                                                 </p>
+
                                             </div>
                                         </div>
 

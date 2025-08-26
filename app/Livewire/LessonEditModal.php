@@ -39,7 +39,7 @@ class LessonEditModal extends Component
         $this->lesson_id = $id;
         $this->isOpen = true;
 
-        $lesson = Lesson::with('students', 'videos', 'quiz.questions.options', 'activityLessons.activity', 'lessonSubjectStudents.curriculumSubject.curriculum', 'lessonSubjectStudents.curriculumSubject.subject')->find($id);
+        $lesson = Lesson::with('students', 'videos', 'quiz.questions.options', 'activityLessons.activity.specializations', 'lessonSubjectStudents.curriculumSubject.curriculum', 'lessonSubjectStudents.curriculumSubject.subject')->find($id);
         $this->lesson_name = $lesson->title;
         $this->grade_level = $lesson->lessonSubjectStudents->first()->curriculumSubject->curriculum->grade_level;
         $this->curriculum = $lesson->lessonSubjectStudents->first()->curriculumSubject->curriculum->name;
@@ -58,10 +58,10 @@ class LessonEditModal extends Component
         })->toArray();
 
         $this->selected_activities = $lesson->activityLessons->map(function ($al) {
-            return [
-                'id'       => $al->activity->id,
-                'name'     => $al->activity->name,
-                'category' => $al->activity->category,
+            return (object) [
+                'id'              => $al->activity->id,
+                'name'            => $al->activity->name,
+                'specializations' => collect($al->activity->specializations ?? [])->pluck('name')->toArray(),
             ];
         })->toArray();
 
@@ -117,21 +117,14 @@ class LessonEditModal extends Component
     #[On('addActivity')]
     public function addSelectedActivity($activity)
     {
+        // Check if activity is already added
         if (!collect($this->selected_activities)->pluck('id')->contains($activity['id'])) {
-            $this->selected_activities[] = [
-                'id'       => $activity['id'],
-                'name'     => $activity['name'],
-                'category' => $activity['category'],
+            $this->selected_activities[] = (object) [
+                'id' => $activity['id'],
+                'name' => $activity['name'],
+                // Ensure specializations is an array of names
+                'specializations' => collect($activity['specializations'] ?? [])->pluck('name')->toArray(),
             ];
-        }
-    }
-
-    public function updatedActivity($value)
-    {
-        $activity = Activity::find($value);
-
-        if ($activity && !collect($this->selected_activities)->pluck('id')->contains($activity->id)) {
-            $this->selected_activities[] = $activity;
         }
     }
 
@@ -330,7 +323,7 @@ class LessonEditModal extends Component
         $lesson->activityLessons()->delete();
         foreach ($this->selected_activities as $activity) {
             $lesson->activityLessons()->create([
-                'activity_id' => $activity['id'],
+                'activity_id' => $activity->id,
             ]);
         }
 
