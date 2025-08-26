@@ -199,7 +199,7 @@
                                             <div>
                                                 <h1 class="font-medium text-sm">{{ $act->name }}</h1>
                                                 <p class="text-xs">
-                                                    {{ collect($act->category ?? [])->map(fn($cat) => ucfirst(Str::of($cat)->explode(' ')->first()))->implode(', ') }}
+                                                    {{ collect($act->specializations ?? [])->pluck('name')->map(fn($cat) => ucfirst(Str::of($cat)->explode(' ')->first()))->implode(', ') }}
                                                 </p>
                                             </div>
                                         </div>

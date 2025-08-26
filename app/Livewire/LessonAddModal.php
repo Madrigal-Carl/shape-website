@@ -326,21 +326,11 @@ class LessonAddModal extends Component
         return $this->closeModal();
     }
 
-
     #[On('addActivity')]
     public function addSelectedActivity($activity)
     {
         if (!collect($this->selected_activities)->pluck('id')->contains($activity['id'])) {
             $this->selected_activities[] = (object) $activity;
-        }
-    }
-
-    public function updatedActivity($value)
-    {
-        $activity = Activity::find($value);
-
-        if ($activity && !collect($this->selected_activities)->pluck('id')->contains($activity->id)) {
-            $this->selected_activities[] = $activity;
         }
     }
 
