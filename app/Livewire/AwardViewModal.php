@@ -3,10 +3,9 @@
 namespace App\Livewire;
 
 use Livewire\Component;
-use App\Models\Curriculum;
 use Livewire\Attributes\On;
 
-class CurriculumViewModal extends Component
+class AwardViewModal extends Component
 {
     public $isOpen = false;
     public $curriculum_id = null;
@@ -26,11 +25,6 @@ class CurriculumViewModal extends Component
 
     public function render()
     {
-        $curriculum = Curriculum::with(['curriculumSubjects.subject',
-        'curriculumSubjects' => function ($query) {
-            $query->withCount('lessons');
-        }])->find($this->curriculum_id);
-        return view('livewire.curriculum-view-modal', compact('curriculum'));
+        return view('livewire.award-view-modal');
     }
-
 }
