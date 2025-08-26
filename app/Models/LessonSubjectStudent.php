@@ -30,6 +30,30 @@ class LessonSubjectStudent extends Model
         return $this->belongsTo(Student::class);
     }
 
+        public function curriculum()
+    {
+        return $this->hasOneThrough(
+            Curriculum::class,
+            CurriculumSubject::class,
+            'id',
+            'id',
+            'curriculum_subject_id',
+            'curriculum_id'
+        );
+    }
+
+    public function subject()
+    {
+        return $this->hasOneThrough(
+            Subject::class,
+            CurriculumSubject::class,
+            'id',
+            'id',
+            'curriculum_subject_id',
+            'subject_id'
+        );
+    }
+
     public function quiz()
     {
         return $this->hasOneThrough(
