@@ -228,7 +228,7 @@ class LessonEditModal extends Component
         $this->uploadedVideos = array_values($this->uploadedVideos);
     }
 
-    private function validateQuestions(): array
+    private function validateQuestions()
     {
         $validQuestions = [];
 
@@ -267,8 +267,54 @@ class LessonEditModal extends Component
         return $validQuestions;
     }
 
+    private function validateLesson()
+    {
+        try {
+            $this->validate([
+                'lesson_name'        => 'required|min:5|max:100',
+                'grade_level'        => 'required',
+                'curriculum_id'      => 'required',
+                'subject_id'         => 'required',
+                'selected_activities'=> 'required',
+                'quiz_name'          => 'required|min:3|max:100',
+                'questions'          => 'required|min:1',
+            ], [
+                'lesson_name.required' => 'Lesson name is required.',
+                'lesson_name.min'      => 'Lesson name must be at least 5 characters.',
+                'lesson_name.max'      => 'Lesson name must not exceed 100 characters.',
+                'grade_level.required' => 'Grade & Section is required.',
+                'curriculum_id.required' => 'Please select a curriculum.',
+                'subject_id.required'  => 'Please select a subject.',
+                'selected_activities.required' => 'You must add at least one activity.',
+                'quiz_name.required'   => 'Quiz name is required.',
+                'quiz_name.min'        => 'Quiz name must be at least 3 characters.',
+                'questions.required'   => 'You must add at least one question.',
+            ]);
+        } catch (ValidationException $e) {
+            $message = $e->validator->errors()->first();
+            $this->dispatch('swal-toast', icon: 'error', title: $message);
+            return false;
+        }
+
+        if (empty($this->uploadedVideos)) {
+            $this->dispatch('swal-toast', icon: 'error', title: 'Please upload at least one video or provide a YouTube link.');
+            return false;
+        }
+
+        $validQuestions = $this->validateQuestions();
+        if (empty($validQuestions)) {
+            return false;
+        }
+
+        return true;
+    }
+
     public function editLesson()
     {
+        if (!$this->validateLesson()) {
+            return;
+        }
+
         // Check for changes
         $current = [
             'lesson_name'   => $this->lesson_name,
