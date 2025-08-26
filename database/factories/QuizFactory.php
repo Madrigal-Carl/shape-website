@@ -24,6 +24,7 @@ class QuizFactory extends Factory
             'lesson_id' => null,
             'title' => $this->faker->sentence(3),
             'score' => $this->faker->numberBetween(0, 100),
+            'path' => 'images/default-img-holder.png',
             'description' => $this->faker->optional()->paragraph(),
         ];
     }

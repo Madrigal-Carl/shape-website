@@ -1,6 +1,6 @@
 <nav class="bg-white flex flex-col items-center p-6 gap-14 h-full">
     <!-- Logo -->
-    <img src="{{ asset('images/main-logo.png') }}" class="w-32" alt="" />
+    <img src="{{ asset('images/Shape-logo-w-text.png') }}" class="w-38" alt="" />
 
     <!-- Account Info -->
     @php

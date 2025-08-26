@@ -125,7 +125,7 @@
                         <div class="w-full grid grid-cols-2 gap-2 items-center justify-center rounded-lg">
                             <div class="flex w-full justify-between bg-card p-2 rounded-lg">
                                 <div class="flex gap-2">
-                                    <img src="src/images/game-icons/hayday.jpeg" alt=""
+                                    <img src="{{ asset($lesson->quiz->path) }}" alt=""
                                         class="h-12 rounded-md aspect-square object-cover">
                                     <div>
                                         <h1 class="font-medium">{{ $lesson->quiz->title }}</h1>
