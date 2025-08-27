@@ -38,8 +38,7 @@
 
                 <!-- Profile pic and info -->
                 <div class="flex gap-6">
-                    <img src="{{ asset('images/profile.jpg') }}" alt="" class="rounded-full w-20" />
-
+                    <img src="{{ asset('storage/' . $student->path) }}" alt="" class="rounded-full w-20" />
                     <div class="flex flex-col justify-between">
                         <h1 class="font-medium text-xl leading-4">{{ ucwords($student->first_name) }}
                             {{ strtoupper(substr($student->middle_name, 0, 1)) }}. {{ ucwords($student->last_name) }}
