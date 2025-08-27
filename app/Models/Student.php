@@ -131,4 +131,8 @@ class Student extends Model
         });
     }
 
+    public function studentAwards()
+    {
+        return $this->hasMany(StudentAward::class);
+    }
 }
