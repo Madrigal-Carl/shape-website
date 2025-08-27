@@ -120,12 +120,19 @@
                         <div class="flex flex-col gap-3">
                             <h2 class="font-medium text-lg">Interactive Video Lessons</h2>
                             <div class="flex flex-col gap-2">
-                                <div class="flex items-center h-24 justify-center gap-2 px-6 py-3 border-1 border-dashed border-gray-300 rounded-lg w-full hover:text-blue-button hover:border-blue-button"
+                                <div x-data="{ isDropping: false }" @dragover.prevent="isDropping = true"
+                                    @dragleave.prevent="isDropping = false"
+                                    @drop.prevent="isDropping = false; $refs.videoUpload.files = $event.dataTransfer.files; $refs.videoUpload.dispatchEvent(new Event('change'))"
+                                    :class="isDropping ? 'border-blue-500 text-blue-500 bg-blue-50' :
+                                        'border-gray-300 text-gray-600'"
+                                    class="flex items-center h-24 justify-center gap-2 px-6 py-3 border-2 border-dashed rounded-lg w-full cursor-pointer transition-colors duration-200 hover:border-blue-500 hover:text-blue-500"
                                     id="dropzone">
-                                    <h1>Drop or Click to Upload Video</h1>
-                                    <span class="material-symbols-rounded">add_photo_alternate</span>
-                                    <input type="file" wire:model="videos" multiple class="hidden"
-                                        id="videoUpload" />
+                                    <label for="videoUpload" class="cursor-pointer flex items-center gap-2">
+                                        <h1>Drop or Click to Upload Video</h1>
+                                        <span class="material-symbols-rounded">add_photo_alternate</span>
+                                    </label>
+                                    <input type="file" wire:model="videos" multiple class="hidden" id="videoUpload"
+                                        x-ref="videoUpload" />
                                 </div>
 
                                 <div wire:loading wire:target="videos" x-data="{ progress: 0 }"
@@ -201,8 +208,8 @@
                             <h2 class="font-medium text-lg">Activities</h2>
 
                             <button wire:click='openActivityHub' type="button"
-                                    class="bg-blue-button py-1.5 px-3 w-full rounded-xl text-white font-medium">
-                                    Add Activity
+                                class="bg-blue-button py-1.5 px-3 w-full rounded-xl text-white font-medium">
+                                Add Activity
                             </button>
                             <livewire:activity-hub targetComponent="lesson-edit-modal" />
                             <div class="w-full grid grid-cols-2 gap-2 items-center justify-center rounded-lg">
@@ -402,37 +409,6 @@
 
 
 <script>
-    const dropzone = document.getElementById('dropzone');
-    const fileInput = document.getElementById('videoUpload');
-
-    // Highlight when dragging
-    dropzone.addEventListener('dragover', (e) => {
-        e.preventDefault();
-        dropzone.classList.add('bg-blue-50', 'border-blue-500');
-    });
-
-    dropzone.addEventListener('dragleave', () => {
-        dropzone.classList.remove('bg-blue-50', 'border-blue-500');
-    });
-
-    // Handle drop
-    dropzone.addEventListener('drop', (e) => {
-        e.preventDefault();
-        dropzone.classList.remove('bg-blue-50', 'border-blue-500');
-
-        if (e.dataTransfer.files.length > 0) {
-            fileInput.files = e.dataTransfer.files;
-            fileInput.dispatchEvent(new Event('change', {
-                bubbles: true
-            }));
-        }
-    });
-
-    // Handle click
-    dropzone.addEventListener('click', () => {
-        fileInput.click();
-    });
-
     function playVideo(index, videoUrl) {
         const container = document.querySelector(`.video-container-${index}`);
         const thumb = container.querySelector(`.video-thumb-${index}`);
