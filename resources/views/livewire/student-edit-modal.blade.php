@@ -8,7 +8,7 @@
                     <div class="flex items-center gap-2">
                         <img src="{{ asset('images/form.png') }}" alt="" />
                         <h1 class="text-2xl font-semibold text-heading-dark">
-                            Education Enrollment Form
+                            Edit Education Enrollment Form
                         </h1>
                     </div>
 
@@ -147,7 +147,7 @@
                     <div class="flex items-center gap-2">
                         <img src="{{ asset('images/form.png') }}" alt="" />
                         <h1 class="text-2xl font-semibold text-heading-dark">
-                            Education Enrollment Form
+                            Edit Education Enrollment Form
                         </h1>
                     </div>
 
@@ -286,7 +286,7 @@
                     <div class="flex items-center gap-2">
                         <img src="{{ asset('images/form.png') }}" alt="" />
                         <h1 class="text-2xl font-semibold text-heading-dark">
-                            Create Student Account
+                            Edit Student Account
                         </h1>
                     </div>
 

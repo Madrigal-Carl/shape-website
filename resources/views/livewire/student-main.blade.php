@@ -86,7 +86,7 @@
                 </div>
 
                 <div
-                    class="ex gap-2 items-center bg-white py-3 px-5 rounded-full shadow-2xl text-paragraph border-2 border-white hover:border-blue-button cursor-pointer">
+                    class="flex gap-2 items-center bg-white py-3 px-5 rounded-full shadow-2xl text-paragraph border-2 border-white hover:border-blue-button cursor-pointer">
                     <span class="material-symbols-rounded">search</span>
                     <input type="text" class="outline-none w-20 focus:w-60 placeholder-paragraph"
                         wire:model.live="search" placeholder="Search">
