@@ -41,8 +41,7 @@
                     <img src="{{ asset('storage/' . $student->path) }}" alt="" class="rounded-full w-20" />
 
                     <div class="flex flex-col justify-between">
-                        <h1 class="font-medium text-xl leading-4">{{ ucwords($student->first_name) }}
-                            {{ strtoupper(substr($student->middle_name, 0, 1)) }}. {{ ucwords($student->last_name) }}
+                        <h1 class="font-medium text-xl leading-4">{{ $student->full_name }}
                         </h1>
                         <p class="text-sm text-paragraph">ID: <span>{{ $student->id }}</span></p>
                         <div class="px-2 py-0.5 rounded-lg bg-[#D2FBD0] w-fit">
@@ -134,9 +133,7 @@
                                     {{ ucwords($student->permanentAddress->province) }}</p>
                                 <p class="text-paragraph">{{ ucwords($student->profile->grade_level) }}</p>
                                 <p class="text-paragraph">{{ ucwords($student->profile->disability_type) }}</p>
-                                <p class="text-paragraph">{{ ucwords($student->guardian->first_name) }}
-                                    {{ strtoupper(substr($student->guardian->middle_name, 0, 1)) }}.
-                                    {{ ucwords($student->guardian->last_name) }}</p>
+                                <p class="text-paragraph">{{ $student->guardian->fullname }}</p>
                                 <p class="text-paragraph">{{ ucwords($student->guardian->phone_number) }}</p>
                                 <p class="text-paragraph">{{ ucwords($student->guardian->email) }}</p>
                                 <p class="text-paragraph italic">{{ ucfirst($student->profile->support_need) }}

@@ -3,7 +3,7 @@
     <div class="bg-white w-full h-full rounded-3xl px-3 pt-3 pb-6 flex flex-col gap-3">
         <div class="flex gap-2 items-center p-3">
             <span class="material-symbols-rounded text-danger">settings_alert</span>
-            <h1 class="text-xl font-semibold">Reward Logs</h1>
+            <h1 class="text-xl font-semibold">Award Feed</h1>
         </div>
 
         <!-- System Notifications -->

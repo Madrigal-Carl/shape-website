@@ -22,6 +22,7 @@ use App\Models\Question;
 use App\Models\Curriculum;
 use App\Models\Instructor;
 use App\Models\StudentQuiz;
+use App\Models\StudentAward;
 use App\Models\ActivityImage;
 use App\Models\ActivityLesson;
 use App\Models\Specialization;
@@ -150,6 +151,19 @@ class DatabaseSeeder extends Seeder
                 'owner_type' => Student::class,
                 'type' => 'current',
             ]);
+        });
+
+        $allAwards = Award::all();
+        $students->each(function ($student) use ($allAwards) {
+            // Give each student 0 to 3 random awards
+            $randomAwards = $allAwards->random(rand(0, 3));
+
+            foreach ($randomAwards as $award) {
+                StudentAward::firstOrCreate([
+                    'student_id' => $student->id,
+                    'award_id'   => $award->id,
+                ]);
+            }
         });
 
         $instructors->each(function ($instructor) {

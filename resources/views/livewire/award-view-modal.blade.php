@@ -11,97 +11,31 @@
                             <h1 class=" text-2xl font-semibold text-heading-dark">Awards View</h1>
                         </div>
                         <!-- Buttons -->
-                        <div class="flex gap-4">
-                            <button
-                                class="flex items-center bg-white py-2 px-5 rounded-full gap-2 shadow-2xl text-paragraph cursor-pointer hover:text-white hover:bg-blue-button hover:shadow-xl/35 hover:shadow-blue-button hover:scale-105">
-                                <span class="material-symbols-rounded">calendar_month</span>
-                                <p class="text-sm">Select Date</p>
-                            </button>
-                        </div>
                     </div>
 
 
                     <div class="w-full flex flex-col gap-4 items-center justify-center">
                         <img src="{{ asset('images/Awards_icons/medal.png') }}" alt="" class="h-50">
-                        <h1 class="text-5xl font-semibold text-center w-80%">Best in Math</h1>
+                        <h1 class="text-5xl font-semibold text-center w-80%">{{ $award->name }}</h1>
                     </div>
 
                     <div class="w-full flex items-center gap-4 justify-center text-xl text-paragraph">
                         <p class="font-semibold">Total Awardees:</p>
-                        <p>24</p>
+                        <p>{{ $award->awardees_count }}</p>
                     </div>
 
                     <!-- student list of awardees -->
                     <div class="w-full grid grid-cols-2 gap-2">
                         <!-- Student name tag -->
-                        <div class="w-full bg-card p-2 text-center rounded-2xl">
-                            <p class="font-semibold text-lg">Carl S. Madrigal</p>
-                        </div>
-
-                        <!-- Student name tag -->
-                        <div class="w-full bg-card p-2 text-center rounded-2xl">
-                            <p class="font-semibold text-lg">Carl S. Madrigal</p>
-                        </div>
-
-                        <!-- Student name tag -->
-                        <div class="w-full bg-card p-2 text-center rounded-2xl">
-                            <p class="font-semibold text-lg">Carl S. Madrigal</p>
-                        </div>
-
-                        <!-- Student name tag -->
-                        <div class="w-full bg-card p-2 text-center rounded-2xl">
-                            <p class="font-semibold text-lg">Carl S. Madrigal</p>
-                        </div>
-
-                        <!-- Student name tag -->
-                        <div class="w-full bg-card p-2 text-center rounded-2xl">
-                            <p class="font-semibold text-lg">Carl S. Madrigal</p>
-                        </div>
-
-                        <!-- Student name tag -->
-                        <div class="w-full bg-card p-2 text-center rounded-2xl">
-                            <p class="font-semibold text-lg">Carl S. Madrigal</p>
-                        </div>
-
-                        <!-- Student name tag -->
-                        <div class="w-full bg-card p-2 text-center rounded-2xl">
-                            <p class="font-semibold text-lg">Carl S. Madrigal</p>
-                        </div>
-
-                        <!-- Student name tag -->
-                        <div class="w-full bg-card p-2 text-center rounded-2xl">
-                            <p class="font-semibold text-lg">Carl S. Madrigal</p>
-                        </div>
-
-                        <!-- Student name tag -->
-                        <div class="w-full bg-card p-2 text-center rounded-2xl">
-                            <p class="font-semibold text-lg">Carl S. Madrigal</p>
-                        </div>
-
-                        <!-- Student name tag -->
-                        <div class="w-full bg-card p-2 text-center rounded-2xl">
-                            <p class="font-semibold text-lg">Carl S. Madrigal</p>
-                        </div>
-
-                        <!-- Student name tag -->
-                        <div class="w-full bg-card p-2 text-center rounded-2xl">
-                            <p class="font-semibold text-lg">Carl S. Madrigal</p>
-                        </div>
-
-                        <!-- Student name tag -->
-                        <div class="w-full bg-card p-2 text-center rounded-2xl">
-                            <p class="font-semibold text-lg">Carl S. Madrigal</p>
-                        </div>
-
-                        <!-- Student name tag -->
-                        <div class="w-full bg-card p-2 text-center rounded-2xl">
-                            <p class="font-semibold text-lg">Carl S. Madrigal</p>
-                        </div>
-
-                        <!-- Student name tag -->
-                        <div class="w-full bg-card p-2 text-center rounded-2xl">
-                            <p class="font-semibold text-lg">Carl S. Madrigal</p>
-                        </div>
+                        @forelse ($award->students as $student)
+                            <div class="w-full bg-card p-2 text-center rounded-2xl">
+                                <p class="font-semibold text-lg">{{ $student->full_name }}</p>
+                            </div>
+                        @empty
+                            <div class="w-full bg-card p-4 text-center rounded-2xl text-gray-400">
+                                <p class="font-semibold text-lg">No students have received this award yet.</p>
+                            </div>
+                        @endforelse
                     </div>
 
                     <div

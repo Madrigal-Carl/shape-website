@@ -123,9 +123,7 @@
                             @forelse ($students as $student)
                                 <tr>
                                     <td class="px-4 py-3 text-center text-paragraph">{{ $student->id }}</td>
-                                    <td class="px-4 py-3 text-center text-paragraph">{{ ucwords($student->first_name) }}
-                                        {{ ucfirst(Str::substr($student->middle_name, 0, 1)) }}.
-                                        {{ ucwords($student->last_name) }}</td>
+                                    <td class="px-4 py-3 text-center text-paragraph">{{ $student->full_name }}</td>
                                     <td class="px-4 py-3 text-center text-paragraph">
                                         {{ ucwords($student->profile->disability_type) }}</td>
                                     <td class="px-4 py-3 text-center text-paragraph">

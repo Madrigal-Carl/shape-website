@@ -19,6 +19,12 @@ class Instructor extends Model
         'status',
     ];
 
+    public function getFullNameAttribute()
+    {
+        $middleInitial = $this->middle_name ? strtoupper(substr($this->middle_name, 0, 1)) . '.' : '';
+        return "{$this->first_name} {$middleInitial} {$this->last_name}";
+    }
+
     public function account()
     {
         return $this->morphOne(Account::class, 'accountable');

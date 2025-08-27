@@ -20,6 +20,6 @@ class StudentAward extends Model
 
     public function award()
     {
-        return $this->belongsTo(StudentAward::class);
+        return $this->belongsTo(Award::class);
     }
 }

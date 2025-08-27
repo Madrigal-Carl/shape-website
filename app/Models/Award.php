@@ -17,4 +17,9 @@ class Award extends Model
     {
         return $this->hasMany(StudentAward::class);
     }
+
+    public function students()
+    {
+        return $this->belongsToMany(Student::class, 'student_awards');
+    }
 }
