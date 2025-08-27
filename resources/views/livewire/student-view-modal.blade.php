@@ -63,7 +63,7 @@
                             class="bg-gradient-to-tr from-blue-button to-[#00EEFF] shadow-blue-button shadow-2xl/45 p-6 text-white rounded-3xl flex flex-col justify-between gap-6">
                             <div class="">
                                 <p class="text-sm leading-snug font-normal">Earned</p>
-                                <h1 class="text-2xl font-semibold leading-6">REWARDS</h1>
+                                <h1 class="text-2xl font-semibold leading-6">AWARDS</h1>
                             </div>
                             <h1 class="text-4xl font-semibold">24</h1>
                         </div>
@@ -74,7 +74,7 @@
                                 <p class="text-sm leading-snug font-normal">Completed</p>
                                 <h1 class="text-2xl font-semibold leading-6">LESSONS</h1>
                             </div>
-                            <h1 class="text-4xl font-semibold">24</h1>
+                            <h1 class="text-4xl font-semibold">{{ $student->completed_lessons_count }}</h1>
                         </div>
 
                         <div
@@ -85,7 +85,7 @@
                                     ACTIVITIES
                                 </h1>
                             </div>
-                            <h1 class="text-4xl font-semibold">24</h1>
+                            <h1 class="text-4xl font-semibold">{{ $student->completed_activities_count }}</h1>
                         </div>
 
                         <div
@@ -96,28 +96,12 @@
                                     QUIZZES
                                 </h1>
                             </div>
-                            <h1 class="text-4xl font-semibold">24</h1>
+                            <h1 class="text-4xl font-semibold">{{ $student->completed_quiz }}</h1>
                         </div>
                     </div>
                 </div>
 
                 <div class="flex flex-col gap-4">
-                    <!-- Account Info -->
-                    <div class="flex flex-col gap-4 border-1 border-gray-300 p-6 rounded-2xl">
-                        <h1 class="text-2xl font-medium">Account Info</h1>
-                        <div class="grid grid-cols-4 gap-4">
-                            <div class="col-span-1 flex flex-col gap-1">
-                                <p class="font-medium">Username:</p>
-                                <p class="font-medium">Password:</p>
-                            </div>
-
-                            <div class="col-span-3 flex flex-col gap-1">
-                                <p class="text-paragraph">exampleUsername</p>
-                                <p class="text-paragraph">examplePassword</p>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- End of Account Info -->
 
                     <!-- Basic Info -->
                     <div class="flex flex-col gap-4 border-1 border-gray-300 p-6 rounded-2xl">
