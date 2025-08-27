@@ -91,7 +91,7 @@
                                     <td class="px-4 py-3 text-center text-paragraph">
                                         {{ ucwords($lesson->lessonSubjectStudents->first()->curriculumSubject->curriculum->name) }}
                                     </td>
-                                    <td class="px-4 py-3 text-center">
+                                    <td class="px-4 py-3 text-center text-paragraph">
                                         {{ ucwords($lesson->lessonSubjectStudents->first()->curriculumSubject->subject->name) }}
                                     </td>
                                     <td class="px-4 py-3 text-center text-paragraph">{{ $lesson->lesson_subject_students_count }}</td>

@@ -61,7 +61,7 @@
                         <h2 class="font-medium text-lg">Interactive Video Lessons</h2>
                         <div class="flex flex-col gap-2">
                             <!-- Video Container -->
-                            <div class="flex grid-cols-2 gap-2">
+                            <div class="grid grid-cols-2 gap-2">
                                 @foreach ($lesson->videos as $i => $video)
                                     <div class="flex flex-col gap-2 relative group video-container-{{ $i }}">
                                         <div class="flex flex-col items-center justify-center">
@@ -97,13 +97,13 @@
                         <!-- Game container -->
                         <div class="w-full grid grid-cols-2 gap-2 items-center justify-center rounded-lg">
                             @foreach ($lesson->activityLessons as $act)
-                                <div class="flex w-full justify-between bg-card p-2 rounded-lg">
+                                <div class="flex w-full justify-between bg-card p-2 rounded-lg col-span-1">
                                     <div class="flex gap-2">
                                         <img src="{{ $act->activity->path }}" alt=""
                                             class="h-12 rounded-md aspect-square object-cover">
                                         <div>
                                             <h1 class="font-medium">{{ $act->activity->name }}</h1>
-                                            <p class="text-sm text-paragraph">
+                                            <p class="text-sm text-paragraph truncate w-60">
                                                 {{ $act->activity->specializations->pluck('name')->map(fn($s) => ucwords($s))->join(', ') }}
                                             </p>
                                         </div>
