@@ -5,7 +5,7 @@
         class="w-96 flex flex-col gap-10 bg-[#ffffffc7] p-10 rounded-3xl backdrop-blur-lg shadow-2xl">
         <!-- logo -->
         <div class="flex flex-col items-center gap-2">
-            <img class="w-40" src="{{ asset('images/main-logo.png') }}" alt="" />
+            <img class="w-40" src="{{asset('images/Shape-logo-w-text.png')}}" alt="" />
             <h1 class="font-normal text-xl">Login</h1>
         </div>
 

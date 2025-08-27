@@ -94,11 +94,11 @@
                                     <td class="px-4 py-3 text-center">
                                         {{ ucwords($lesson->lessonSubjectStudents->first()->curriculumSubject->subject->name) }}
                                     </td>
-                                    <td class="px-4 py-3 text-center">{{ $lesson->lesson_subject_students_count }}</td>
-                                    <td class="px-4 py-3 text-center">{{ $lesson->videos_count }}</td>
-                                    <td class="px-4 py-3 text-center">{{ $lesson->activity_lessons_count }}</td>
-                                    <td class="px-4 py-3 text-center">{{ $lesson->quiz_count }}</td>
-                                    <td class="px-4 py-3 text-center">
+                                    <td class="px-4 py-3 text-center text-paragraph">{{ $lesson->lesson_subject_students_count }}</td>
+                                    <td class="px-4 py-3 text-center text-paragraph">{{ $lesson->videos_count }}</td>
+                                    <td class="px-4 py-3 text-center text-paragraph">{{ $lesson->activity_lessons_count }}</td>
+                                    <td class="px-4 py-3 text-center text-paragraph">{{ $lesson->quiz_count }}</td>
+                                    <td class="px-4 py-3 text-center text-paragraph">
                                         <div class="flex justify-center items-center gap-1 text-white">
                                             <button wire:click='openEditLessonModal({{ $lesson->id }})'
                                                 class="bg-danger px-2 py-1 flex gap-2 items-center rounded-lg cursor-pointer hover:scale-110 min-w-[50px] justify-center relative">

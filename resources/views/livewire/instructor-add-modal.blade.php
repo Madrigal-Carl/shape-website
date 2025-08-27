@@ -8,8 +8,8 @@
                     class="bg-white rounded-3xl shadow-2xl w-full max-w-xl p-8 flex flex-col gap-8 animate-fade-in">
                     <!-- Header -->
                     <div class="flex items-center gap-2">
-                        <img src="../src/images/form.png" alt="" class="w-6 h-6" />
-                        <h1 class="text-3xl font-bold text-heading-dark">Teachers Form</h1>
+                        <img src="{{asset('images/form.png')}}" alt=""/>
+                        <h1 class="text-2xl font-semibold text-heading-dark">Edit Teacher's Form</h1>
                     </div>
 
                     <!-- Upload Photo -->
@@ -29,27 +29,27 @@
                         <h2 class="font-semibold text-lg">Teachers Information</h2>
 
                         <input type="text" placeholder="License Number"
-                            class="px-4 py-2 rounded-lg bg-gray-100 placeholder-gray-400 outline-none w-full" />
+                            class="px-4 py-2 rounded-lg bg-gray-100 placeholder:text-paragraph outline-none w-full" />
 
                         <div class="flex flex-col sm:flex-row gap-2">
                             <input type="text" placeholder="First name"
-                                class="px-4 py-2 rounded-lg bg-gray-100 placeholder-gray-400 outline-none w-full" />
+                                class="px-4 py-2 rounded-lg bg-gray-100 placeholder:text-paragraph outline-none w-full" />
                             <input type="text" placeholder="Middle name"
-                                class="px-4 py-2 rounded-lg bg-gray-100 placeholder-gray-400 outline-none w-full" />
+                                class="px-4 py-2 rounded-lg bg-gray-100 placeholder:text-paragraph outline-none w-full" />
                             <input type="text" placeholder="Last name"
-                                class="px-4 py-2 rounded-lg bg-gray-100 placeholder-gray-400 outline-none w-full" />
+                                class="px-4 py-2 rounded-lg bg-gray-100 placeholder:text-paragraph outline-none w-full" />
                         </div>
 
                         <div class="relative">
                             <input type="text" placeholder="Birthdate"
-                                class="px-4 py-2 rounded-lg bg-gray-100 placeholder-gray-400 outline-none w-full"
+                                class="px-4 py-2 rounded-lg bg-gray-100 placeholder:text-paragraph outline-none w-full"
                                 onfocus="this.type='date'" onblur="if(!this.value)this.type='text'" />
                             <span
-                                class="material-symbols-rounded absolute right-3 top-2.5 text-gray-500">calendar_today</span>
+                                class="material-symbols-rounded absolute right-3 top-2.5 text-paragraph">calendar_today</span>
                         </div>
 
                         <div class="px-4 py-2 rounded-lg bg-card">
-                            <select class="rounded-lg text-gray-500 outline-none w-full">
+                            <select class="rounded-lg text-paragraph outline-none w-full">
                                 <option disabled selected>Sex</option>
                                 <option>Male</option>
                                 <option>Female</option>
@@ -57,7 +57,7 @@
                         </div>
 
                         <div class="px-4 py-2 rounded-lg bg-card">
-                            <select class="rounded-lg text-gray-500 outline-none w-full">
+                            <select class="rounded-lg text-paragraph outline-none w-full">
                                 <option disabled selected>Grade Level</option>
                                 <option>Kindergarten</option>
                                 <option>Grade 1</option>
@@ -67,7 +67,7 @@
                         </div>
 
                         <div class="px-4 py-2 rounded-lg bg-card">
-                            <select class="rounded-lg text-gray-500 outline-none w-full">
+                            <select class="rounded-lg text-paragraph outline-none w-full">
                                 <option disabled selected>Specialization</option>
                                 <option>Math</option>
                                 <option>English</option>
@@ -80,11 +80,11 @@
                     <!-- Action Buttons -->
                     <div class="flex gap-4">
                         <button id="cancelBtn" type="button" wire:click='closeModal'
-                            class="bg-blue-600 hover:bg-blue-700 py-2 px-4 w-full rounded-xl text-white font-semibold transition">
+                            class="bg-gray-100 py-2 px-4 w-full rounded-xl text-heading-dark font-medium transition">
                             Cancel
                         </button>
                         <button wire:click="nextStep" type="button"
-                            class="bg-red-500 hover:bg-red-600 py-2 px-4 w-full rounded-xl text-white font-semibold transition"
+                            class="bg-blue-button py-2 px-4 w-full rounded-xl text-white font-medium transition"
                             id="nextBtn">
                             Next
                         </button>
@@ -97,9 +97,9 @@
                 <div id="secondForm"
                     class="bg-white rounded-3xl shadow-2xl w-full max-w-xl p-8 flex-col gap-8 animate-fade-in flex">
                     <div class="flex items-center gap-2">
-                        <img src="../src/images/form.png" alt="" />
+                        <img src="{{asset('images/form.png')}}" alt="" />
                         <h1 class="text-2xl font-semibold text-heading-dark">
-                            Education Enrollment Form
+                            Edit Teacher's Form
                         </h1>
                     </div>
                     <!-- Permanent Address -->
@@ -129,7 +129,7 @@
                             <!-- Barangay (searchable) -->
                             <div class="px-2 py-1 rounded-lg bg-card w-full">
                                 <input list="perm-brgy-list" id="perm-brgy"
-                                    class="w-full outline-none text-paragraph px-3 py-2 rounded-lg"
+                                    class="w-full outline-none text-paragraph px-3 py-2 rounded-lg placeholder:text-paragraph"
                                     placeholder="Barangay" />
                                 <datalist id="perm-brgy-list"></datalist>
                             </div>
@@ -150,7 +150,7 @@
                             <!-- Municipality -->
                             <div class="px-2 py-1 rounded-lg bg-card w-full">
                                 <select id="curr-muni" class="w-full outline-none text-paragraph">
-                                    <option disabled selected>Municipality</option>
+                                    <option disabled selected class="">Municipality</option>
                                     <option value="Boac">Boac</option>
                                     <option value="Mogpog">Mogpog</option>
                                     <option value="Gasan">Gasan</option>
@@ -163,7 +163,7 @@
                             <!-- Barangay (searchable) -->
                             <div class="px-2 py-1 rounded-lg bg-card w-full">
                                 <input list="curr-brgy-list" id="curr-brgy"
-                                    class="w-full outline-none text-paragraph px-3 py-2 rounded-lg"
+                                    class="w-full outline-none text-paragraph px-3 py-2 rounded-lg placeholder:text-paragraph"
                                     placeholder="Barangay" />
                                 <datalist id="curr-brgy-list"></datalist>
                             </div>
@@ -183,7 +183,7 @@
                     <!-- buttons -->
                     <div class="flex items-center gap-2">
                         <button id="cancelSecondBtn" type="button" wire:click='closeModal'
-                            class="bg-blue-button py-1.5 px-3 w-full rounded-xl text-white font-medium">
+                            class="bg-gray-100 py-1.5 px-3 w-full rounded-xl text-heading-dark font-medium">
                             Cancel
                         </button>
                         <button id="prevBtn" type="button" wire:click="previousStep"
@@ -191,7 +191,7 @@
                             Prev
                         </button>
                         <button id="submitBtn" type="button" wire:click='addInstructor'
-                            class="bg-danger py-1.5 px-3 w-full rounded-xl text-white font-medium">
+                            class="bg-blue-button py-1.5 px-3 w-full rounded-xl text-white font-medium">
                             Submit
                         </button>
                     </div>

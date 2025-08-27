@@ -2,7 +2,7 @@
     @if ($isOpen)
         <section class="bg-black/30 fixed w-dvw h-dvh p-10 top-0 left-0 z-50 backdrop-blur-xs flex justify-center gap-6">
             <!-- Lessson View Info-->
-            <div class="w-150 h-full Addlesson bg-white py-8 rounded-4xl relative flex">
+            <div class="w-180 h-full Addlesson bg-white py-8 rounded-4xl relative flex">
                 <div
                     class="Addlesson w-full h-full flex flex-col pr-8 pl-8 pb-18 gap-8 self-center-safe overflow-y-auto">
                     <div class="flex items-center gap-4">
@@ -25,29 +25,29 @@
                         </div>
 
                         <div class="border-1 border-gray-300 p-6 rounded-3xl w-full flex flex-col gap-2">
-                            <div class="flex items-center w-auto">
-                                <h3 class="text-sm font-semibold w-30">Subject:</h3>
-                                <p class="text-sm">{{ $lesson->lessonSubjectStudents->first()->subject->name }}</p>
+                            <div class="flex items-center w-auto gap-4">
+                                <h3 class="text-sm font-semibold w-40">Subject:</h3>
+                                <p class="text-sm w-full">{{ $lesson->lessonSubjectStudents->first()->subject->name }}</p>
                             </div>
 
-                            <div class="flex items-center w-auto">
-                                <h3 class="text-sm font-semibold w-30">Curriculum:</h3>
-                                <p class="text-sm">{{ $lesson->lessonSubjectStudents->first()->curriculum->name }}</p>
+                            <div class="flex items-center w-auto gap-4">
+                                <h3 class="text-sm font-semibold w-40">Curriculum:</h3>
+                                <p class="text-sm w-full">{{ $lesson->lessonSubjectStudents->first()->curriculum->name }}</p>
                             </div>
 
-                            <div class="flex items-center w-auto">
-                                <h3 class="text-sm font-semibold w-30">No. of Videos:</h3>
-                                <p class="text-sm">{{ count($lesson->videos) }}</p>
+                            <div class="flex items-center w-auto gap-4">
+                                <h3 class="text-sm font-semibold w-40">No. of Videos:</h3>
+                                <p class="text-sm w-full">{{ count($lesson->videos) }}</p>
                             </div>
 
-                            <div class="flex items-center w-auto">
-                                <h3 class="text-sm font-semibold w-30">No. of Activity:</h3>
-                                <p class="text-sm">{{ count($lesson->activityLessons) }}</p>
+                            <div class="flex items-center w-auto gap-4">
+                                <h3 class="text-sm font-semibold w-40">No. of Activity:</h3>
+                                <p class="text-sm w-full">{{ count($lesson->activityLessons) }}</p>
                             </div>
 
-                            <div class="flex items-center w-auto">
-                                <h3 class="text-sm font-semibold w-30">No. of Quizzes:</h3>
-                                <p class="text-sm">1</p>
+                            <div class="flex items-center w-auto gap-4">
+                                <h3 class="text-sm font-semibold w-40">No. of Quizzes:</h3>
+                                <p class="text-sm w-full">1</p>
                             </div>
                         </div>
                     </div>
@@ -80,7 +80,7 @@
                                         <div
                                             class="absolute bottom-0 bg-gradient-to-t from-black/80 via-black/0 to-black/0 w-full h-full rounded-lg">
                                             <div class="h-full w-full flex items-end justify-between p-3">
-                                                <h1 class="text-white font-medium text-sm ml-1">{{ $video->title }}</h1>
+                                                <h1 class="text-white font-medium text-sm ml-1 w-full truncate">{{ $video->title }}</h1>
                                             </div>
                                         </div>
                                     </div>

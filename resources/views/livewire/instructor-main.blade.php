@@ -58,7 +58,7 @@
                 <h1 class="text-5xl font-semibold leading-none">23</h1>
                 <div class="flex flex-col justify-center">
                     <p class="text-sm font-normal leading-tight">Teachers</p>
-                    <h2 class="text-xl font-bold leading-tight">REGISTERED</h2>
+                    <h2 class="text-xl font-semibold leading-tight">REGISTERED</h2>
                 </div>
             </div>
 
@@ -68,7 +68,7 @@
                 <h1 class="text-5xl font-semibold leading-none">09</h1>
                 <div class="flex flex-col justify-center">
                     <p class="text-sm font-normal leading-tight">Teachers for</p>
-                    <h2 class="text-xl font-bold leading-tight">AUTISM</h2>
+                    <h2 class="text-xl font-semibold leading-tight">AUTISM</h2>
                 </div>
             </div>
 
@@ -78,7 +78,7 @@
                 <h1 class="text-5xl font-semibold leading-none">08</h1>
                 <div class="flex flex-col justify-center">
                     <p class="text-sm font-normal leading-tight">Teachers for</p>
-                    <h2 class="text-xl font-bold leading-tight">HEARING IMPAIRED</h2>
+                    <h2 class="text-xl font-semibold leading-tight">HEARING IMPAIRED</h2>
                 </div>
             </div>
 
@@ -88,7 +88,7 @@
                 <h1 class="text-5xl font-semibold leading-none">06</h1>
                 <div class="flex flex-col justify-center">
                     <p class="text-sm font-normal leading-tight">Teachers for</p>
-                    <h2 class="text-xl font-bold leading-tight">SPEECH IMPAIRED</h2>
+                    <h2 class="text-xl font-semibold leading-tight">SPEECH IMPAIRED</h2>
                 </div>
             </div>
         </div>

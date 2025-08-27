@@ -100,7 +100,7 @@
                         <div class="flex flex-col gap-3">
                             <h2 class="font-medium text-lg">Interactive Video Lessons</h2>
                             <div class="flex flex-col gap-2">
-                                <div class="flex items-center h-24 justify-center gap-2 px-6 py-3 border-1 border-dashed rounded-lg w-full hover:text-blue-button"
+                                <div class="flex items-center h-24 justify-center gap-2 px-6 py-3 border-1 border-dashed border-gray-300 rounded-lg w-full hover:text-blue-button hover:border-blue-button"
                                     id="dropzone">
                                     <label for="videoUpload" class="cursor-pointer flex items-center gap-2">
                                         <h1>Drop or Click to Upload Video</h1>
@@ -181,14 +181,14 @@
 
                         <div class="flex flex-col gap-3">
                             <h2 class="font-medium text-lg">Activities</h2>
-
-
-                            <div class="w-full grid grid-cols-1 gap-2 items-center justify-center rounded-lg">
-                                <button wire:click='openActivityHub' type="button"
+                            <livewire:activity-hub targetComponent="lesson-add-modal" />
+                            <button wire:click='openActivityHub' type="button"
                                     class="bg-blue-button py-1.5 px-3 w-full rounded-xl text-white font-medium">
                                     Add Activity
-                                </button>
-                                <livewire:activity-hub targetComponent="lesson-add-modal" />
+                            </button>
+                            <div class="w-full grid grid-cols-2 gap-2 rounded-lg">
+
+
                                 @forelse ($selected_activities as $i => $act)
                                     <div wire:key="activity-{{ $i }}"
                                         class="flex w-full justify-between bg-card p-2 rounded-lg">
@@ -214,6 +214,7 @@
                                         <h1 class="text-paragraph">No Activity added</h1>
                                     </div>
                                 @endforelse
+
                             </div>
                         </div>
                     </div>

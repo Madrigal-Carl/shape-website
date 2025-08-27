@@ -9,7 +9,7 @@
                         <div class="flex items-center gap-2">
                             <img src="{{ asset('images/cube.png') }}" alt="" />
                             <h1 class="text-2xl font-semibold text-heading-dark">
-                                Add Lesson
+                                Edit Lesson
                             </h1>
                         </div>
 
@@ -120,7 +120,7 @@
                         <div class="flex flex-col gap-3">
                             <h2 class="font-medium text-lg">Interactive Video Lessons</h2>
                             <div class="flex flex-col gap-2">
-                                <div class="flex items-center h-24 justify-center gap-2 px-6 py-3 border-1 border-dashed rounded-lg w-full hover:text-blue-button"
+                                <div class="flex items-center h-24 justify-center gap-2 px-6 py-3 border-1 border-dashed border-gray-300 rounded-lg w-full hover:text-blue-button hover:border-blue-button"
                                     id="dropzone">
                                     <label for="videoUpload" class="cursor-pointer flex items-center gap-2">
                                         <h1>Drop or Click to Upload Video</h1>
@@ -251,7 +251,7 @@
                         <div class="flex items-center gap-2">
                             <img src="{{ asset('images/quizzes.png') }}" alt="" />
                             <h1 class="text-2xl font-semibold text-heading-dark">
-                                Create Quiz
+                                Edit Quiz
                             </h1>
                         </div>
 

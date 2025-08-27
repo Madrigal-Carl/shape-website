@@ -169,7 +169,7 @@
                     fill: { opacity: 1 },
                     tooltip: { y: { formatter: val => `$ ${val} thousands` } },
                 };
-            
+
                 var chart = new ApexCharts(document.querySelector('#Barchart'), options);
                 chart.render();
             }">
@@ -195,7 +195,7 @@
                         }
                     }]
                 };
-            
+
                 var chart = new ApexCharts(document.querySelector('#Piechart'), options);
                 chart.render();
             }">
@@ -234,7 +234,7 @@
                         x: { format: 'dd/MM/yy HH:mm' }
                     }
                 };
-            
+
                 var chart = new ApexCharts(document.querySelector('#Linechart'), options);
                 chart.render();
             }">
