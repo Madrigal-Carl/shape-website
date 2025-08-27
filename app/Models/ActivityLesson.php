@@ -25,8 +25,8 @@ class ActivityLesson extends Model
         return $this->belongsTo(Activity::class);
     }
 
-    public function logs()
+    public function studentActivities()
     {
-        return $this->morphMany(Log::class, 'loggable');
+        return $this->hasMany(StudentActivity::class);
     }
 }

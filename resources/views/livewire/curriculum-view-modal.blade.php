@@ -39,7 +39,7 @@
                         <div class="flex items-center w-auto">
                             <h3 class="text-sm font-semibold w-25">Specialize:</h3>
                             <p class="text-sm">
-                                {{ collect($curriculum->specialization)->map(fn($s) => ucfirst(explode(' ', $s)[0]))->implode(', ') }}
+                                {{ collect($curriculum->specializations)->map(fn($s) => ucfirst(explode(' ', $s->name)[0]))->implode(', ') }}
                             </p>
                         </div>
 

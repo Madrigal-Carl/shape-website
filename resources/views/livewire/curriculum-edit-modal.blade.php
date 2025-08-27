@@ -18,9 +18,6 @@
                         <div class="px-2 py-1 rounded-lg bg-card">
                             <select wire:change="$set('edit_grade_level', $event.target.value)"
                                 class="w-full outline-none text-paragraph">
-                                <option class="text-sm text-black" selected disabled>
-                                    {{ ucfirst($edit_grade_level) }}
-                                </option>
                                 @foreach ($grade_levels as $grade_level)
                                     @if ($edit_grade_level === $grade_level)
                                         <option value="{{ $edit_grade_level }}" class="text-sm text-paragraph">

@@ -20,9 +20,9 @@
                                     class="px-3 py-1 rounded-lg bg-card placeholder-paragraph outline-none w-full" />
 
                                 <div class="px-2 py-1 rounded-lg bg-card">
-                                    <select wire:change="$set('grade_level', $event.target.value)" name=""
-                                        id="" class="w-full outline-none text-paragraph">
-                                        <option value="pending" class="text-sm text-black" selected disabled>
+                                    <select wire:model.live="grade_level" name="" id=""
+                                        class="w-full outline-none text-paragraph">
+                                        <option value="" class="text-sm text-black" selected disabled>
                                             Grade & Section
                                         </option>
                                         @foreach ($grade_levels as $grade_level)
@@ -34,10 +34,9 @@
                                 </div>
                                 <div class="flex items-center gap-2 w-full">
                                     <div class="px-2 py-1 rounded-lg bg-card w-full">
-                                        <select name="" id=""
-                                            wire:change="$set('curriculum', $event.target.value)"
-                                            class="w-full outline-none text-paragraph">
-                                            <option value="pending" class="text-sm text-black" selected disabled>
+                                        <select name="" id="" wire:model.live="curriculum"
+                                            wire:key="{{ $grade_level }}" class="w-full outline-none text-paragraph">
+                                            <option value="" class="text-sm text-black" selected disabled>
                                                 Curriculum
                                             </option>
                                             @foreach ($curriculums as $curriculum)
@@ -50,10 +49,9 @@
                                 </div>
                                 <div class="flex items-center gap-2 w-full">
                                     <div class="px-2 py-1 rounded-lg bg-card w-full">
-                                        <select name="" id=""
-                                            wire:change="$set('subject', $event.target.value)"
-                                            class="w-full outline-none text-paragraph">
-                                            <option value="pending" class="text-sm text-black" selected disabled>
+                                        <select name="" id="" wire:model.live="subject"
+                                            wire:key="{{ $curriculum }}" class="w-full outline-none text-paragraph">
+                                            <option value="" class="text-sm text-black" selected disabled>
                                                 Subject
                                             </option>
                                             @foreach ($subjects as $subject)
@@ -66,15 +64,15 @@
                                 </div>
 
                                 <div class="px-2 py-1 rounded-lg bg-card">
-                                    <select name="" id=""
-                                        wire:change="$set('selected_student', $event.target.value)"
-                                        class="w-full outline-none text-paragraph">
-                                        <option class="text-sm text-black" selected disabled>
+                                    <select name="" id="" wire:model.live="selected_student"
+                                        wire:key="{{ $curriculum }}" class="w-full outline-none text-paragraph">
+                                        <option value="" class="text-sm text-black" selected disabled>
                                             Select Student (Optional)
                                         </option>
                                         @foreach ($students as $student)
                                             <option value="{{ $student->id }}" class="text-sm text-paragraph">
-                                                {{ ucwords($student->last_name) }}, {{ ucwords($student->first_name) }}
+                                                {{ ucwords($student->last_name) }},
+                                                {{ ucwords($student->first_name) }}
                                             </option>
                                         @endforeach
                                     </select>

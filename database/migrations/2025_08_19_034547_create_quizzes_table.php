@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('lesson_id')->constrained()->onDelete('cascade');
             $table->string('title');
             $table->text('description')->nullable();
-            $table->string('path');
+            $table->string('path')->default('images/default-img-holder.png');
             $table->unsignedInteger('score')->nullable();
             $table->timestamps();
         });

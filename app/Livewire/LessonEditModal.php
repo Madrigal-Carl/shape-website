@@ -3,9 +3,7 @@
 namespace App\Livewire;
 
 use FFMpeg\FFMpeg;
-use App\Models\Quiz;
 use App\Models\Lesson;
-use App\Models\Profile;
 use App\Models\Student;
 use App\Models\Subject;
 use Livewire\Component;
@@ -16,7 +14,6 @@ use Livewire\Attributes\On;
 use Livewire\WithFileUploads;
 use FFMpeg\Coordinate\TimeCode;
 use App\Models\CurriculumSubject;
-use App\Models\LessonSubjectStudent;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
@@ -24,11 +21,11 @@ use Illuminate\Validation\ValidationException;
 class LessonEditModal extends Component
 {
     use WithFileUploads;
-    public $subjects, $grade_levels, $students, $activities, $curriculums, $youtube_link, $selected_student, $curriculum_id, $subject_id;
+    public $subjects, $grade_levels, $students, $activities, $curriculums, $youtube_link, $selected_student = '', $curriculum_id, $subject_id;
     public $videos = [];
     public $lesson_id = null;
     public $isOpen = false;
-    public $lesson_name, $curriculum, $subject, $grade_level, $description, $quiz_name, $quiz_description;
+    public $lesson_name, $curriculum = '', $subject = '', $grade_level = '', $description, $quiz_name, $quiz_description;
     public $uploadedVideos = [], $selected_activities = [], $selected_students = [], $questions = [];
     public $original = [];
 
@@ -48,6 +45,18 @@ class LessonEditModal extends Component
         $this->subject_id = $lesson->lessonSubjectStudents->first()->curriculumSubject->subject->id;
         $this->selected_students = $lesson->students->pluck('id')->toArray();
         $this->description = $lesson->description;
+
+        $this->students = Auth::user()->accountable->students()
+            ->where('status', 'active')
+            ->whereHas('profile', function ($query) {
+                $query->where('grade_level', $this->grade_level);
+            })
+            ->whereHas('profile', function ($query) {
+                $query->whereIn('disability_type', Curriculum::find($this->curriculum_id)
+                    ->specializations()
+                    ->pluck('name'));
+            })
+            ->get();
 
         $this->uploadedVideos = $lesson->videos->map(function ($video) {
             return [
@@ -346,10 +355,13 @@ class LessonEditModal extends Component
         $curriculumSubject = CurriculumSubject::where('subject_id', $this->subject_id)
             ->where('curriculum_id', $this->curriculum_id)
             ->first();
+        $studentsToAssign = empty($this->selected_students)
+            ? $this->students
+            : Student::whereIn('id', $this->selected_students)->get();
 
-        foreach ($this->selected_students as $studentId) {
+        foreach ($studentsToAssign as $student) {
             $lesson->lessonSubjectStudents()->create([
-                'student_id' => $studentId,
+                'student_id' => $student->id,
                 'curriculum_subject_id' => $curriculumSubject->id,
                 'lesson_id'  => $lesson->id,
             ]);
@@ -465,21 +477,39 @@ class LessonEditModal extends Component
     public function updatedGradeLevel()
     {
         $this->curriculums = Curriculum::where('instructor_id', Auth::id())->where('grade_level', $this->grade_level)->where('status', 'active')->get();
-        $this->students = Auth::user()->accountable->students()
-            ->where('status', 'active')
-            ->whereHas('profile', function ($query) {
-                $query->where('grade_level', $this->grade_level);
-            })
-            ->get();
-        $this->selected_students = [];
+        if (!empty($this->selected_students)) {
+            $this->selected_students = [];
+        }
+        $this->curriculum = '';
+        $this->subject = '';
+        $this->selected_student = '';
+        $this->subjects = collect();
+        $this->students = collect();
     }
 
     public function updatedCurriculum()
     {
-        $this->curriculum_id = $this->curriculum;
-        $this->subjects = Subject::whereHas('curriculumSubjects', function ($query) {
-            $query->where('curriculum_id', $this->curriculum_id);
-        })->get();
+        if ($this->curriculum != '') {
+            if (!empty($this->selected_students)) {
+                $this->selected_students = [];
+            }
+            $this->subject = '';
+            $this->selected_student = '';
+            $this->subjects = Subject::whereHas('curriculumSubjects', function ($query) {
+                $query->where('curriculum_id', $this->curriculum_id);
+            })->get();
+            $this->students = Auth::user()->accountable->students()
+                ->where('status', 'active')
+                ->whereHas('profile', function ($query) {
+                    $query->where('grade_level', $this->grade_level);
+                })
+                ->whereHas('profile', function ($query) {
+                    $query->whereIn('disability_type', Curriculum::find($this->curriculum_id)
+                        ->specializations()
+                        ->pluck('name'));
+                })
+                ->get();
+        }
     }
 
     public function render()
@@ -496,12 +526,6 @@ class LessonEditModal extends Component
         $this->subjects = Subject::whereHas('curriculumSubjects', function ($query) {
             $query->where('curriculum_id', $this->curriculum_id);
         })->get();
-        $this->students = Auth::user()->accountable->students()
-            ->where('status', 'active')
-            ->whereHas('profile', function ($query) {
-                $query->where('grade_level', $this->grade_level);
-            })
-            ->get();
         return view('livewire.lesson-edit-modal');
     }
 }

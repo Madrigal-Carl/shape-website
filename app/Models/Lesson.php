@@ -46,15 +46,39 @@ class Lesson extends Model
     }
     public function isCompletedByStudent($studentId)
     {
+        // Check quiz
         if ($this->quiz) {
-            $log = $this->quiz->logs()->where('student_id', $studentId)->latest('attempt_number')->first();
+            $studentQuiz = $this->quiz->studentQuizzes()
+                ->where('student_id', $studentId)
+                ->first();
+
+            if (!$studentQuiz) {
+                return false;
+            }
+
+            $log = $studentQuiz->logs()
+                ->latest('attempt_number')
+                ->first();
+
             if (!$log || $log->status !== 'completed') {
                 return false;
             }
         }
 
+        // Check activities
         foreach ($this->activityLessons as $activityLesson) {
-            $log = $activityLesson->logs()->where('student_id', $studentId)->latest('attempt_number')->first();
+            $studentActivity = $activityLesson->studentActivities()
+                ->where('student_id', $studentId)
+                ->first();
+
+            if (!$studentActivity) {
+                return false;
+            }
+
+            $log = $studentActivity->logs()
+                ->latest('attempt_number')
+                ->first();
+
             if (!$log || $log->status !== 'completed') {
                 return false;
             }
@@ -62,4 +86,5 @@ class Lesson extends Model
 
         return true;
     }
+
 }

@@ -66,48 +66,63 @@ class Student extends Model
         );
     }
 
-    public function getTotalLessonsCountAttribute() {
+    public function getTotalLessonsCountAttribute()
+    {
         return $this->lessonSubjectStudents->count();
     }
 
-    // Completed lessons count
-    public function getCompletedLessonsCountAttribute() {
-        return $this->lessonSubjectStudents->filter(function($lss) {
+    public function getCompletedLessonsCountAttribute()
+    {
+        return $this->lessonSubjectStudents->filter(function ($lss) {
             return $lss->lesson->isCompletedByStudent($this->id);
         })->count();
     }
 
-    // Total quizzes count
     public function getTotalQuizzesCountAttribute()
     {
-        return $this->lessonSubjectStudents->filter(fn ($lss) => $lss->lesson->quiz !== null)->count();
-    }
-
-    // Completed quizzes count
-    public function getCompletedQuizzesCountAttribute()
-    {
         return $this->lessonSubjectStudents->filter(function ($lss) {
-            $quiz = $lss->lesson->quiz;
-            if (!$quiz) return false;
-
-            $log = $quiz->latestLogForStudent($this->id);
-            return $log && $log->status === 'completed';
+            return $lss->lesson->quiz !== null;
         })->count();
     }
 
-    // Total activities count
-    public function getTotalActivitiesCountAttribute() {
-        return $this->lessonSubjectStudents->sum(function($lss) {
+    public function getCompletedQuizAttribute()
+    {
+        return $this->lessonSubjectStudents->sum(function ($lss) {
+            $quiz = $lss->lesson->quiz;
+            if (!$quiz) return 0;
+
+            $studentQuiz = $quiz->studentQuizzes()
+                ->where('student_id', $this->id)
+                ->first();
+
+            if (!$studentQuiz) return 0;
+
+            $log = $studentQuiz->logs()
+                ->latest('attempt_number')
+                ->first();
+
+            return ($log && $log->status === 'completed') ? 1 : 0;
+        });
+    }
+
+    public function getTotalActivitiesCountAttribute()
+    {
+        return $this->lessonSubjectStudents->sum(function ($lss) {
             return $lss->lesson->activityLessons->count();
         });
     }
 
-    // Completed activities count
-    public function getCompletedActivitiesCountAttribute() {
-        return $this->lessonSubjectStudents->sum(function($lss) {
-            return $lss->lesson->activityLessons->filter(function($activityLesson) {
-                $log = $activityLesson->logs()
+    public function getCompletedActivitiesCountAttribute()
+    {
+        return $this->lessonSubjectStudents->sum(function ($lss) {
+            return $lss->lesson->activityLessons->filter(function ($activityLesson) {
+                $studentActivity = $activityLesson->studentActivities()
                     ->where('student_id', $this->id)
+                    ->first();
+
+                if (!$studentActivity) return false;
+
+                $log = $studentActivity->logs()
                     ->latest('attempt_number')
                     ->first();
 

@@ -135,7 +135,7 @@
                                         {{ $student->completed_activities_count }}/{{ $student->total_activities_count }}
                                     </td>
                                     <td class="px-4 py-3 text-center text-paragraph">
-                                        {{ $student->completed_quizzes_count }}/{{ $student->total_quizzes_count }}
+                                        {{ $student->completed_quiz }}/{{ $student->total_quizzes_count }}
                                     </td>
                                     <td class="px-4 py-3 text-center">
                                         <div class="flex justify-center items-center">

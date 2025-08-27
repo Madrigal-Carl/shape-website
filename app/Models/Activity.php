@@ -30,16 +30,6 @@ class Activity extends Model
         return $this->hasOne(ActivityLesson::class);
     }
 
-    public function latestLogForStudent($studentId)
-    {
-        if (!$this->activityLesson) return null;
-
-        return $this->activityLesson->logs()
-            ->where('student_id', $studentId)
-            ->latest('attempt_number')
-            ->first();
-    }
-
     public function activityImages()
     {
         return $this->hasMany(ActivityImage::class);

@@ -20,12 +20,14 @@ use App\Models\Guardian;
 use App\Models\Question;
 use App\Models\Curriculum;
 use App\Models\Instructor;
+use App\Models\StudentQuiz;
+use App\Models\ActivityImage;
 use App\Models\ActivityLesson;
 use App\Models\Specialization;
+use App\Models\StudentActivity;
 use Illuminate\Database\Seeder;
 use App\Models\CurriculumSubject;
 use App\Models\LessonSubjectStudent;
-use App\Models\ActivityImage;
 
 class DatabaseSeeder extends Seeder
 {
@@ -185,18 +187,29 @@ class DatabaseSeeder extends Seeder
                 // Create logs for lesson's quiz and activity
                 $quiz = $lesson->quiz;
                 if ($quiz) {
-                    Log::factory()->create([
+                    $studentQuiz = StudentQuiz::firstOrCreate([
                         'student_id' => $student->id,
-                        'loggable_id' => $quiz->id,
-                        'loggable_type' => Quiz::class,
+                        'quiz_id'    => $quiz->id,
+                    ]);
+
+                    Log::factory()->create([
+                        'loggable_id'    => $studentQuiz->id,
+                        'loggable_type'  => StudentQuiz::class,
                     ]);
                 }
 
-                Log::factory()->create([
-                    'student_id' => $student->id,
-                    'loggable_id' => $lesson->lessonActivity->id,
-                    'loggable_type' => ActivityLesson::class,
-                ]);
+                // Activity
+                if ($lesson->lessonActivity) {
+                    $studentActivity = StudentActivity::firstOrCreate([
+                        'student_id'          => $student->id,
+                        'activity_lesson_id'  => $lesson->lessonActivity->id,
+                    ]);
+
+                    Log::factory()->create([
+                        'loggable_id'   => $studentActivity->id,
+                        'loggable_type' => StudentActivity::class,
+                    ]);
+                }
             });
         });
 

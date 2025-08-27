@@ -23,10 +23,10 @@ use Illuminate\Validation\ValidationException;
 class LessonAddModal extends Component
 {
     use WithFileUploads;
-    public $subjects, $grade_levels, $students, $activities, $curriculums, $youtube_link, $selected_student;
+    public $subjects, $grade_levels, $students, $activities, $curriculums, $youtube_link, $selected_student = '';
     public $videos = [];
     public $isOpen = false;
-    public $lesson_name, $curriculum, $subject, $grade_level, $description, $quiz_name, $quiz_description;
+    public $lesson_name, $curriculum = '', $subject = '', $grade_level = '', $description, $quiz_name, $quiz_description;
     public $uploadedVideos = [], $selected_activities = [], $selected_students = [];
     public $questions = [
         [
@@ -42,9 +42,13 @@ class LessonAddModal extends Component
     public function resetFields()
     {
         $this->lesson_name = null;
-        $this->subject = null;
-        $this->grade_level = null;
-        $this->selected_student = null;
+        $this->subject = '';
+        $this->grade_level = '';
+        $this->subjects = collect();
+        $this->students = collect();
+        $this->curriculums = collect();
+        $this->curriculum = '';
+        $this->selected_student = '';
         $this->selected_students = [];
         $this->description = null;
         $this->videos = [];
@@ -418,21 +422,37 @@ class LessonAddModal extends Component
     public function updatedGradeLevel()
     {
         $this->curriculums = Curriculum::where('instructor_id', Auth::id())->where('grade_level', $this->grade_level)->where('status', 'active')->get();
+        if (!empty($this->selected_students)) {
+            $this->selected_students = [];
+        }
+        $this->curriculum = '';
+        $this->subject = '';
+        $this->selected_student = '';
+        $this->subjects = collect();
+        $this->students = collect();
+    }
+
+    public function updatedCurriculum()
+    {
+        if (!empty($this->selected_students)) {
+            $this->selected_students = [];
+        }
+        $this->subject = '';
+        $this->selected_student = '';
+        $this->subjects = Subject::whereHas('curriculumSubjects', function ($query) {
+            $query->where('curriculum_id', $this->curriculum);
+        })->get();
         $this->students = Auth::user()->accountable->students()
             ->where('status', 'active')
             ->whereHas('profile', function ($query) {
                 $query->where('grade_level', $this->grade_level);
             })
+            ->whereHas('profile', function ($query) {
+                $query->whereIn('disability_type', Curriculum::find($this->curriculum)
+                    ->specializations()
+                    ->pluck('name'));
+            })
             ->get();
-        $this->selected_students = [];
-    }
-
-    public function updatedCurriculum()
-    {
-        $this->subjects = Subject::whereHas('curriculumSubjects', function ($query) {
-        $query->where('curriculum_id', $this->curriculum);
-        })
-        ->get();
     }
 
     public function render()

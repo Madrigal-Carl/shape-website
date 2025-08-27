@@ -88,13 +88,17 @@ class CurriculumEditModal extends Component
     {
         try {
             $this->validate([
-                'edit_name'              => 'required|string|max:255',
-                'edit_grade_level'       => 'required|string|max:255',
-                'selectedSpecializations' => 'required|array|min:1',
-                'selectedSubjects'        => 'required|array|min:1',
+                'edit_name'              => 'required|min:5|max:24',
+                'edit_grade_level'       => 'required',
+                'edit_description' => 'nullable|max:255',
+                'selectedSpecializations' => 'required|min:1',
+                'selectedSubjects'        => 'required|min:1',
             ], [
                 'edit_name.required' => 'Name is required.',
+                'edit_name.min' => 'Name must be at least 5 characters.',
+                'edit_name.max' => 'Name must not be more than 24 characters.',
                 'edit_grade_level.required' => 'Grade level is required.',
+                'edit_description.max' => 'Description must not exceed 255 characters.',
                 'selectedSpecializations.required' => 'Please select at least one specialization.',
                 'selectedSpecializations.min' => 'You must select at least one specialization.',
                 'selectedSubjects.required' => 'Please select at least one subject.',

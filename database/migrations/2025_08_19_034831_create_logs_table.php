@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('logs', function (Blueprint $table) {
             $table->id();
             $table->morphs('loggable');
-            $table->foreignId('student_id')->constrained()->onDelete('cascade');
             $table->unsignedInteger('attempt_number')->default(1);
             $table->enum('status', ['in-progress', 'completed'])->default('in-progress');
             $table->timestamps();

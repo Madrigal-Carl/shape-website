@@ -11,7 +11,6 @@ class Quiz extends Model
 
     protected $fillable = [
         'lesson_id',
-        'path',
         'title',
         'score',
         'description',
@@ -27,16 +26,8 @@ class Quiz extends Model
         return $this->belongsTo(Lesson::class);
     }
 
-    public function logs()
+    public function studentQuizzes()
     {
-        return $this->morphMany(Log::class, 'loggable');
-    }
-
-    public function latestLogForStudent($studentId)
-    {
-        return $this->logs()
-            ->where('student_id', $studentId)
-            ->orderByDesc('attempt_number')
-            ->first();
+        return $this->hasMany(StudentQuiz::class);
     }
 }
