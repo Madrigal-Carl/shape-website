@@ -62,30 +62,30 @@
                         <div class="flex flex-col gap-2">
                             <!-- Video Container -->
                             <div class="flex grid-cols-2 gap-2">
-                                @foreach ($lesson->videos as $video)
-                                    <div class="flex flex-col gap-2 relative group">
+                                @foreach ($lesson->videos as $i => $video)
+                                    <div class="flex flex-col gap-2 relative group video-container-{{ $i }}">
                                         <div class="flex flex-col items-center justify-center">
                                             {{-- Thumbnail --}}
                                             <img src="{{ $video->thumbnail }}" alt=""
-                                                class="aspect-video w-full h-fit rounded-lg object-cover">
+                                                class="aspect-video w-full h-fit rounded-lg object-cover video-thumb-{{ $i }}">
 
                                             {{-- Play button --}}
-                                            <button onclick="playFullscreen('{{ asset($video->url) }}')"
-                                                class="absolute rounded-full cursor-pointer hover:scale-110 shadow-xl/40 z-10">
+                                            <button onclick="playVideo({{ $i }}, '{{ $video->url }}')"
+                                                class="absolute rounded-full cursor-pointer hover:scale-110 shadow-xl/40 z-10 playBtn-{{ $i }}">
                                                 <span
-                                                    class="material-symbols-rounded p-2 rounded-full playBtn text-white bg-white/20 backdrop-blur-[3px] shadow-white shadow-inner">play_arrow</span>
+                                                    class="material-symbols-rounded p-2 rounded-full text-white bg-white/20 backdrop-blur-[3px] shadow-white shadow-inner">play_arrow</span>
                                             </button>
                                         </div>
 
                                         <div
                                             class="absolute bottom-0 bg-gradient-to-t from-black/80 via-black/0 to-black/0 w-full h-full rounded-lg">
                                             <div class="h-full w-full flex items-end justify-between p-3">
-                                                <h1 class="text-white font-medium text-sm ml-1">{{ $video->title }}</h1>
+                                                <h1 class="text-white font-medium text-sm ml-1">{{ $video->title }}
+                                                </h1>
                                             </div>
                                         </div>
                                     </div>
                                 @endforeach
-
                             </div>
                         </div>
                     </div>
@@ -147,34 +147,57 @@
 </div>
 
 <script>
-    function playFullscreen(path) {
-        // Create video dynamically
-        let video = document.createElement("video");
-        video.src = path;
-        video.controls = true;
-        video.autoplay = true;
-        video.style.width = "100%";
-        video.style.height = "100%";
-        video.style.background = "#000";
+    function playVideo(index, videoUrl) {
+        const container = document.querySelector(`.video-container-${index}`);
+        const thumb = container.querySelector(`.video-thumb-${index}`);
+        const playBtn = container.querySelector(`.playBtn-${index}`);
 
-        // Append to body
-        document.body.appendChild(video);
+        thumb.style.display = 'none';
+        playBtn.style.display = 'none';
 
-        // Go fullscreen
-        if (video.requestFullscreen) {
-            video.requestFullscreen();
-        } else if (video.webkitRequestFullscreen) {
-            video.webkitRequestFullscreen();
-        } else if (video.msRequestFullscreen) {
-            video.msRequestFullscreen();
+        let existingMedia = container.querySelector('video, iframe');
+        if (existingMedia) existingMedia.remove();
+
+        let mediaEl;
+
+        if (videoUrl.includes('youtube.com') || videoUrl.includes('youtu.be')) {
+            const videoIdMatch = videoUrl.match(/(?:youtube\.com\/(?:watch\?v=|shorts\/)|youtu\.be\/)([^\?&]+)/);
+            const videoId = videoIdMatch ? videoIdMatch[1] : null;
+            if (!videoId) return;
+
+            mediaEl = document.createElement('iframe');
+            mediaEl.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&controls=1`;
+            mediaEl.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
+            mediaEl.allowFullscreen = true;
+
+        } else {
+            // Normal video file
+            mediaEl = document.createElement('video');
+            mediaEl.src = videoUrl;
+            mediaEl.controls = true;
+            mediaEl.autoplay = true;
+
+            mediaEl.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (mediaEl.paused) mediaEl.play();
+                else mediaEl.pause();
+            });
         }
 
-        // Cleanup on exit
-        video.onfullscreenchange = () => {
-            if (!document.fullscreenElement) {
-                video.pause();
-                video.remove();
+        mediaEl.classList.add('aspect-video', 'w-full', 'rounded-lg', 'object-cover');
+
+        container.querySelector('div').appendChild(mediaEl);
+
+        function handleClickOutside(e) {
+            if (!container.contains(e.target)) {
+                if (mediaEl.tagName === 'VIDEO') mediaEl.pause();
+                mediaEl.remove();
+                thumb.style.display = 'block';
+                playBtn.style.display = 'flex';
+                document.removeEventListener('click', handleClickOutside);
             }
-        };
+        }
+
+        setTimeout(() => document.addEventListener('click', handleClickOutside), 0);
     }
 </script>
