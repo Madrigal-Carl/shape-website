@@ -31,19 +31,8 @@ class GrantAwardsScheduler extends Command
     {
         $this->info('Checking awards...');
 
-        Instructor::with(['curriculums.curriculumSubjects.lessonSubjectStudents.student'])->chunk(2, function ($instructors) {
-            foreach ($instructors as $instructor) {
-                foreach ($instructor->students as $student) {
-
-                    $this->checkTopScorer($student);
-                    $this->checkQuizMaster($student);
-                    $this->checkConsistentPerformer($student);
-                    $this->checkActivityChampion($student);
-                    $this->checkAllRounder($student);
-                    $this->checkPerfectStreak($student);
-                }
-            }
-        });
+        $this->checkTopScorerForAll();
+        $this->checkQuizMasterForAll();
 
         $this->info('Award checks finished.');
     }
@@ -80,24 +69,113 @@ class GrantAwardsScheduler extends Command
         }
     }
 
-    protected function checkTopScorer(Student $student)
+    protected function checkTopScorerForAll()
     {
-        $quizzes = $student->lessonSubjectStudents->pluck('lesson.quiz')->filter();
-        if ($quizzes->isEmpty()) {
+        $academicYear = $this->getAcademicYear();
+
+        // Get all students with their quizzes in the current academic year
+        $students = Student::with([
+            'lessonSubjectStudents.lesson.quiz' => function ($q) use ($academicYear) {
+                $q->where('academic_year', $academicYear);
+            }
+        ])->get();
+
+        // Compute averages
+        $averages = $students->map(function ($student) {
+            $quizzes = $student->lessonSubjectStudents
+                ->pluck('lesson.quiz')
+                ->filter();
+
+            if ($quizzes->isEmpty()) {
+                return ['student' => $student, 'avg' => 0];
+            }
+
+            $avg = $quizzes->map(function ($quiz) use ($student) {
+                $sq = $quiz?->studentQuizzes()
+                    ->where('student_id', $student->id)
+                    ->first();
+                return $sq?->score ?? 0;
+            })->avg();
+
+            return ['student' => $student, 'avg' => $avg];
+        });
+
+        // Sort by avg descending
+        $sorted = $averages->sortByDesc('avg')->values();
+
+        // Take top 3, then find the cutoff average (3rd place)
+        $top3 = $sorted->take(3);
+        $thirdPlaceAvg = $top3->last()['avg'] ?? 0;
+
+        // Include ties with 3rd place
+        $topScorers = $sorted->filter(function ($entry) use ($thirdPlaceAvg) {
+            return $entry['avg'] >= $thirdPlaceAvg;
+        });
+
+        // Revoke award from everyone for this year
+        foreach ($students as $student) {
             $this->grantOrRevokeAward($student, 'Top Scorer', false);
-            return;
         }
 
-        $avg = $quizzes->map(function ($quiz) use ($student) {
-            $sq = $quiz->studentQuizzes()
-                ->where('student_id', $student->id)
-                ->first();
-            return $sq?->score ?? 0;
-        })->avg();
-
-        // Meets criteria if avg ≥ 90
-        $this->grantOrRevokeAward($student, 'Top Scorer', $avg >= 90);
+        // Grant to top scorers (with ties included)
+        foreach ($topScorers as $entry) {
+            $this->grantOrRevokeAward($entry['student'], 'Top Scorer', true);
+        }
     }
+
+    protected function checkQuizMasterForAll()
+    {
+        $academicYear = $this->getAcademicYear();
+
+        // Get all students with their quizzes in the current academic year
+        $students = Student::with([
+            'lessonSubjectStudents.lesson.quiz' => function ($q) use ($academicYear) {
+                $q->where('academic_year', $academicYear);
+            }
+        ])->get();
+
+        // Compute total quiz scores per student
+        $totals = $students->map(function ($student) {
+            $quizzes = $student->lessonSubjectStudents
+                ->pluck('lesson.quiz')
+                ->filter();
+
+            if ($quizzes->isEmpty()) {
+                return ['student' => $student, 'total' => 0];
+            }
+
+            $total = $quizzes->map(function ($quiz) use ($student) {
+                $sq = $quiz?->studentQuizzes()
+                    ->where('student_id', $student->id)
+                    ->first();
+                return $sq?->score ?? 0;
+            })->sum();
+
+            return ['student' => $student, 'total' => $total];
+        });
+
+        // Sort by total descending
+        $sorted = $totals->sortByDesc('total')->values();
+
+        // Take top 3, but allow ties
+        $top3 = $sorted->take(3);
+        $thirdPlaceScore = $top3->last()['total'] ?? 0;
+
+        $topScorers = $sorted->filter(function ($entry) use ($thirdPlaceScore) {
+            return $entry['total'] >= $thirdPlaceScore;
+        });
+
+        // Revoke award from everyone for this year
+        foreach ($students as $student) {
+            $this->grantOrRevokeAward($student, 'Quiz Master', false);
+        }
+
+        // Grant to top scorers (with ties included)
+        foreach ($topScorers as $entry) {
+            $this->grantOrRevokeAward($entry['student'], 'Quiz Master', true);
+        }
+    }
+
 
 
 

@@ -28,11 +28,13 @@
                     <div class="w-full h-full grid gird-cols-1 grid-rows-3 gap-2 ">
                         <!-- Student name tag -->
                         @forelse ($award->students as $student)
-                            <div class="w-full bg-card p-2 text-center flex flex-col items-center justify-center rounded-2xl">
+                            <div
+                                class="w-full bg-card p-2 text-center flex flex-col items-center justify-center rounded-2xl">
                                 <p class="font-semibold text-lg">{{ $student->full_name }}</p>
                             </div>
                         @empty
-                            <div class="w-full h-full row-span-3 bg-card p-4 text-center flex flex-col justify-center items-center rounded-2xl text-paragraph">
+                            <div
+                                class="w-full h-full row-span-3 bg-card p-4 text-center flex flex-col justify-center items-center rounded-2xl text-paragraph">
                                 <p class="font-medium text-lg">No students have received this award yet.</p>
                             </div>
                         @endforelse
