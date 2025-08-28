@@ -5,7 +5,7 @@
             <!-- Third form -->
             <div class="bg-white p-8 rounded-4xl w-250 flex flex-col gap-12 self-center-safe">
                 <div class="flex items-center justify-between gap-2">
-                    <h1 class="text-4xl font-semibold text-heading-dark">
+                    <h1 class="text-3xl font-bold text-heading-dark">
                         Student Info.
                     </h1>
 
@@ -30,7 +30,7 @@
                         </button>
 
                         <button type="button" wire:click='closeModal'
-                            class="profile-button flex items-center bg-white p-2 rounded-full gap-2 shadow-2xl text-paragraph cursor-pointer hover:text-white hover:bg-blue-button hover:shadow-xl/35 hover:shadow-blue-button hover:scale-105">
+                            class="profile-button flex items-center p-2 rounded-full gap-2 shadow-2xl text-paragraph cursor-pointer hover:text-white hover:bg-blue-button hover:shadow-xl/35 hover:shadow-blue-button hover:scale-105">
                             <span class="material-symbols-rounded">close</span>
                         </button>
                     </div>
@@ -228,7 +228,7 @@
                                         x: { format: 'dd/MM/yy HH:mm' },
                                     },
                                 };
-                            
+
                                 var chart = new ApexCharts(document.querySelector('#PerformanceLinechart'), options);
                                 chart.render();
                             }">
@@ -269,7 +269,7 @@
                                     fill: { opacity: 1 },
                                     tooltip: { y: { formatter: val => `${val}%` } },
                                 };
-                            
+
                                 var chart = new ApexCharts(document.querySelector('#PerformanceBarchart'), options);
                                 chart.render();
                             }">

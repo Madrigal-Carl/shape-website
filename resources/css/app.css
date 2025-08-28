@@ -135,6 +135,20 @@ html {
 .gamesGrid::-webkit-scrollbar{
     width: 0;
 }
+
+.gamePreview{
+    background-image: url('/public/images/game-icons/game-posters/mario-kart-world-review-1.jpg');
+    backdrop-filter: blur(60px);
+    background-size: cover;
+    background-position: center;
+}
+
+.image-preview-active{
+    opacity: 1;
+    border: 2px;
+    border-style: solid;
+    border-color: var(--color-yellowOrange);
+}
 /* @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
