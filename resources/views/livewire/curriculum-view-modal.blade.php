@@ -77,7 +77,7 @@
                 </div>
                 <div class="flex items-center gap-2">
                     <button wire:click='closeModal'
-                        class="bg-gray-100 py-1.5 px-3 w-full rounded-xl text-heading-dark font-medium">
+                        class="bg-gray-100 py-1.5 px-3 w-full rounded-xl text-heading-dark font-medium hover:bg-gray-300 cursor-pointer">
                         Close
                     </button>
                 </div>

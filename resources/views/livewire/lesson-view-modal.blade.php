@@ -141,7 +141,7 @@
                     <div
                         class="flex items-center gap-2 absolute w-full left-0 bottom-0 px-5 pb-5 pt-10  rounded-b-4xl bg-gradient-to-t from-white via-white to-white/50">
                         <button type="button" wire:click='closeModal'
-                            class=" bg-gray-100 py-1.5 px-3 w-full rounded-xl text-heading-dark font-medium">Cancel</button>
+                            class=" bg-gray-100 py-1.5 px-3 w-full rounded-xl text-heading-dark font-medium cursor-pointer hover:bg-gray-300">Cancel</button>
                     </div>
                 </div>
             </div><!-- End of Lesson View Info-->

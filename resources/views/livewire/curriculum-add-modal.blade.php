@@ -4,7 +4,7 @@
             <form wire:submit='addCurriculum' class="bg-white p-8 rounded-3xl w-1/3 flex flex-col gap-8">
                 <div class="flex items-center gap-4">
                     <img src="{{ asset('images/book.png') }}" alt="" />
-                    <h1 class="text-2xl font-semibold text-heading-dark">
+                    <h1 class="text-3xl font-bold text-heading-dark">
                         Add Curriculumn
                     </h1>
                 </div>

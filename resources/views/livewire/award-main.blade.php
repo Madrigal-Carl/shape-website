@@ -63,12 +63,12 @@
 
                     <div class="flex items-center gap-2 w-full">
                         <button type="button"
-                            class="w-full flex items-center justify-center gap-1 px-3 py-2 bg-white rounded-xl text-paragraph">
+                            class="w-full flex items-center justify-center gap-1 px-3 py-2 bg-white rounded-xl text-paragraph hover:bg-gray-300 cursor-pointer">
                             <span class="material-symbols-rounded award-icon">print</span>
                             <p class="text-sm">Print</p>
                         </button>
                         <button wire:click='openViewAwardModal({{ $award->id }})'
-                            class="cursor-pointer w-full flex items-center justify-center gap-1 px-3 py-2 bg-yellowOrange rounded-xl text-white relative">
+                            class="cursor-pointer w-full flex items-center justify-center gap-1 px-3 py-2 bg-yellowOrange hover:bg-amber-500 rounded-xl text-white relative">
 
                             <span class="material-symbols-rounded award-icon transition-opacity duration-150"
                                 wire:loading.class="opacity-0" wire:target='openViewAwardModal({{ $award->id }})'>

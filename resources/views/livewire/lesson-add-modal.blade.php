@@ -172,7 +172,7 @@
                                 <input type="text" placeholder="Paste YouTube Link" wire:model="youtube_link"
                                     class="px-3 py-1 rounded-lg bg-card placeholder-paragraph outline-none w-full col-span-2" />
                                 <button type="button" wire:click="addYoutubeVideo"
-                                    class="bg-blue-button text-white px-3 py-1 rounded-lg w-full col-span-1">
+                                    class="bg-blue-button text-white px-3 py-1 rounded-lg w-full col-span-1 hover:bg-blue-700 cursor-pointer">
                                     Add YouTube Video
                                 </button>
                             </div>
@@ -185,9 +185,9 @@
 
                         <div class="flex flex-col gap-3">
                             <h2 class="font-medium text-lg">Activities</h2>
-                            <livewire:activity-hub targetComponent="lesson-add-modal" />
+
                             <button wire:click='openActivityHub' type="button"
-                                class="bg-blue-button py-1.5 px-3 w-full rounded-xl text-white font-medium">
+                                class="bg-blue-button py-1.5 px-3 w-full rounded-xl text-white font-medium hover:bg-blue-700 cursor-pointer">
                                 Add Activity
                             </button>
                             <div class="w-full grid grid-cols-2 gap-2 rounded-lg">
@@ -218,7 +218,7 @@
                                         <h1 class="text-paragraph">No Activity added</h1>
                                     </div>
                                 @endforelse
-
+                                <livewire:activity-hub targetComponent="lesson-add-modal" />
                             </div>
                         </div>
                     </div>
@@ -305,7 +305,7 @@
                                                     class="w-5 h-5 border-1 border-gray-400 rounded-full p-0.5 flex items-center justify-center">
                                                 </div>
                                                 <button type="button" wire:click="addOption({{ $qIndex }})"
-                                                    class="text-blue-button outline-none text-sm cursor-pointer">
+                                                    class="text-blue-button outline-none text-sm cursor-pointer hover:text-blue-700">
                                                     Add Option
                                                 </button>
                                             </div>
@@ -316,8 +316,8 @@
                                             <button type="button"
                                                 class="w-fit h-fit flex items-center justify-center gap-2 cursor-pointer">
                                                 <span
-                                                    class="material-symbols-rounded text-blue-button">assignment_turned_in</span>
-                                                <h1 class="text-blue-button">Answer Key</h1>
+                                                    class="material-symbols-rounded text-blue-button hover:text-blue-700">assignment_turned_in</span>
+                                                <h1 class="text-blue-button hover:text-blue-700">Answer Key</h1>
                                                 <p class="pl-3 text-paragraph text-sm">
                                                     (<span>
                                                         {{ collect($question['options'])->firstWhere('is_correct', true)['text'] ?? 'None' }}
@@ -356,11 +356,11 @@
                         <div
                             class="flex items-center gap-2 absolute w-full left-0 bottom-0 px-5 pb-5 pt-10 rounded-b-4xl bg-gradient-to-t from-white via-white to-white/50">
                             <button wire:click='closeModal' type="button"
-                                class="bg-gray-100 py-1.5 px-3 w-full rounded-xl text-heading-dark font-medium cursor-pointer hover:scale-102">
+                                class="bg-gray-100 py-1.5 px-3 w-full rounded-xl text-heading-dark font-medium hover:bg-gray-300 cursor-pointer">
                                 Cancel
                             </button>
                             <button type="submit"
-                                class="bg-blue-button py-1.5 px-3 w-full rounded-xl text-white font-medium cursor-pointer hover:scale-102">
+                                class="bg-blue-button py-1.5 px-3 w-full rounded-xl text-white font-medium cursor-pointer hover:bg-blue-700">
                                 Save
                             </button>
                         </div>

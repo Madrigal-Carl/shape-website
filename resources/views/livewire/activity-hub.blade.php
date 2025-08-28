@@ -3,11 +3,19 @@
         <section
             class="bg-black/30 fixed w-dvw h-dvh p-10 top-0 left-0 z-50 backdrop-blur-xs flex justify-center items-center gap-6">
             <div class="flex flex-col w-[50%] h-full gap-4 bg-white shadow-2xl rounded-4xl p-8">
-                <button type="button" class="cursor-pointer w-full flex items-center justify-between"
+
+                <div class="w-full flex items-center justify-between">
+                    <div class="flex items-center gap-4">
+                        <img src="{{asset('images/game-icons/gamehub.png')}}" class="h-8" alt="">
+                        <p class="font-bold text-3xl">Activity Hub</p>
+                    </div>
+
+                    <button type="button" class="profile-button flex items-center p-2 rounded-full gap-2 shadow-2xl text-paragraph cursor-pointer hover:text-white hover:bg-blue-button hover:shadow-xl/35 hover:shadow-blue-button"
                     wire:click='closeModal'>
-                    <p class="font-semibold text-2xl">Activity Hub</p>
-                    <span class="material-symbols-rounded">close</span>
-                </button>
+                        <span class="material-symbols-rounded ">close</span>
+                    </button>
+                </div>
+
 
                 <div class="w-full flex flex-col gap-2">
                     <h1 class="text-lg font-medium">Activity Categories:</h1>
@@ -53,7 +61,7 @@
                                                 <p class="text-sm">View</p>
                                             </button>
                                             <button type="button" wire:click="addActivity({{ $activity->id }})"
-                                                class="cursor-pointer bg-white/40 backdrop-blur-sm px-3 py-1 rounded-full p-0 flex items-center justify-center text-white hover:bg-blue-button hover:scale-110">
+                                                class="cursor-pointer bg-white/40 backdrop-blur-sm px-3 py-1 rounded-full p-0 flex items-center justify-center text-white hover:bg-yellowOrange hover:scale-110">
                                                 <p class="text-sm">Add</p>
                                             </button>
                                         </div>
@@ -69,8 +77,8 @@
                 <div
                     class="flex flex-col w-[30%] h-full bg-white shadow-2xl overflow-y-auto gamesGrid rounded-4xl relative">
                     <div class="w-full flex items-center justify-between p-8 absolute top-0 left-0 z-10 text-white">
-                        <p class="font-semibold text-2xl">Activity Info</p>
-                        <button class="cursor-pointer" type="button" wire:click="closeActivityView">
+                        <p class="font-bold text-3xl">Activity Info</p>
+                        <button class="profile-button flex items-center p-2 rounded-full gap-2 shadow-2xl text-white cursor-pointer hover:text-white hover:bg-blue-button hover:shadow-xl/35 hover:shadow-blue-button" type="button" wire:click="closeActivityView">
                             <span class="material-symbols-rounded">close</span>
                         </button>
                     </div>
@@ -105,10 +113,10 @@
                                 @foreach ($act->activityImages as $image)
                                     @if ($loop->iteration == 2)
                                         <img src="{{ asset($image->path) }}" alt=""
-                                            class="w-full rounded-lg col-span-2 row-span-2">
+                                            class="w-full rounded-lg col-span-2 row-span-2 hover:scale-102 cursor-pointer">
                                     @elseif ($loop->iteration > 2)
                                         <img src="{{ asset($image->path) }}" alt=""
-                                            class="w-full rounded-lg col-span-1 row-span-1">
+                                            class="w-full rounded-lg col-span-1 row-span-1 hover:scale-104 cursor-pointer">
                                     @endif
                                 @endforeach
                             </div>
@@ -120,6 +128,39 @@
                     </div>
                 </div>
             @endif
+
+            {{-- Image game Preview page --}}
+            <section class=" bg-black/30 fixed w-dvw h-dvh top-0 left-0 z-50 backdrop-blur-xs flex justify-center items-center gap-6">
+                <div class="gamePreview relative w-full h-full">
+                    <div class="fixed top-0 left-0 w-full h-full bg-black/70 backdrop-blur-3xl shrink-0 p-10">
+                        <div class="w-full h-full flex flex-col justify-center gap-4">
+                            {{-- Image pagination --}}
+                            <div class="flex items-center gap-4 justify-between w-full h-full">
+                                <button class="p-3 rounded-full aspect-square flex items-center justify-center bg-white/10 hover:bg-white/30 cursor-pointer">
+                                    <span class="material-symbols-rounded scale-x-110 text-gray-400">chevron_backward</span>
+                                </button>
+
+                                <div class="w-300 aspect-video object-contain object-center flex items-center justify-center overflow-hidden rounded-2xl">
+                                    <img src="{{asset('images/game-icons/game-posters/mario-kart-world-review-1.jpg')}}" class="h-full object-contain object-center rounded-2xl" alt="">
+                                </div>
+
+
+                                <button class="p-3 rounded-full aspect-square flex items-center justify-center bg-white/10 hover:bg-white/30 cursor-pointer">
+                                    <span class="material-symbols-rounded scale-110 text-gray-400">chevron_forward</span>
+                                </button>
+                            </div>
+                            {{-- Image Drawer --}}
+                            <div class="flex items-center gap-2 w-full h-max justify-center relative">
+                                <img src="{{asset('images/game-icons/game-posters/mario-kart-world-review-1.jpg')}}" class="image-preview-active w-30 aspect-video object-cover object-center rounded-2xl opacity-30 hover:opacity-100 transform hover:-translate-y-1" alt="">
+                                <img src="{{asset('images/game-icons/game-posters/mario-kart-world-review-1.jpg')}}" class="w-30 aspect-video object-cover object-center rounded-2xl opacity-30 hover:opacity-100 relative transform hover:-translate-y-1" alt="">
+                                <img src="{{asset('images/game-icons/game-posters/mario-kart-world-review-1.jpg')}}" class="w-30 aspect-video object-cover object-center rounded-2xl opacity-30 hover:opacity-100 transform hover:-translate-y-1" alt="">
+                                <img src="{{asset('images/game-icons/game-posters/mario-kart-world-review-1.jpg')}}" class="w-30 aspect-video object-cover object-center rounded-2xl opacity-30 hover:opacity-100 transform hover:-translate-y-1" alt="">
+                                <img src="{{asset('images/game-icons/game-posters/mario-kart-world-review-1.jpg')}}" class="w-30 aspect-video object-cover object-center rounded-2xl opacity-30 hover:opacity-100 transform hover:-translate-y-1" alt="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>{{-- End Image game Preview page --}}
         </section>
     @endif
 </div>

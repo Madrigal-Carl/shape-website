@@ -7,7 +7,7 @@
                 <div class="bg-white p-8 rounded-4xl w-150 flex flex-col gap-8">
                     <div class="flex items-center gap-2">
                         <img src="{{ asset('images/form.png') }}" alt="" />
-                        <h1 class="text-2xl font-semibold text-heading-dark">
+                        <h1 class="text-3xl font-bold text-heading-dark">
                             Education Enrollment Form
                         </h1>
                     </div>
@@ -113,12 +113,12 @@
                     <!-- buttons -->
                     <div class="flex items-center gap-2">
                         <button type="button"
-                            class="bg-gray-100 py-1.5 px-3 w-full rounded-xl text-heading-dark font-medium"
+                            class="bg-gray-100 py-1.5 px-3 w-full rounded-xl text-heading-dark font-medium hover:bg-gray-300 cursor-pointer"
                             wire:click="closeModal" type="button">
                             Cancel
                         </button>
                         <button type="button"
-                            class="bg-blue-button py-1.5 px-3 w-full rounded-xl text-white font-medium"
+                            class="bg-blue-button py-1.5 px-3 w-full rounded-xl text-white font-medium hover:to-blue-700 cursor-pointer"
                             wire:click="nextStep">
                             Next
                         </button>
@@ -132,7 +132,7 @@
                 <div class="bg-white p-8 rounded-4xl w-150 flex flex-col gap-8">
                     <div class="flex items-center gap-2">
                         <img src="{{ asset('images/form.png') }}" alt="" />
-                        <h1 class="text-2xl font-semibold text-heading-dark">
+                        <h1 class="text-3xl font-bold text-heading-dark">
                             Education Enrollment Form
                         </h1>
                     </div>
@@ -231,17 +231,17 @@
                     <!-- buttons -->
                     <div class="flex items-center gap-2">
                         <button type="button"
-                            class="bg-gray-100 py-1.5 px-3 w-full rounded-xl text-heading-dark font-medium"
+                            class="bg-gray-100 py-1.5 px-3 w-full rounded-xl text-heading-dark font-medium hover:bg-gray-300 cursor-pointer"
                             wire:click="closeModal">
                             Cancel
                         </button>
                         <button type="button"
-                            class="bg-yellowOrange py-1.5 px-3 w-full rounded-xl text-white font-medium"
+                            class="bg-yellowOrange py-1.5 px-3 w-full rounded-xl text-white font-medium hover:bg-amber-500 cursor-pointer"
                             wire:click="previousStep">
                             Prev
                         </button>
                         <button type="button"
-                            class="bg-blue-button py-1.5 px-3 w-full rounded-xl text-white font-medium"
+                            class="bg-blue-button py-1.5 px-3 w-full rounded-xl text-white font-medium hover:bg-blue-700 cursor-pointer"
                             wire:click="nextStep">
                             Next
                         </button>
@@ -255,7 +255,7 @@
                 <div class="bg-white p-8 rounded-4xl w-150 flex flex-col gap-8">
                     <div class="flex items-center gap-2">
                         <img src="{{ asset('images/form.png') }}" alt="" />
-                        <h1 class="text-2xl font-semibold text-heading-dark">
+                        <h1 class="text-3xl font-bold text-heading-dark">
                             Create Student Account
                         </h1>
                     </div>
@@ -275,17 +275,17 @@
                     <!-- buttons -->
                     <div class="flex items-center gap-2">
                         <button type="button"
-                            class="bg-gray-100 py-1.5 px-3 w-full rounded-xl text-heading-dark font-medium"
+                            class="bg-gray-100 py-1.5 px-3 w-full rounded-xl text-heading-dark font-medium hover:bg-gray-300 cursor-pointer"
                             wire:click="closeModal">
                             Cancel
                         </button>
                         <button type="button"
-                            class="bg-yellowOrange py-1.5 px-3 w-full rounded-xl text-white font-medium"
+                            class="bg-yellowOrange py-1.5 px-3 w-full rounded-xl text-white font-medium hover:bg-amber-500 cursor-pointer"
                             wire:click="previousStep">
                             Prev
                         </button>
                         <button type="button"
-                            class="bg-blue-button py-1.5 px-3 w-full rounded-xl text-white font-medium"
+                            class="bg-blue-button py-1.5 px-3 w-full rounded-xl text-white font-medium hover:bg-blue-700 cursor-pointer"
                             wire:click="addStudent">
                             Register
                         </button>
