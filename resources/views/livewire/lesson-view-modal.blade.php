@@ -27,12 +27,14 @@
                         <div class="border-1 border-gray-300 p-6 rounded-3xl w-full flex flex-col gap-2">
                             <div class="flex items-center w-auto gap-4">
                                 <h3 class="text-sm font-semibold w-40">Subject:</h3>
-                                <p class="text-sm w-full">{{ $lesson->lessonSubjectStudents->first()->subject->name }}</p>
+                                <p class="text-sm w-full">{{ $lesson->lessonSubjectStudents->first()->subject->name }}
+                                </p>
                             </div>
 
                             <div class="flex items-center w-auto gap-4">
                                 <h3 class="text-sm font-semibold w-40">Curriculum:</h3>
-                                <p class="text-sm w-full">{{ $lesson->lessonSubjectStudents->first()->curriculum->name }}</p>
+                                <p class="text-sm w-full">
+                                    {{ $lesson->lessonSubjectStudents->first()->curriculum->name }}</p>
                             </div>
 
                             <div class="flex items-center w-auto gap-4">
@@ -66,7 +68,8 @@
                                     <div class="flex flex-col gap-2 relative group video-container-{{ $i }}">
                                         <div class="flex flex-col items-center justify-center">
                                             {{-- Thumbnail --}}
-                                            <img src="{{ $video->thumbnail }}" alt=""
+                                            <img src="{{ $video->thumbnail ? asset($video->thumbnail) : asset('images/default-img-holder.png') }}"
+                                                alt=""
                                                 class="aspect-video w-full h-fit rounded-lg object-cover video-thumb-{{ $i }}">
 
                                             {{-- Play button --}}
@@ -80,7 +83,8 @@
                                         <div
                                             class="absolute bottom-0 bg-gradient-to-t from-black/80 via-black/0 to-black/0 w-full h-full rounded-lg">
                                             <div class="h-full w-full flex items-end justify-between p-3">
-                                                <h1 class="text-white font-medium text-sm ml-1 w-full truncate">{{ $video->title }}</h1>
+                                                <h1 class="text-white font-medium text-sm ml-1 w-full truncate">
+                                                    {{ $video->title }}</h1>
                                             </div>
                                         </div>
                                     </div>

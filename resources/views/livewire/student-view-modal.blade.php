@@ -38,7 +38,8 @@
 
                 <!-- Profile pic and info -->
                 <div class="flex gap-6">
-                    <img src="{{ asset('storage/' . $student->path) }}" alt="" class="rounded-full w-20" />
+                    <img src="{{ $student->path ? asset('storage/' . $student->path) : asset('images/default-img-holder.png') }}"
+                        alt="" class="rounded-full w-20" />
 
                     <div class="flex flex-col justify-between">
                         <h1 class="font-medium text-xl leading-4">{{ $student->full_name }}

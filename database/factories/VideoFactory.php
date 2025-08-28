@@ -23,7 +23,7 @@ class VideoFactory extends Factory
             'lesson_id' => Lesson::factory(),
             'url' => null,
             'title' => $this->faker->words(3, true),
-            'thumbnail' => $this->faker->imageUrl(640, 480, 'education'),
+            'thumbnail' => null,
         ];
     }
 }
