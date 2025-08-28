@@ -43,17 +43,10 @@ class DatabaseSeeder extends Seeder
             ['name' => 'Quiz Master', 'description' => 'Highest total score in all quizzes of a curriculum.'],
             ['name' => 'Fast Finisher', 'description' => 'Completes all quizzes/lessons in the shortest total time.'],
             ['name' => 'Consistent Performer', 'description' => 'Always scores above 80% in every quiz/activity.'],
-
-            ['name' => 'Activity Champion', 'description' => 'Completes the highest number of activities across lessons or highest average score in activities.'],
+            ['name' => 'Activity Champion', 'description' => 'Highest average score in activities.'],
             ['name' => 'All-Rounder', 'description' => 'Completes all quizzes and activities in all lessons of the curriculum.'],
-            ['name' => 'Most Improved', 'description' => 'Largest positive growth from first attempt to last attempt scores.'],
-
             ['name' => 'Early Bird', 'description' => 'Submits/finishes each quiz or activity earliest compared to classmates.'],
             ['name' => 'Persistent Learner', 'description' => 'Has the most attempts on quizzes/activities before completing.'],
-
-            ['name' => 'Perfect Streak', 'description' => 'Got 100% in all quizzes in a curriculum.'],
-            ['name' => 'Curriculum Topper', 'description' => 'Best performing student overall across all subjects within a curriculum.'],
-            ['name' => 'Subject Specialist', 'description' => 'Highest scorer in a specific subject across all quizzes/activities in that subject.'],
         ];
 
         foreach ($awards as $award) {
@@ -162,6 +155,7 @@ class DatabaseSeeder extends Seeder
                 StudentAward::firstOrCreate([
                     'student_id' => $student->id,
                     'award_id'   => $award->id,
+                    'academic_year'  => now()->year . '-' . (now()->year + 1),
                 ]);
             }
         });

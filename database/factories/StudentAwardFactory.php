@@ -21,6 +21,10 @@ class StudentAwardFactory extends Factory
         return [
             'student_id' => null,
             'award_id' => null,
+            'academic_year' => function () {
+                $year = fake()->numberBetween(2010, now()->year);
+                return $year . '-' . ($year + 1);
+            },
         ];
     }
 }

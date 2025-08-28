@@ -87,4 +87,23 @@ class Lesson extends Model
         return true;
     }
 
+    protected static function booted()
+    {
+        static::creating(function ($model) {
+            if (empty($model->academic_year)) {
+                $model->academic_year = $model->getAcademicYear();
+            }
+        });
+    }
+
+    public function getAcademicYear(): string
+    {
+        $now = now();
+        $year = $now->year;
+
+        return $now->month >= 6
+            ? $year . '-' . ($year + 1)
+            : ($year - 1) . '-' . $year;
+    }
+
 }

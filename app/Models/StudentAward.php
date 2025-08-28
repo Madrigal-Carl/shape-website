@@ -10,7 +10,8 @@ class StudentAward extends Model
     use HasFactory;
     protected $fillable = [
         'student_id',
-        'award_id'
+        'award_id',
+        'academic_year'
     ];
 
     public function student()
@@ -21,5 +22,16 @@ class StudentAward extends Model
     public function award()
     {
         return $this->belongsTo(Award::class);
+    }
+
+    public function getAcademicYear(): string
+    {
+        $now = now();
+        $year = $now->year;
+
+        if ($now->month >= 6) {
+            return $year . '-' . ($year + 1);
+        }
+        return ($year - 1) . '-' . $year;
     }
 }

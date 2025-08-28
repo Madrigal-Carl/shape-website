@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('title');
             $table->text('description')->nullable();
             $table->string('path')->default('images/default-img-holder.png');
-            $table->unsignedInteger('score')->nullable();
+            $table->unsignedInteger('score');
             $table->timestamps();
         });
     }
