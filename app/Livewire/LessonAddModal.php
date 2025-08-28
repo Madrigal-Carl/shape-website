@@ -305,10 +305,15 @@ class LessonAddModal extends Component
             ]);
         }
 
+        $totalScore = collect($this->questions)->sum(function ($q) {
+            return $q['point'] ?? 1;
+        });
+
         $quiz = Quiz::create([
             'lesson_id' => $lesson->id,
             'title'       => $this->quiz_name,
             'description' => $this->quiz_description,
+            'score'       => $totalScore,
         ]);
 
         foreach ($this->questions as $questionData) {

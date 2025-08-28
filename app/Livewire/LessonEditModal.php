@@ -387,10 +387,15 @@ class LessonEditModal extends Component
 
         // Update quiz
         $lesson->quiz()->delete();
+        $totalScore = collect($this->questions)->sum(function ($q) {
+            return $q['point'] ?? 1;
+        });
+
         if (!empty($this->quiz_name)) {
             $quiz = $lesson->quiz()->create([
                 'title'       => $this->quiz_name,
                 'description' => $this->quiz_description,
+                'score'       => $totalScore,
             ]);
 
             foreach ($this->questions as $questionData) {
