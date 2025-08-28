@@ -14,6 +14,9 @@ class ActivityHub extends Component
     public $isOpenActivityView = false;
     public $activities = [], $categories = [], $selectedCategories = [];
     public $act;
+    public $isPreviewOpen = false;
+    public $previewImages = [];
+    public $previewIndex = 0;
 
 
     #[On('openModal')]
@@ -80,6 +83,44 @@ class ActivityHub extends Component
         $this->activities = $q->orderByDesc('created_at')->get();
     }
 
+    public function openPreview($activityId, $imageIndex = 0)
+    {
+        $activity = Activity::with('activityImages')->find($activityId);
+
+        if (!$activity) return;
+
+        $this->previewImages = $activity->activityImages->pluck('path')->toArray();
+        $this->previewIndex = $imageIndex;
+        $this->isPreviewOpen = true;
+    }
+
+    public function closePreview()
+    {
+        $this->isPreviewOpen = false;
+        $this->previewImages = [];
+        $this->previewIndex = 0;
+    }
+
+    public function nextImage()
+    {
+        if (!empty($this->previewImages)) {
+            $this->previewIndex = ($this->previewIndex + 1) % count($this->previewImages);
+        }
+    }
+
+    public function prevImage()
+    {
+        if (!empty($this->previewImages)) {
+            $this->previewIndex = ($this->previewIndex - 1 + count($this->previewImages)) % count($this->previewImages);
+        }
+    }
+
+    public function setImage($index)
+    {
+        if (isset($this->previewImages[$index])) {
+            $this->previewIndex = $index;
+        }
+    }
 
     public function mount($targetComponent = null)
     {

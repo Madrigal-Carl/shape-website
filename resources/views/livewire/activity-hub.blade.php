@@ -1,17 +1,63 @@
 <div>
+
+    {{-- Image game Preview page --}}
+    @if ($isPreviewOpen)
+        <section
+            class=" bg-black/30 fixed w-dvw h-dvh top-0 left-0 z-50 backdrop-blur-xs flex justify-center items-center gap-6">
+            <div class="gamePreview relative w-full h-full">
+                <div class="fixed top-0 left-0 w-full h-full bg-black/70 backdrop-blur-3xl shrink-0 p-10">
+
+                    <button wire:click='closePreview' type="button"
+                        class="absolute top-o right-50 p-3 rounded-full aspect-square flex items-center justify-center bg-white/10 hover:bg-white/30 cursor-pointer">
+                        <span class="material-symbols-rounded scale-x-110 text-gray-400">close</span>
+                    </button>
+                    <div class="w-full h-full flex flex-col justify-center gap-4">
+                        {{-- Image pagination --}}
+                        <div class="flex items-center gap-4 justify-between w-full h-full">
+                            <button type="button" wire:click="prevImage"
+                                class="p-3 rounded-full aspect-square flex items-center justify-center bg-white/10 hover:bg-white/30 cursor-pointer">
+                                <span class="material-symbols-rounded scale-x-110 text-gray-400">chevron_backward</span>
+                            </button>
+
+                            <div
+                                class="w-300 aspect-video object-contain object-center flex items-center justify-center overflow-hidden rounded-2xl">
+                                <img src="{{ asset($previewImages[$previewIndex]) }}"
+                                    class="h-full object-contain object-center rounded-2xl" alt="">
+                            </div>
+
+
+                            <button type="button" wire:click="nextImage"
+                                class="p-3 rounded-full aspect-square flex items-center justify-center bg-white/10 hover:bg-white/30 cursor-pointer">
+                                <span class="material-symbols-rounded scale-110 text-gray-400">chevron_forward</span>
+                            </button>
+                        </div>
+                        <div class="flex items-center gap-2 justify-center">
+                            @foreach ($previewImages as $i => $path)
+                                <img src="{{ asset($path) }}" wire:click="setImage({{ $i }})"
+                                    class="w-24 aspect-video object-cover rounded-lg cursor-pointer
+                                {{ $i === $previewIndex ? 'opacity-100 ring-2 ring-blue-500' : 'opacity-40 hover:opacity-80' }}">
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    @endif
+    {{-- End Image game Preview page --}}
     @if ($isOpen)
         <section
-            class="bg-black/30 fixed w-dvw h-dvh p-10 top-0 left-0 z-50 backdrop-blur-xs flex justify-center items-center gap-6">
+            class="bg-black/30 fixed w-dvw h-dvh p-10 top-0 left-0 z-30 backdrop-blur-xs flex justify-center items-center gap-6">
             <div class="flex flex-col w-[50%] h-full gap-4 bg-white shadow-2xl rounded-4xl p-8">
 
                 <div class="w-full flex items-center justify-between">
                     <div class="flex items-center gap-4">
-                        <img src="{{asset('images/game-icons/gamehub.png')}}" class="h-8" alt="">
+                        <img src="{{ asset('images/game-icons/gamehub.png') }}" class="h-8" alt="">
                         <p class="font-bold text-3xl">Activity Hub</p>
                     </div>
 
-                    <button type="button" class="profile-button flex items-center p-2 rounded-full gap-2 shadow-2xl text-paragraph cursor-pointer hover:text-white hover:bg-blue-button hover:shadow-xl/35 hover:shadow-blue-button"
-                    wire:click='closeModal'>
+                    <button type="button"
+                        class="profile-button flex items-center p-2 rounded-full gap-2 shadow-2xl text-paragraph cursor-pointer hover:text-white hover:bg-blue-button hover:shadow-xl/35 hover:shadow-blue-button"
+                        wire:click='closeModal'>
                         <span class="material-symbols-rounded ">close</span>
                     </button>
                 </div>
@@ -68,7 +114,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div><!--End Game container at game hub-->
+                        </div>
                     @endforeach
                 </div>
             </div>
@@ -78,7 +124,9 @@
                     class="flex flex-col w-[30%] h-full bg-white shadow-2xl overflow-y-auto gamesGrid rounded-4xl relative">
                     <div class="w-full flex items-center justify-between p-8 absolute top-0 left-0 z-10 text-white">
                         <p class="font-bold text-3xl">Activity Info</p>
-                        <button class="profile-button flex items-center p-2 rounded-full gap-2 shadow-2xl text-white cursor-pointer hover:text-white hover:bg-blue-button hover:shadow-xl/35 hover:shadow-blue-button" type="button" wire:click="closeActivityView">
+                        <button
+                            class="profile-button flex items-center p-2 rounded-full gap-2 shadow-2xl text-white cursor-pointer hover:text-white hover:bg-blue-button hover:shadow-xl/35 hover:shadow-blue-button"
+                            type="button" wire:click="closeActivityView">
                             <span class="material-symbols-rounded">close</span>
                         </button>
                     </div>
@@ -113,9 +161,11 @@
                                 @foreach ($act->activityImages as $image)
                                     @if ($loop->iteration == 2)
                                         <img src="{{ asset($image->path) }}" alt=""
+                                            wire:click="openPreview({{ $act->id }}, {{ $loop->index }})"
                                             class="w-full rounded-lg col-span-2 row-span-2 hover:scale-102 cursor-pointer">
                                     @elseif ($loop->iteration > 2)
                                         <img src="{{ asset($image->path) }}" alt=""
+                                            wire:click="openPreview({{ $act->id }}, {{ $loop->index }})"
                                             class="w-full rounded-lg col-span-1 row-span-1 hover:scale-104 cursor-pointer">
                                     @endif
                                 @endforeach
@@ -128,39 +178,6 @@
                     </div>
                 </div>
             @endif
-
-            {{-- Image game Preview page --}}
-            <section class=" bg-black/30 fixed w-dvw h-dvh top-0 left-0 z-50 backdrop-blur-xs flex justify-center items-center gap-6">
-                <div class="gamePreview relative w-full h-full">
-                    <div class="fixed top-0 left-0 w-full h-full bg-black/70 backdrop-blur-3xl shrink-0 p-10">
-                        <div class="w-full h-full flex flex-col justify-center gap-4">
-                            {{-- Image pagination --}}
-                            <div class="flex items-center gap-4 justify-between w-full h-full">
-                                <button class="p-3 rounded-full aspect-square flex items-center justify-center bg-white/10 hover:bg-white/30 cursor-pointer">
-                                    <span class="material-symbols-rounded scale-x-110 text-gray-400">chevron_backward</span>
-                                </button>
-
-                                <div class="w-300 aspect-video object-contain object-center flex items-center justify-center overflow-hidden rounded-2xl">
-                                    <img src="{{asset('images/game-icons/game-posters/mario-kart-world-review-1.jpg')}}" class="h-full object-contain object-center rounded-2xl" alt="">
-                                </div>
-
-
-                                <button class="p-3 rounded-full aspect-square flex items-center justify-center bg-white/10 hover:bg-white/30 cursor-pointer">
-                                    <span class="material-symbols-rounded scale-110 text-gray-400">chevron_forward</span>
-                                </button>
-                            </div>
-                            {{-- Image Drawer --}}
-                            <div class="flex items-center gap-2 w-full h-max justify-center relative">
-                                <img src="{{asset('images/game-icons/game-posters/mario-kart-world-review-1.jpg')}}" class="image-preview-active w-30 aspect-video object-cover object-center rounded-2xl opacity-30 hover:opacity-100 transform hover:-translate-y-1" alt="">
-                                <img src="{{asset('images/game-icons/game-posters/mario-kart-world-review-1.jpg')}}" class="w-30 aspect-video object-cover object-center rounded-2xl opacity-30 hover:opacity-100 relative transform hover:-translate-y-1" alt="">
-                                <img src="{{asset('images/game-icons/game-posters/mario-kart-world-review-1.jpg')}}" class="w-30 aspect-video object-cover object-center rounded-2xl opacity-30 hover:opacity-100 transform hover:-translate-y-1" alt="">
-                                <img src="{{asset('images/game-icons/game-posters/mario-kart-world-review-1.jpg')}}" class="w-30 aspect-video object-cover object-center rounded-2xl opacity-30 hover:opacity-100 transform hover:-translate-y-1" alt="">
-                                <img src="{{asset('images/game-icons/game-posters/mario-kart-world-review-1.jpg')}}" class="w-30 aspect-video object-cover object-center rounded-2xl opacity-30 hover:opacity-100 transform hover:-translate-y-1" alt="">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>{{-- End Image game Preview page --}}
         </section>
     @endif
 </div>
