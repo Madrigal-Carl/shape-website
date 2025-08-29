@@ -14,20 +14,20 @@
             <div class="flex flex-col gap-1">
                 <label for="">Username</label>
                 <input wire:model="username"
-                    class="text-sm bg-white py-1.5 px-3 rounded-xl outline-none border-2 border-white focus:border-amber-600"
+                    class="text-sm bg-white py-1.5 px-3 rounded-xl outline-none border-2 border-white focus:border-blue-button hover:border-blue-button"
                     type="text" placeholder="Enter your username" />
             </div>
             <div class="flex flex-col gap-1">
                 <label for="">Password</label>
                 <input wire:model="password"
-                    class="text-sm bg-white py-1.5 px-3 rounded-xl outline-none border-2 border-white focus:border-amber-600"
+                    class="text-sm bg-white py-1.5 px-3 rounded-xl outline-none border-2 border-white focus:border-blue-button hover:border-blue-button"
                     type="password" placeholder="Enter your password" />
-                <a href="#" class="w-fit self-end">Forgot Password?</a>
+                <a href="#" class="w-fit self-end hover:text-blue-button cursor-pointer">Forgot Password?</a>
             </div>
         </div>
 
         <!-- Login Button -->
-        <button type="submit" class="py-1.5 px-3 rounded-xl text-white font-semibold bg-blue-button">
+        <button type="submit" class="py-1.5 px-3 rounded-xl text-white font-semibold bg-blue-button hover:bg-blue-700 cursor-pointer">
             Login
         </button>
     </form>

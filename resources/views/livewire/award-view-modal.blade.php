@@ -8,7 +8,7 @@
                     <div class="flex items-center justify-between">
                         <div class="flex items-center gap-4">
                             <img src="{{ asset('images/award-icon.png') }}" alt="" class="h-15">
-                            <h1 class=" text-2xl font-semibold text-heading-dark">Awards View</h1>
+                            <h1 class=" text-3xl font-bold text-heading-dark">Awards View</h1>
                         </div>
                         <!-- Buttons -->
                     </div>
@@ -41,7 +41,7 @@
                     </div>
 
                     <div
-                        class="flex items-center gap-2 absolute w-full left-0 bottom-0 px-10 pb-10 pt-5  rounded-b-4xl bg-gradient-to-t from-white via-white to-white/50">
+                        class="flex items-center gap-2 absolute w-full left-0 bottom-0 px-8 pb-8 pt-8  rounded-b-4xl bg-gradient-to-t from-white via-white to-white/50">
                         <button type="button" wire:click='closeModal()'
                             class=" bg-gray-100 py-1.5 px-3 w-full rounded-xl text-heading-dark font-medium cursor-pointer hover:bg-gray-300">Cancel</button>
                         <button type="submit"
