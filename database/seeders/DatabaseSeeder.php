@@ -155,7 +155,6 @@ class DatabaseSeeder extends Seeder
                 StudentAward::firstOrCreate([
                     'student_id' => $student->id,
                     'award_id'   => $award->id,
-                    'academic_year'  => now()->year . '-' . (now()->year + 1),
                 ]);
             }
         });
