@@ -11,7 +11,6 @@ class StudentAward extends Model
     protected $fillable = [
         'student_id',
         'award_id',
-        'academic_year'
     ];
 
     public function student()
@@ -24,14 +23,22 @@ class StudentAward extends Model
         return $this->belongsTo(Award::class);
     }
 
-    public function getAcademicYear(): string
+    protected static function booted()
+    {
+        static::creating(function ($model) {
+            if (empty($model->school_year)) {
+                $model->school_year = $model->getSchoolYear();
+            }
+        });
+    }
+
+    public function getSchoolYear(): string
     {
         $now = now();
         $year = $now->year;
 
-        if ($now->month >= 6) {
-            return $year . '-' . ($year + 1);
-        }
-        return ($year - 1) . '-' . $year;
+        return $now->month >= 6
+            ? $year . '-' . ($year + 1)
+            : ($year - 1) . '-' . $year;
     }
 }

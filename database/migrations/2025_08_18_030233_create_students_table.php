@@ -21,6 +21,7 @@ return new class extends Migration
             $table->enum('sex', ['male', 'female'])->nullable();
             $table->date('birth_date');
             $table->enum('status', ['active', 'inactive', 'graduated', 'dropped', 'transferred'])->default('active');
+            $table->string('school_year');
             $table->timestamps();
         });
     }

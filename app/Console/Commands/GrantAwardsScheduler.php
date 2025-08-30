@@ -37,7 +37,7 @@ class GrantAwardsScheduler extends Command
         $this->info('Award checks finished.');
     }
 
-    private function getAcademicYear(): string
+    private function getSchoolYear(): string
     {
         $now = now();
         $year = $now->year;
@@ -51,7 +51,7 @@ class GrantAwardsScheduler extends Command
     protected function grantOrRevokeAward(Student $student, string $awardName, bool $meetsCriteria)
     {
         $award = Award::firstOrCreate(['name' => $awardName]);
-        $currentYear = $this->getAcademicYear();
+        $currentYear = $this->getSchoolYear();
 
         $alreadyHas = $student->awards()
             ->wherePivot('year', $currentYear)
@@ -71,7 +71,7 @@ class GrantAwardsScheduler extends Command
 
     protected function checkTopScorerForAll()
     {
-        $academicYear = $this->getAcademicYear();
+        $academicYear = $this->getSchoolYear();
 
         // Get all students with their quizzes in the current academic year
         $students = Student::with([
@@ -125,7 +125,7 @@ class GrantAwardsScheduler extends Command
 
     protected function checkQuizMasterForAll()
     {
-        $academicYear = $this->getAcademicYear();
+        $academicYear = $this->getSchoolYear();
 
         // Get all students with their quizzes in the current academic year
         $students = Student::with([

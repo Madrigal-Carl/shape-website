@@ -26,7 +26,7 @@ class StudentAddModal extends Component
     public function generatePassword()
     {
         $birthdate = str_replace('-', '', $this->birthdate);
-        $lastName = strtolower($this->last_name);
+        $lastName = strtolower(trim($this->last_name));
         $this->account_password = "{$birthdate}-{$lastName}";
     }
 

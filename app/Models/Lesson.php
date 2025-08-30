@@ -90,13 +90,13 @@ class Lesson extends Model
     protected static function booted()
     {
         static::creating(function ($model) {
-            if (empty($model->academic_year)) {
-                $model->academic_year = $model->getAcademicYear();
+            if (empty($model->school_year)) {
+                $model->school_year = $model->getSchoolYear();
             }
         });
     }
 
-    public function getAcademicYear(): string
+    public function getSchoolYear(): string
     {
         $now = now();
         $year = $now->year;
