@@ -266,8 +266,8 @@
                             <input type="text" name="" id="" placeholder="Username"
                                 wire:model.live='account_username'
                                 class="px-3 py-1 rounded-lg bg-card placeholder-paragraph outline-none w-full" />
-                            <input type="password" name="" id="" placeholder="Password"
-                                wire:model.live='account_password'
+                            <input type="text" name="" id="" placeholder="Password"
+                                wire:model.live='account_password' disabled
                                 class="px-3 py-1 rounded-lg bg-card placeholder-paragraph outline-none w-full" />
                         </div>
                     </div>
