@@ -13,6 +13,7 @@ class Log extends Model
         'loggable_id',
         'loggable_type',
         'attempt_number',
+        'time_spent_seconds',
         'status',
     ];
 

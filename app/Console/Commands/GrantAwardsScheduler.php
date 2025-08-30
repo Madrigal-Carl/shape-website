@@ -60,7 +60,7 @@ class GrantAwardsScheduler extends Command
 
         if ($meetsCriteria && !$alreadyHas) {
             // Grant award
-            $student->awards()->attach($award->id, ['year' => $currentYear]);
+            $student->awards()->attach($award->id);
             Log::info("Granted {$awardName} ({$currentYear}) to {$student->full_name}");
         } elseif (!$meetsCriteria && $alreadyHas) {
             // Revoke award
@@ -71,12 +71,12 @@ class GrantAwardsScheduler extends Command
 
     protected function checkTopScorerForAll()
     {
-        $academicYear = $this->getSchoolYear();
+        $schoolYear = $this->getSchoolYear();
 
         // Get all students with their quizzes in the current academic year
         $students = Student::with([
-            'lessonSubjectStudents.lesson.quiz' => function ($q) use ($academicYear) {
-                $q->where('academic_year', $academicYear);
+            'lessonSubjectStudents.lesson.quiz' => function ($q) use ($schoolYear) {
+                $q->where('academic_year', $schoolYear);
             }
         ])->get();
 
@@ -125,12 +125,12 @@ class GrantAwardsScheduler extends Command
 
     protected function checkQuizMasterForAll()
     {
-        $academicYear = $this->getSchoolYear();
+        $schoolYear = $this->getSchoolYear();
 
         // Get all students with their quizzes in the current academic year
         $students = Student::with([
-            'lessonSubjectStudents.lesson.quiz' => function ($q) use ($academicYear) {
-                $q->where('academic_year', $academicYear);
+            'lessonSubjectStudents.lesson.quiz' => function ($q) use ($schoolYear) {
+                $q->where('academic_year', $schoolYear);
             }
         ])->get();
 
