@@ -3,32 +3,37 @@
     @php
         $user = App\Models\Account::with('accountable')->find(auth()->id());
     @endphp
-    <div class="flex gap-2 w-auto justify-between">
+    <div class="flex gap-2 mt-4 w-auto justify-between">
         <div class="flex gap-4">
-            <span class="w-1 h-full bg-blue-button rounded-full"></span>
-            <div>
-                <h1 class="text-2xl font-medium">
-                    Welcome back,
-                    <span class="font-bold text-blue-button">{{ $user->accountable->first_name }}</span>
+            <span class="w-2 h-full bg-blue-button rounded-full"></span>
+            <div class="flex flex-col gap-1">
+                <h1 class="text-2xl font-semibold leading-tight">
+                    Welcome back, Sir
+                    <span class="font-bold text-blue-button">Dave</span>
                 </h1>
-                <p class="text-sm text-paragraph">Here is your summary today</p>
+                <p class="text-lg text-paragraph leading-4">Here is your summary today</p>
+                <div class="w-max px-2 py-1 mt-4 rounded-lg border-1 border-gray-300 hover:border-blue-button shadow-2xl/15">
+                    <select
+                        class="w-full outline-none text-heading-dark font-medium text-lg">
+                        <option class="text-sm text-black" selected disabled>
+                            S.Y 2025-2026
+                        </option>
+
+                    </select>
+                </div>
             </div>
         </div>
 
         <!-- Buttons -->
-        <button
-            class="flex items-center bg-white py-2 px-5 rounded-full gap-2 shadow-2xl text-paragraph cursor-pointer hover:text-white hover:bg-blue-button hover:shadow-xl/35 hover:shadow-blue-button hover:scale-105">
-            <span class="material-symbols-rounded">calendar_month</span>
-            <p class="text-sm">Select Date</p>
-        </button>
+
     </div>
 
     <!-- Award inventory -->
     <div class="flex flex-col gap-4">
-        <div class="side flex items-center justify-between gap-2">
-            <h1 class="text-4xl font-medium">Awards Inventory</h1>
-            <div
-                class="flex items-center bg-white py-3 px-5 rounded-full shadow-2xl text-paragraph cursor-pointer hover:text-white hover:bg-blue-button">
+        <div class="side flex items-center justify-between gap-2 mb-4">
+            <h1 class="text-4xl font-bold">Awards Inventory</h1>
+            {{-- <div
+                class="flex items-center bg-white py-3 px-5 rounded-full shadow-2xl border-2 border-white hover:border-blue-button text-paragraph cursor-pointer hover:text-white hover:bg-blue-button">
                 <select name="" id="" class="w-25 outline-none">
                     <option value="pending" class="text-sm text-heading-dark" selected disabled>
                         Filter by
@@ -43,7 +48,7 @@
                 </select>
                 <!-- <span class="material-symbols-rounded">more_horiz</span>
                     <span class="material-symbols-rounded">search</span> -->
-            </div>
+            </div> --}}
         </div>
 
 
@@ -51,10 +56,10 @@
         <div class="w-full  grid grid-cols-4 gap-4">
             @foreach ($awards as $award)
                 <div
-                    class="max-w-100 flex flex-col gap-8 items-center bg-[radial-gradient(circle_at_center,_#93CEF5,_#006FDF)] p-4 rounded-3xl">
+                    class="max-w-100 flex flex-col gap-8 items-center bg-[radial-gradient(circle_at_center,_#93CEF5,_#006FDF)] p-4 rounded-3xl ">
                     <div class="flex flex-col items-center gap-2 pt-8">
                         <img src="{{ asset('images/Awards_icons/medal.png') }}" alt="" class="h-35 mb-4">
-                        <p class="font-medium text-xl text-white w-full">{{ $award->name }}</p>
+                        <p class="font-medium text-xl text-white w-full text-center">{{ $award->name }}</p>
                         <div class="flex items-center w-full justify-center gap-4 text-white">
                             <p class="text-sm">Awardees:</p>
                             <p class="text-sm">{{ $award->awardees_count }}</p>

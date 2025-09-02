@@ -1,34 +1,39 @@
-<main class="col-span-5 px-8 py-4 flex flex-col h-dvh gap-16 overflow-y-auto">
+<main class="col-span-5 pl-8 pr-7 py-4 flex flex-col h-dvh gap-4 overflow-y-none">
     <!-- Greetings -->
     @php
         $user = App\Models\Account::with('accountable')->find(auth()->id());
     @endphp
-    <div class="flex gap-2 w-auto justify-between">
+    <div class="flex mt-4 gap-2 w-auto justify-between">
         <div class="flex gap-4">
-            <span class="w-1 h-full bg-blue-button rounded-full"></span>
-            <div>
-                <h1 class="text-2xl font-medium">
-                    Welcome back,
-                    <span class="font-bold text-blue-button">{{ $user->accountable->first_name }}</span>
+            <span class="w-2 h-full bg-blue-button rounded-full"></span>
+            <div class="flex flex-col gap-1">
+                <h1 class="text-2xl font-semibold leading-tight">
+                    Welcome back, Sir
+                    <span class="font-bold text-blue-button">Dave</span>
                 </h1>
-                <p class="text-sm text-paragraph">Here is your summary today</p>
+                <p class="text-lg text-paragraph leading-4">Here is your summary today</p>
+                <div class="w-max px-2 py-1 mt-4 rounded-lg border-1 border-gray-300 hover:border-blue-button shadow-2xl/15">
+                    <select
+                        class="w-full outline-none text-heading-dark font-medium text-lg">
+                        <option class="text-sm text-black" selected disabled>
+                            S.Y 2025-2026
+                        </option>
+
+                    </select>
+                </div>
             </div>
         </div>
 
         <!-- Buttons -->
-        <div class="flex gap-4">
-            <button
-                class="flex items-center bg-white py-2 px-5 rounded-full gap-2 shadow-2xl text-paragraph cursor-pointer hover:text-white hover:bg-blue-button hover:shadow-xl/35 hover:shadow-blue-button hover:scale-105">
-                <span class="material-symbols-rounded">calendar_month</span>
-                <p class="text-sm">Select Date</p>
-            </button>
+        <div class="flex gap-4 self-start">
+
             <button wire:click="openAddStudentModal"
-                class="relative flex items-center justify-center bg-white py-2 px-5 rounded-full gap-2 shadow-2xl text-paragraph cursor-pointer hover:text-white hover:bg-blue-button hover:shadow-xl/35 hover:shadow-blue-button hover:scale-105"
+                class="relative flex items-center justify-center bg-white py-3 px-5 rounded-full gap-2 shadow-2xl/15 text-paragraph cursor-pointer border-2 border-white hover:border-blue-button hover:text-white hover:bg-blue-button hover:shadow-xl/35 hover:shadow-blue-button hover:scale-105"
                 wire:loading.attr="disabled" wire:target="openAddStudentModal">
 
                 <div class="flex items-center gap-2" wire:loading.class="invisible" wire:target="openAddStudentModal">
                     <span class="material-symbols-rounded">add</span>
-                    <p class="text-sm">Add Student</p>
+                    <p class="">Add Student</p>
                 </div>
 
                 <div wire:loading wire:target="openAddStudentModal" role="status"
@@ -49,44 +54,44 @@
     </div>
 
     <!-- Student Table -->
-    <div class="flex flex-col gap-4 min-h-[20%]">
-        <div class="side flex items-center justify-between gap-2">
-            <h1 class="text-4xl font-medium">Student List</h1>
+    <div class="mt-12 flex flex-col gap-4 min-h-[20%]">
+        <div class="side flex items-center justify-between gap-2 mb-2">
+            <h1 class="text-4xl font-bold">Student List</h1>
 
             <livewire:student-add-modal />
             <livewire:student-edit-modal />
             <livewire:student-view-modal />
-            <div class="flex items-center gap-4">
+            <div class="flex items-center gap-4 self-start">
                 <div
-                    class="flex items-center bg-white py-3 px-5 rounded-full shadow-2xl text-paragraph hover:bg-blue-button hover:text-white cursor-pointer">
+                    class="flex items-center bg-white py-3 px-5 rounded-full shadow-2xl/15 border-2 border-white hover:border-blue-button text-paragraph hover:bg-blue-button hover:text-white cursor-pointer">
                     <select name="" id="" class="w-30 outline-none"
                         wire:change="$set('status', $event.target.value)">
-                        <option class="text-sm text-heading-dark" selected disabled>
+                        <option class=" text-heading-dark" selected disabled>
                             Status
                         </option>
-                        <option value="all" class="text-sm text-heading-dark">
+                        <option value="all" class=" text-heading-dark">
                             All
                         </option>
-                        <option value="active" class="text-sm text-lime">
+                        <option value="active" class=" text-lime">
                             Active
                         </option>
-                        <option value="inactive" class="text-sm text-paragraph">
+                        <option value="inactive" class=" text-paragraph">
                             Inactive
                         </option>
-                        <option value="graduated" class="text-sm text-blue-button">
+                        <option value="graduated" class=" text-blue-button">
                             Graduated
                         </option>
-                        <option value="transferred" class="text-sm text-yellowOrange">
+                        <option value="transferred" class=" text-yellowOrange">
                             Transferred
                         </option>
-                        <option value="dropped" class="text-sm text-danger">
+                        <option value="dropped" class=" text-danger">
                             Dropped
                         </option>
                     </select>
                 </div>
 
                 <div
-                    class="flex gap-2 items-center bg-white py-3 px-5 rounded-full shadow-2xl text-paragraph border-2 border-white hover:border-blue-button cursor-pointer">
+                    class="flex gap-2 items-center bg-white py-3 px-5 rounded-full shadow-2xl/15 text-paragraph border-2 border-white hover:border-blue-button cursor-pointer">
                     <span class="material-symbols-rounded">search</span>
                     <input type="text" class="outline-none w-20 focus:w-60 placeholder-paragraph"
                         wire:model.live="search" placeholder="Search">
@@ -94,7 +99,7 @@
             </div>
         </div>
 
-        <div class="flex flex-col min-h-[20%] p-6 bg-white rounded-3xl">
+        <div class="flex flex-col min-h-[20%] p-6 bg-white rounded-3xl shadow-2xl/5">
             <div class="flex flex-col overflow-y-scroll min-h-[20%]">
                 <div class="flex flex-col rounded-3xl bg-white">
                     <table class="table-auto border-separate relative">
@@ -124,7 +129,7 @@
                                 <tr>
                                     <td class="px-4 py-3 text-center text-paragraph">{{ $student->id }}</td>
                                     <td class="px-4 py-3 text-center text-paragraph">{{ $student->full_name }}</td>
-                                    <td class="px-4 py-3 text-center text-paragraph">
+                                    <td class="px-4 py-3 text-center text-paragraph ">
                                         {{ ucwords($student->profile->disability_type) }}</td>
                                     <td class="px-4 py-3 text-center text-paragraph">
                                         {{ $student->completed_lessons_count }}/{{ $student->total_lessons_count }}

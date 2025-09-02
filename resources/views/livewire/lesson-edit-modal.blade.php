@@ -8,7 +8,7 @@
                     <div class="Addlesson w-full h-[100%] flex flex-col gap-8 self-center-safe overflow-y-auto">
                         <div class="flex items-center gap-2">
                             <img src="{{ asset('images/cube.png') }}" alt="" />
-                            <h1 class="text-2xl font-semibold text-heading-dark">
+                            <h1 class="text-3xl font-bold text-heading-dark">
                                 Edit Lesson
                             </h1>
                         </div>
@@ -83,38 +83,50 @@
                                     </div>
                                 </div>
 
-                                <div class="px-2 py-1 rounded-lg bg-card">
-                                    <select name="" id="" wire:model.live="selected_student"
-                                        wire:key="{{ $curriculum }}" class="w-full outline-none text-paragraph">
-                                        <option value="" class="text-sm text-black" selected disabled>
-                                            Select Student (Optional)
-                                        </option>
-                                        @foreach ($students as $student)
-                                            <option value="{{ $student->id }}" class="text-sm text-paragraph">
-                                                {{ ucwords($student->last_name) }},
-                                                {{ ucwords($student->first_name) }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="flex flex-wrap gap-2">
-                                    @foreach ($selected_students as $i => $stud)
-                                        @php
-                                            $student = $students->firstWhere('id', $stud);
-                                        @endphp
-                                        <div class="flex items-center gap-2 px-3 py-1 bg-card rounded-full w-fit">
-                                            {{-- SHOULD BE STUDENT NAME --}}
-                                            <p class="text-sm">{{ $student->last_name }}</p>
-                                            <button wire:click="removeStudent({{ $i }})" type="button"
-                                                class="text-red-500 hover:text-red-700">✕</button>
-                                        </div>
-                                    @endforeach
-                                </div>
-
                                 <textarea name="" id="" maxlength="200" placeholder="Description (Optional)"
                                     wire:model.live="description"
                                     class="px-3 py-2 rounded-lg bg-card placeholder-paragraph resize-none h-24 outline-none"></textarea>
                             </div>
+                        </div>
+
+                        <div class="flex flex-col gap-3">
+                            <h2 class="font-medium text-lg">Specialize Learning <span class="text-paragraph font-normal text-sm">(optional)</span></h2>
+                            {{-- Specilize selected Student --}}
+                            <div class="p-3 rounded-lg bg-card relative flex flex-col gap-2 h-60">
+                                <div class="flex items-center justify-between w-full mb-2">
+                                    <p class="text-paragraph font-medium">Select Student:</p>
+                                    <button class="flex items-center justify-center gap-1 px-3 py-1 rounded-lg text-paragraph hover:text-white cursor-pointer bg-white hover:bg-blue-button">
+                                        <p class="text-sm">Clear All</p>
+                                        <span class="material-symbols-rounded">clear_all</span>
+                                    </button>
+                                </div>
+
+
+                                {{-- Student list checkbox --}}
+                                <div class="flex items-center gap-2 w-full">
+                                    <div class=" w-full flex items-center px-3 py-2 rounded-lg bg-white border-gray-300 gap-2">
+                                        <input class="w-full outline-none" type="text" placeholder="Search Student"
+                                            wire:model.live="student_search"
+                                            class="w-full outline-none text-paragraph placeholder-paragraph" />
+                                    </div>
+                                    <button class="flex items-center justify-center p-2 rounded-lg bg-blue-button hover:bg-blue-700 cursor-pointer">
+                                            <span class="material-symbols-rounded text-white cursor-pointer">search</span>
+                                    </button>
+                                </div>
+
+                                <div class="h-full flex flex-col gap-1 bg-white p-2 rounded-lg">
+                                    <div class="flex flex-col gap-1 h-full overflow-y-scroll pr-2 rounded-lg">
+                                        {{-- Student checkbox --}}
+                                        <div class="flex items-center justify-end-safe gap-2 w-full p-2 hover:bg-card rounded-lg cursor-pointer">
+                                            <label class="container w-fit">
+                                                <input checked="checked" type="checkbox">
+                                                <div class="checkmark"></div>
+                                            </label>
+                                            <p class="w-full text-paragraph">Carl S. Madrigal</p>
+                                        </div>{{--End Student checkbox --}}
+                                    </div>
+                                </div>
+                            </div>{{-- End of Specilize selected Student --}}
                         </div>
 
                         <div class="flex flex-col gap-3">
@@ -252,7 +264,7 @@
                     <div class="Addlesson w-full h-[100%] flex flex-col pb-18 gap-8 self-center-safe overflow-y-auto">
                         <div class="flex items-center gap-2">
                             <img src="{{ asset('images/quizzes.png') }}" alt="" />
-                            <h1 class="text-2xl font-semibold text-heading-dark">
+                            <h1 class="text-3xl font-bold text-heading-dark">
                                 Edit Quiz
                             </h1>
                         </div>

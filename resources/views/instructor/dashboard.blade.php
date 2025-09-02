@@ -1,35 +1,39 @@
 <main class="col-span-5 pl-8 pr-4 py-4 flex flex-col h-dvh gap-4 overflow-y-auto">
     <!-- Greetings -->
-    <div class="flex gap-2 w-auto justify-between">
+    <div class="flex gap-2 mt-4 w-auto justify-between">
         <div class="flex gap-4">
-            <span class="w-1 h-full bg-blue-button rounded-full"></span>
-            <div>
-                <h1 class="text-2xl font-medium">
+            <span class="w-2 h-full bg-blue-button rounded-full"></span>
+            <div class="flex flex-col gap-1">
+                <h1 class="text-2xl font-semibold leading-tight">
                     Welcome back, Sir
                     <span class="font-bold text-blue-button">Dave</span>
                 </h1>
-                <p class="text-sm text-paragraph">Here is your summary today</p>
+                <p class="text-lg text-paragraph leading-4">Here is your summary today</p>
+                <div class="w-max px-2 py-1 mt-4 rounded-lg border-1 border-gray-300 hover:border-blue-button shadow-2xl/15">
+                    <select
+                        class="w-full outline-none text-heading-dark font-medium text-lg">
+                        <option class="text-sm text-black" selected disabled>
+                            S.Y 2025-2026
+                        </option>
+
+                    </select>
+                </div>
             </div>
         </div>
 
         <!-- Buttons -->
-        <div class="flex gap-4">
+        <div class="flex gap-4 self-start">
             <button
-                class="flex items-center bg-white py-2 px-5 rounded-full gap-2 shadow-2xl text-paragraph cursor-pointer hover:text-white hover:bg-blue-button hover:shadow-xl/35 hover:shadow-blue-button hover:scale-105">
-                <span class="material-symbols-rounded">calendar_month</span>
-                <p class="text-sm">Select Date</p>
-            </button>
-            <button
-                class="flex items-center bg-white py-2 px-5 rounded-full gap-2 shadow-2xl text-paragraph cursor-pointer hover:text-white hover:bg-blue-button hover:shadow-xl/35 hover:shadow-blue-button hover:scale-105">
+                class="flex items-center bg-white py-3 px-5 rounded-full gap-2 shadow-2xl/15 text-paragraph cursor-pointer border-2 border-white hover:border-blue-button hover:text-white hover:bg-blue-button hover:shadow-xl/35 hover:shadow-blue-button hover:scale-105">
                 <span class="material-symbols-rounded">save</span>
-                <p class="text-sm">Export</p>
+                <p class="">Export</p>
             </button>
         </div>
     </div>
 
     <!-- Dashboard -->
     <div class="mt-12 flex flex-col gap-4">
-        <h1 class="text-4xl font-medium">Dashboard</h1>
+        <h1 class="text-5xl font-bold mb-2">Dashboard</h1>
         <div class="grid grid-cols-4 grid-rows-1 gap-4">
             <div
                 class="bg-gradient-to-tr from-blue-button to-[#00EEFF] shadow-blue-button shadow-2xl/45 p-6 text-white rounded-3xl flex flex-col justify-between gap-6">
@@ -85,7 +89,7 @@
         </div>
 
         <div class="grid grid-cols-4 grid-rows-1 gap-4">
-            <div class="bg-white p-6 text-heading-dark shadow-2xl/15 rounded-3xl flex flex-col justify-between gap-6">
+            <div class="bg-white p-6 text-heading-dark shadow-2xl/5 rounded-3xl flex flex-col justify-between gap-6">
                 <div class="flex justify-between">
                     <div>
                         <p class="text-sm leading-snug font-normal text-paragraph">
@@ -98,7 +102,7 @@
                 <h1 class="text-4xl font-semibold text-blue-button">24</h1>
             </div>
 
-            <div class="bg-white p-6 text-heading-dark shadow-2xl/15 rounded-3xl flex flex-col justify-between gap-6">
+            <div class="bg-white p-6 text-heading-dark shadow-2xl/5 rounded-3xl flex flex-col justify-between gap-6">
                 <div class="flex justify-between">
                     <div>
                         <p class="text-sm leading-snug font-normal text-paragraph">
@@ -111,7 +115,7 @@
                 <h1 class="text-4xl font-semibold text-lime">24</h1>
             </div>
 
-            <div class="bg-white p-6 text-heading-dark shadow-2xl/15 rounded-3xl flex flex-col justify-between gap-6">
+            <div class="bg-white p-6 text-heading-dark shadow-2xl/5 rounded-3xl flex flex-col justify-between gap-6">
                 <div class="flex justify-between">
                     <div>
                         <p class="text-sm leading-snug font-normal text-paragraph">
@@ -124,7 +128,7 @@
                 <h1 class="text-4xl font-semibold text-yellowOrange">24</h1>
             </div>
 
-            <div class="bg-white p-6 text-heading-dark shadow-2xl/15 rounded-3xl flex flex-col justify-between gap-6">
+            <div class="bg-white p-6 text-heading-dark shadow-2xl/5 rounded-3xl flex flex-col justify-between gap-6">
                 <div class="flex justify-between">
                     <div>
                         <p class="text-sm leading-snug font-normal text-paragraph">
@@ -140,8 +144,8 @@
     </div>
 
     <div class="grid grid-cols-2 grid-rows-4 gap-4">
-        <div class="col-span-1 row-span-2 h-full bg-white p-6 rounded-3xl flex flex-col gap-4 shadow-2xl/15">
-            <h1 class="text-xl font-semibold">Weekly Activities</h1>
+        <div class="col-span-1 row-span-2 h-full bg-white p-6 rounded-3xl flex flex-col gap-4 shadow-2xl/5">
+            <h1 class="text-2xl font-semibold">Weekly Activities</h1>
             <div id="Barchart" class="w-full" wire:ignore x-data="{}" x-init="() => {
                 var options = {
                     series: [
@@ -176,8 +180,8 @@
             </div>
         </div>
 
-        <div class="col-span-1 row-span-2 h-full bg-white p-6 rounded-3xl flex flex-col gap-4 shadow-2xl/15">
-            <h1 class="text-xl font-semibold">Weekly Activities</h1>
+        <div class="col-span-1 row-span-2 h-full bg-white p-6 rounded-3xl flex flex-col gap-4 shadow-2xl/5">
+            <h1 class="text-2xl font-semibold">Weekly Activities</h1>
             <div id="Piechart" class="w-full" wire:ignore x-data="{}" x-init="() => {
                 var options = {
                     series: [44, 55, 13, 43, 22],
@@ -203,8 +207,8 @@
 
         </div>
 
-        <div class="col-span-2 row-span-2 h-full bg-white p-6 rounded-3xl flex flex-col gap-4 shadow-2xl/15">
-            <h1 class="text-xl font-semibold">Weekly Activities</h1>
+        <div class="col-span-2 row-span-2 h-full bg-white p-6 rounded-3xl flex flex-col gap-4 shadow-2xl/5">
+            <h1 class="text-2xl font-semibold">Weekly Activities</h1>
             <div id="Linechart" class="w-full" wire:ignore x-data="{}" x-init="() => {
                 var options = {
                     series: [
@@ -247,10 +251,10 @@
 <!-- Aside -->
 <aside class="col-span-2 grid grid-cols-1 grid-rows-2 pl-4 pr-4 py-4 gap-4 h-dvh">
     <!-- Student Feed -->
-    <div class="bg-white w-full h-full rounded-3xl px-3 pt-3 pb-6 flex flex-col gap-3">
+    <div class="bg-white w-full h-full rounded-3xl px-3 pt-3 pb-6 flex flex-col shadow-2xl/5">
         <div class="flex gap-2 items-center p-3">
             <span class="material-symbols-rounded text-yellowOrange">local_library</span>
-            <h1 class="text-xl font-semibold">Student Feed</h1>
+            <h1 class="text-2xl font-bold">Student Feed</h1>
         </div>
 
         <!-- Student Notifications -->
@@ -336,10 +340,10 @@
     </div>
 
     <!-- System Feed -->
-    <div class="bg-white w-full h-full rounded-3xl px-3 pt-3 pb-6 flex flex-col gap-3">
+    <div class="bg-white w-full h-full rounded-3xl px-3 pt-3 pb-6 flex flex-col shadow-2xl/5">
         <div class="flex gap-2 items-center p-3">
             <span class="material-symbols-rounded text-danger">settings_alert</span>
-            <h1 class="text-xl font-semibold">System Feed</h1>
+            <h1 class="text-2xl font-bold">System Feed</h1>
         </div>
 
         <!-- System Notifications -->
