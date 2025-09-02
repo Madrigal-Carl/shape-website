@@ -142,10 +142,37 @@
                                     </td>
                                     <td class="px-4 py-3 text-center">
                                         <div class="flex justify-center items-center">
+
+                                            {{-- For active --}}
                                             <div
                                                 class="gap-2 bg-[#D2FBD0] px-2 py-1 rounded-full flex items-center w-fit">
                                                 <small class="text-[#0D5F07]">{{ ucwords($student->status) }}</small>
                                             </div>
+
+
+                                            {{-- For inactive --}}
+                                            {{-- <div
+                                                class="gap-2 bg-[#F7F7F7] px-2 py-1 rounded-full flex items-center w-fit">
+                                                <small class="text-[#3B3B3B]">{{ ucwords($student->status) }}</small>
+                                            </div> --}}
+
+                                            {{-- For graduated --}}
+                                            {{-- <div
+                                                class="gap-2 bg-[#D0E8FF] px-2 py-1 rounded-full flex items-center w-fit">
+                                                <small class="text-[#004A9F]">{{ ucwords($student->status) }}</small>
+                                            </div> --}}
+
+                                            {{-- For transferred --}}
+                                            {{-- <div
+                                                class="gap-2 bg-[#F0E5C0] px-2 py-1 rounded-full flex items-center w-fit">
+                                                <small class="text-[#7F5900]">{{ ucwords($student->status) }}</small>
+                                            </div> --}}
+
+                                            {{-- For dropped --}}
+                                            {{-- <div
+                                                class="gap-2 bg-[#fce4e4] px-2 py-1 rounded-full flex items-center w-fit">
+                                                <small class="text-[#af0000]">{{ ucwords($student->status) }}</small>
+                                            </div> --}}
                                         </div>
                                     </td>
                                     <td class="px-4 py-3 text-center">
