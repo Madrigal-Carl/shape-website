@@ -117,7 +117,9 @@
                                     <td class="px-4 py-3 text-center">
                                         <div class="flex justify-center items-center gap-1 text-white">
                                             <button wire:click='openEditCurriculumModal({{ $curriculum->id }})'
-                                                class="bg-danger px-2 py-1 flex gap-2 items-center rounded-lg cursor-pointer hover:scale-110 min-w-[50px] justify-center relative">
+                                                class="px-2 py-1 flex gap-2 items-center rounded-lg min-w-[50px] justify-center relative
+                                                {{ $curriculum->status === 'active' ? 'bg-gray-400 cursor-not-allowed opacity-70' : 'bg-danger cursor-pointer hover:scale-110' }}"
+                                                {{ $curriculum->status === 'active' ? 'disabled' : '' }}>
 
                                                 <!-- Text (hidden when loading) -->
                                                 <small class="transition-opacity duration-150"

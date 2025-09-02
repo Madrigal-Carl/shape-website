@@ -146,4 +146,23 @@ class Student extends Model
     {
         return $this->belongsToMany(Award::class, 'student_awards', 'student_id', 'award_id');
     }
+
+    protected static function booted()
+    {
+        static::creating(function ($model) {
+            if (empty($model->school_year)) {
+                $model->school_year = $model->getSchoolYear();
+            }
+        });
+    }
+
+    public function getSchoolYear(): string
+    {
+        $now = now();
+        $year = $now->year;
+
+        return $now->month >= 6
+            ? $year . '-' . ($year + 1)
+            : ($year - 1) . '-' . $year;
+    }
 }

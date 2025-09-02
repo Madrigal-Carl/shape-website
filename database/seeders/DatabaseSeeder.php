@@ -41,7 +41,7 @@ class DatabaseSeeder extends Seeder
         $awards = [
             ['name' => 'Top Scorer', 'description' => 'Highest average score across all quizzes in all subjects of a curriculum.'],
             ['name' => 'Quiz Master', 'description' => 'Highest total score in all quizzes of a curriculum.'],
-            ['name' => 'Fast Finisher', 'description' => 'Completes all quizzes/lessons in the shortest total time.'],
+            ['name' => 'Perfect Streak', 'description' => 'Completes every quiz with a perfect score.'],
             ['name' => 'Consistent Performer', 'description' => 'Always scores above 80% in every quiz/activity.'],
             ['name' => 'Activity Champion', 'description' => 'Highest average score in activities.'],
             ['name' => 'All-Rounder', 'description' => 'Completes all quizzes and activities in all lessons of the curriculum.'],
@@ -155,7 +155,6 @@ class DatabaseSeeder extends Seeder
                 StudentAward::firstOrCreate([
                     'student_id' => $student->id,
                     'award_id'   => $award->id,
-                    'academic_year'  => now()->year . '-' . (now()->year + 1),
                 ]);
             }
         });

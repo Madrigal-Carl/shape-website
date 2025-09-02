@@ -20,7 +20,15 @@ class StudentAddModal extends Component
     public $photo, $lrn, $first_name, $middle_name, $last_name, $birthdate, $sex, $grade_level, $disability, $description;
     public $province = "marinduque";
     public $permanent_barangay, $permanent_municipal, $current_barangay, $current_municipal, $guardian_first_name, $guardian_middle_name, $guardian_last_name, $guardian_email, $guardian_phone;
-    public $account_username, $account_password;
+    public $account_username, $account_password = '';
+
+
+    public function generatePassword()
+    {
+        $birthdate = str_replace('-', '', $this->birthdate);
+        $lastName = strtolower(trim($this->last_name));
+        $this->account_password = "{$birthdate}-{$lastName}";
+    }
 
     #[On('openModal')]
     public function openModal()
@@ -32,6 +40,9 @@ class StudentAddModal extends Component
     {
         if ($this->validateStep()){
             $this->step++;
+            if ($this->step === 2) {
+                $this->generatePassword();
+            }
         }
     }
 

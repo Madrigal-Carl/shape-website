@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->morphs('loggable');
             $table->unsignedInteger('attempt_number')->default(1);
+            $table->unsignedInteger('time_spent_seconds');
             $table->enum('status', ['in-progress', 'completed'])->default('in-progress');
             $table->timestamps();
         });
