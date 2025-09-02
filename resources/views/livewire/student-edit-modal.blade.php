@@ -53,7 +53,7 @@
                                 <input type="text" placeholder="LRN" wire:model.live='lrn' maxlength="12"
                                 class="px-3 py-1 rounded-lg bg-card placeholder-paragraph outline-none w-full" />
                                 <div class="px-2 py-1 rounded-lg bg-card">
-                                    <select name="" id="" class="w-max outline-none text-paragraph"
+                                    <select name="" id="" class="w-max outline-none "
                                         wire:change="$set('sex', $event.target.value)">
                                         <option class=" text-heading-dark" selected disabled>
                                             Status
