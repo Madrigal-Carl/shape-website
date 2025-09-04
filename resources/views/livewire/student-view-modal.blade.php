@@ -38,18 +38,38 @@
 
                 <!-- Profile pic and info -->
                 <div class="flex gap-6">
-                    <img src="{{ $student->path ? asset('storage/' . $student->path) : asset('images/default-img-holder.png') }}"
+                    <img src="{{ $student->path
+                        ? asset('storage/' . $student->path)
+                        : ($student->sex === 'male'
+                            ? asset('images/default_profiles/default-male-student-pfp.png')
+                            : asset('images/default_profiles/default-female-student-pfp.png')) }}"
                         alt="" class="rounded-full w-20" />
 
                     <div class="flex flex-col justify-between">
                         <h1 class="font-medium text-xl leading-4">{{ $student->full_name }}
                         </h1>
                         <p class="text-sm text-paragraph">ID: <span>{{ $student->id }}</span></p>
-                        <div class="px-2 py-0.5 rounded-lg bg-[#D2FBD0] w-fit">
-                            <div class="w-fit outline-none text-[#0D5F07] text-sm">
-                                <p class="text-sm text-black" selected>
-                                    {{ ucwords($student->status) }}
-                                </p>
+                        <div class="w-fit">
+                            @php
+                                $statusStyles = [
+                                    'active' => ['bg' => 'bg-[#D2FBD0]', 'text' => 'text-[#0D5F07]'],
+                                    'inactive' => ['bg' => 'bg-[#F7F7F7]', 'text' => 'text-[#3B3B3B]'],
+                                    'graduated' => ['bg' => 'bg-[#D0E8FF]', 'text' => 'text-[#004A9F]'],
+                                    'transferred' => [
+                                        'bg' => 'bg-[#F0E5C0]',
+                                        'text' => 'text-[#7F5900]',
+                                    ],
+                                    'dropped' => ['bg' => 'bg-[#fce4e4]', 'text' => 'text-[#af0000]'],
+                                ];
+
+                                $style = $statusStyles[strtolower($student->status)] ?? [
+                                    'bg' => 'bg-gray-200',
+                                    'text' => 'text-gray-600',
+                                ];
+                            @endphp
+
+                            <div class="gap-2 {{ $style['bg'] }} px-3 py-1 rounded-lg flex items-center w-fit">
+                                <small class="{{ $style['text'] }}">{{ ucwords($student->status) }}</small>
                             </div>
                         </div>
                     </div>
@@ -96,7 +116,7 @@
                                     QUIZZES
                                 </h1>
                             </div>
-                            <h1 class="text-4xl font-semibold">{{ $student->completed_quiz }}</h1>
+                            <h1 class="text-4xl font-semibold">0</h1>
                         </div>
                     </div>
                 </div>
@@ -153,10 +173,7 @@
                                         No. of Videos
                                     </th>
                                     <th class="text-center font-semibold px-2 py-4">
-                                        No. of Acts
-                                    </th>
-                                    <th class="text-center font-semibold px-2 py-4">
-                                        No. of Quizzes
+                                        No. of Activities
                                     </th>
                                     <th class="text-center font-semibold px-2 py-4">Status</th>
                                 </tr>
@@ -168,7 +185,6 @@
                                         <td class="text-left px-2 py-4">{{ $lesson->title }}</td>
                                         <td class="text-center px-2 py-4">{{ count($lesson->videos) }}</td>
                                         <td class="text-center px-2 py-4">{{ count($lesson->activityLessons) }}</td>
-                                        <td class="text-center px-2 py-4">1</td>
                                         <td class="text-center px-2 py-4">
                                             {{ $lesson->isCompletedByStudent($student->id) ? 'Completed' : 'In-Progress' }}
                                         </td>
@@ -228,7 +244,7 @@
                                         x: { format: 'dd/MM/yy HH:mm' },
                                     },
                                 };
-
+                            
                                 var chart = new ApexCharts(document.querySelector('#PerformanceLinechart'), options);
                                 chart.render();
                             }">
@@ -269,7 +285,7 @@
                                     fill: { opacity: 1 },
                                     tooltip: { y: { formatter: val => `${val}%` } },
                                 };
-
+                            
                                 var chart = new ApexCharts(document.querySelector('#PerformanceBarchart'), options);
                                 chart.render();
                             }">

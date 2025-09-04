@@ -23,11 +23,6 @@ class Lesson extends Model
         return $this->hasMany(LessonSubjectStudent::class);
     }
 
-    public function quiz()
-    {
-        return $this->hasOne(Quiz::class);
-    }
-
     public function activityLessons()
     {
         return $this->hasMany(ActivityLesson::class);

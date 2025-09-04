@@ -84,33 +84,6 @@ class Student extends Model
         })->count();
     }
 
-    public function getTotalQuizzesCountAttribute()
-    {
-        return $this->lessonSubjectStudents->filter(function ($lss) {
-            return $lss->lesson->quiz !== null;
-        })->count();
-    }
-
-    public function getCompletedQuizAttribute()
-    {
-        return $this->lessonSubjectStudents->sum(function ($lss) {
-            $quiz = $lss->lesson->quiz;
-            if (!$quiz) return 0;
-
-            $studentQuiz = $quiz->studentQuizzes()
-                ->where('student_id', $this->id)
-                ->first();
-
-            if (!$studentQuiz) return 0;
-
-            $log = $studentQuiz->logs()
-                ->latest('attempt_number')
-                ->first();
-
-            return ($log && $log->status === 'completed') ? 1 : 0;
-        });
-    }
-
     public function getTotalActivitiesCountAttribute()
     {
         return $this->lessonSubjectStudents->sum(function ($lss) {

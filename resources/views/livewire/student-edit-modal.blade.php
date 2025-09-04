@@ -51,16 +51,10 @@
                         <div class="flex flex-col gap-2">
                             <div class="flex items-center gap-2 w-full">
                                 <input type="text" placeholder="LRN" wire:model.live='lrn' maxlength="12"
-                                class="px-3 py-1 rounded-lg bg-card placeholder-paragraph outline-none w-full" />
+                                    class="px-3 py-1 rounded-lg bg-card placeholder-paragraph outline-none w-full" />
                                 <div class="px-2 py-1 rounded-lg bg-card">
-                                    <select name="" id="" class="w-max outline-none "
-                                        wire:change="$set('sex', $event.target.value)">
-                                        <option class=" text-heading-dark" selected disabled>
-                                            Status
-                                        </option>
-                                        <option value="all" class=" text-heading-dark">
-                                            All
-                                        </option>
+                                    <select class="w-max outline-none "
+                                        wire:change="$set('status', $event.target.value)">
                                         <option value="active" class=" text-lime">
                                             Active
                                         </option>
@@ -141,7 +135,8 @@
                                                 {{ ucwords($disability) }}
                                             </option>
                                         @else
-                                            <option value="{{ $specialization->name }}" class="text-sm text-paragraph">
+                                            <option value="{{ $specialization->name }}"
+                                                class="text-sm text-paragraph">
                                                 {{ ucwords($specialization->name) }}
                                             </option>
                                         @endif

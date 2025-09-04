@@ -12,9 +12,9 @@
                     <span class="font-bold text-blue-button">Dave</span>
                 </h1>
                 <p class="text-lg text-paragraph leading-4">Here is your summary today</p>
-                <div class="w-max px-2 py-1 mt-4 rounded-lg border-1 border-gray-300 hover:border-blue-button shadow-2xl/15">
-                    <select
-                        class="w-full outline-none text-heading-dark font-medium text-lg">
+                <div
+                    class="w-max px-2 py-1 mt-4 rounded-lg border-1 border-gray-300 hover:border-blue-button shadow-2xl/15">
+                    <select class="w-full outline-none text-heading-dark font-medium text-lg">
                         <option class="text-sm text-black" selected disabled>
                             S.Y 2025-2026
                         </option>
@@ -116,9 +116,6 @@
                                 <th class="px-4 pb-3 text-center font-semibold w-20">
                                     Completed Activitis
                                 </th>
-                                <th class="px-4 pb-3 text-center font-semibold w-20">
-                                    Completed Quizzes
-                                </th>
                                 <th class="px-4 pb-3 text-center font-semibold">Status</th>
                                 <th class="px-4 pb-3 text-center font-semibold">Actions</th>
                             </tr>
@@ -137,42 +134,31 @@
                                     <td class="px-4 py-3 text-center text-paragraph">
                                         {{ $student->completed_activities_count }}/{{ $student->total_activities_count }}
                                     </td>
-                                    <td class="px-4 py-3 text-center text-paragraph">
-                                        {{ $student->completed_quiz }}/{{ $student->total_quizzes_count }}
-                                    </td>
                                     <td class="px-4 py-3 text-center">
                                         <div class="flex justify-center items-center">
+                                            @php
+                                                $statusStyles = [
+                                                    'active' => ['bg' => 'bg-[#D2FBD0]', 'text' => 'text-[#0D5F07]'],
+                                                    'inactive' => ['bg' => 'bg-[#F7F7F7]', 'text' => 'text-[#3B3B3B]'],
+                                                    'graduated' => ['bg' => 'bg-[#D0E8FF]', 'text' => 'text-[#004A9F]'],
+                                                    'transferred' => [
+                                                        'bg' => 'bg-[#F0E5C0]',
+                                                        'text' => 'text-[#7F5900]',
+                                                    ],
+                                                    'dropped' => ['bg' => 'bg-[#fce4e4]', 'text' => 'text-[#af0000]'],
+                                                ];
 
-                                            {{-- For active --}}
+                                                $style = $statusStyles[strtolower($student->status)] ?? [
+                                                    'bg' => 'bg-gray-200',
+                                                    'text' => 'text-gray-600',
+                                                ];
+                                            @endphp
+
                                             <div
-                                                class="gap-2 bg-[#D2FBD0] px-2 py-1 rounded-full flex items-center w-fit">
-                                                <small class="text-[#0D5F07]">{{ ucwords($student->status) }}</small>
+                                                class="gap-2 {{ $style['bg'] }} px-2 py-1 rounded-full flex items-center w-fit">
+                                                <small
+                                                    class="{{ $style['text'] }}">{{ ucwords($student->status) }}</small>
                                             </div>
-
-
-                                            {{-- For inactive --}}
-                                            {{-- <div
-                                                class="gap-2 bg-[#F7F7F7] px-2 py-1 rounded-full flex items-center w-fit">
-                                                <small class="text-[#3B3B3B]">{{ ucwords($student->status) }}</small>
-                                            </div> --}}
-
-                                            {{-- For graduated --}}
-                                            {{-- <div
-                                                class="gap-2 bg-[#D0E8FF] px-2 py-1 rounded-full flex items-center w-fit">
-                                                <small class="text-[#004A9F]">{{ ucwords($student->status) }}</small>
-                                            </div> --}}
-
-                                            {{-- For transferred --}}
-                                            {{-- <div
-                                                class="gap-2 bg-[#F0E5C0] px-2 py-1 rounded-full flex items-center w-fit">
-                                                <small class="text-[#7F5900]">{{ ucwords($student->status) }}</small>
-                                            </div> --}}
-
-                                            {{-- For dropped --}}
-                                            {{-- <div
-                                                class="gap-2 bg-[#fce4e4] px-2 py-1 rounded-full flex items-center w-fit">
-                                                <small class="text-[#af0000]">{{ ucwords($student->status) }}</small>
-                                            </div> --}}
                                         </div>
                                     </td>
                                     <td class="px-4 py-3 text-center">

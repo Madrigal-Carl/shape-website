@@ -28,7 +28,7 @@ class StudentFactory extends Factory
             'last_name' => $this->faker->lastName,
             'sex' => $this->faker->randomElement(['male', 'female']),
             'birth_date' => $this->faker->date(),
-            'status' => 'active',
+            'status' => $this->faker->randomElement(['active', 'inactive', 'graduated', 'dropped', 'transferred']),
         ];
     }
 }

@@ -2,8 +2,6 @@
 
 namespace App\Livewire;
 
-use App\Models\Account;
-use App\Models\Profile;
 use App\Models\Student;
 use Livewire\Component;
 use Livewire\Attributes\On;
@@ -17,7 +15,7 @@ class StudentEditModal extends Component
     use WithFileUploads;
 
     public $step = 0, $isOpen = false, $student_id = null;
-    public $photo, $currentPhoto, $lrn, $first_name, $middle_name, $last_name, $birthdate, $sex, $grade_level, $disability, $description;
+    public $photo, $currentPhoto, $lrn, $status = '', $first_name, $middle_name, $last_name, $birthdate, $sex, $grade_level, $disability, $description;
     public $province = "marinduque";
     public $permanent_barangay, $permanent_municipal, $current_barangay, $current_municipal;
     public $guardian_first_name, $guardian_middle_name, $guardian_last_name, $guardian_email, $guardian_phone;
@@ -39,6 +37,7 @@ class StudentEditModal extends Component
         $this->last_name  = $student->last_name;
         $this->birthdate  = $student->birth_date;
         $this->sex        = $student->sex;
+        $this->status        = $student->status;
         $this->currentPhoto = $student->path;
 
         $this->lrn         = $student->profile->lrn;
@@ -74,6 +73,7 @@ class StudentEditModal extends Component
             'last_name'  => $this->last_name,
             'birthdate'  => $this->birthdate,
             'sex'        => $this->sex,
+            'status'        => $this->status,
             'grade_level'=> $this->grade_level,
             'disability' => $this->disability,
             'description'=> $this->description,
@@ -115,6 +115,7 @@ class StudentEditModal extends Component
                 $this->validate([
                     'photo'       => 'nullable|image|max:5120',
                     'lrn'         => 'required|digits:12',
+                    'status'  => 'required',
                     'first_name'  => 'required',
                     'middle_name' => 'required',
                     'last_name'   => 'required',
@@ -128,6 +129,7 @@ class StudentEditModal extends Component
                     'photo.max'               => 'The photo size must not exceed 5MB.',
                     'lrn.required'            => 'The LRN field is required.',
                     'lrn.digits'              => 'The LRN must be exactly 12 digits.',
+                    'status.required'            => 'The status is required.',
                     'first_name.required'     => 'The first name is required.',
                     'middle_name.required'    => 'The middle name is required.',
                     'last_name.required'      => 'The last name is required.',
@@ -220,6 +222,7 @@ class StudentEditModal extends Component
             'last_name'  => [$this->last_name, $this->original['last_name']],
             'birthdate'  => [$this->birthdate, $this->original['birthdate']],
             'sex'        => [$this->sex, $this->original['sex']],
+            'status'        => [$this->sex, $this->original['status']],
             'grade_level'=> [$this->grade_level, $this->original['grade_level']],
             'disability' => [$this->disability, $this->original['disability']],
             'description'=> [$this->description, $this->original['description']],
@@ -250,6 +253,7 @@ class StudentEditModal extends Component
             'last_name'  => $this->last_name,
             'birth_date' => $this->birthdate,
             'sex'        => $this->sex,
+            'status'        => $this->status,
         ]);
 
         $student->profile->update([
