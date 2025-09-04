@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('logs', function (Blueprint $table) {
             $table->id();
-            $table->morphs('loggable');
+            $table->foreignId('student_activity_id')->constrained()->onDelete('cascade');
             $table->unsignedInteger('attempt_number')->default(1);
             $table->unsignedInteger('time_spent_seconds');
             $table->enum('status', ['in-progress', 'completed'])->default('in-progress');

@@ -16,7 +16,7 @@ class StudentActivity extends Model
 
     public function logs()
     {
-        return $this->morphMany(Log::class, 'loggable');
+        return $this->hasMany(Log::class);
     }
 
     public function student()

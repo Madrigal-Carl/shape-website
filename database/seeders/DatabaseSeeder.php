@@ -172,7 +172,7 @@ class DatabaseSeeder extends Seeder
             ]);
         });
 
-        // 9. Create Lessons, Activities, Quizzes, Videos (once per lesson)
+        // 9. Create Lessons, Activities, Videos (once per lesson)
         $lessons = Lesson::factory()->count(10)->create();
         $activities = Activity::factory()->count(10)->create();
         $activities->each(function ($activity) use ($specializations) {
@@ -190,15 +190,6 @@ class DatabaseSeeder extends Seeder
                 'activity_id' => $activities->random()->id,
             ]);
             $lesson->setRelation('lessonActivity', $lessonActivity);
-
-            // Create 20 quizzes with questions and options
-            $quiz = Quiz::factory()->create([
-                'lesson_id' => $lesson->id,
-            ]);
-            $questions = Question::factory(3)->create(['quiz_id' => $quiz->id]);
-            $questions->each(function ($question) {
-                Option::factory(4)->create(['question_id' => $question->id]);
-            });
         });
         $lessons->each(function ($lesson) use ($curriculums) {
             $curriculum = $curriculums->random();
@@ -217,20 +208,6 @@ class DatabaseSeeder extends Seeder
                     'student_id' => $student->id,
                 ]);
 
-                // Create logs for lesson's quiz and activity
-                $quiz = $lesson->quiz;
-                if ($quiz) {
-                    $studentQuiz = StudentQuiz::firstOrCreate([
-                        'student_id' => $student->id,
-                        'quiz_id'    => $quiz->id,
-                    ]);
-
-                    Log::factory()->create([
-                        'loggable_id'    => $studentQuiz->id,
-                        'loggable_type'  => StudentQuiz::class,
-                    ]);
-                }
-
                 // Activity
                 if ($lesson->lessonActivity) {
                     $studentActivity = StudentActivity::firstOrCreate([
@@ -239,8 +216,7 @@ class DatabaseSeeder extends Seeder
                     ]);
 
                     Log::factory()->create([
-                        'loggable_id'   => $studentActivity->id,
-                        'loggable_type' => StudentActivity::class,
+                        'student_activity_id'   => $studentActivity->id,
                     ]);
                 }
             });

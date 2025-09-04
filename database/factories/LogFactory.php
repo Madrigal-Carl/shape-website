@@ -21,8 +21,7 @@ class LogFactory extends Factory
     public function definition(): array
     {
         return [
-            'loggable_id' => null,
-            'loggable_type' => null,
+            'student_activity_id' => null,
             'attempt_number' => $this->faker->numberBetween(1, 5),
             'time_spent_seconds' => $this->faker->numberBetween(60, 120),
             'status' => $this->faker->randomElement(['in-progress', 'completed']),
