@@ -12,9 +12,9 @@
                     <span class="font-bold text-blue-button">Dave</span>
                 </h1>
                 <p class="text-lg text-paragraph leading-4">Here is your summary today</p>
-                <div class="w-max px-2 py-1 mt-4 rounded-lg border-1 border-gray-300 hover:border-blue-button shadow-2xl/15">
-                    <select
-                        class="w-full outline-none text-heading-dark font-medium text-lg">
+                <div
+                    class="w-max px-2 py-1 mt-4 rounded-lg border-1 border-gray-300 hover:border-blue-button shadow-2xl/15">
+                    <select class="w-full outline-none text-heading-dark font-medium text-lg">
                         <option class="text-sm text-black" selected disabled>
                             S.Y 2025-2026
                         </option>
@@ -89,8 +89,7 @@
                                     Assigned
                                 </th>
                                 <th class="px-4 pb-3 text-center font-semibold">Videos</th>
-                                <th class="px-4 pb-3 text-center font-semibold">Games</th>
-                                <th class="px-4 pb-3 text-center font-semibold">Quizzes</th>
+                                <th class="px-4 pb-3 text-center font-semibold">Activies</th>
                                 <th class="px-4 pb-3 text-center font-semibold">Actions</th>
                             </tr>
                         </thead>
@@ -106,10 +105,11 @@
                                     <td class="px-4 py-3 text-center text-paragraph">
                                         {{ ucwords($lesson->lessonSubjectStudents->first()->curriculumSubject->subject->name) }}
                                     </td>
-                                    <td class="px-4 py-3 text-center text-paragraph">{{ $lesson->lesson_subject_students_count }}</td>
+                                    <td class="px-4 py-3 text-center text-paragraph">
+                                        {{ $lesson->lesson_subject_students_count }}</td>
                                     <td class="px-4 py-3 text-center text-paragraph">{{ $lesson->videos_count }}</td>
-                                    <td class="px-4 py-3 text-center text-paragraph">{{ $lesson->activity_lessons_count }}</td>
-                                    <td class="px-4 py-3 text-center text-paragraph">{{ $lesson->quiz_count }}</td>
+                                    <td class="px-4 py-3 text-center text-paragraph">
+                                        {{ $lesson->activity_lessons_count }}</td>
                                     <td class="px-4 py-3 text-center text-paragraph">
                                         <div class="flex justify-center items-center gap-1 text-white">
                                             <button wire:click='openEditLessonModal({{ $lesson->id }})'
@@ -123,8 +123,7 @@
                                                 </small>
 
                                                 <!-- Spinner (overlay) -->
-                                                <svg wire:loading
-                                                    wire:target='openEditLessonModal({{ $lesson->id }})'
+                                                <svg wire:loading wire:target='openEditLessonModal({{ $lesson->id }})'
                                                     aria-hidden="true" class="w-4 h-4 text-white animate-spin absolute"
                                                     viewBox="0 0 100 101" fill="none"
                                                     xmlns="http://www.w3.org/2000/svg">

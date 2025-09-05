@@ -26,18 +26,8 @@ class LessonAddModal extends Component
     public $subjects, $grade_levels, $students, $activities, $curriculums, $youtube_link, $selected_student = '';
     public $videos = [];
     public $isOpen = false;
-    public $lesson_name, $curriculum = '', $subject = '', $grade_level = '', $description, $quiz_name, $quiz_description;
+    public $lesson_name, $curriculum = '', $subject = '', $grade_level = '', $description;
     public $uploadedVideos = [], $selected_activities = [], $selected_students = [];
-    public $questions = [
-        [
-            'question' => '',
-            'point' => 1,
-            'options' => [
-                ['text' => '', 'is_correct' => false],
-                ['text' => '', 'is_correct' => false],
-            ],
-        ],
-    ];
 
     public function resetFields()
     {
@@ -54,18 +44,6 @@ class LessonAddModal extends Component
         $this->videos = [];
         $this->uploadedVideos = [];
         $this->selected_activities = [];
-        $this->quiz_name = null;
-        $this->quiz_description = null;
-        $this->questions = [
-            [
-                'question' => '',
-                'point' => 1,
-                'options' => [
-                    ['text' => '', 'is_correct' => false],
-                    ['text' => '', 'is_correct' => false],
-                ],
-            ],
-        ];
     }
 
 
@@ -181,45 +159,6 @@ class LessonAddModal extends Component
         $this->uploadedVideos = array_values($this->uploadedVideos);
     }
 
-    private function validateQuestions(): array
-    {
-        $validQuestions = [];
-
-        foreach ($this->questions as $questionData) {
-            $questionText = trim($questionData['question']);
-
-            // Skip completely blank rows
-            if ($questionText === '') {
-                $this->dispatch('swal-toast', icon: 'error', title: "A question cannot be empty.");
-                return [];
-            }
-
-            // Collect only non-empty options
-            $filledOptions = collect($questionData['options'])
-                ->filter(fn($opt) => trim($opt['text']) !== '')
-                ->values();
-
-            if ($filledOptions->count() < 2) {
-                $this->dispatch('swal-toast', icon: 'error', title: "Question '{$questionText}' must have at least 2 options.");
-                return [];
-            }
-
-            // At least one correct option
-            if ($filledOptions->where('is_correct', true)->isEmpty()) {
-                $this->dispatch('swal-toast', icon: 'error', title: "Question '{$questionText}' must have at least one correct option.");
-                return [];
-            }
-
-            $validQuestions[] = [
-                'question' => $questionText,
-                'point'    => $questionData['point'] ?? 1,
-                'options'  => $filledOptions->toArray(),
-            ];
-        }
-
-        return $validQuestions;
-    }
-
     public function validateLesson(): bool
     {
         try {
@@ -230,7 +169,6 @@ class LessonAddModal extends Component
                 'subject'            => 'required',
                 'selected_activities'=> 'required',
                 'quiz_name'          => 'required|min:3|max:100',
-                'questions'          => 'required|min:1',
             ], [
                 'lesson_name.required' => 'Lesson name is required.',
                 'lesson_name.min'      => 'Lesson name must be at least 5 characters.',
@@ -239,9 +177,6 @@ class LessonAddModal extends Component
                 'curriculum.required'  => 'Please select a curriculum.',
                 'subject.required'     => 'Please select a subject.',
                 'selected_activities.required' => 'You must add at least one activity.',
-                'quiz_name.required'   => 'Quiz name is required.',
-                'quiz_name.min'        => 'Quiz name must be at least 3 characters.',
-                'questions.required'   => 'You must add at least one question.',
             ]);
         } catch (ValidationException $e) {
             $message = $e->validator->errors()->first();
@@ -252,12 +187,6 @@ class LessonAddModal extends Component
         // 2. Videos validation
         if (empty($this->uploadedVideos)) {
             $this->dispatch('swal-toast', icon: 'error', title: 'Please upload at least one video or provide a YouTube link.');
-            return false;
-        }
-
-        // 3. Questions validation
-        $validQuestions = $this->validateQuestions();
-        if (empty($validQuestions)) {
             return false;
         }
 
@@ -309,28 +238,6 @@ class LessonAddModal extends Component
             return $q['point'] ?? 1;
         });
 
-        $quiz = Quiz::create([
-            'lesson_id' => $lesson->id,
-            'title'       => $this->quiz_name,
-            'description' => $this->quiz_description,
-            'score'       => $totalScore,
-        ]);
-
-        foreach ($this->questions as $questionData) {
-            $question = $quiz->questions()->create([
-                'question_text' => $questionData['question'],
-                'point'         => $questionData['point'],
-            ]);
-
-            foreach ($questionData['options'] as $optionData) {
-                if (trim($optionData['text']) === '') continue;
-                $question->options()->create([
-                    'option_text' => $optionData['text'],
-                    'is_correct'  => $optionData['is_correct'],
-                ]);
-            }
-        }
-
         $this->dispatch('swal-toast', icon: 'success', title: 'Lesson added successfully!');
         return $this->closeModal();
     }
@@ -349,66 +256,6 @@ class LessonAddModal extends Component
         $this->selected_activities = array_values($this->selected_activities);
     }
 
-    public function addQuestion()
-    {
-        if (!empty($this->questions)) {
-            $lastQuestion = end($this->questions);
-
-            $hasQuestionText = trim($lastQuestion['question']) !== '';
-
-            $filledOptions = collect($lastQuestion['options'])
-                ->filter(fn($opt) => trim($opt['text']) !== '')
-                ->count();
-
-            $hasCorrectAnswer = collect($lastQuestion['options'])
-                ->contains(fn($opt) => $opt['is_correct'] === true);
-
-            if (!$hasQuestionText) {
-                return $this->dispatch('swal-toast', icon: 'error', title: 'Fill in the question field first.');
-            }
-
-            if ($filledOptions < 2) {
-                return $this->dispatch('swal-toast', icon: 'error', title: 'Add at least 2 options.');
-            }
-
-            if (!$hasCorrectAnswer) {
-                return $this->dispatch('swal-toast', icon: 'error', title: 'Please select a correct answer.');
-            }
-        }
-
-        $this->questions[] = [
-            'question' => '',
-            'point' => 1,
-            'options' => [
-                ['text' => '', 'is_correct' => false],
-                ['text' => '', 'is_correct' => false],
-            ],
-        ];
-    }
-
-    public function removeQuestion($index)
-    {
-        unset($this->questions[$index]);
-        $this->questions = array_values($this->questions);
-    }
-
-    public function addOption($qIndex)
-    {
-        $this->questions[$qIndex]['options'][] = ['text' => '', 'is_correct' => false];
-    }
-
-    public function removeOption($qIndex, $oIndex)
-    {
-        unset($this->questions[$qIndex]['options'][$oIndex]);
-        $this->questions[$qIndex]['options'] = array_values($this->questions[$qIndex]['options']);
-    }
-
-    public function setCorrectAnswer($qIndex, $oIndex)
-    {
-        foreach ($this->questions[$qIndex]['options'] as $key => $option) {
-            $this->questions[$qIndex]['options'][$key]['is_correct'] = ($key === $oIndex);
-        }
-    }
     public function mount()
     {
         $this->activities = Activity::orderBy('id')->get();

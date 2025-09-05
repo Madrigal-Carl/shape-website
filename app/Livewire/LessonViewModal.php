@@ -18,7 +18,7 @@ class LessonViewModal extends Component
         $this->lesson_id = $id;
         $this->isOpen = true;
 
-        $this->lesson = Lesson::with('videos', 'activityLessons.activity.specializations', 'quiz', 'students', 'lessonSubjectStudents.curriculum', 'lessonSubjectStudents.subject')->find($id);
+        $this->lesson = Lesson::with('videos', 'activityLessons.activity.specializations', 'students', 'lessonSubjectStudents.curriculum', 'lessonSubjectStudents.subject')->find($id);
     }
 
     public function closeModal()

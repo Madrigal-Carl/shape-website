@@ -25,8 +25,8 @@ class LessonEditModal extends Component
     public $videos = [];
     public $lesson_id = null;
     public $isOpen = false;
-    public $lesson_name, $curriculum = '', $subject = '', $grade_level = '', $description, $quiz_name, $quiz_description;
-    public $uploadedVideos = [], $selected_activities = [], $selected_students = [], $questions = [];
+    public $lesson_name, $curriculum = '', $subject = '', $grade_level = '', $description;
+    public $uploadedVideos = [], $selected_activities = [], $selected_students = [];
     public $original = [];
 
 
@@ -36,7 +36,7 @@ class LessonEditModal extends Component
         $this->lesson_id = $id;
         $this->isOpen = true;
 
-        $lesson = Lesson::with('students', 'videos', 'quiz.questions.options', 'activityLessons.activity.specializations', 'lessonSubjectStudents.curriculumSubject.curriculum', 'lessonSubjectStudents.curriculumSubject.subject')->find($id);
+        $lesson = Lesson::with('students', 'videos', 'activityLessons.activity.specializations', 'lessonSubjectStudents.curriculumSubject.curriculum', 'lessonSubjectStudents.curriculumSubject.subject')->find($id);
         $this->lesson_name = $lesson->title;
         $this->grade_level = $lesson->lessonSubjectStudents->first()->curriculumSubject->curriculum->grade_level;
         $this->curriculum = $lesson->lessonSubjectStudents->first()->curriculumSubject->curriculum->name;
@@ -75,29 +75,6 @@ class LessonEditModal extends Component
             ];
         })->toArray();
 
-        if ($lesson->quiz) {
-            $quiz = $lesson->quiz;
-            $this->quiz_name = $quiz->title;
-            $this->quiz_description = $quiz->description;
-
-            $this->questions = $quiz->questions->map(function ($q) {
-                return [
-                    'question' => $q->question_text,
-                    'point'    => $q->point,
-                    'options'  => $q->options->map(function ($opt) {
-                        return [
-                            'text'       => $opt->option_text,
-                            'is_correct' => (bool) $opt->is_correct,
-                        ];
-                    })->toArray(),
-                ];
-            })->toArray();
-        } else {
-            $this->quiz_name = '';
-            $this->quiz_description = '';
-            $this->questions = [];
-        }
-
         $this->original = [
             'lesson_name'   => $this->lesson_name,
             'description'   => $this->description,
@@ -107,9 +84,6 @@ class LessonEditModal extends Component
             'students'      => $this->selected_students,
             'videos'        => $this->uploadedVideos,
             'activities'    => $this->selected_activities,
-            'quiz_name'     => $this->quiz_name,
-            'quiz_desc'     => $this->quiz_description,
-            'questions'     => $this->questions,
         ];
     }
 
@@ -238,45 +212,6 @@ class LessonEditModal extends Component
         $this->uploadedVideos = array_values($this->uploadedVideos);
     }
 
-    private function validateQuestions()
-    {
-        $validQuestions = [];
-
-        foreach ($this->questions as $questionData) {
-            $questionText = trim($questionData['question']);
-
-            // Skip completely blank rows
-            if ($questionText === '') {
-                $this->dispatch('swal-toast', icon: 'error', title: "A question cannot be empty.");
-                return [];
-            }
-
-            // Collect only non-empty options
-            $filledOptions = collect($questionData['options'])
-                ->filter(fn($opt) => trim($opt['text']) !== '')
-                ->values();
-
-            if ($filledOptions->count() < 2) {
-                $this->dispatch('swal-toast', icon: 'error', title: "Question '{$questionText}' must have at least 2 options.");
-                return [];
-            }
-
-            // At least one correct option
-            if ($filledOptions->where('is_correct', true)->isEmpty()) {
-                $this->dispatch('swal-toast', icon: 'error', title: "Question '{$questionText}' must have at least one correct option.");
-                return [];
-            }
-
-            $validQuestions[] = [
-                'question' => $questionText,
-                'point'    => $questionData['point'] ?? 1,
-                'options'  => $filledOptions->toArray(),
-            ];
-        }
-
-        return $validQuestions;
-    }
-
     private function validateLesson()
     {
         try {
@@ -286,8 +221,6 @@ class LessonEditModal extends Component
                 'curriculum_id'      => 'required',
                 'subject_id'         => 'required',
                 'selected_activities'=> 'required',
-                'quiz_name'          => 'required|min:3|max:100',
-                'questions'          => 'required|min:1',
             ], [
                 'lesson_name.required' => 'Lesson name is required.',
                 'lesson_name.min'      => 'Lesson name must be at least 5 characters.',
@@ -296,9 +229,6 @@ class LessonEditModal extends Component
                 'curriculum_id.required' => 'Please select a curriculum.',
                 'subject_id.required'  => 'Please select a subject.',
                 'selected_activities.required' => 'You must add at least one activity.',
-                'quiz_name.required'   => 'Quiz name is required.',
-                'quiz_name.min'        => 'Quiz name must be at least 3 characters.',
-                'questions.required'   => 'You must add at least one question.',
             ]);
         } catch (ValidationException $e) {
             $message = $e->validator->errors()->first();
@@ -385,98 +315,8 @@ class LessonEditModal extends Component
             ]);
         }
 
-        // Update quiz
-        $lesson->quiz()->delete();
-        $totalScore = collect($this->questions)->sum(function ($q) {
-            return $q['point'] ?? 1;
-        });
-
-        if (!empty($this->quiz_name)) {
-            $quiz = $lesson->quiz()->create([
-                'title'       => $this->quiz_name,
-                'description' => $this->quiz_description,
-                'score'       => $totalScore,
-            ]);
-
-            foreach ($this->questions as $questionData) {
-                $question = $quiz->questions()->create([
-                    'question_text' => $questionData['question'],
-                    'point'         => $questionData['point'],
-                ]);
-
-                foreach ($questionData['options'] as $optionData) {
-                    if (trim($optionData['text']) === '') continue;
-                    $question->options()->create([
-                        'option_text' => $optionData['text'],
-                        'is_correct'  => $optionData['is_correct'],
-                    ]);
-                }
-            }
-        }
-
         $this->dispatch('swal-toast', icon: 'success', title: 'Lesson updated successfully!');
         $this->closeModal();
-    }
-
-    public function addQuestion()
-    {
-        if (!empty($this->questions)) {
-            $lastQuestion = end($this->questions);
-
-            $hasQuestionText = trim($lastQuestion['question']) !== '';
-
-            $filledOptions = collect($lastQuestion['options'])
-                ->filter(fn($opt) => trim($opt['text']) !== '')
-                ->count();
-
-            $hasCorrectAnswer = collect($lastQuestion['options'])
-                ->contains(fn($opt) => $opt['is_correct'] === true);
-
-            if (!$hasQuestionText) {
-                return $this->dispatch('swal-toast', icon: 'error', title: 'Fill in the question field first.');
-            }
-
-            if ($filledOptions < 2) {
-                return $this->dispatch('swal-toast', icon: 'error', title: 'Add at least 2 options.');
-            }
-
-            if (!$hasCorrectAnswer) {
-                return $this->dispatch('swal-toast', icon: 'error', title: 'Please select a correct answer.');
-            }
-        }
-
-        $this->questions[] = [
-            'question' => '',
-            'point' => 1,
-            'options' => [
-                ['text' => '', 'is_correct' => false],
-                ['text' => '', 'is_correct' => false],
-            ],
-        ];
-    }
-
-    public function removeQuestion($index)
-    {
-        unset($this->questions[$index]);
-        $this->questions = array_values($this->questions);
-    }
-
-    public function addOption($qIndex)
-    {
-        $this->questions[$qIndex]['options'][] = ['text' => '', 'is_correct' => false];
-    }
-
-    public function removeOption($qIndex, $oIndex)
-    {
-        unset($this->questions[$qIndex]['options'][$oIndex]);
-        $this->questions[$qIndex]['options'] = array_values($this->questions[$qIndex]['options']);
-    }
-
-    public function setCorrectAnswer($qIndex, $oIndex)
-    {
-        foreach ($this->questions[$qIndex]['options'] as $key => $option) {
-            $this->questions[$qIndex]['options'][$key]['is_correct'] = ($key === $oIndex);
-        }
     }
 
     public function updatedGradeLevel()

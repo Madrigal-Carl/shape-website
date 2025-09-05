@@ -46,11 +46,6 @@
                                 <h3 class="text-sm font-semibold w-40">No. of Activity:</h3>
                                 <p class="text-sm w-full">{{ count($lesson->activityLessons) }}</p>
                             </div>
-
-                            <div class="flex items-center w-auto gap-4">
-                                <h3 class="text-sm font-semibold w-40">No. of Quizzes:</h3>
-                                <p class="text-sm w-full">1</p>
-                            </div>
                         </div>
                     </div>
 
@@ -116,26 +111,6 @@
                             @endforeach
 
                         </div>
-                    </div>
-
-                    <div class="flex flex-col gap-3">
-                        <h2 class="font-medium text-lg">Quizzes</h2>
-
-                        <div class="bg-card w-full h-30 hidden items-center justify-center rounded-lg">
-                            <h1 class="text-paragraph">No Quiz added</h1>
-                        </div>
-
-                        <div class="w-full grid grid-cols-2 gap-2 items-center justify-center rounded-lg">
-                            <div class="flex w-full justify-between bg-card p-2 rounded-lg">
-                                <div class="flex gap-2">
-                                    <img src="{{ asset($lesson->quiz->path) }}" alt=""
-                                        class="h-12 rounded-md aspect-square object-cover">
-                                    <div>
-                                        <h1 class="font-medium">{{ $lesson->quiz->title }}</h1>
-                                    </div>
-                                </div>
-                            </div>
-                        </div><!--End of Quiz container -->
                     </div>
 
                     <div

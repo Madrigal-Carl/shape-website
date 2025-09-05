@@ -90,12 +90,14 @@
                         </div>
 
                         <div class="flex flex-col gap-3">
-                            <h2 class="font-medium text-lg">Specialize Learning <span class="text-paragraph font-normal text-sm">(optional)</span></h2>
+                            <h2 class="font-medium text-lg">Specialize Learning <span
+                                    class="text-paragraph font-normal text-sm">(optional)</span></h2>
                             {{-- Specilize selected Student --}}
                             <div class="p-3 rounded-lg bg-card relative flex flex-col gap-2 h-60">
                                 <div class="flex items-center justify-between w-full mb-2">
                                     <p class="text-paragraph font-medium">Select Student:</p>
-                                    <button class="flex items-center justify-center gap-1 px-3 py-1 rounded-lg text-paragraph hover:text-white cursor-pointer bg-white hover:bg-blue-button">
+                                    <button
+                                        class="flex items-center justify-center gap-1 px-3 py-1 rounded-lg text-paragraph hover:text-white cursor-pointer bg-white hover:bg-blue-button">
                                         <p class="text-sm">Clear All</p>
                                         <span class="material-symbols-rounded">clear_all</span>
                                     </button>
@@ -104,26 +106,29 @@
 
                                 {{-- Student list checkbox --}}
                                 <div class="flex items-center gap-2 w-full">
-                                    <div class=" w-full flex items-center px-3 py-2 rounded-lg bg-white border-gray-300 gap-2">
+                                    <div
+                                        class=" w-full flex items-center px-3 py-2 rounded-lg bg-white border-gray-300 gap-2">
                                         <input class="w-full outline-none" type="text" placeholder="Search Student"
                                             wire:model.live="student_search"
                                             class="w-full outline-none text-paragraph placeholder-paragraph" />
                                     </div>
-                                    <button class="flex items-center justify-center p-2 rounded-lg bg-blue-button hover:bg-blue-700 cursor-pointer">
-                                            <span class="material-symbols-rounded text-white cursor-pointer">search</span>
+                                    <button
+                                        class="flex items-center justify-center p-2 rounded-lg bg-blue-button hover:bg-blue-700 cursor-pointer">
+                                        <span class="material-symbols-rounded text-white cursor-pointer">search</span>
                                     </button>
                                 </div>
 
                                 <div class="h-full flex flex-col gap-1 bg-white p-2 rounded-lg">
                                     <div class="flex flex-col gap-1 h-full overflow-y-scroll pr-2 rounded-lg">
                                         {{-- Student checkbox --}}
-                                        <div class="flex items-center justify-end-safe gap-2 w-full p-2 hover:bg-card rounded-lg cursor-pointer">
+                                        <div
+                                            class="flex items-center justify-end-safe gap-2 w-full p-2 hover:bg-card rounded-lg cursor-pointer">
                                             <label class="container w-fit">
                                                 <input checked="checked" type="checkbox">
                                                 <div class="checkmark"></div>
                                             </label>
                                             <p class="w-full text-paragraph">Carl S. Madrigal</p>
-                                        </div>{{--End Student checkbox --}}
+                                        </div>{{-- End Student checkbox --}}
                                     </div>
                                 </div>
                             </div>{{-- End of Specilize selected Student --}}
@@ -170,7 +175,7 @@
                                     @foreach ($uploadedVideos as $index => $video)
                                         <div class="flex flex-col gap-2 relative video-container-{{ $index }}">
                                             <div class="w-full flex flex-col items-center justify-center shrink-0">
-                                                <img src="{{ $video['thumbnail'] }}"
+                                                <img src="{{ $video['thumbnail'] ? asset($video->thumbnail) : asset('images/default-img-holder.png') }}"
                                                     class="aspect-video w-max h-fit rounded-lg object-cover video-thumb-{{ $index }}" />
                                                 <button type="button"
                                                     class="absolute rounded-full cursor-pointer hover:scale-120 shadow-xl/40 z-10 playBtn-{{ $index }}"
@@ -262,129 +267,7 @@
                 <!-- Create Quiz Container -->
                 <div class="w-180 h-full Addlesson bg-white p-8 rounded-4xl relative">
                     <div class="Addlesson w-full h-[100%] flex flex-col pb-18 gap-8 self-center-safe overflow-y-auto">
-                        <div class="flex items-center gap-2">
-                            <img src="{{ asset('images/quizzes.png') }}" alt="" />
-                            <h1 class="text-3xl font-bold text-heading-dark">
-                                Edit Quiz
-                            </h1>
-                        </div>
 
-                        <!-- Question Container-->
-                        <div class="flex flex-col gap-4">
-                            <div class="flex flex-col border-1 border-gray-300 py-4 px-5 rounded-2xl">
-                                <input type="text" name="" id="" placeholder="Quiz Name"
-                                    wire:model.live="quiz_name"
-                                    class="text-xl outline-none placeholder-heading-dark" />
-                                <textarea name="" id="" maxlength="200" placeholder="Description (Optional)"
-                                    wire:model.live="quiz_description" class="placeholder-paragraph text-paragraph resize-none h-15 outline-none"></textarea>
-                            </div>
-                            @foreach ($questions as $qIndex => $question)
-                                <div class="flex flex-col border-1 border-gray-300 p-5 rounded-2xl gap-4">
-
-                                    <!-- Question Input -->
-                                    <input type="text" placeholder="Question"
-                                        wire:model="questions.{{ $qIndex }}.question"
-                                        class="border-b-2 border-gray-400 px-3 py-1 bg-card placeholder-paragraph outline-none w-full" />
-
-                                    <!-- Option Container -->
-                                    <div class="flex flex-col">
-
-                                        @foreach ($question['options'] as $oIndex => $option)
-                                            <!-- Option Holder -->
-                                            <div
-                                                class="flex items-center justify-between w-full p-2 rounded-lg
-                                                    {{ $option['is_correct'] ? 'bg-[#CFF2D9]' : '' }}">
-
-                                                <div class="flex items-center gap-4 w-full">
-
-                                                    <!-- Circle (only this is clickable to set answer) -->
-                                                    <div wire:click="setCorrectAnswer({{ $qIndex }}, {{ $oIndex }})"
-                                                        class="w-5 h-5 border-1 rounded-full p-0.5 flex items-center justify-center cursor-pointer
-                                                            {{ $option['is_correct'] ? 'border-[#11BC3F]' : 'border-gray-400' }}">
-
-                                                        @if ($option['is_correct'])
-                                                            <span
-                                                                class="w-full h-full rounded-full bg-[#11BC3F]"></span>
-                                                        @endif
-                                                    </div>
-
-                                                    <!-- Option text -->
-                                                    <input type="text"
-                                                        wire:model="questions.{{ $qIndex }}.options.{{ $oIndex }}.text"
-                                                        placeholder="Option {{ $oIndex + 1 }}"
-                                                        class="placeholder-paragraph text-sm outline-none
-                                                            {{ $option['is_correct'] ? 'text-[#11BC3F] font-medium' : '' }}" />
-                                                </div>
-
-                                                <!-- Right side icon -->
-                                                @if ($option['is_correct'])
-                                                    <span class="material-symbols-rounded text-[#11BC3F]">check</span>
-                                                @else
-                                                    <span
-                                                        wire:click="removeOption({{ $qIndex }}, {{ $oIndex }})"
-                                                        class="material-symbols-rounded text-paragraph cursor-pointer hover:text-danger">
-                                                        close
-                                                    </span>
-                                                @endif
-                                            </div>
-                                            <!-- End of Option Holder -->
-                                        @endforeach
-
-
-
-                                        <!-- Add option -->
-                                        <div class="flex items-center justify-between w-full p-2 rounded-lg">
-                                            <div class="flex items-center gap-4">
-                                                <div
-                                                    class="w-5 h-5 border-1 border-gray-400 rounded-full p-0.5 flex items-center justify-center">
-                                                </div>
-                                                <button type="button" wire:click="addOption({{ $qIndex }})"
-                                                    class="text-blue-button outline-none text-sm cursor-pointer">
-                                                    Add Option
-                                                </button>
-                                            </div>
-                                        </div>
-                                        <!-- End of Add option -->
-
-                                        <div class="flex items-center justify-between pt-6">
-                                            <button type="button"
-                                                class="w-fit h-fit flex items-center justify-center gap-2 cursor-pointer">
-                                                <span
-                                                    class="material-symbols-rounded text-blue-button">assignment_turned_in</span>
-                                                <h1 class="text-blue-button">Answer Key</h1>
-                                                <p class="pl-3 text-paragraph text-sm">
-                                                    (<span>
-                                                        {{ collect($question['options'])->firstWhere('is_correct', true)['text'] ?? 'None' }}
-                                                    </span>)
-                                                </p>
-                                            </button>
-                                            <div class="flex items-center gap-6">
-                                                <div class="w-fit flex items-center gap-2">
-                                                    <input type="number"
-                                                        wire:model.live="questions.{{ $qIndex }}.point"
-                                                        class="w-9 outline-none pl-1 border-b-1 border-gray-400"
-                                                        min="1" step="1" name="" value="1"
-                                                        id="" />
-                                                    <p>points</p>
-                                                </div>
-                                                <button wire:click="removeQuestion({{ $qIndex }})"
-                                                    type="button"
-                                                    class="w-fit h-fit cursor-pointer p-0 flex items-center justify-center text-paragraph hover:text-danger hover:scale-120">
-                                                    <span class="material-symbols-rounded">delete</span>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- End of Option Container -->
-                                </div>
-                            @endforeach
-                            <!--End Question Holder -->
-                            <button wire:click="addQuestion" type="button"
-                                class="flex w-fit items-center justify-center border-1 border-gray-300 py-2 px-3 rounded-2xl gap-2 self-center text-paragraph text-sm hover:border-blue-button hover:text-white hover:bg-blue-button hover:scale-110 cursor-pointer">
-                                <span class="material-symbols-rounded">add_circle</span>
-                                <p>Add Question</p>
-                            </button>
-                        </div>
                         <!-- End of Option Container -->
 
                         <div
