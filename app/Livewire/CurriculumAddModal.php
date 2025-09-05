@@ -129,9 +129,9 @@ class CurriculumAddModal extends Component
     {
         $this->subjects = Subject::orderBy('name')->get();
         $this->grade_levels = Student::where('instructor_id', Auth::user()->accountable->id)
-            ->with('profile')
+            ->with('enrollment')
             ->get()
-            ->pluck('profile.grade_level')
+            ->pluck('enrollment.grade_level')
             ->filter()
             ->unique()
             ->sort()

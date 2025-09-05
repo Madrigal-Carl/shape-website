@@ -5,23 +5,19 @@ namespace Database\Seeders;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Models\Log;
 use App\Models\Feed;
-use App\Models\Quiz;
 use App\Models\Admin;
 use App\Models\Award;
 use App\Models\Video;
 use App\Models\Lesson;
-use App\Models\Option;
 use App\Models\Account;
 use App\Models\Address;
-use App\Models\Profile;
+use App\Models\Enrollment;
 use App\Models\Student;
 use App\Models\Subject;
 use App\Models\Activity;
 use App\Models\Guardian;
-use App\Models\Question;
 use App\Models\Curriculum;
 use App\Models\Instructor;
-use App\Models\StudentQuiz;
 use App\Models\StudentAward;
 use App\Models\ActivityImage;
 use App\Models\ActivityLesson;
@@ -104,8 +100,14 @@ class DatabaseSeeder extends Seeder
         });
 
         // 6. Create Students
-        $students = $curriculums->map(function ($curriculum) {
-            return Student::factory()->count(5)->create(['instructor_id' => $curriculum->instructor_id]);
+        $students = $curriculums->map(function ($curriculum) use ($specializations) {
+            return Student::factory()->count(5)->create([
+                'instructor_id' => $curriculum->instructor_id,
+            ])->each(function ($student) use ($specializations) {
+                $student->specializations()->attach(
+                    $specializations->random()->id
+                );
+            });
         })->flatten();
 
         // 7. Create Accounts
@@ -133,7 +135,7 @@ class DatabaseSeeder extends Seeder
         // 8. Create Guardians, Profiles, Addresses
         $students->each(function ($student) {
             Guardian::factory()->create(['student_id' => $student->id]);
-            Profile::factory()->create(['student_id' => $student->id]);
+            Enrollment::factory()->create(['student_id' => $student->id]);
             Address::factory()->student()->create([
                 'owner_id' => $student->id,
                 'owner_type' => Student::class,

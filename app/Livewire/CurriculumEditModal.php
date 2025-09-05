@@ -2,7 +2,6 @@
 
 namespace App\Livewire;
 
-use App\Models\Profile;
 use App\Models\Student;
 use App\Models\Subject;
 use Livewire\Component;
@@ -153,9 +152,9 @@ class CurriculumEditModal extends Component
     public function render()
     {
         $this->grade_levels = Student::where('instructor_id', Auth::user()->accountable->id)
-            ->with('profile')
+            ->with('enrollment')
             ->get()
-            ->pluck('profile.grade_level')
+            ->pluck('enrollment.grade_level')
             ->filter()
             ->unique()
             ->sort()

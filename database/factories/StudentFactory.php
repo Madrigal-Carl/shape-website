@@ -28,6 +28,9 @@ class StudentFactory extends Factory
             'last_name' => $this->faker->lastName,
             'sex' => $this->faker->randomElement(['male', 'female']),
             'birth_date' => $this->faker->date(),
+            'lrn' => $this->faker->unique()->numerify('#############'),
+            'disability_type' => $this->faker->randomElement(['autism spectrum disorder', 'speech disorder', 'hearing impairment']),
+            'support_need' => $this->faker->sentence(),
             'status' => $this->faker->randomElement(['active', 'inactive', 'graduated', 'dropped', 'transferred']),
         ];
     }

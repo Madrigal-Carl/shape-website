@@ -16,6 +16,9 @@ class Student extends Model
         'last_name',
         'sex',
         'birth_date',
+        'lrn',
+        'disability_type',
+        'support_need',
         'status',
     ];
 
@@ -45,9 +48,14 @@ class Student extends Model
         return $this->morphOne(Address::class, 'owner')->where('type', 'current');
     }
 
-    public function profile()
+    public function enrollment()
     {
-        return $this->hasOne(Profile::class);
+        return $this->hasMany(Enrollment::class);
+    }
+
+    public function specializations()
+    {
+        return $this->morphToMany(Specialization::class, 'specializable');
     }
 
     public function guardian()
@@ -118,24 +126,5 @@ class Student extends Model
     public function awards()
     {
         return $this->belongsToMany(Award::class, 'student_awards', 'student_id', 'award_id');
-    }
-
-    protected static function booted()
-    {
-        static::creating(function ($model) {
-            if (empty($model->school_year)) {
-                $model->school_year = $model->getSchoolYear();
-            }
-        });
-    }
-
-    public function getSchoolYear(): string
-    {
-        $now = now();
-        $year = $now->year;
-
-        return $now->month >= 6
-            ? $year . '-' . ($year + 1)
-            : ($year - 1) . '-' . $year;
     }
 }

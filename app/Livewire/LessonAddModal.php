@@ -296,7 +296,7 @@ class LessonAddModal extends Component
         })->get();
         $this->students = Auth::user()->accountable->students()
             ->where('status', 'active')
-            ->whereHas('profile', function ($query) {
+            ->whereHas('enrollment', function ($query) {
                 $query->where('grade_level', $this->grade_level);
             })
             ->whereHas('profile', function ($query) {
