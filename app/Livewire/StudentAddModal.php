@@ -164,18 +164,24 @@ class StudentAddModal extends Component
     {
         $this->validateStep();
 
-        $filename = null;
+        $path = null;
         if ($this->photo) {
             $studentName = preg_replace('/\s+/', '', "{$this->last_name}_{$this->first_name}_{$this->middle_name}");
             $extension   = $this->photo->getClientOriginalExtension();
             $customName  = "{$studentName}_Profile.{$extension}";
 
-            $filename = $this->photo->storeAs('students', $customName, 'public');
+            $path = $this->photo->storeAs('students', $customName, 'public');
+        } else {
+            if ($this->sex === 'male') {
+                $path = 'default_profiles/default-male-student-pfp.png';
+            } else {
+                $path = 'default_profiles/default-female-student-pfp.png';
+            }
         }
 
         $student = Student::create([
             'instructor_id' => Auth::user()->accountable->id,
-            'path'          => $filename,
+            'path'          => $path,
             'first_name'    => $this->first_name,
             'middle_name'   => $this->middle_name,
             'last_name'     => $this->last_name,
