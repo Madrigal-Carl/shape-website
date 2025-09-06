@@ -1,4 +1,4 @@
-<main class="col-span-5 pl-8 pr-4 py-4 flex flex-col h-dvh gap-16 overflow-y-auto">
+<main class="col-span-5 pl-8 pr-4 py-4 flex flex-col h-dvh gap-12 overflow-y-auto">
     <!-- Greetings -->
     @php
         $user = App\Models\Account::with('accountable')->find(auth()->id());
@@ -12,12 +12,21 @@
                     <span class="font-bold text-blue-button">Dave</span>
                 </h1>
                 <p class="text-lg text-paragraph leading-4">Here is your summary today</p>
-                <div class="w-max px-2 py-1 mt-4 rounded-lg border-1 border-gray-300 hover:border-blue-button shadow-2xl/15">
-                    <select
-                        class="w-full outline-none text-heading-dark font-medium text-lg">
-                        <option class="text-sm text-black" selected disabled>
-                            S.Y 2025-2026
-                        </option>
+                <div
+                    class="w-max px-2 py-1 mt-4 rounded-lg border-1 border-gray-300 hover:border-blue-button shadow-2xl/15">
+                    <select class="w-full outline-none text-heading-dark font-medium text-lg"
+                        wire:model.live='school_year'>
+                        @foreach ($school_years as $sy)
+                            @if ($sy == $school_year)
+                                <option value="{{ $school_year }}" class="text-sm text-black" selected>
+                                    S.Y {{ $school_year }}
+                                </option>
+                            @else
+                                <option value="{{ $sy }}" class="text-sm text-paragraph">
+                                    S.Y {{ $sy }}
+                                </option>
+                            @endif
+                        @endforeach
 
                     </select>
                 </div>
@@ -26,39 +35,22 @@
 
         <!-- Buttons -->
 
+        <livewire:award-view-modal />
     </div>
 
     <!-- Award inventory -->
     <div class="flex flex-col gap-4">
-        <div class="side flex items-center justify-between gap-2 mb-4">
+        <div class="side flex items-center justify-between gap-2 mb-2">
             <h1 class="text-4xl font-bold">Awards Inventory</h1>
-            {{-- <div
-                class="flex items-center bg-white py-3 px-5 rounded-full shadow-2xl border-2 border-white hover:border-blue-button text-paragraph cursor-pointer hover:text-white hover:bg-blue-button">
-                <select name="" id="" class="w-25 outline-none">
-                    <option value="pending" class="text-sm text-heading-dark" selected disabled>
-                        Filter by
-                    </option>
-                    <option value="pending" class="text-sm text-heading-dark">
-                        All
-                    </option>
-                    <option value="pending" class="text-sm text-lime">Active</option>
-                    <option value="pending" class="text-sm text-paragraph">
-                        Inactive
-                    </option>
-                </select>
-                <!-- <span class="material-symbols-rounded">more_horiz</span>
-                    <span class="material-symbols-rounded">search</span> -->
-            </div> --}}
         </div>
 
-
         <!-- Award Grid -->
-        <div class="w-full  grid grid-cols-4 gap-4">
+        <div class="w-full grid grid-cols-4 gap-4">
             @foreach ($awards as $award)
                 <div
-                    class="max-w-100 flex flex-col gap-8 items-center bg-[radial-gradient(circle_at_center,_#93CEF5,_#006FDF)] p-4 rounded-3xl ">
+                    class="max-w-100 flex flex-col gap-6 items-center bg-[radial-gradient(circle_at_center,_#93CEF5,_#006FDF)] p-4 rounded-3xl ">
                     <div class="flex flex-col items-center gap-2 pt-8">
-                        <img src="{{ asset('images/Awards_icons/medal.png') }}" alt="" class="h-35 mb-4">
+                        <img src="{{ asset('images/Awards_icons/medal.png') }}" alt="" class="h-32 mb-2">
                         <p class="font-medium text-xl text-white w-full text-center">{{ $award->name }}</p>
                         <div class="flex items-center w-full justify-center gap-4 text-white">
                             <p class="text-sm">Awardees:</p>
@@ -101,5 +93,4 @@
             @endforeach
         </div>
     </div>
-    <livewire:award-view-modal />
 </main>
