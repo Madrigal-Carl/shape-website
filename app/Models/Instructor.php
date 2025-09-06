@@ -42,7 +42,7 @@ class Instructor extends Model
 
     public function lessons()
     {
-        return Lesson::whereHas('lessonSubject.curriculumSubject.curriculum', function ($query) {
+        return Lesson::whereHas('lessonSubjectStudents.curriculumSubject.curriculum', function ($query) {
             $query->where('instructor_id', $this->id);
         });
     }

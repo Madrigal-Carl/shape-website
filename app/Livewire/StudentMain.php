@@ -36,16 +36,6 @@ class StudentMain extends Component
         $this->dispatch('openModal', id: $id)->to('student-view-modal');
     }
 
-    public function updatingSearch()
-    {
-        $this->resetPage();
-    }
-
-    public function updatingStatus()
-    {
-        $this->resetPage();
-    }
-
     public function render()
     {
         $students = Auth::user()->accountable

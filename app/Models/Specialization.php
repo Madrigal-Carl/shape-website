@@ -25,9 +25,4 @@ class Specialization extends Model
     {
         return $this->morphedByMany(Activity::class, 'specializable');
     }
-
-    public function students()
-    {
-        return $this->hasMany(Student::class);
-    }
 }

@@ -93,19 +93,46 @@
                             <h2 class="font-medium text-lg">Specialize Learning <span
                                     class="text-paragraph font-normal text-sm">(optional)</span></h2>
                             {{-- Specilize selected Student --}}
-                            <div class="p-3 rounded-lg bg-card relative flex flex-col gap-2 h-60">
+                            <div class="p-3 rounded-lg bg-card relative flex flex-col gap-2 h-81">
                                 <div class="flex items-center justify-between w-full mb-2">
                                     <p class="text-paragraph font-medium">Select Student:</p>
-                                    <button
+                                    <button type="button" wire:click="clearStudents"
                                         class="flex items-center justify-center gap-1 px-3 py-1 rounded-lg text-paragraph hover:text-white cursor-pointer bg-white hover:bg-blue-button">
                                         <p class="text-sm">Clear All</p>
                                         <span class="material-symbols-rounded">clear_all</span>
                                     </button>
                                 </div>
 
-
-                                {{-- Student list checkbox --}}
+                                {{-- Search --}}
                                 <div class="flex items-center gap-2 w-full">
+                                    <div
+                                        class="w-full flex items-center px-3 py-2 rounded-lg bg-white border-gray-300 gap-2">
+                                        <input type="text" placeholder="Search Student"
+                                            wire:model.live="student_search"
+                                            class="w-full outline-none text-paragraph placeholder-paragraph" />
+                                    </div>
+                                </div>
+
+                                {{-- Student List --}}
+                                <div class="h-full flex flex-col gap-1 bg-white p-2 rounded-lg">
+                                    <div class="flex flex-col gap-1 h-full overflow-y-scroll pr-2 rounded-lg">
+                                        @forelse($this->filteredStudents as $student)
+                                            <div
+                                                class="flex items-center gap-2 w-full p-2 hover:bg-card rounded-lg cursor-pointer">
+                                                <label class="container w-fit">
+                                                    <input type="checkbox"
+                                                        wire:click="toggleStudent({{ $student->id }})"
+                                                        @checked(in_array($student->id, $selected_students))>
+                                                    <div class="checkmark"></div>
+                                                </label>
+                                                <p class="w-full text-paragraph">{{ $student->full_name }}</p>
+                                            </div>
+                                        @empty
+                                            <p class="text-center text-sm text-gray-500">No students found.</p>
+                                        @endforelse
+                                    </div>
+                                </div>
+                                {{-- <div class="flex items-center gap-2 w-full">
                                     <div
                                         class=" w-full flex items-center px-3 py-2 rounded-lg bg-white border-gray-300 gap-2">
                                         <input class="w-full outline-none" type="text" placeholder="Search Student"
@@ -120,7 +147,6 @@
 
                                 <div class="h-full flex flex-col gap-1 bg-white p-2 rounded-lg">
                                     <div class="flex flex-col gap-1 h-full overflow-y-scroll pr-2 rounded-lg">
-                                        {{-- Student checkbox --}}
                                         <div
                                             class="flex items-center justify-end-safe gap-2 w-full p-2 hover:bg-card rounded-lg cursor-pointer">
                                             <label class="container w-fit">
@@ -128,11 +154,20 @@
                                                 <div class="checkmark"></div>
                                             </label>
                                             <p class="w-full text-paragraph">Carl S. Madrigal</p>
-                                        </div>{{-- End Student checkbox --}}
+                                        </div>
                                     </div>
-                                </div>
+                                </div> --}}
                             </div>{{-- End of Specilize selected Student --}}
                         </div>
+                    </div>
+                </div>
+                <!-- End Add lesson container -->
+
+                <!-- Create Quiz Container -->
+                <div class="w-180 h-full Addlesson bg-white p-8 rounded-4xl relative">
+                    <div class="Addlesson w-full h-[100%] flex flex-col pb-18 gap-8 self-center-safe overflow-y-auto">
+
+
 
                         <div class="flex flex-col gap-3">
                             <h2 class="font-medium text-lg">Interactive Video Lessons</h2>
@@ -148,8 +183,8 @@
                                         <h1>Drop or Click to Upload Video</h1>
                                         <span class="material-symbols-rounded">add_photo_alternate</span>
                                     </label>
-                                    <input type="file" wire:model="videos" multiple class="hidden" id="videoUpload"
-                                        x-ref="videoUpload" />
+                                    <input type="file" wire:model="videos" multiple class="hidden"
+                                        id="videoUpload" x-ref="videoUpload" />
                                 </div>
 
                                 <div wire:loading wire:target="videos" x-data="{ progress: 0 }"
@@ -175,7 +210,7 @@
                                     @foreach ($uploadedVideos as $index => $video)
                                         <div class="flex flex-col gap-2 relative video-container-{{ $index }}">
                                             <div class="w-full flex flex-col items-center justify-center shrink-0">
-                                                <img src="{{ $video['thumbnail'] ? asset($video->thumbnail) : asset('images/default-img-holder.png') }}"
+                                                <img src="{{ $video['thumbnail'] ? asset($video['thumbnail']) : asset('images/default-img-holder.png') }}"
                                                     class="aspect-video w-max h-fit rounded-lg object-cover video-thumb-{{ $index }}" />
                                                 <button type="button"
                                                     class="absolute rounded-full cursor-pointer hover:scale-120 shadow-xl/40 z-10 playBtn-{{ $index }}"
@@ -260,15 +295,6 @@
                                 @endforelse
                             </div>
                         </div>
-                    </div>
-                </div>
-                <!-- End Add lesson container -->
-
-                <!-- Create Quiz Container -->
-                <div class="w-180 h-full Addlesson bg-white p-8 rounded-4xl relative">
-                    <div class="Addlesson w-full h-[100%] flex flex-col pb-18 gap-8 self-center-safe overflow-y-auto">
-
-                        <!-- End of Option Container -->
 
                         <div
                             class="flex items-center gap-2 absolute w-full left-0 bottom-0 px-5 pb-5 pt-10 rounded-b-4xl bg-gradient-to-t from-white via-white to-white/50">

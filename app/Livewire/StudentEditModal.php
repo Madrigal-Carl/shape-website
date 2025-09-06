@@ -4,12 +4,10 @@ namespace App\Livewire;
 
 use App\Models\Student;
 use Livewire\Component;
-use App\Models\Enrollment;
 use Livewire\Attributes\On;
 use Livewire\WithFileUploads;
 use App\Models\Specialization;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class StudentEditModal extends Component
@@ -223,7 +221,7 @@ class StudentEditModal extends Component
             'last_name'  => [$this->last_name, $this->original['last_name']],
             'birthdate'  => [$this->birthdate, $this->original['birthdate']],
             'sex'        => [$this->sex, $this->original['sex']],
-            'status'        => [$this->sex, $this->original['status']],
+            'status'        => [$this->status, $this->original['status']],
             'grade_level'=> [$this->grade_level, $this->original['grade_level']],
             'disability' => [$this->disability, $this->original['disability']],
             'description'=> [$this->description, $this->original['description']],

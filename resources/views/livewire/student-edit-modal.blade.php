@@ -53,23 +53,33 @@
                                 <input type="text" placeholder="LRN" wire:model.live='lrn' maxlength="12"
                                     class="px-3 py-1 rounded-lg bg-card placeholder-paragraph outline-none w-full" />
                                 <div class="px-2 py-1 rounded-lg bg-card">
+
+                                    @php
+                                        $statuses = [
+                                            'active' => 'Active',
+                                            'inactive' => 'Inactive',
+                                            'graduated' => 'Graduated',
+                                            'transferred' => 'Transferred',
+                                            'dropped' => 'Dropped',
+                                        ];
+
+                                        $classes = [
+                                            'active' => 'text-lime',
+                                            'inactive' => 'text-paragraph',
+                                            'graduated' => 'text-blue-button',
+                                            'transferred' => 'text-yellowOrange',
+                                            'dropped' => 'text-danger',
+                                        ];
+                                    @endphp
                                     <select class="w-max outline-none "
                                         wire:change="$set('status', $event.target.value)">
-                                        <option value="active" class=" text-lime">
-                                            Active
-                                        </option>
-                                        <option value="inactive" class=" text-paragraph">
-                                            Inactive
-                                        </option>
-                                        <option value="graduated" class=" text-blue-button">
-                                            Graduated
-                                        </option>
-                                        <option value="transferred" class=" text-yellowOrange">
-                                            Transferred
-                                        </option>
-                                        <option value="dropped" class=" text-danger">
-                                            Dropped
-                                        </option>
+
+                                        @foreach ($statuses as $value => $label)
+                                            <option value="{{ $value }}" class="{{ $classes[$value] }}"
+                                                {{ $status === $value ? 'selected' : '' }}>
+                                                {{ $label }}
+                                            </option>
+                                        @endforeach
 
                                     </select>
                                 </div>
@@ -136,8 +146,7 @@
                                                 {{ ucwords($disability) }}
                                             </option>
                                         @else
-                                            <option value="{{ $specialization->name }}"
-                                                class="text-sm text-paragraph">
+                                            <option value="{{ $specialization->name }}" class="text-sm text-paragraph">
                                                 {{ ucwords($specialization->name) }}
                                             </option>
                                         @endif

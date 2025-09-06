@@ -54,18 +54,6 @@ class LessonSubjectStudent extends Model
         );
     }
 
-    public function quiz()
-    {
-        return $this->hasOneThrough(
-            Quiz::class,
-            Lesson::class,
-            'id',
-            'lesson_id',
-            'lesson_id',
-            'id'
-        );
-    }
-
     public function activities()
     {
         return $this->hasManyThrough(

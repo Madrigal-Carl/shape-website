@@ -35,14 +35,12 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $awards = [
-            ['name' => 'Top Scorer', 'description' => 'Highest average score across all quizzes in all subjects of a curriculum.'],
-            ['name' => 'Quiz Master', 'description' => 'Highest total score in all quizzes of a curriculum.'],
-            ['name' => 'Perfect Streak', 'description' => 'Completes every quiz with a perfect score.'],
-            ['name' => 'Consistent Performer', 'description' => 'Always scores above 80% in every quiz/activity.'],
-            ['name' => 'Activity Champion', 'description' => 'Highest average score in activities.'],
-            ['name' => 'All-Rounder', 'description' => 'Completes all quizzes and activities in all lessons of the curriculum.'],
-            ['name' => 'Early Bird', 'description' => 'Submits/finishes each quiz or activity earliest compared to classmates.'],
-            ['name' => 'Persistent Learner', 'description' => 'Has the most attempts on quizzes/activities before completing.'],
+            ['name' => 'Activity Ace', 'description' => 'Recognizes the student who completes the highest number of activities overall.'],
+            ['name' => 'Lesson Finisher', 'description' => 'Awarded for completing all lessons assigned in the course.'],
+            ['name' => 'Resilient Learner', 'description' => 'Granted to a student who keeps trying until success, completing an activity after multiple failed attempts.'],
+            ['name' => 'Progress Pioneer', 'description' => 'Awarded the student who shows the greatest improvement across activities.'],
+            ['name' => 'Subject Specialist', 'description' => 'Earned by completing every activity within a single subject (demonstrates mastery).'],
+            ['name' => 'Speed Learner', 'description' => 'Awarded to the student who complete lessons in the shortest recorded time.'],
         ];
 
         foreach ($awards as $award) {

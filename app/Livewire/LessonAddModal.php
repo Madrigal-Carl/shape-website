@@ -28,6 +28,36 @@ class LessonAddModal extends Component
     public $isOpen = false;
     public $lesson_name, $curriculum = '', $subject = '', $grade_level = '', $description;
     public $uploadedVideos = [], $selected_activities = [], $selected_students = [];
+    public $student_search = '';
+
+    public function getFilteredStudentsProperty()
+    {
+        return $this->students
+            ->when($this->student_search, function ($q) {
+                return $q->filter(function ($student) {
+                    return str_contains(
+                        strtolower($student->full_name),
+                        strtolower($this->student_search)
+                    );
+                });
+            });
+    }
+
+    public function toggleStudent($studentId)
+    {
+        if (in_array($studentId, $this->selected_students)) {
+            $this->selected_students = array_values(
+                array_diff($this->selected_students, [$studentId])
+            );
+        } else {
+            $this->selected_students[] = $studentId;
+        }
+    }
+
+    public function clearStudents()
+    {
+        $this->selected_students = [];
+    }
 
     public function resetFields()
     {
@@ -63,19 +93,6 @@ class LessonAddModal extends Component
     public function openActivityHub()
     {
         $this->dispatch('openModal')->to('activity-hub');
-    }
-
-    public function updatedSelectedStudent($value)
-    {
-        if ($value && !in_array($value, $this->selected_students)) {
-            $this->selected_students[] = $value;
-        }
-    }
-
-    public function removeStudent($index)
-    {
-        unset($this->selected_students[$index]);
-        $this->selected_students = array_values($this->selected_students);
     }
 
     public function updatedVideos()
@@ -168,7 +185,6 @@ class LessonAddModal extends Component
                 'curriculum'         => 'required',
                 'subject'            => 'required',
                 'selected_activities'=> 'required',
-                'quiz_name'          => 'required|min:3|max:100',
             ], [
                 'lesson_name.required' => 'Lesson name is required.',
                 'lesson_name.min'      => 'Lesson name must be at least 5 characters.',
@@ -234,10 +250,6 @@ class LessonAddModal extends Component
             ]);
         }
 
-        $totalScore = collect($this->questions)->sum(function ($q) {
-            return $q['point'] ?? 1;
-        });
-
         $this->dispatch('swal-toast', icon: 'success', title: 'Lesson added successfully!');
         return $this->closeModal();
     }
@@ -295,16 +307,18 @@ class LessonAddModal extends Component
             $query->where('curriculum_id', $this->curriculum);
         })->get();
         $this->students = Auth::user()->accountable->students()
-            ->where('status', 'active')
-            ->whereHas('enrollment', function ($query) {
-                $query->where('grade_level', $this->grade_level);
-            })
-            ->whereHas('profile', function ($query) {
-                $query->whereIn('disability_type', Curriculum::find($this->curriculum)
-                    ->specializations()
-                    ->pluck('name'));
-            })
-            ->get();
+        ->where('status', 'active')
+        ->whereHas('enrollments', function ($query) {
+            $query->where('grade_level', $this->grade_level)
+                ->where('school_year', now()->schoolYear());
+        })
+        ->whereIn(
+            'disability_type',
+            Curriculum::find($this->curriculum)
+                ->specializations()
+                ->pluck('name')
+        )
+        ->get();
     }
 
     public function render()

@@ -28,6 +28,36 @@ class LessonEditModal extends Component
     public $lesson_name, $curriculum = '', $subject = '', $grade_level = '', $description;
     public $uploadedVideos = [], $selected_activities = [], $selected_students = [];
     public $original = [];
+    public $student_search = '';
+
+    public function getFilteredStudentsProperty()
+    {
+        return $this->students
+            ->when($this->student_search, function ($q) {
+                return $q->filter(function ($student) {
+                    return str_contains(
+                        strtolower($student->full_name),
+                        strtolower($this->student_search)
+                    );
+                });
+            });
+    }
+
+    public function toggleStudent($studentId)
+    {
+        if (in_array($studentId, $this->selected_students)) {
+            $this->selected_students = array_values(
+                array_diff($this->selected_students, [$studentId])
+            );
+        } else {
+            $this->selected_students[] = $studentId;
+        }
+    }
+
+    public function clearStudents()
+    {
+        $this->selected_students = [];
+    }
 
 
     #[On('openModal')]
@@ -47,16 +77,18 @@ class LessonEditModal extends Component
         $this->description = $lesson->description;
 
         $this->students = Auth::user()->accountable->students()
-            ->where('status', 'active')
-            ->whereHas('profile', function ($query) {
-                $query->where('grade_level', $this->grade_level);
-            })
-            ->whereHas('profile', function ($query) {
-                $query->whereIn('disability_type', Curriculum::find($this->curriculum_id)
-                    ->specializations()
-                    ->pluck('name'));
-            })
-            ->get();
+        ->where('status', 'active')
+        ->whereHas('enrollments', function ($query) {
+            $query->where('grade_level', $this->grade_level)
+                ->where('school_year', now()->schoolYear());
+        })
+        ->whereIn(
+            'disability_type',
+            Curriculum::find($this->curriculum_id)
+                ->specializations()
+                ->pluck('name')
+        )
+        ->get();
 
         $this->uploadedVideos = $lesson->videos->map(function ($video) {
             return [
@@ -241,11 +273,6 @@ class LessonEditModal extends Component
             return false;
         }
 
-        $validQuestions = $this->validateQuestions();
-        if (empty($validQuestions)) {
-            return false;
-        }
-
         return true;
     }
 
@@ -264,9 +291,6 @@ class LessonEditModal extends Component
             'students'      => $this->selected_students,
             'videos'        => $this->uploadedVideos,
             'activities'    => $this->selected_activities,
-            'quiz_name'     => $this->quiz_name,
-            'quiz_desc'     => $this->quiz_description,
-            'questions'     => $this->questions,
         ];
 
         if ($current == $this->original) {
@@ -344,16 +368,18 @@ class LessonEditModal extends Component
                 $query->where('curriculum_id', $this->curriculum_id);
             })->get();
             $this->students = Auth::user()->accountable->students()
-                ->where('status', 'active')
-                ->whereHas('profile', function ($query) {
-                    $query->where('grade_level', $this->grade_level);
-                })
-                ->whereHas('profile', function ($query) {
-                    $query->whereIn('disability_type', Curriculum::find($this->curriculum_id)
-                        ->specializations()
-                        ->pluck('name'));
-                })
-                ->get();
+            ->where('status', 'active')
+            ->whereHas('enrollments', function ($query) {
+                $query->where('grade_level', $this->grade_level)
+                    ->where('school_year', now()->schoolYear());
+            })
+            ->whereIn(
+                'disability_type',
+                Curriculum::find($this->curriculum)
+                    ->specializations()
+                    ->pluck('name')
+            )
+            ->get();
         }
     }
 

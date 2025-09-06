@@ -8,16 +8,25 @@
             <span class="w-2 h-full bg-blue-button rounded-full"></span>
             <div class="flex flex-col gap-1">
                 <h1 class="text-2xl font-semibold leading-tight">
-                    Welcome back, Sir
+                    Welcome back,
                     <span class="font-bold text-blue-button">Dave</span>
                 </h1>
                 <p class="text-lg text-paragraph leading-4">Here is your summary today</p>
                 <div
                     class="w-max px-2 py-1 mt-4 rounded-lg border-1 border-gray-300 hover:border-blue-button shadow-2xl/15">
-                    <select class="w-full outline-none text-heading-dark font-medium text-lg">
-                        <option class="text-sm text-black" selected disabled>
-                            S.Y 2025-2026
-                        </option>
+                    <select class="w-full outline-none text-heading-dark font-medium text-lg"
+                        wire:model.live='school_year'>
+                        @foreach ($school_years as $sy)
+                            @if ($sy == $school_year)
+                                <option value="{{ $school_year }}" class="text-sm text-black" selected>
+                                    S.Y {{ $school_year }}
+                                </option>
+                            @else
+                                <option value="{{ $sy }}" class="text-sm text-paragraph">
+                                    S.Y {{ $sy }}
+                                </option>
+                            @endif
+                        @endforeach
 
                     </select>
                 </div>
@@ -113,7 +122,11 @@
                                     <td class="px-4 py-3 text-center text-paragraph">
                                         <div class="flex justify-center items-center gap-1 text-white">
                                             <button wire:click='openEditLessonModal({{ $lesson->id }})'
-                                                class="bg-danger px-2 py-1 flex gap-2 items-center rounded-lg cursor-pointer hover:scale-110 min-w-[50px] justify-center relative">
+                                                class="px-2 py-1 flex gap-2 items-center rounded-lg min-w-[50px] justify-center relative
+                                                {{ $lesson->school_year === now()->schoolYear()
+                                                    ? 'bg-danger cursor-pointer hover:scale-110'
+                                                    : 'bg-gray-400 cursor-not-allowed' }}"
+                                                {{ $lesson->school_year !== now()->schoolYear() ? 'disabled' : '' }}>
 
                                                 <!-- Text (hidden when loading) -->
                                                 <small class="transition-opacity duration-150"
@@ -123,7 +136,8 @@
                                                 </small>
 
                                                 <!-- Spinner (overlay) -->
-                                                <svg wire:loading wire:target='openEditLessonModal({{ $lesson->id }})'
+                                                <svg wire:loading
+                                                    wire:target='openEditLessonModal({{ $lesson->id }})'
                                                     aria-hidden="true" class="w-4 h-4 text-white animate-spin absolute"
                                                     viewBox="0 0 100 101" fill="none"
                                                     xmlns="http://www.w3.org/2000/svg">

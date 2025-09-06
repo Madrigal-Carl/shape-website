@@ -12,7 +12,12 @@ class LessonMain extends Component
 {
     use WithPagination, WithoutUrlPagination;
     public $search = '';
+    public $school_year, $school_years;
     public $listeners = ['refresh' => '$refresh'];
+    public function mount()
+    {
+        $this->school_year = now()->schoolYear();
+    }
 
     public function openAddLessonModal()
     {
@@ -40,6 +45,7 @@ class LessonMain extends Component
             'videos',
             'activityLessons',
         ])
+        ->where('school_year', $this->school_year)
         ->whereHas('lessonSubjectStudents.curriculumSubject.curriculum', function ($q) {
             $q->where('instructor_id', Auth::user()->accountable->id);
         })
@@ -49,6 +55,12 @@ class LessonMain extends Component
         ->orderByDesc('created_at')
         ->paginate(10);
 
+        $this->school_years = Auth::user()->accountable
+        ->lessons()
+        ->pluck('school_year')
+        ->unique()
+        ->sort()
+        ->values();
         return view('livewire.lesson-main', compact('lessons'));
     }
 }

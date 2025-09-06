@@ -8,7 +8,7 @@
             <span class="w-2 h-full bg-blue-button rounded-full"></span>
             <div class="flex flex-col gap-1">
                 <h1 class="text-2xl font-semibold leading-tight">
-                    Welcome back, Sir
+                    Welcome back,
                     <span class="font-bold text-blue-button">Dave</span>
                 </h1>
                 <p class="text-lg text-paragraph leading-4">Here is your summary today</p>

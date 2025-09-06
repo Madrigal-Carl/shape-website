@@ -27,14 +27,15 @@
                         <div class="border-1 border-gray-300 p-6 rounded-3xl w-full flex flex-col gap-2">
                             <div class="flex items-center w-auto gap-4">
                                 <h3 class="text-sm font-semibold w-40">Subject:</h3>
-                                <p class="text-sm w-full">{{ $lesson->lessonSubjectStudents->first()->subject->name }}
+                                <p class="text-sm w-full">
+                                    {{ ucwords($lesson->lessonSubjectStudents->first()->subject->name) }}
                                 </p>
                             </div>
 
                             <div class="flex items-center w-auto gap-4">
                                 <h3 class="text-sm font-semibold w-40">Curriculum:</h3>
                                 <p class="text-sm w-full">
-                                    {{ $lesson->lessonSubjectStudents->first()->curriculum->name }}</p>
+                                    {{ ucwords($lesson->lessonSubjectStudents->first()->curriculum->name) }}</p>
                             </div>
 
                             <div class="flex items-center w-auto gap-4">
