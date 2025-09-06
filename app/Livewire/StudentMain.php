@@ -19,6 +19,15 @@ class StudentMain extends Component
     public function mount()
     {
         $this->school_year = now()->schoolYear();
+
+        $this->school_years = Student::where('instructor_id', Auth::user()->accountable->id)
+        ->with('enrollments')
+        ->get()
+        ->pluck('enrollments.*.school_year')
+        ->flatten()
+        ->unique()
+        ->sort()
+        ->values();
     }
 
     public function openAddStudentModal()
@@ -55,15 +64,6 @@ class StudentMain extends Component
         })
         ->orderBy('first_name')
         ->paginate(10);
-
-        $this->school_years = Student::where('instructor_id', Auth::user()->accountable->id)
-        ->with('enrollments')
-        ->get()
-        ->pluck('enrollments.*.school_year')
-        ->flatten()
-        ->unique()
-        ->sort()
-        ->values();
 
         return view('livewire.student-main', compact('students'));
     }

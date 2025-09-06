@@ -17,6 +17,13 @@ class LessonMain extends Component
     public function mount()
     {
         $this->school_year = now()->schoolYear();
+
+        $this->school_years = Auth::user()->accountable
+        ->lessons()
+        ->pluck('school_year')
+        ->unique()
+        ->sort()
+        ->values();
     }
 
     public function openAddLessonModal()
@@ -55,12 +62,6 @@ class LessonMain extends Component
         ->orderByDesc('created_at')
         ->paginate(10);
 
-        $this->school_years = Auth::user()->accountable
-        ->lessons()
-        ->pluck('school_year')
-        ->unique()
-        ->sort()
-        ->values();
         return view('livewire.lesson-main', compact('lessons'));
     }
 }
