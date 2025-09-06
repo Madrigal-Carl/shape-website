@@ -103,11 +103,7 @@ class DatabaseSeeder extends Seeder
         $students = $curriculums->map(function ($curriculum) use ($specializations) {
             return Student::factory()->count(5)->create([
                 'instructor_id' => $curriculum->instructor_id,
-            ])->each(function ($student) use ($specializations) {
-                $student->specializations()->attach(
-                    $specializations->random()->id
-                );
-            });
+            ]);
         })->flatten();
 
         // 7. Create Accounts

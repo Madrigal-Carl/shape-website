@@ -18,7 +18,7 @@ class StudentViewModal extends Component
         $this->student_id = $id;
         $this->isOpen = true;
 
-        $this->student = Student::with('guardian', 'profile', 'permanentAddress', 'currentAddress', 'lessons')->find($id);
+        $this->student = Student::with('guardian', 'currentEnrollment', 'permanentAddress', 'currentAddress', 'lessons')->find($id);
     }
 
     public function closeModal()

@@ -147,12 +147,12 @@
                                 <p class="text-paragraph">{{ ucwords($student->permanentAddress->barangay) }},
                                     {{ ucwords($student->permanentAddress->municipality) }},
                                     {{ ucwords($student->permanentAddress->province) }}</p>
-                                <p class="text-paragraph">{{ ucwords($student->profile->grade_level) }}</p>
-                                <p class="text-paragraph">{{ ucwords($student->profile->disability_type) }}</p>
+                                <p class="text-paragraph">{{ ucwords($student->currentEnrollment->grade_level) }}</p>
+                                <p class="text-paragraph">{{ ucwords($student->disability_type) }}</p>
                                 <p class="text-paragraph">{{ $student->guardian->fullname }}</p>
                                 <p class="text-paragraph">{{ ucwords($student->guardian->phone_number) }}</p>
                                 <p class="text-paragraph">{{ ucwords($student->guardian->email) }}</p>
-                                <p class="text-paragraph italic">{{ ucfirst($student->profile->support_need) }}
+                                <p class="text-paragraph italic">{{ ucfirst($student->support_need) }}
                                 </p>
                             </div>
                         </div>

@@ -110,18 +110,20 @@
                             <div class="px-2 py-1 rounded-lg bg-card">
                                 <select name="" id="" class="w-full outline-none text-paragraph"
                                     wire:change="$set('grade_level', $event.target.value)">
-                                    @foreach ($grade_levels as $level)
-                                        @if ($grade_level === $level)
-                                            <option value="{{ $grade_level }}" class="text-sm text-black" selected
-                                                disabled>
+                                    @for ($i = 1; $i <= 3; $i++)
+                                        @php
+                                            $grade = "kindergarten $i";
+                                        @endphp
+                                        @if ($grade === $grade_level)
+                                            <option value="{{ $grade_level }}" class="text-sm text-black" selected>
                                                 {{ ucwords($grade_level) }}
                                             </option>
                                         @else
-                                            <option value="{{ $level }}" class="text-sm text-paragraph">
-                                                {{ ucwords($level) }}
+                                            <option value="{{ $grade }}" class="text-sm text-paragraph">
+                                                Kindergarten {{ $i }}
                                             </option>
                                         @endif
-                                    @endforeach
+                                    @endfor
                                 </select>
                             </div>
 
@@ -130,8 +132,7 @@
                                     wire:change="$set('disability', $event.target.value)">
                                     @foreach ($specializations as $specialization)
                                         @if ($disability === $specialization->name)
-                                            <option value="{{ $disability }}" class="text-sm text-black" selected
-                                                disabled>
+                                            <option value="{{ $disability }}" class="text-sm text-black" selected>
                                                 {{ ucwords($disability) }}
                                             </option>
                                         @else

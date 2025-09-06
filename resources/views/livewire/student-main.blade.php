@@ -14,10 +14,19 @@
                 <p class="text-lg text-paragraph leading-4">Here is your summary today</p>
                 <div
                     class="w-max px-2 py-1 mt-4 rounded-lg border-1 border-gray-300 hover:border-blue-button shadow-2xl/15">
-                    <select class="w-full outline-none text-heading-dark font-medium text-lg">
-                        <option class="text-sm text-black" selected disabled>
-                            S.Y 2025-2026
-                        </option>
+                    <select class="w-full outline-none text-heading-dark font-medium text-lg"
+                        wire:model.live='school_year'>
+                        @foreach ($school_years as $sy)
+                            @if ($sy == $school_year)
+                                <option value="{{ $school_year }}" class="text-sm text-black" selected>
+                                    S.Y {{ $school_year }}
+                                </option>
+                            @else
+                                <option value="{{ $sy }}" class="text-sm text-paragraph">
+                                    S.Y {{ $sy }}
+                                </option>
+                            @endif
+                        @endforeach
 
                     </select>
                 </div>
@@ -127,7 +136,7 @@
                                     <td class="px-4 py-3 text-center text-paragraph">{{ $student->id }}</td>
                                     <td class="px-4 py-3 text-center text-paragraph">{{ $student->full_name }}</td>
                                     <td class="px-4 py-3 text-center text-paragraph ">
-                                        {{ ucwords($student->profile->disability_type) }}</td>
+                                        {{ ucwords($student->disability_type) }}</td>
                                     <td class="px-4 py-3 text-center text-paragraph">
                                         {{ $student->completed_lessons_count }}/{{ $student->total_lessons_count }}
                                     </td>
@@ -164,7 +173,11 @@
                                     <td class="px-4 py-3 text-center">
                                         <div class="flex justify-center items-center gap-1 text-white">
                                             <button wire:click='openEditStudentModal({{ $student->id }})'
-                                                class="bg-danger px-2 py-1 flex gap-2 items-center rounded-lg cursor-pointer hover:scale-110 min-w-[50px] justify-center relative">
+                                                class="px-2 py-1 flex gap-2 items-center rounded-lg min-w-[50px] justify-center relative transition
+                                                {{ optional($student->currentEnrollment)->school_year === now()->schoolYear()
+                                                    ? 'bg-danger cursor-pointer hover:scale-110'
+                                                    : 'bg-gray-400 cursor-not-allowed' }}"
+                                                {{ optional($student->currentEnrollment)->school_year !== now()->schoolYear() ? 'disabled' : '' }}>
 
                                                 <!-- Text (hidden when loading) -->
                                                 <small class="transition-opacity duration-150"

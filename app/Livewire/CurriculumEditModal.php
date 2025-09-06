@@ -151,15 +151,6 @@ class CurriculumEditModal extends Component
 
     public function render()
     {
-        $this->grade_levels = Student::where('instructor_id', Auth::user()->accountable->id)
-            ->with('enrollment')
-            ->get()
-            ->pluck('enrollment.grade_level')
-            ->filter()
-            ->unique()
-            ->sort()
-            ->values()
-            ->toArray();
         $this->specializations = Auth::user()->accountable->specializations;
         return view('livewire.curriculum-edit-modal');
     }

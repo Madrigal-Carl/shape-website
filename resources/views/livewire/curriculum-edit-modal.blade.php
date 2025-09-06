@@ -18,17 +18,20 @@
                         <div class="px-2 py-1 rounded-lg bg-card">
                             <select wire:change="$set('edit_grade_level', $event.target.value)"
                                 class="w-full outline-none text-paragraph">
-                                @foreach ($grade_levels as $grade_level)
-                                    @if ($edit_grade_level === $grade_level)
-                                        <option value="{{ $edit_grade_level }}" class="text-sm text-paragraph">
+                                @for ($i = 1; $i <= 3; $i++)
+                                    @php
+                                        $grade = "kindergarten $i";
+                                    @endphp
+                                    @if ($grade === $edit_grade_level)
+                                        <option value="{{ $edit_grade_level }}" class="text-sm text-black" selected>
                                             {{ ucwords($edit_grade_level) }}
                                         </option>
                                     @else
-                                        <option value="{{ $grade_level }}" class="text-sm text-paragraph">
-                                            {{ ucwords($grade_level) }}
+                                        <option value="{{ $grade }}" class="text-sm text-paragraph">
+                                            Kindergarten {{ $i }}
                                         </option>
                                     @endif
-                                @endforeach
+                                @endfor
                             </select>
                         </div>
 

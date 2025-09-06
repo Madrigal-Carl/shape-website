@@ -83,11 +83,15 @@
                                     <option class="text-sm text-black" selected disabled>
                                         Grade Level
                                     </option>
-                                    @foreach ($grade_levels as $grade_level)
-                                        <option value="{{ $grade_level }}" class="text-sm text-paragraph">
-                                            {{ ucwords($grade_level) }}
-                                        </option>
-                                    @endforeach
+                                    <option value="kindergarten 1" class="text-sm text-paragraph">
+                                        Kindergarten 1
+                                    </option>
+                                    <option value="kindergarten 2" class="text-sm text-paragraph">
+                                        Kindergarten 2
+                                    </option>
+                                    <option value="kindergarten 3" class="text-sm text-paragraph">
+                                        Kindergarten 3
+                                    </option>
                                 </select>
                             </div>
 

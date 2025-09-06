@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Models\Student;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Livewire\WithoutUrlPagination;
@@ -13,6 +14,12 @@ class StudentMain extends Component
     public $search = '';
     public $status = 'all';
     public $listeners = ["refresh" => '$refresh'];
+    public $school_year, $school_years;
+
+    public function mount()
+    {
+        $this->school_year = now()->schoolYear();
+    }
 
     public function openAddStudentModal()
     {
@@ -43,9 +50,9 @@ class StudentMain extends Component
     {
         $students = Auth::user()->accountable
         ->students()
-        ->with([
-            'profile'
-        ])
+        ->whereHas('enrollments', function ($q) {
+            $q->where('school_year', $this->school_year);
+        })
         ->when($this->search, function ($query) {
             $query->where(function ($q) {
                 $q->where('first_name', 'like', '%' . $this->search . '%')
@@ -54,14 +61,19 @@ class StudentMain extends Component
             });
         })
         ->when($this->status !== 'all', function ($query) {
-            $query->whereHas('profile', function ($q) {
-                $q->where('status', $this->status);
-            });
+            $query->where('status', $this->status);
         })
         ->orderBy('first_name')
         ->paginate(10);
 
-
+        $this->school_years = Student::where('instructor_id', Auth::user()->accountable->id)
+        ->with('enrollments')
+        ->get()
+        ->pluck('enrollments.*.school_year')
+        ->flatten()
+        ->unique()
+        ->sort()
+        ->values();
 
         return view('livewire.student-main', compact('students'));
     }

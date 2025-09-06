@@ -4,8 +4,10 @@ namespace App\Livewire;
 
 use App\Models\Student;
 use Livewire\Component;
+use App\Models\Enrollment;
 use Livewire\Attributes\On;
 use Livewire\WithFileUploads;
+use App\Models\Specialization;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -30,7 +32,7 @@ class StudentEditModal extends Component
         $this->step = 1;
         $this->isOpen = true;
 
-        $student = Student::with(['profile','guardian','addresses','account','permanentAddress', 'currentAddress'])->findOrFail($id);
+        $student = Student::with('guardian', 'currentEnrollment', 'addresses','account','permanentAddress', 'currentAddress')->findOrFail($id);
 
         $this->first_name = $student->first_name;
         $this->middle_name = $student->middle_name;
@@ -39,11 +41,10 @@ class StudentEditModal extends Component
         $this->sex        = $student->sex;
         $this->status        = $student->status;
         $this->currentPhoto = $student->path;
-
-        $this->lrn         = $student->profile->lrn;
-        $this->grade_level = $student->profile->grade_level;
-        $this->disability  = $student->profile->disability_type;
-        $this->description = $student->profile->support_need;
+        $this->lrn         = $student->lrn;
+        $this->grade_level = $student->currentEnrollment->grade_level;
+        $this->disability  = $student->disability_type;
+        $this->description = $student->support_need;
 
         $this->guardian_first_name  = $student->guardian->first_name;
         $this->guardian_middle_name = $student->guardian->middle_name;
@@ -200,7 +201,7 @@ class StudentEditModal extends Component
             return;
         }
 
-        $student = Student::with(['profile','guardian','addresses','account'])->findOrFail($this->student_id);
+        $student = Student::with('guardian','addresses','account')->findOrFail($this->student_id);
 
         if ($this->photo instanceof UploadedFile) {
             if ($student->path && Storage::disk('public')->exists($student->path)) {
@@ -254,15 +255,14 @@ class StudentEditModal extends Component
             'birth_date' => $this->birthdate,
             'sex'        => $this->sex,
             'status'        => $this->status,
-        ]);
-
-        $student->profile->update([
             'lrn' => $this->lrn,
-            'grade_level' => $this->grade_level,
             'disability_type' => $this->disability,
             'support_need' => $this->description,
         ]);
 
+        $student->currentEnrollment()->update([
+            'grade_level' => $this->grade_level,
+        ]);
         $student->guardian->update([
             'first_name' => $this->guardian_first_name,
             'middle_name'=> $this->guardian_middle_name,
@@ -335,17 +335,7 @@ class StudentEditModal extends Component
             ],
         ];
         $this->municipalities = array_keys($this->barangayData);
-        $this->grade_levels = Student::with('profile')
-            ->get()
-            ->pluck('profile.grade_level')
-            ->filter()
-            ->unique()
-            ->sort()
-            ->values()
-            ->toArray();
-
-        $this->specializations = Auth::user()->accountable->specializations;
-
+        $this->specializations = Specialization::all();
         return view('livewire.student-edit-modal');
     }
 }

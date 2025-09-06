@@ -48,14 +48,19 @@ class Student extends Model
         return $this->morphOne(Address::class, 'owner')->where('type', 'current');
     }
 
-    public function enrollment()
+    public function enrollments()
     {
         return $this->hasMany(Enrollment::class);
     }
 
-    public function specializations()
+    public function currentEnrollment()
     {
-        return $this->morphToMany(Specialization::class, 'specializable');
+        $currentSchoolYear = now()->month >= 6
+            ? now()->year . '-' . (now()->year + 1)
+            : (now()->year - 1) . '-' . now()->year;
+
+        return $this->hasOne(Enrollment::class)
+            ->where('school_year', $currentSchoolYear);
     }
 
     public function guardian()

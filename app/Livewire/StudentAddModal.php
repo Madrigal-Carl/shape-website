@@ -188,13 +188,13 @@ class StudentAddModal extends Component
             'sex'           => $this->sex,
             'birth_date'    => $this->birthdate,
             'status'        => 'active',
-        ]);
-
-        $student->profile()->create([
-            'lrn'           => $this->lrn,
-            'grade_level'   => $this->grade_level,
             'disability_type' => $this->disability,
             'support_need'  => $this->description,
+            'lrn'           => $this->lrn,
+        ]);
+
+        $student->enrollments()->create([
+            'grade_level'   => $this->grade_level,
         ]);
 
         $student->guardian()->create([
@@ -282,15 +282,6 @@ class StudentAddModal extends Component
             ],
         ];
         $this->municipalities = array_keys($this->barangayData);
-
-        $this->grade_levels = Student::with('profile')
-            ->get()
-            ->pluck('profile.grade_level')
-            ->filter()
-            ->unique()
-            ->sort()
-            ->values()
-            ->toArray();
         $this->specializations = Auth::user()->accountable->specializations;
         return view('livewire.student-add-modal');
     }
