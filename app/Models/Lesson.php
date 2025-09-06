@@ -86,19 +86,9 @@ class Lesson extends Model
     {
         static::creating(function ($model) {
             if (empty($model->school_year)) {
-                $model->school_year = $model->getSchoolYear();
+                $model->school_year = now()->schoolYear();
             }
         });
-    }
-
-    public function getSchoolYear(): string
-    {
-        $now = now();
-        $year = $now->year;
-
-        return $now->month >= 6
-            ? $year . '-' . ($year + 1)
-            : ($year - 1) . '-' . $year;
     }
 
 }
