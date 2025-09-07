@@ -19,7 +19,7 @@
                             </div>
                             <span class="material-symbols-rounded icon">subject</span>
                         </div>
-                        <h1 class="text-4xl font-semibold">{{ count($curriculum->curriculumSubjects) }}</h1>
+                        <h1 class="text-5xl font-bold">{{ count($curriculum->curriculumSubjects) }}</h1>
                     </div>
 
                     <div class="border-1 border-gray-300 p-6 rounded-3xl w-full flex flex-col justify-between">

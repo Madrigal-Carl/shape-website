@@ -72,7 +72,7 @@
                     class="max-w-100 h-110 flex flex-col justify-between gap-8 items-center bg-[radial-gradient(circle_at_center,_#93CEF5,_#006FDF)] p-4 rounded-3xl ">
                     <div class="flex flex-col items-center gap-2 pt-8">
                         <img src="{{ asset('images/Awards_icons/medal.png') }}" alt="" class="h-48 mb-4">
-                        <p class="font-semibold text-2xl text-white w-full text-center">{{ $award->name }}</p>
+                        <p class="font-bold text-3xl text-white w-full text-center">{{ $award->name }}</p>
                         <div class="flex items-center w-full justify-center gap-4 text-white/80">
                             <p class="text-sm">Total Awardees:</p>
                             <p class="text-sm">{{ $award->awardees_count }}</p>

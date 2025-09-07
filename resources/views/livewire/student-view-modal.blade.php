@@ -73,37 +73,44 @@
                 <!-- Summary -->
                 <div class="flex flex-col gap-4">
                     <h1 class="text-2xl font-semibold text-heading-dark">Summary</h1>
-                    <div class="grid grid-cols-4 grid-rows-1 gap-4">
+                    <div class="grid grid-cols-3 grid-rows-1 gap-4">
                         <div
-                            class="bg-gradient-to-tr from-blue-button to-[#00EEFF] shadow-blue-button shadow-2xl/45 p-6 text-white rounded-3xl flex flex-col justify-between gap-6">
-                            <div class="">
-                                <p class="text-sm leading-snug font-normal">Earned</p>
-                                <h1 class="text-2xl font-semibold leading-6">AWARDS</h1>
+                            class="bg-gradient-to-tr h-48 from-blue-button to-[#00EEFF] shadow-blue-button shadow-2xl/45 p-6 text-white rounded-3xl flex flex-col justify-between gap-6">
+                            <div class="flex justify-between w-full">
+                                <div>
+                                    <p class="text-xs leading-snug font-normal">Earned</p>
+                                    <h1 class="text-lg font-semibold leading-6">AWARDS</h1>
+                                </div>
+                                <span class="material-symbols-rounded icon">award_star</span>
                             </div>
-                            <h1 class="text-4xl font-semibold">24</h1>
+                            <h1 class="text-5xl font-bold">24</h1>
                         </div>
 
                         <div
-                            class="bg-gradient-to-tr from-lime to-[#00ff80] shadow-lime shadow-2xl/45 p-6 text-white rounded-3xl flex flex-col justify-between gap-6">
-                            <div>
-                                <p class="text-sm leading-snug font-normal">Completed</p>
-                                <h1 class="text-2xl font-semibold leading-6">LESSONS</h1>
+                            class="bg-gradient-to-tr h-48 from-lime to-[#00ff80] shadow-lime shadow-2xl/45 p-6 text-white rounded-3xl flex flex-col justify-between gap-6">
+                            <div class="flex justify-between w-full">
+                                <div>
+                                    <p class="text-xs leading-snug font-normal">Completed</p>
+                                    <h1 class="text-lg font-semibold leading-6">LESSONS</h1>
+                                </div>
+                                <span class="material-symbols-rounded icon">book_ribbon</span>
                             </div>
-                            <h1 class="text-4xl font-semibold">{{ $student->completed_lessons_count }}</h1>
+                            <h1 class="text-5xl font-bold">{{ $student->completed_lessons_count }}</h1>
                         </div>
 
                         <div
-                            class="bg-gradient-to-tr from-yellowOrange to-[#FFEA00] shadow-yellowOrange shadow-2xl/45 p-6 text-white rounded-3xl flex flex-col justify-between gap-6">
-                            <div>
-                                <p class="text-sm leading-snug font-normal">Completed</p>
-                                <h1 class="text-2xl font-semibold leading-6 max-w-50">
-                                    ACTIVITIES
-                                </h1>
+                            class="bg-gradient-to-tr h-48 from-yellowOrange to-[#FFEA00] shadow-yellowOrange shadow-2xl/45 p-6 text-white rounded-3xl flex flex-col justify-between gap-6">
+                            <div class="flex justify-between w-full">
+                                <div>
+                                    <p class="text-xs leading-snug font-normal">Completed</p>
+                                    <h1 class="text-lg font-semibold leading-6">ACTIVITIES</h1>
+                                </div>
+                                <span class="material-symbols-rounded icon">stadia_controller</span>
                             </div>
-                            <h1 class="text-4xl font-semibold">{{ $student->completed_activities_count }}</h1>
+                            <h1 class="text-5xl font-bold">{{ $student->completed_activities_count }}</h1>
                         </div>
 
-                        <div
+                        {{-- <div
                             class="bg-gradient-to-tr from-danger to-[#ff00aa] shadow-danger shadow-2xl/45 p-6 text-white rounded-3xl flex flex-col justify-between gap-6">
                             <div>
                                 <p class="text-sm leading-snug font-normal">Competed</p>
@@ -111,8 +118,8 @@
                                     QUIZZES
                                 </h1>
                             </div>
-                            <h1 class="text-4xl font-semibold">0</h1>
-                        </div>
+                            <h1 class="text-5xl font-bold">0</h1>
+                        </div> --}}
                     </div>
                 </div>
 

@@ -21,7 +21,7 @@
                                 </div>
                                 <span class="material-symbols-rounded icon">people</span>
                             </div>
-                            <h1 class="text-4xl font-semibold">{{ count($lesson->students) }}</h1>
+                            <h1 class="text-5xl font-bold">{{ count($lesson->students) }}</h1>
                         </div>
 
                         <div class="border-1 border-gray-300 p-6 rounded-3xl w-full flex flex-col gap-2">

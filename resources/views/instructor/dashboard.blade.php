@@ -36,7 +36,7 @@
         <h1 class="text-5xl font-bold mb-2">Dashboard</h1>
         <div class="grid grid-cols-4 grid-rows-1 gap-4">
             <div
-                class="bg-gradient-to-tr from-blue-button to-[#00EEFF] shadow-blue-button shadow-2xl/45 p-6 text-white rounded-3xl flex flex-col justify-between gap-6">
+                class="bg-gradient-to-tr h-48 from-blue-button to-[#00EEFF] shadow-blue-button shadow-2xl/45 p-6 text-white rounded-3xl flex flex-col justify-between gap-6">
                 <div class="flex justify-between">
                     <div>
                         <p class="text-sm leading-snug font-normal">Total Students</p>
@@ -44,11 +44,11 @@
                     </div>
                     <span class="material-symbols-rounded icon">people</span>
                 </div>
-                <h1 class="text-4xl font-semibold">24</h1>
+                <h1 class="text-5xl font-bold">24</h1>
             </div>
 
             <div
-                class="bg-gradient-to-tr from-lime to-[#00ff80] shadow-lime shadow-2xl/45 p-6 text-white rounded-3xl flex flex-col justify-between gap-6">
+                class="bg-gradient-to-tr h-48 from-lime to-[#00ff80] shadow-lime shadow-2xl/45 p-6 text-white rounded-3xl flex flex-col justify-between gap-6">
                 <div class="flex justify-between">
                     <div>
                         <p class="text-sm leading-snug font-normal">Students with</p>
@@ -56,11 +56,11 @@
                     </div>
                     <span class="material-symbols-rounded icon">sentiment_very_satisfied</span>
                 </div>
-                <h1 class="text-4xl font-semibold">24</h1>
+                <h1 class="text-5xl font-bold">24</h1>
             </div>
 
             <div
-                class="bg-gradient-to-tr from-yellowOrange to-[#FFEA00] shadow-yellowOrange shadow-2xl/45 p-6 text-white rounded-3xl flex flex-col justify-between gap-6">
+                class="bg-gradient-to-tr h-48 from-yellowOrange to-[#FFEA00] shadow-yellowOrange shadow-2xl/45 p-6 text-white rounded-3xl flex flex-col justify-between gap-6">
                 <div class="flex justify-between">
                     <div>
                         <p class="text-sm leading-snug font-normal">Students with</p>
@@ -70,11 +70,11 @@
                     </div>
                     <span class="material-symbols-rounded icon">hearing_disabled</span>
                 </div>
-                <h1 class="text-4xl font-semibold">24</h1>
+                <h1 class="text-5xl font-bold">24</h1>
             </div>
 
             <div
-                class="bg-gradient-to-tr from-danger to-[#ff00aa] shadow-danger shadow-2xl/45 p-6 text-white rounded-3xl flex flex-col justify-between gap-6">
+                class="bg-gradient-to-tr h-48 from-danger to-[#ff00aa] shadow-danger shadow-2xl/45 p-6 text-white rounded-3xl flex flex-col justify-between gap-6">
                 <div class="flex justify-between">
                     <div>
                         <p class="text-sm leading-snug font-normal">Total Students</p>
@@ -84,12 +84,12 @@
                     </div>
                     <span class="material-symbols-rounded icon">graphic_eq</span>
                 </div>
-                <h1 class="text-4xl font-semibold">24</h1>
+                <h1 class="text-5xl font-bold">24</h1>
             </div>
         </div>
 
         <div class="grid grid-cols-4 grid-rows-1 gap-4">
-            <div class="bg-white p-6 text-heading-dark shadow-2xl/5 rounded-3xl flex flex-col justify-between gap-6">
+            <div class="bg-white p-6 h-48 text-heading-dark shadow-2xl/5 rounded-3xl flex flex-col justify-between gap-6">
                 <div class="flex justify-between">
                     <div>
                         <p class="text-sm leading-snug font-normal text-paragraph">
@@ -99,10 +99,10 @@
                     </div>
                     <span class="material-symbols-rounded icon">book_4</span>
                 </div>
-                <h1 class="text-4xl font-semibold text-blue-button">24</h1>
+                <h1 class="text-5xl font-bold text-blue-button">24</h1>
             </div>
 
-            <div class="bg-white p-6 text-heading-dark shadow-2xl/5 rounded-3xl flex flex-col justify-between gap-6">
+            <div class="bg-white p-6 h-48 text-heading-dark shadow-2xl/5 rounded-3xl flex flex-col justify-between gap-6">
                 <div class="flex justify-between">
                     <div>
                         <p class="text-sm leading-snug font-normal text-paragraph">
@@ -112,10 +112,10 @@
                     </div>
                     <span class="material-symbols-rounded icon">library_books</span>
                 </div>
-                <h1 class="text-4xl font-semibold text-lime">24</h1>
+                <h1 class="text-5xl font-bold text-lime">24</h1>
             </div>
 
-            <div class="bg-white p-6 text-heading-dark shadow-2xl/5 rounded-3xl flex flex-col justify-between gap-6">
+            <div class="bg-white p-6 h-48 text-heading-dark shadow-2xl/5 rounded-3xl flex flex-col justify-between gap-6">
                 <div class="flex justify-between">
                     <div>
                         <p class="text-sm leading-snug font-normal text-paragraph">
@@ -125,10 +125,10 @@
                     </div>
                     <span class="material-symbols-rounded icon">sports_esports</span>
                 </div>
-                <h1 class="text-4xl font-semibold text-yellowOrange">24</h1>
+                <h1 class="text-5xl font-bold text-yellowOrange">24</h1>
             </div>
 
-            <div class="bg-white p-6 text-heading-dark shadow-2xl/5 rounded-3xl flex flex-col justify-between gap-6">
+            <div class="bg-white p-6 h-48 text-heading-dark shadow-2xl/5 rounded-3xl flex flex-col justify-between gap-6">
                 <div class="flex justify-between">
                     <div>
                         <p class="text-sm leading-snug font-normal text-paragraph">
@@ -138,7 +138,7 @@
                     </div>
                     <span class="material-symbols-rounded icon">award_star</span>
                 </div>
-                <h1 class="text-4xl font-semibold text-danger">24</h1>
+                <h1 class="text-5xl font-bold text-danger">24</h1>
             </div>
         </div>
     </div>
