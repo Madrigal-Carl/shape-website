@@ -3,7 +3,7 @@
         <section
             class="bg-black/30 fixed w-dvw h-dvh top-0 left-0 z-50 backdrop-blur-xs flex justify-center overflow-y-auto p-10">
             <!-- Third form -->
-            <div class="bg-white p-8 rounded-4xl w-250 flex flex-col gap-12 self-center-safe">
+            <div class="bg-card p-8 rounded-4xl w-250 flex flex-col gap-12 self-center-safe">
                 <div class="flex items-center justify-between gap-2">
                     <h1 class="text-3xl font-bold text-heading-dark">
                         Student Info.
@@ -72,7 +72,7 @@
 
                 <!-- Summary -->
                 <div class="flex flex-col gap-4">
-                    <h1 class="text-2xl font-medium">Summary</h1>
+                    <h1 class="text-2xl font-semibold text-heading-dark">Summary</h1>
                     <div class="grid grid-cols-4 grid-rows-1 gap-4">
                         <div
                             class="bg-gradient-to-tr from-blue-button to-[#00EEFF] shadow-blue-button shadow-2xl/45 p-6 text-white rounded-3xl flex flex-col justify-between gap-6">
@@ -119,8 +119,8 @@
                 <div class="flex flex-col gap-4">
 
                     <!-- Basic Info -->
-                    <div class="flex flex-col gap-4 border-1 border-gray-300 p-6 rounded-2xl">
-                        <h1 class="text-2xl font-medium">Basic Info</h1>
+                    <div class="flex flex-col gap-4 bg-white p-6 rounded-2xl">
+                        <h1 class="text-2xl font-semibold text-heading-dark">Basic Info</h1>
                         <div class="grid grid-cols-4 gap-4">
                             <div class="col-span-1 flex flex-col gap-1">
                                 <p class="font-medium">Gender:</p>
@@ -158,8 +158,8 @@
                         </div>
                         <!-- End of Basic Info -->
                     </div>
-                    <div class="flex flex-col bg-whitel rounded-3xl bg-white border-1 border-gray-300 p-6 gap-4">
-                        <h1 class="text-2xl font-medium">Assigned Lessons</h1>
+                    <div class="flex flex-col bg-white rounded-2xl p-6 gap-4 ">
+                        <h1 class="text-2xl font-semibold text-heading-dark">Assigned Lessons</h1>
                         <table class="table-auto border-collapse">
                             <thead>
                                 <tr>
@@ -194,100 +194,110 @@
                             </tbody>
                         </table>
                     </div>
-                </div>
+                    <div class="flex flex-col gap-4 bg-white p-6 rounded-2xl">
+                        <div class="flex flex-col gap-2 mb-4">
+                            <h1 class="text-2xl font-semibold text-heading-dark">
+                            Student Performance
+                            </h1>
+                            <p class="text-paragraph">Overview of student's lesson progress and quiz scores.</p>
+                        </div>
 
-                <h1 class="text-3xl font-semibold text-heading-dark">
-                    Student Performance
-                </h1>
-                <!-- LineChart -->
-                <div class="flex flex-col gap-4">
-                    <div
-                        class="col-span-1 row-span-2 h-full bg-white p-6 rounded-3xl flex flex-col gap-4 shadow-2xl/15">
-                        <h1 class="text-xl font-semibold">Lesson Progress Over Time</h1>
-                        <div id="PerformanceLinechart" class="w-full" wire:ignore x-data="{}"
-                            x-init="() => {
-                                var options = {
-                                    series: [{
-                                            name: 'Series 1',
-                                            data: [31, 40, 28, 51, 42, 109, 100],
-                                        },
-                                        {
-                                            name: 'Series 2',
-                                            data: [11, 32, 45, 32, 34, 52, 41],
-                                        },
-                                    ],
-                                    chart: {
-                                        type: 'area',
-                                        height: 350,
-                                        toolbar: { show: false },
-                                    },
-                                    dataLabels: { enabled: false },
-                                    stroke: { curve: 'smooth' },
-                                    xaxis: {
-                                        type: 'datetime',
-                                        categories: [
-                                            '2018-09-19T00:00:00.000Z',
-                                            '2018-09-19T01:30:00.000Z',
-                                            '2018-09-19T02:30:00.000Z',
-                                            '2018-09-19T03:30:00.000Z',
-                                            '2018-09-19T04:30:00.000Z',
-                                            '2018-09-19T05:30:00.000Z',
-                                            '2018-09-19T06:30:00.000Z',
-                                        ],
-                                    },
-                                    tooltip: {
-                                        x: { format: 'dd/MM/yy HH:mm' },
-                                    },
-                                };
-                            
-                                var chart = new ApexCharts(document.querySelector('#PerformanceLinechart'), options);
-                                chart.render();
-                            }">
+
+                        <!-- LineChart -->
+                        <div class="flex flex-col gap-4">
+                            <div
+                                class="col-span-1 row-span-2 h-full bg-white rounded-2xl flex flex-col gap-4">
+                                <h1 class="text-xl font-semibold">Lesson Progress Over Time</h1>
+                                <div id="PerformanceLinechart" class="w-full" wire:ignore x-data="{}"
+                                    x-init="() => {
+                                        var options = {
+                                            series: [{
+                                                    name: 'Series 1',
+                                                    data: [31, 40, 28, 51, 42, 109, 100],
+                                                },
+                                                {
+                                                    name: 'Series 2',
+                                                    data: [11, 32, 45, 32, 34, 52, 41],
+                                                },
+                                            ],
+                                            chart: {
+                                                type: 'area',
+                                                height: 350,
+                                                toolbar: { show: false },
+                                            },
+                                            dataLabels: { enabled: false },
+                                            stroke: { curve: 'smooth' },
+                                            xaxis: {
+                                                type: 'datetime',
+                                                categories: [
+                                                    '2018-09-19T00:00:00.000Z',
+                                                    '2018-09-19T01:30:00.000Z',
+                                                    '2018-09-19T02:30:00.000Z',
+                                                    '2018-09-19T03:30:00.000Z',
+                                                    '2018-09-19T04:30:00.000Z',
+                                                    '2018-09-19T05:30:00.000Z',
+                                                    '2018-09-19T06:30:00.000Z',
+                                                ],
+                                            },
+                                            tooltip: {
+                                                x: { format: 'dd/MM/yy HH:mm' },
+                                            },
+                                        };
+
+                                        var chart = new ApexCharts(document.querySelector('#PerformanceLinechart'), options);
+                                        chart.render();
+                                    }">
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- BarChart -->
+                        <div class="flex flex-col gap-4">
+                            <div
+                                class="col-span-1 row-span-2 h-full bg-white rounded-2xl flex flex-col gap-4">
+                                <h1 class="text-xl font-semibold">Average Quiz Score per Subjects</h1>
+                                <div id="PerformanceBarchart" class="w-full" wire:ignore x-data="{}"
+                                    x-init="() => {
+                                        var options = {
+                                            series: [
+                                                { name: 'Net Profit', data: [44, 55, 57, 56, 61, 58, 63, 60, 66] },
+                                                { name: 'Revenue', data: [76, 85, 101, 98, 87, 105, 91, 114, 94] },
+                                                { name: 'Free Cash Flow', data: [35, 41, 36, 26, 45, 48, 52, 53, 41] }
+                                            ],
+                                            chart: {
+                                                type: 'bar',
+                                                height: 350,
+                                                toolbar: { show: false },
+                                            },
+                                            plotOptions: {
+                                                bar: {
+                                                    horizontal: false,
+                                                    columnWidth: '55%',
+                                                    borderRadius: 5,
+                                                    borderRadiusApplication: 'end',
+                                                },
+                                            },
+                                            dataLabels: { enabled: false },
+                                            stroke: { show: true, width: 2, colors: ['transparent'] },
+                                            xaxis: { categories: ['Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct'] },
+                                            fill: { opacity: 1 },
+                                            tooltip: { y: { formatter: val => `${val}%` } },
+                                        };
+
+                                        var chart = new ApexCharts(document.querySelector('#PerformanceBarchart'), options);
+                                        chart.render();
+                                    }">
+                                </div>
+                            </div>
                         </div>
                     </div>
-
                 </div>
 
-                <!-- BarChart -->
-                <div class="flex flex-col gap-4">
-                    <div
-                        class="col-span-1 row-span-2 h-full bg-white p-6 rounded-3xl flex flex-col gap-4 shadow-2xl/15">
-                        <h1 class="text-xl font-semibold">Average Quiz Score per Subjects</h1>
-                        <div id="PerformanceBarchart" class="w-full" wire:ignore x-data="{}"
-                            x-init="() => {
-                                var options = {
-                                    series: [
-                                        { name: 'Net Profit', data: [44, 55, 57, 56, 61, 58, 63, 60, 66] },
-                                        { name: 'Revenue', data: [76, 85, 101, 98, 87, 105, 91, 114, 94] },
-                                        { name: 'Free Cash Flow', data: [35, 41, 36, 26, 45, 48, 52, 53, 41] }
-                                    ],
-                                    chart: {
-                                        type: 'bar',
-                                        height: 350,
-                                        toolbar: { show: false },
-                                    },
-                                    plotOptions: {
-                                        bar: {
-                                            horizontal: false,
-                                            columnWidth: '55%',
-                                            borderRadius: 5,
-                                            borderRadiusApplication: 'end',
-                                        },
-                                    },
-                                    dataLabels: { enabled: false },
-                                    stroke: { show: true, width: 2, colors: ['transparent'] },
-                                    xaxis: { categories: ['Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct'] },
-                                    fill: { opacity: 1 },
-                                    tooltip: { y: { formatter: val => `${val}%` } },
-                                };
-                            
-                                var chart = new ApexCharts(document.querySelector('#PerformanceBarchart'), options);
-                                chart.render();
-                            }">
-                        </div>
-                    </div>
 
-                </div>
+
+
+
             </div>
             <!-- End of Third form -->
         </section>

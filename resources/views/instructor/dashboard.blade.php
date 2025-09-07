@@ -260,7 +260,7 @@
         <!-- Student Notifications -->
         <div class="flex flex-col gap-2 px-3 overflow-y-auto">
             <div class="flex gap-2 w-full bg-card p-3 rounded-full">
-                <img src="{{ asset('images/profile.jpg') }}" class="rounded-full w-10" alt="" />
+                <img src="{{ asset('images/default_profiles/default-male-student-pfp.png') }}" class="rounded-full w-10" alt="" />
                 <!-- notification Details -->
                 <div>
                     <h2 class="leading-tight font-semibold text-md">
@@ -273,7 +273,7 @@
             </div>
 
             <div class="flex gap-2 w-full bg-card p-3 rounded-full">
-                <img src="{{ asset('images/profile.jpg') }}" class="rounded-full w-10" alt="" />
+                <img src="{{ asset('images/default_profiles/default-male-student-pfp.png') }}" class="rounded-full w-10" alt="" />
                 <!-- notification Details -->
                 <div>
                     <h2 class="leading-tight font-semibold text-md">
@@ -286,7 +286,7 @@
             </div>
 
             <div class="flex gap-2 w-full bg-card p-3 rounded-full">
-                <img src="{{ asset('images/profile.jpg') }}" class="rounded-full w-10" alt="" />
+                <img src="{{ asset('images/default_profiles/default-male-student-pfp.png') }}" class="rounded-full w-10" alt="" />
                 <!-- notification Details -->
                 <div>
                     <h2 class="leading-tight font-semibold text-md">
@@ -299,7 +299,7 @@
             </div>
 
             <div class="flex gap-2 w-full bg-card p-3 rounded-full">
-                <img src="{{ asset('images/profile.jpg') }}" class="rounded-full w-10" alt="" />
+                <img src="{{ asset('images/default_profiles/default-male-student-pfp.png') }}" class="rounded-full w-10" alt="" />
                 <!-- notification Details -->
                 <div>
                     <h2 class="leading-tight font-semibold text-md">
@@ -312,7 +312,7 @@
             </div>
 
             <div class="flex gap-2 w-full bg-card p-3 rounded-full">
-                <img src="{{ asset('images/profile.jpg') }}" class="rounded-full w-10" alt="" />
+                <img src="{{ asset('images/default_profiles/default-male-student-pfp.png') }}" class="rounded-full w-10" alt="" />
                 <!-- notification Details -->
                 <div>
                     <h2 class="leading-tight font-semibold text-md">
@@ -325,7 +325,7 @@
             </div>
 
             <div class="flex gap-2 w-full bg-card p-3 rounded-full">
-                <img src="{{ asset('images/profile.jpg') }}" class="rounded-full w-10" alt="" />
+                <img src="{{ asset('images/default_profiles/default-male-student-pfp.png') }}" class="rounded-full w-10" alt="" />
                 <!-- notification Details -->
                 <div>
                     <h2 class="leading-tight font-semibold text-md">

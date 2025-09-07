@@ -3,7 +3,7 @@
         <section class="bg-black/30 fixed w-dvw h-dvh p-10 top-0 left-0 z-50 backdrop-blur-xs flex justify-center gap-6">
             <!-- Add lesson container -->
             <form wire:submit='editLesson' class="flex justify-center gap-6">
-                <div class="w-180 h-full Addlesson bg-white p-8 rounded-4xl relative">
+                <div class="w-180 h-full Addlesson bg-card p-8 rounded-4xl relative">
                     <!-- first form -->
                     <div class="Addlesson w-full h-[100%] flex flex-col gap-8 self-center-safe overflow-y-auto">
                         <div class="flex items-center gap-2">
@@ -14,12 +14,12 @@
                         </div>
 
                         <div class="flex flex-col gap-3">
-                            <h2 class="font-medium text-lg">Lesson Information</h2>
+                            <h2 class="font-semibold text-xl">Lesson Information</h2>
                             <div class="flex flex-col gap-2">
                                 <input type="text" placeholder="Lesson Name" wire:model.live="lesson_name"
-                                    class="px-3 py-1 rounded-lg bg-card placeholder-paragraph outline-none w-full" />
+                                    class="px-4 py-2 rounded-lg bg-white placeholder-paragraph outline-none w-full" />
 
-                                <div class="px-2 py-1 rounded-lg bg-card">
+                                <div class="px-4 py-2 rounded-lg bg-white">
                                     <select wire:model.live="grade_level" name="" id=""
                                         class="w-full outline-none text-paragraph">
                                         <option value="" class="text-sm text-black" disabled>
@@ -39,7 +39,7 @@
                                     </select>
                                 </div>
                                 <div class="flex items-center gap-2 w-full">
-                                    <div class="px-2 py-1 rounded-lg bg-card w-full">
+                                    <div class="px-4 py-2 rounded-lg bg-white w-full">
                                         <select name="" id="" wire:model.live="curriculum"
                                             wire:key="{{ $grade_level }}" class="w-full outline-none text-paragraph">
                                             <option value="" class="text-sm text-black" disabled>
@@ -61,7 +61,7 @@
                                     </div>
                                 </div>
                                 <div class="flex items-center gap-2 w-full">
-                                    <div class="px-2 py-1 rounded-lg bg-card w-full">
+                                    <div class="px-4 py-2 rounded-lg bg-white w-full">
                                         <select name="" id="" wire:model.live="subject"
                                             wire:key="{{ $curriculum }}" class="w-full outline-none text-paragraph">
                                             <option value="" class="text-sm text-black" disabled>
@@ -85,32 +85,29 @@
 
                                 <textarea name="" id="" maxlength="200" placeholder="Description (Optional)"
                                     wire:model.live="description"
-                                    class="px-3 py-2 rounded-lg bg-card placeholder-paragraph resize-none h-24 outline-none"></textarea>
+                                    class="px-3 py-2 rounded-lg bg-white placeholder-paragraph resize-none h-24 outline-none"></textarea>
                             </div>
                         </div>
 
                         <div class="flex flex-col gap-3">
-                            <h2 class="font-medium text-lg">Specialize Learning <span
+                            <h2 class="font-semibold text-xl">Specialize Learning <span
                                     class="text-paragraph font-normal text-sm">(optional)</span></h2>
                             {{-- Specilize selected Student --}}
-                            <div class="p-3 rounded-lg bg-card relative flex flex-col gap-2 h-81">
+                            <div class="rounded-lg relative flex flex-col gap-2 h-81">
                                 <div class="flex items-center justify-between w-full mb-2">
                                     <p class="text-paragraph font-medium">Select Student:</p>
                                     <button type="button" wire:click="clearStudents"
-                                        class="flex items-center justify-center gap-1 px-3 py-1 rounded-lg text-paragraph hover:text-white cursor-pointer bg-white hover:bg-blue-button">
+                                        class="flex items-center justify-center gap-1 px-4 py-2 rounded-lg text-paragraph hover:text-white cursor-pointer bg-white hover:bg-blue-button">
                                         <p class="text-sm">Clear All</p>
                                         <span class="material-symbols-rounded">clear_all</span>
                                     </button>
                                 </div>
-
                                 {{-- Search --}}
-                                <div class="flex items-center gap-2 w-full">
-                                    <div
-                                        class="w-full flex items-center px-3 py-2 rounded-lg bg-white border-gray-300 gap-2">
-                                        <input type="text" placeholder="Search Student"
-                                            wire:model.live="student_search"
-                                            class="w-full outline-none text-paragraph placeholder-paragraph" />
-                                    </div>
+                                <div class="flex items-center gap-2 px-4 py-2 rounded-lg bg-white w-full">
+                                    <span class="material-symbols-rounded">person_search</span>
+                                    <input type="text" placeholder="Search Student"
+                                        wire:model.live="student_search"
+                                        class="w-full outline-none text-paragraph placeholder-paragraph" />
                                 </div>
 
                                 {{-- Student List --}}
@@ -128,86 +125,70 @@
                                                 <p class="w-full text-paragraph">{{ $student->full_name }}</p>
                                             </div>
                                         @empty
-                                            <p class="text-center text-sm text-gray-500">No students found.</p>
+                                            <p class="text-center text-sm text-gray-500 h-full flex justify-center items-center">No students found.</p>
                                         @endforelse
                                     </div>
                                 </div>
-                                {{-- <div class="flex items-center gap-2 w-full">
-                                    <div
-                                        class=" w-full flex items-center px-3 py-2 rounded-lg bg-white border-gray-300 gap-2">
-                                        <input class="w-full outline-none" type="text" placeholder="Search Student"
-                                            wire:model.live="student_search"
-                                            class="w-full outline-none text-paragraph placeholder-paragraph" />
-                                    </div>
-                                    <button
-                                        class="flex items-center justify-center p-2 rounded-lg bg-blue-button hover:bg-blue-700 cursor-pointer">
-                                        <span class="material-symbols-rounded text-white cursor-pointer">search</span>
-                                    </button>
-                                </div>
-
-                                <div class="h-full flex flex-col gap-1 bg-white p-2 rounded-lg">
-                                    <div class="flex flex-col gap-1 h-full overflow-y-scroll pr-2 rounded-lg">
-                                        <div
-                                            class="flex items-center justify-end-safe gap-2 w-full p-2 hover:bg-card rounded-lg cursor-pointer">
-                                            <label class="container w-fit">
-                                                <input checked="checked" type="checkbox">
-                                                <div class="checkmark"></div>
-                                            </label>
-                                            <p class="w-full text-paragraph">Carl S. Madrigal</p>
-                                        </div>
-                                    </div>
-                                </div> --}}
                             </div>{{-- End of Specilize selected Student --}}
                         </div>
                     </div>
                 </div>
                 <!-- End Add lesson container -->
 
-                <!-- Create Quiz Container -->
-                <div class="w-180 h-full Addlesson bg-white p-8 rounded-4xl relative">
+                <!-- Lesson Materials container -->
+                <div class="w-180 h-full Addlesson bg-card p-8 rounded-4xl relative">
                     <div class="Addlesson w-full h-[100%] flex flex-col pb-18 gap-8 self-center-safe overflow-y-auto">
-
-
-
                         <div class="flex flex-col gap-3">
-                            <h2 class="font-medium text-lg">Interactive Video Lessons</h2>
-                            <div class="flex flex-col gap-2">
-                                <div x-data="{ isDropping: false }" @dragover.prevent="isDropping = true"
-                                    @dragleave.prevent="isDropping = false"
-                                    @drop.prevent="isDropping = false; $refs.videoUpload.files = $event.dataTransfer.files; $refs.videoUpload.dispatchEvent(new Event('change'))"
-                                    :class="isDropping ? 'border-blue-500 text-blue-500 bg-blue-50' :
-                                        'border-gray-300 text-gray-600'"
-                                    class="flex items-center h-24 justify-center gap-2 px-6 py-3 border-2 border-dashed rounded-lg w-full cursor-pointer transition-colors duration-200 hover:border-blue-500 hover:text-blue-500"
-                                    id="dropzone">
-                                    <label for="videoUpload" class="cursor-pointer flex items-center gap-2">
-                                        <h1>Drop or Click to Upload Video</h1>
-                                        <span class="material-symbols-rounded">add_photo_alternate</span>
-                                    </label>
-                                    <input type="file" wire:model="videos" multiple class="hidden"
-                                        id="videoUpload" x-ref="videoUpload" />
-                                </div>
-
-                                <div wire:loading wire:target="videos" x-data="{ progress: 0 }"
-                                    x-on:livewire-upload-progress.window="progress = $event.detail.progress"
-                                    x-on:livewire-upload-start.window="progress = 0"
-                                    x-on:livewire-upload-finish.window="progress = 0"
-                                    x-on:livewire-upload-error.window="progress = 0"
-                                    class="w-full mt-3 flex-col items-center">
-
-                                    <div class="bg-gray-200 rounded-full h-2 overflow-hidden">
-                                        <div class="bg-blue-500 h-2 transition-all duration-300"
-                                            :style="'width: ' + progress + '%'"></div>
+                            <h2 class="font-semibold text-xl">Interactive Video Lessons</h2>
+                            <div class="flex flex-col gap-2 bg-white p-4 rounded-xl">
+                                {{-- Video Upload --}}
+                                <div class="flex flex-col gap-2">
+                                    <div x-data="{ isDropping: false }" @dragover.prevent="isDropping = true"
+                                        @dragleave.prevent="isDropping = false"
+                                        @drop.prevent="isDropping = false; $refs.videoUpload.files = $event.dataTransfer.files; $refs.videoUpload.dispatchEvent(new Event('change'))"
+                                        :class="isDropping ? 'border-blue-500 text-blue-500 bg-blue-50' :
+                                            'border-gray-300 text-gray-600'"
+                                        class="flex items-center h-48 mb-2 justify-center border-2 border-dashed rounded-lg w-full cursor-pointer transition-colors duration-200 hover:border-blue-500 hover:text-blue-500"
+                                        id="dropzone">
+                                        <label for="videoUpload" class="cursor-pointer flex flex-col items-center gap-2">
+                                            <span class="material-symbols-rounded p-4 bg-blue-button rounded-3xl text-white large-icon">video_camera_back_add</span>
+                                            <h1 class="w-60 text-center">Drag and Drop a video here or Click to Upload Video</h1>
+                                        </label>
+                                        <input type="file" wire:model="videos" multiple class="hidden"
+                                            id="videoUpload" x-ref="videoUpload" />
                                     </div>
 
-                                    <p class="text-sm text-blue-600 text-center">
-                                        Uploading... <span x-text="progress"></span>%
-                                    </p>
-                                </div>
+                                    <div wire:loading wire:target="videos" x-data="{ progress: 0 }"
+                                        x-on:livewire-upload-progress.window="progress = $event.detail.progress"
+                                        x-on:livewire-upload-start.window="progress = 0"
+                                        x-on:livewire-upload-finish.window="progress = 0"
+                                        x-on:livewire-upload-error.window="progress = 0"
+                                        class="w-full mt-3 flex-col items-center">
+
+                                        <div class="bg-gray-200 rounded-full h-2 overflow-hidden">
+                                            <div class="bg-blue-500 h-2 transition-all duration-300"
+                                                :style="'width: ' + progress + '%'"></div>
+                                        </div>
+
+                                        <p class="text-sm text-blue-600 text-center">
+                                            Uploading... <span x-text="progress"></span>%
+                                        </p>
+                                    </div>
+                                    <div class="grid grid-cols-5 gap-2">
+                                        <div class="col-span-4 flex items-center px-4 py-2 bg-card gap-2 rounded-lg">
+                                            <span class="material-symbols-rounded">youtube_activity</span>
+                                            <input type="text" placeholder="Paste YouTube Link" wire:model="youtube_link"
+                                            class=" rounded-lg placeholder-paragraph outline-none w-full" />
+                                        </div>
+                                        <button type="button" wire:click="addYoutubeVideo"
+                                            class="bg-blue-button text-sm text-white px-3 py-2 rounded-lg w-full col-span-1 hover:bg-blue-700 cursor-pointer">
+                                            Add Link
+                                        </button>
+                                    </div>
 
 
-
-                                <div class="w-full grid grid-cols-2 gap-2">
-                                    @foreach ($uploadedVideos as $index => $video)
+                                    <div class="w-full grid grid-cols-2 gap-2">
+                                        @foreach ($uploadedVideos as $index => $video)
                                         <div class="flex flex-col gap-2 relative video-container-{{ $index }}">
                                             <div class="w-full flex flex-col items-center justify-center shrink-0">
                                                 <img src="{{ $video['thumbnail'] ? asset($video['thumbnail']) : asset('images/default-img-holder.png') }}"
@@ -236,74 +217,72 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    @endforeach
-
+                                        @endforeach
+                                    </div>
                                 </div>
-
-                            </div>
-                            <div class="grid grid-cols-3 gap-2">
-                                <input type="text" placeholder="Paste YouTube Link" wire:model="youtube_link"
-                                    class="px-3 py-1 rounded-lg bg-card placeholder-paragraph outline-none w-full col-span-2" />
-                                <button type="button" wire:click="addYoutubeVideo"
-                                    class="bg-blue-button text-white px-3 py-1 rounded-lg w-full col-span-1">
-                                    Add YouTube Video
-                                </button>
-                            </div>
-                            @if (empty($uploadedVideos))
-                                <div class="bg-card w-full h-30 flex items-center justify-center rounded-lg">
-                                    <h1 class="text-paragraph">No Video added</h1>
+                                    @if (empty($uploadedVideos))
+                                        <div class="bg-card w-full h-48 flex items-center justify-center rounded-lg">
+                                            <h1 class="text-paragraph">No Video added</h1>
+                                        </div>
+                                    @endif
                                 </div>
-                            @endif
                         </div>
 
                         <div class="flex flex-col gap-2">
-                            <h2 class="font-medium text-lg">Activities</h2>
+                            <h2 class="font-semibold text-xl">Activities</h2>
 
-                            <button wire:click='openActivityHub' type="button"
-                                class="bg-blue-button py-1.5 px-3 w-full rounded-xl text-white font-medium">
-                                Add Activity
-                            </button>
-                            <livewire:activity-hub targetComponent="lesson-edit-modal" />
-                            <div class="w-full grid grid-cols-2 gap-2 items-center justify-center rounded-lg">
+                            <div class="flex flex-col gap-2 bg-white p-4 rounded-xl">
+                                <button wire:click='openActivityHub' type="button"
+                                    class="bg-card flex items-center justify-baseline gap-2 py-2 px-4 w-full rounded-xl hover:bg-gray-300 cursor-pointer mb-2">
 
+                                    <div class="flex items-center gap-2 w-full">
+                                        <span class="material-symbols-rounded">joystick</span>
+                                        <p class="text-paragraph">choose Game/Activity</p>
+                                    </div>
+                                    <span class="material-symbols-rounded">add</span>
+                                </button>
+                                <div class="w-full grid grid-cols-2 gap-2 items-center justify-center rounded-lg">
+                                    @forelse ($selected_activities as $i => $act)
+                                        <div wire:key="activity-{{ $i }}"
+                                            class="flex w-full justify-between bg-card p-2 rounded-lg">
+                                            <div class="flex gap-2">
+                                                <img src="{{ asset($act->path) }}" alt=""
+                                                    class="h-12 rounded-md aspect-square object-cover" />
+                                                <div>
+                                                    <h1 class="font-medium text-sm">{{ $act->name }}</h1>
+                                                    <p class="text-xs text-paragraph">
+                                                        {{ collect($act->specializations ?? [])->map(fn($cat) => ucfirst(Str::of($cat)->explode(' ')->first()))->implode(', ') }}
+                                                    </p>
 
-                                @forelse ($selected_activities as $i => $act)
-                                    <div wire:key="activity-{{ $i }}"
-                                        class="flex w-full justify-between bg-card p-2 rounded-lg">
-                                        <div class="flex gap-2">
-                                            <img src="{{ asset($act->path) }}" alt=""
-                                                class="h-12 rounded-md aspect-square object-cover" />
-                                            <div>
-                                                <h1 class="font-medium text-sm">{{ $act->name }}</h1>
-                                                <p>
-                                                    {{ collect($act->specializations ?? [])->map(fn($cat) => ucfirst(Str::of($cat)->explode(' ')->first()))->implode(', ') }}
-                                                </p>
-
+                                                </div>
                                             </div>
-                                        </div>
 
-                                        <button type="button" wire:click="removeActivity({{ $i }})"
-                                            type="button"
-                                            class="flex items-center w-fit h-fit justify-center cursor-pointer hover:scale-120">
-                                            <span class="material-symbols-rounded remove-icon">close</span>
-                                        </button>
-                                    </div>
-                                @empty
-                                    <div class="bg-card col-span-2 h-30 flex items-center justify-center rounded-lg">
-                                        <h1 class="text-paragraph">No Activity added</h1>
-                                    </div>
-                                @endforelse
+                                            <button type="button" wire:click="removeActivity({{ $i }})"
+                                                type="button"
+                                                class="flex items-center w-fit h-fit justify-center cursor-pointer hover:scale-120">
+                                                <span class="material-symbols-rounded remove-icon">close</span>
+                                            </button>
+                                        </div>
+                                    @empty
+                                        <div class="bg-card col-span-2 h-48 flex items-center justify-center rounded-lg">
+                                            <h1 class="text-paragraph">No Activity added</h1>
+                                        </div>
+                                    @endforelse
+
+                                </div>
                             </div>
+
+                            <livewire:activity-hub targetComponent="lesson-edit-modal" />
                         </div>
 
                         <div
-                            class="flex items-center gap-2 absolute w-full left-0 bottom-0 px-5 pb-5 pt-10 rounded-b-4xl bg-gradient-to-t from-white via-white to-white/50">
+                            class="flex items-center gap-2 absolute w-full left-0 bottom-0 px-8 pb-8 pt-4 rounded-b-4xl bg-card">
                             <button wire:click='closeModal' type="button"
-                                class="bg-gray-100 py-1.5 px-3 w-full rounded-xl text-heading-dark font-medium cursor-pointer hover:scale-102">
+                                class="bg-white py-1.5 px-3 w-full rounded-xl text-heading-dark font-medium hover:bg-gray-300 cursor-pointer">
                                 Cancel
                             </button>
                             <button type="submit"
-                                class="bg-blue-button py-1.5 px-3 w-full rounded-xl text-white font-medium cursor-pointer hover:scale-102">
+                                class="bg-blue-button py-1.5 px-3 w-full rounded-xl text-white font-medium cursor-pointer hover:bg-blue-700">
                                 Save
                             </button>
                         </div>

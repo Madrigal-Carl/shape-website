@@ -37,7 +37,7 @@
         <div class="flex gap-4 self-start">
             <button
                 class="relative flex items-center justify-center bg-white py-3 px-5 rounded-full gap-2 shadow-2xl/15 text-paragraph cursor-pointer border-2 border-white hover:border-blue-button hover:text-white hover:bg-blue-button hover:shadow-xl/35 hover:shadow-blue-button hover:scale-105">
-                <div class="flex items-center gap-2" wire:loading.class="invisible" wire:target="openAddStudentModal">
+                <div class="flex items-center gap-2">
                     <span class="material-symbols-rounded">upgrade</span>
                     <p class="">Move up</p>
                 </div>
@@ -337,7 +337,7 @@
                     </div>
 
                     <div class="flex flex-col gap-3 h-full">
-                        <h2 class="font-semibold text-2 xl">Students</h2>
+                        <h2 class="font-semibold text-2xl">Students</h2>
                         <div class="flex flex-col gap-2 h-full mb-16">
                             {{-- Specialization checkbox --}}
                             <div class="rounded-lg flex flex-col h-full gap-2">
@@ -352,9 +352,12 @@
                                 </div>
 
                                 {{-- Search --}}
-                                <input type="text" placeholder="Search Student"
-                                            wire:model.live="student_search"
-                                            class="w-full bg-white outline-none text-paragraph placeholder-paragraph py-2 px-4 border-2 border-white rounded-4xl hover:border-blue-button focus:border-blue-button" />
+                                <div class="flex items-center gap-2 px-4 py-2 rounded-4xl bg-white w-full">
+                                    <span class="material-symbols-rounded">person_search</span>
+                                    <input type="text" placeholder="Search Student"
+                                        wire:model.live="student_search"
+                                        class="w-full outline-none text-paragraph placeholder-paragraph" />
+                                </div>
 
                                 {{-- Specialization List --}}
                                 <div class="h-full flex flex-col gap-1 bg-white p-6 rounded-4xl">

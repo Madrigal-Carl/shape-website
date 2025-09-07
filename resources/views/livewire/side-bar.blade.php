@@ -7,7 +7,7 @@
         $user = App\Models\Account::with('accountable')->find(auth()->id());
     @endphp
     <div class="flex flex-col gap-2 items-center">
-        <img src="{{ asset('images/profile.jpg') }}" class="w-24 rounded-full" alt="" />
+        <img src="{{asset('images/default_profiles/default-male-teacher-pfp.png')}}" class="w-24 rounded-full" alt="" />
         <!-- Profile Pic -->
         <div class="flex flex-col items-center">
             <p class="text-lg">

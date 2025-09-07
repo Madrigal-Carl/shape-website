@@ -4,14 +4,14 @@
     @if ($isPreviewOpen)
         <section
             class=" bg-black/30 fixed w-dvw h-dvh top-0 left-0 z-50 backdrop-blur-xs flex justify-center items-center gap-6">
-            <div class="gamePreview relative w-full h-full">
+            <div class="gamePreview w-full h-full">
                 <div class="fixed top-0 left-0 w-full h-full bg-black/70 backdrop-blur-3xl shrink-0 p-10">
 
                     <button wire:click='closePreview' type="button"
-                        class="absolute top-o right-50 p-3 rounded-full aspect-square flex items-center justify-center bg-white/10 hover:bg-white/30 cursor-pointer">
+                        class="absolute top-10 right-10 z-10 p-3 rounded-full aspect-square flex items-center justify-center bg-white/10 hover:bg-white/30 cursor-pointer">
                         <span class="material-symbols-rounded scale-x-110 text-gray-400">close</span>
                     </button>
-                    <div class="w-full h-full flex flex-col justify-center gap-4">
+                    <div class="w-full h-full flex flex-col justify-center gap-4 relative">
                         {{-- Image pagination --}}
                         <div class="flex items-center gap-4 justify-between w-full h-full">
                             <button type="button" wire:click="prevImage"
@@ -47,7 +47,7 @@
     @if ($isOpen)
         <section
             class="bg-black/30 fixed w-dvw h-dvh p-10 top-0 left-0 z-30 backdrop-blur-xs flex justify-center items-center gap-6">
-            <div class="flex flex-col w-[50%] h-full gap-4 bg-white shadow-2xl rounded-4xl p-8">
+            <div class="flex flex-col w-[50%] h-full gap-8 bg-card shadow-2xl rounded-4xl p-8">
 
                 <div class="w-full flex items-center justify-between">
                     <div class="flex items-center gap-4">
@@ -64,18 +64,84 @@
 
 
                 <div class="w-full flex flex-col gap-2">
-                    <h1 class="text-lg font-medium">Activity Categories:</h1>
+                    <h1 class="font-semibold text-xl">Specialization:</h1>
                     <!--Categories-->
                     <div class="w-full flex items-center gap-2 gameCategories overflow-x-auto pb-2">
                         @foreach ($categories as $name)
                             <div wire:click="toggleCategory('{{ $name }}')"
-                                class="w-fit shrink-0 flex items-center gap-2 px-3 py-1 rounded-xl cursor-pointer
-                                    {{ in_array($name, $selectedCategories, true) ? 'bg-blue-button text-white' : 'bg-card hover:bg-blue-button hover:text-white' }}">
-                                <img src="{{ asset('images/game-icons/game-categories-icons/arts.png') }}"
+                                class="w-fit shrink-0 flex items-center gap-2 px-4 py-2 rounded-xl cursor-pointer
+                                    {{ in_array($name, $selectedCategories, true) ? 'bg-blue-button text-white' : 'bg-white hover:bg-blue-button hover:text-white' }}">
+                                <img src="{{asset('images/specialization_icons/autism-icon.png')}}"
                                     alt="" class="h-6">
                                 <p class="text-base">{{ ucwords($name) }}</p>
                             </div>
                         @endforeach
+                    </div>
+                </div>
+
+                <div class="w-full flex flex-col gap-2">
+                    <h1 class="font-semibold text-xl">Subjects:</h1>
+                    <!-- Subject Categories-->
+                    <div class="w-full flex items-center gap-2 gameCategories overflow-x-auto pb-2">
+                        <div wire:click="toggleCategory('{{ $name }}')"
+                            class="w-fit shrink-0 flex items-center gap-2 px-4 py-2 rounded-xl cursor-pointer
+                                {{ in_array($name, $selectedCategories, true) ? 'bg-blue-button text-white' : 'bg-white hover:bg-blue-button hover:text-white' }}">
+                            <img src="{{asset('images/subject_icons/mathematics-icon.png')}}"
+                                alt="" class="h-6">
+                            <p class="text-base">Mathematics</p>
+                        </div>
+
+                        <div wire:click="toggleCategory('{{ $name }}')"
+                            class="w-fit shrink-0 flex items-center gap-2 px-4 py-2 rounded-xl cursor-pointer
+                                {{ in_array($name, $selectedCategories, true) ? 'bg-blue-button text-white' : 'bg-white hover:bg-blue-button hover:text-white' }}">
+                            <img src="{{asset('images/subject_icons/science-icon.png')}}"
+                                alt="" class="h-6">
+                            <p class="text-base">Science</p>
+                        </div>
+
+                        <div wire:click="toggleCategory('{{ $name }}')"
+                            class="w-fit shrink-0 flex items-center gap-2 px-4 py-2 rounded-xl cursor-pointer
+                                {{ in_array($name, $selectedCategories, true) ? 'bg-blue-button text-white' : 'bg-white hover:bg-blue-button hover:text-white' }}">
+                            <img src="{{asset('images/subject_icons/self-care-icon.png')}}"
+                                alt="" class="h-6">
+                            <p class="text-base">Self- Care</p>
+                        </div>
+
+                        <div wire:click="toggleCategory('{{ $name }}')"
+                            class="w-fit shrink-0 flex items-center gap-2 px-4 py-2 rounded-xl cursor-pointer
+                                {{ in_array($name, $selectedCategories, true) ? 'bg-blue-button text-white' : 'bg-white hover:bg-blue-button hover:text-white' }}">
+                            <img src="{{asset('images/subject_icons/filipino-sign-language-icon.png')}}"
+                                alt="" class="h-6">
+                            <p class="text-base">Filipino Sign Language</p>
+                        </div>
+
+                        <div wire:click="toggleCategory('{{ $name }}')"
+                            class="w-fit shrink-0 flex items-center gap-2 px-4 py-2 rounded-xl cursor-pointer
+                                {{ in_array($name, $selectedCategories, true) ? 'bg-blue-button text-white' : 'bg-white hover:bg-blue-button hover:text-white' }}">
+                            <img src="{{asset('images/subject_icons/araling-panlipunan-icon.png')}}"
+                                alt="" class="h-6">
+                            <p class="text-base">Araling Panlipunan</p>
+                        </div>
+
+                        <div wire:click="toggleCategory('{{ $name }}')"
+                            class="w-fit shrink-0 flex items-center gap-2 px-4 py-2 rounded-xl cursor-pointer
+                                {{ in_array($name, $selectedCategories, true) ? 'bg-blue-button text-white' : 'bg-white hover:bg-blue-button hover:text-white' }}">
+                            <img src="{{asset('images/subject_icons/filipino-icon.png')}}"
+                                alt="" class="h-6">
+                            <p class="text-base">Filipino</p>
+                        </div>
+
+                        <div wire:click="toggleCategory('{{ $name }}')"
+                            class="w-fit shrink-0 flex items-center gap-2 px-4 py-2 rounded-xl cursor-pointer
+                                {{ in_array($name, $selectedCategories, true) ? 'bg-blue-button text-white' : 'bg-white hover:bg-blue-button hover:text-white' }}">
+                            <img src="{{asset('images/subject_icons/english-icon.png')}}"
+                                alt="" class="h-6">
+                            <p class="text-base">English</p>
+                        </div>
+
+
+
+
                     </div>
                 </div>
 
@@ -121,7 +187,7 @@
 
             @if ($act && $isOpenActivityView)
                 <div
-                    class="flex flex-col w-[30%] h-full bg-white shadow-2xl overflow-y-auto gamesGrid rounded-4xl relative">
+                    class="flex flex-col w-[30%] h-full bg-card shadow-2xl overflow-y-auto gamesGrid rounded-4xl relative">
                     <div class="w-full flex items-center justify-between p-8 absolute top-0 left-0 z-10 text-white">
                         <p class="font-bold text-3xl">Activity Info</p>
                         <button

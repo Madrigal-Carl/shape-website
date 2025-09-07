@@ -83,6 +83,10 @@ html {
   color: white;
 }
 
+.large-icon{
+    font-size: 2rem;
+}
+
 .playBtn {
   font-size: 2rem;
 }

@@ -2,7 +2,7 @@
     @if ($isOpen)
         <section class="bg-black/30 fixed w-dvw h-dvh p-10 top-0 left-0 z-50 backdrop-blur-xs flex justify-center gap-6">
             <!-- Awards View Info-->
-            <div class="w-150 max-h-full Addlesson bg-white py-8 rounded-4xl relative flex">
+            <div class="w-150 max-h-full Addlesson bg-card py-8 rounded-4xl relative flex">
                 <div class="Addlesson w-full h-full flex flex-col px-8 pb-18 gap-8 self-center-safe overflow-y-auto">
 
                     <div class="flex items-center justify-between">
@@ -31,11 +31,11 @@
                         </div>
 
                         <!-- student list of awardees -->
-                        <div class="w-full h-full grid grid-cols-2 grid-rows-2 gap-2 ">
+                        <div class="w-full h-full grid grid-cols-2 gap-4 ">
                             <!-- Student name tag -->
                             @forelse ($award->students as $student)
                                 <div
-                                    class="w-full col-span-1 bg-card p-8 text-center flex flex-col items-center justify-center rounded-2xl">
+                                    class="w-full col-span-1 bg-white p-8 text-center flex flex-col items-center justify-center rounded-2xl">
                                     <img src="{{asset('images/default_profiles/default-male-student-pfp.png')}}"
                                         class="h-16 mb-2 rounded-full"
                                         alt="">
@@ -43,7 +43,7 @@
                                 </div>
                             @empty
                                 <div
-                                    class="w-full h-full row-span-3 bg-card p-4 text-center flex flex-col justify-center items-center rounded-2xl text-paragraph">
+                                    class="w-full h-full row-span-3 bg-white p-4 text-center flex flex-col justify-center items-center rounded-2xl text-paragraph">
                                     <p class="font-medium text-lg">No students have received this award yet.</p>
                                 </div>
                             @endforelse
@@ -52,9 +52,9 @@
 
 
                     <div
-                        class="flex items-center gap-2 absolute w-full left-0 bottom-0 px-8 pb-8 pt-8  rounded-b-4xl bg-gradient-to-t from-white via-white to-white/50">
+                        class="flex items-center gap-2 absolute w-full left-0 bottom-0 px-8 pb-8 pt-4  rounded-b-4xl bg-card">
                         <button type="button" wire:click='closeModal()'
-                            class=" bg-gray-100 py-1.5 px-3 w-full rounded-xl text-heading-dark font-medium cursor-pointer hover:bg-gray-300">Cancel</button>
+                            class=" bg-white py-1.5 px-3 w-full rounded-xl text-heading-dark font-medium cursor-pointer hover:bg-gray-300">Cancel</button>
                         <button type="submit"
                             class="bg-blue-button py-1.5 px-3 w-full rounded-xl text-white font-medium cursor-pointer hover:bg-blue-700">Print</button>
                     </div>
