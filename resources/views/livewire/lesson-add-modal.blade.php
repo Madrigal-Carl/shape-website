@@ -120,7 +120,7 @@
                 <!-- End Add lesson container -->
 
                 <div class="w-180 h-full Addlesson bg-card p-8 rounded-4xl relative">
-                    <div class="Addlesson w-full h-[100%] flex flex-col pb-18 gap-8 self-center-safe overflow-y-auto">
+                    <div class="Addlesson w-full h-[100%] flex flex-col pb-12 gap-8 self-center-safe overflow-y-auto">
 
 
                         <div class="flex flex-col gap-3">
