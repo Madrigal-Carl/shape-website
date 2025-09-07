@@ -8,19 +8,20 @@
 
         <!-- System Notifications -->
         <div class="flex flex-col gap-2 px-3 overflow-y-auto">
-            <div class="flex flex-col gap-2 w-full bg-card p-3 rounded-lg">
-                <!-- System Details -->
-                <h2 class="leading-tight font-medium text-md">
-                    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nobis, officiis? Amet asperiores in esse
-                    tempore deleniti. Dolor maxime nemo at?
-                </h2>
-                <p class="text-xs leading-tight text-paragraph">
-                    20-20-20
-                </p>
-            </div>
-            <div class="hidden h-full w-full text-center">
-                <p>Empty</p>
-            </div>
+            @forelse ($feeds as $feed)
+                <div class="flex flex-col gap-2 w-full bg-card p-3 rounded-lg">
+                    <!-- System Details -->
+                    <h2 class="leading-tight font-medium text-md">
+                        {{ $feed->message }}
+                    </h2>
+                    <p class="text-xs leading-tight text-paragraph">
+                        {{ \Carbon\Carbon::parse($feed->created_at)->diffForHumans() }}</p>
+                </div>
+            @empty
+                <div class="h-full w-full text-center">
+                    <p>Empty</p>
+                </div>
+            @endforelse
         </div>
     </div>
 </aside>
