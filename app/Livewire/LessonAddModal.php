@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use FFMpeg\FFMpeg;
+use App\Models\Feed;
 use App\Models\Quiz;
 use App\Models\Lesson;
 use App\Models\Student;
@@ -233,6 +234,13 @@ class LessonAddModal extends Component
                 'curriculum_subject_id' => $curriculumSubject->id,
                 'lesson_id' => $lesson->id,
                 'student_id' => $student->id,
+            ]);
+
+            Feed::create([
+                'notifiable_id' => $student->id,
+                'group' => 'student',
+                'title' => 'New Lesson Created',
+                'message' => "A new lesson named '{$this->lesson_name}' has been to {$student->fullname}.",
             ]);
         }
 

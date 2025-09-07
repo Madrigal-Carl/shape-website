@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Feed;
 use App\Models\Award;
 use App\Models\Student;
 use App\Models\Instructor;
@@ -71,9 +72,21 @@ class GrantAwardsScheduler extends Command
 
         if ($meetsCriteria && !$alreadyHas) {
             $student->awards()->attach($award->id, ['school_year' => $currentYear]);
+            Feed::create([
+                'notifiable_id' => $student->id,
+                'group' => 'award',
+                'title' => "{$student->fullname} earned a new award!",
+                'message' => "{$student->fullname} has been awarded the '{$award->name}' for outstanding performance.",
+            ]);
             Log::info("Granted {$awardName} ({$currentYear}) to {$student->full_name}");
         } elseif (!$meetsCriteria && $alreadyHas) {
             $student->awards()->detach($award->id);
+            Feed::create([
+                'notifiable_id' => $student->id,
+                'group' => 'award',
+                'title' => "Award revoked from {$student->fullname}",
+                'message' => "The '{$award->name}' award has been revoked from {$student->fullname}.",
+            ]);
             Log::info("Revoked {$awardName} ({$currentYear}) from {$student->full_name}");
         }
     }
