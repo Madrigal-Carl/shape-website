@@ -185,7 +185,7 @@
                                                         class="absolute rounded-full cursor-pointer hover:scale-120 shadow-xl/40 z-10 playBtn-{{ $index }}"
                                                         onclick="playVideo({{ $index }}, '{{ $video['video'] }}')">
                                                         <span
-                                                            class="material-symbols-rounded p-2 rounded-full text-white bg-black/35 backdrop-blur-[3px] shadow-white/70 shadow-inner">
+                                                            class="material-symbols-rounded p-2 rounded-full text-white bg-black/35 backdrop-blur-[3px] shadow-white/70 shadow-inner playBtn">
                                                             play_arrow
                                                         </span>
                                                     </button>
