@@ -56,7 +56,7 @@
                     </div>
                     <span class="material-symbols-rounded icon">sentiment_very_satisfied</span>
                 </div>
-                <h1 class="text-5xl font-bold">24</h1>
+                <h1 class="text-5xl font-bold">14</h1>
             </div>
 
             <div
@@ -70,7 +70,7 @@
                     </div>
                     <span class="material-symbols-rounded icon">hearing_disabled</span>
                 </div>
-                <h1 class="text-5xl font-bold">24</h1>
+                <h1 class="text-5xl font-bold">6</h1>
             </div>
 
             <div
@@ -84,7 +84,7 @@
                     </div>
                     <span class="material-symbols-rounded icon">graphic_eq</span>
                 </div>
-                <h1 class="text-5xl font-bold">24</h1>
+                <h1 class="text-5xl font-bold">5</h1>
             </div>
         </div>
 
@@ -99,7 +99,7 @@
                     </div>
                     <span class="material-symbols-rounded icon">book_4</span>
                 </div>
-                <h1 class="text-5xl font-bold text-blue-button">24</h1>
+                <h1 class="text-5xl font-bold text-blue-button">2</h1>
             </div>
 
             <div class="bg-white p-6 h-48 text-heading-dark shadow-2xl/5 rounded-3xl flex flex-col justify-between gap-6">
@@ -112,7 +112,7 @@
                     </div>
                     <span class="material-symbols-rounded icon">library_books</span>
                 </div>
-                <h1 class="text-5xl font-bold text-lime">24</h1>
+                <h1 class="text-5xl font-bold text-lime">10</h1>
             </div>
 
             <div class="bg-white p-6 h-48 text-heading-dark shadow-2xl/5 rounded-3xl flex flex-col justify-between gap-6">
@@ -125,7 +125,7 @@
                     </div>
                     <span class="material-symbols-rounded icon">sports_esports</span>
                 </div>
-                <h1 class="text-5xl font-bold text-yellowOrange">24</h1>
+                <h1 class="text-5xl font-bold text-yellowOrange">15</h1>
             </div>
 
             <div class="bg-white p-6 h-48 text-heading-dark shadow-2xl/5 rounded-3xl flex flex-col justify-between gap-6">
@@ -138,7 +138,7 @@
                     </div>
                     <span class="material-symbols-rounded icon">award_star</span>
                 </div>
-                <h1 class="text-5xl font-bold text-danger">24</h1>
+                <h1 class="text-5xl font-bold text-danger">8</h1>
             </div>
         </div>
     </div>
