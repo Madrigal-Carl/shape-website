@@ -3,7 +3,7 @@
         <section class="bg-black/30 fixed w-dvw h-dvh p-10 top-0 left-0 z-50 backdrop-blur-xs flex justify-center gap-6">
             <!-- Awards View Info-->
             <div class="w-150 max-h-full Addlesson bg-white py-8 rounded-4xl relative flex">
-                <div class="Addlesson w-full h-full flex flex-col px-8 pb-18 gap-12 self-center-safe overflow-y-auto">
+                <div class="Addlesson w-full h-full flex flex-col px-8 pb-18 gap-8 self-center-safe overflow-y-auto">
 
                     <div class="flex items-center justify-between">
                         <div class="flex items-center gap-4">
@@ -14,31 +14,42 @@
                     </div>
 
 
-                    <div class="w-full flex flex-col gap-4 items-center justify-center">
+                    <div class="w-full flex flex-col gap-4 items-center justify-center my-10">
                         <img src="{{ asset('images/Awards_icons/medal.png') }}" alt="" class="h-50">
                         <h1 class="text-5xl font-bold text-center w-80%">{{ $award->name }}</h1>
                     </div>
 
-                    <div class="w-full flex items-center gap-4 justify-center text-xl text-paragraph">
-                        <p class="font-semibold">Total Awardees:</p>
-                        <p>{{ $award->awardees_count }}</p>
+                    <div class="w-full flex flex-col gap-2">
+                        <h2 class="text-xl font-semibold">Description</h2>
+                        <p class=" text-justify text-paragraph">Lorem ipsum dolor sit amet consectetur adipisicing elit. Minus corrupti ad ratione debitis consectetur facilis est sequi possimus nam autem in ab, odio tempore quae eos, fugit non aperiam labore. Possimus officiis impedit vero nesciunt, quidem ipsum nemo asperiores eum autem quod iure quisquam? Earum vel suscipit consequuntur necessitatibus ad?</p>
                     </div>
 
-                    <!-- student list of awardees -->
-                    <div class="w-full h-full grid gird-cols-1 grid-rows-3 gap-2 ">
-                        <!-- Student name tag -->
-                        @forelse ($award->students as $student)
-                            <div
-                                class="w-full bg-card p-2 text-center flex flex-col items-center justify-center rounded-2xl">
-                                <p class="font-semibold text-lg">{{ $student->full_name }}</p>
-                            </div>
-                        @empty
-                            <div
-                                class="w-full h-full row-span-3 bg-card p-4 text-center flex flex-col justify-center items-center rounded-2xl text-paragraph">
-                                <p class="font-medium text-lg">No students have received this award yet.</p>
-                            </div>
-                        @endforelse
+                    <div class="w-full flex flex-col gap-2">
+                        <div class="w-full flex items-center gap-4 justify-between text-xl ">
+                            <h2 class="text-xl font-semibold">Awardees:</h2>
+                            {{-- <p class="text-paragraph">{{ $award->awardees_count }}</p> --}}
+                        </div>
+
+                        <!-- student list of awardees -->
+                        <div class="w-full h-full grid grid-cols-2 grid-rows-2 gap-2 ">
+                            <!-- Student name tag -->
+                            @forelse ($award->students as $student)
+                                <div
+                                    class="w-full col-span-1 bg-card p-8 text-center flex flex-col items-center justify-center rounded-2xl">
+                                    <img src="{{asset('images/default_profiles/default-male-student-pfp.png')}}"
+                                        class="h-16 mb-2 rounded-full"
+                                        alt="">
+                                    <p class="font-semibold text-lg">{{ $student->full_name }}</p>
+                                </div>
+                            @empty
+                                <div
+                                    class="w-full h-full row-span-3 bg-card p-4 text-center flex flex-col justify-center items-center rounded-2xl text-paragraph">
+                                    <p class="font-medium text-lg">No students have received this award yet.</p>
+                                </div>
+                            @endforelse
+                        </div>
                     </div>
+
 
                     <div
                         class="flex items-center gap-2 absolute w-full left-0 bottom-0 px-8 pb-8 pt-8  rounded-b-4xl bg-gradient-to-t from-white via-white to-white/50">

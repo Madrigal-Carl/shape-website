@@ -42,6 +42,27 @@
     <div class="flex flex-col gap-4">
         <div class="side flex items-center justify-between gap-2 mb-2">
             <h1 class="text-4xl font-bold">Awards Inventory</h1>
+
+            <div class="flex items-center">
+                <div
+                    class="flex items-center bg-white py-3 px-5 rounded-full shadow-2xl/15 border-2 border-white hover:border-blue-button text-paragraph hover:bg-blue-button hover:text-white cursor-pointer">
+                    <select name="" id="" class="w-30 outline-none"
+                        wire:change="$set('status', $event.target.value)">
+                        <option class=" text-heading-dark" selected disabled>
+                            Grade Level
+                        </option>
+
+                        <option value="all" class=" text-heading-dark">
+                            All
+                        </option>
+
+                        <option value="all" class=" text-heading-dark">
+                            Grade 1
+                        </option>
+                    </select>
+                </div>
+            </div>
+
         </div>
 
         <!-- Award Grid -->
@@ -53,7 +74,7 @@
                         <img src="{{ asset('images/Awards_icons/medal.png') }}" alt="" class="h-32 mb-2">
                         <p class="font-medium text-xl text-white w-full text-center">{{ $award->name }}</p>
                         <div class="flex items-center w-full justify-center gap-4 text-white">
-                            <p class="text-sm">Awardees:</p>
+                            <p class="text-sm">Total Awardees:</p>
                             <p class="text-sm">{{ $award->awardees_count }}</p>
                         </div>
                     </div>
