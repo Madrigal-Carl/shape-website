@@ -92,6 +92,9 @@
                                     Curriculum
                                 </th>
                                 <th class="px-4 pb-3 text-center font-semibold">
+                                    Grade Level
+                                </th>
+                                <th class="px-4 pb-3 text-center font-semibold">
                                     Subjects
                                 </th>
                                 <th class="px-4 pb-3 text-center font-semibold">
@@ -110,7 +113,8 @@
                                     <td class="px-4 py-3 text-center text-paragraph">{{ ucwords($lesson->title) }}</td>
                                     <td class="px-4 py-3 text-center text-paragraph">
                                         {{ ucwords($lesson->lessonSubjectStudents->first()->curriculumSubject->curriculum->name) }}
-                                    </td>
+                                    </td >
+                                    <td class="px-4 py-3 text-center text-paragraph">Grade Level</td>
                                     <td class="px-4 py-3 text-center text-paragraph">
                                         {{ ucwords($lesson->lessonSubjectStudents->first()->curriculumSubject->subject->name) }}
                                     </td>
