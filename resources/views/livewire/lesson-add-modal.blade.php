@@ -69,11 +69,12 @@
                             </div>
                         </div>
 
-                        <div class="flex flex-col gap-3">
+                        <div class="flex flex-col gap-3 h-full">
                             <h2 class="font-medium text-lg">Specialize Learning <span
                                     class="text-paragraph font-normal text-sm">(optional)</span></h2>
                             {{-- Specilize selected Student --}}
-                            <div class="p-3 rounded-lg bg-card relative flex flex-col gap-2 h-81">
+                            <div class="p-3 rounded-lg bg-card relative flex flex-col gap-2 h-full">
+                                {{-- Header --}}
                                 <div class="flex items-center justify-between w-full mb-2">
                                     <p class="text-paragraph font-medium">Select Student:</p>
                                     <button type="button" wire:click="clearStudents"
@@ -108,35 +109,10 @@
                                                 <p class="w-full text-paragraph">{{ $student->full_name }}</p>
                                             </div>
                                         @empty
-                                            <p class="text-center text-sm text-gray-500">No students found.</p>
+                                            <p class="text-center text-sm text-gray-500 h-full flex justify-center items-center">No students found.</p>
                                         @endforelse
                                     </div>
                                 </div>
-                                {{-- <div class="flex items-center gap-2 w-full">
-                                    <div
-                                        class=" w-full flex items-center px-3 py-2 rounded-lg bg-white border-gray-300 gap-2">
-                                        <input class="w-full outline-none" type="text" placeholder="Search Student"
-                                            wire:model.live="student_search"
-                                            class="w-full outline-none text-paragraph placeholder-paragraph" />
-                                    </div>
-                                    <button
-                                        class="flex items-center justify-center p-2 rounded-lg bg-blue-button hover:bg-blue-700 cursor-pointer">
-                                        <span class="material-symbols-rounded text-white cursor-pointer">search</span>
-                                    </button>
-                                </div>
-
-                                <div class="h-full flex flex-col gap-1 bg-white p-2 rounded-lg">
-                                    <div class="flex flex-col gap-1 h-full overflow-y-scroll pr-2 rounded-lg">
-                                        <div
-                                            class="flex items-center justify-end-safe gap-2 w-full p-2 hover:bg-card rounded-lg cursor-pointer">
-                                            <label class="container w-fit">
-                                                <input checked="checked" type="checkbox">
-                                                <div class="checkmark"></div>
-                                            </label>
-                                            <p class="w-full text-paragraph">Carl S. Madrigal</p>
-                                        </div>
-                                    </div>
-                                </div> --}}
                             </div>{{-- End of Specilize selected Student --}}
                         </div>
                     </div>

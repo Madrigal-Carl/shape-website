@@ -1,128 +1,171 @@
 <div>
     @if ($isOpen)
-        <div class="bg-black/30 fixed w-dvw h-dvh top-0 left-0 z-50 backdrop-blur-xs flex justify-center items-center">
-            <form wire:submit='addCurriculum' class="bg-white p-8 rounded-3xl w-1/3 flex flex-col gap-8">
-                <div class="flex items-center gap-4">
-                    <img src="{{ asset('images/book.png') }}" alt="" />
-                    <h1 class="text-3xl font-bold text-heading-dark">
-                        Add Curriculumn
-                    </h1>
-                </div>
-                <div class="flex flex-col gap-3">
-                    <h2 class="font-medium text-lg">Curriculum Details</h2>
-                    <div class="flex flex-col gap-2">
-                        <input type="text" placeholder="Name" wire:model.live="add_name"
-                            class="px-3 py-1 rounded-lg bg-card placeholder-paragraph outline-none" />
-                        <div class="px-2 py-1 rounded-lg bg-card">
-                            <select wire:change="$set('add_grade_level', $event.target.value)"
-                                class="w-full outline-none text-paragraph">
-                                <option class="text-sm text-black" selected disabled>
-                                    Grade Level
-                                </option>
-                                <option value="kindergarter 1" class="text-sm text-paragraph">
-                                    Kindergarter 1
-                                </option>
-                                <option value="kindergarter 2" class="text-sm text-paragraph">
-                                    Kindergarter 2
-                                </option>
-                                <option value="kindergarter 3" class="text-sm text-paragraph">
-                                    Kindergarter 3
-                                </option>
-                            </select>
-                        </div>
-
-                        <div class="px-2 py-1 rounded-lg bg-card">
-                            <select wire:change="$set('add_specialization', $event.target.value)"
-                                class="w-full outline-none text-paragraph outline-1 outline-card focus:outline-blue-button">
-                                <option class="text-sm text-black" disabled selected>
-                                    Specialization
-                                </option>
-                                @foreach ($specializations as $specialization)
-                                    <option value="{{ $specialization->id }}" class="text-sm text-paragraph">
-                                        {{ ucwords($specialization->name) }}
+        <div class="bg-black/30 fixed w-dvw h-dvh top-0 left-0 z-50 backdrop-blur-xs flex justify-center items-center p-10">
+            <div class="w-180 h-full flex flex-col bg-white p-8 rounded-4xl relative gap-8 ">
+                <form wire:submit='addCurriculum' class="w-full h-full flex flex-col gap-8 overflow-auto Addlesson">
+                    <div class="flex items-center gap-4">
+                        <img src="{{ asset('images/book.png') }}" alt="" />
+                        <h1 class="text-3xl font-bold text-heading-dark">
+                            Add Curriculumn
+                        </h1>
+                    </div>
+                    <div class="flex flex-col gap-3">
+                        <h2 class="font-medium text-lg">Curriculum Details</h2>
+                        <div class="flex flex-col gap-2">
+                            <input type="text" placeholder="Name" wire:model.live="add_name"
+                                class="px-3 py-1 rounded-lg bg-card placeholder-paragraph outline-none" />
+                            <div class="px-2 py-1 rounded-lg bg-card">
+                                <select wire:change="$set('add_grade_level', $event.target.value)"
+                                    class="w-full outline-none text-paragraph">
+                                    <option class="text-sm text-black" selected disabled>
+                                        Grade Level
                                     </option>
-                                @endforeach
-                            </select>
-                        </div>
-
-                        <div class="flex flex-wrap gap-2">
-                            @foreach ($selectedSpecializations as $i => $specId)
-                                @php
-                                    $spec = $specializations->firstWhere('id', $specId);
-                                @endphp
-                                <div wire:key="specialization-{{ $i }}"
-                                    class="flex items-center gap-2 px-3 py-1 bg-card rounded-full w-fit">
-                                    <p class="text-sm">{{ ucwords($spec->name) }}</p>
-                                    <button wire:click="removeSpecialization({{ $i }})" type="button"
-                                        class="text-red-500 hover:text-red-700">✕</button>
-                                </div>
-                            @endforeach
-                        </div>
-                        <div
-                            class="flex items-center justify-between pl-3 pr-2 py-1 rounded-lg border border-dashed border-paragraph placeholder-paragraph inputs">
-                            <p class="text-paragraph">Add another Specialization</p>
-                            <span class="material-symbols-rounded small-icons text-paragraph">add</span>
-                        </div>
-
-                        <textarea wire:model.live="add_description" name="" id="" maxlength="200"
-                            placeholder="Description (Optional)"
-                            class="px-3 py-2 rounded-lg bg-card placeholder-paragraph resize-none h-24 outline-none"></textarea>
-                        <div class="px-2 py-1 rounded-lg bg-card" wire:ignore>
-                            <select wire:change="$set('add_subject', $event.target.value)" name="" id=""
-                                class="w-full outline-none text-paragraph">
-                                <option class="text-sm text-black" selected disabled>
-                                    Subjects
-                                </option>
-                                @foreach ($subjects as $subject)
-                                    <option value="{{ $subject->name }}" class="text-sm text-paragraph">
-                                        {{ ucwords($subject->name) }}
+                                    <option value="kindergarter 1" class="text-sm text-paragraph">
+                                        Kindergarter 1
                                     </option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="flex flex-wrap gap-2">
-                            @foreach ($selectedSubjects as $i => $spec)
-                                <div wire:key="subject-{{ $i }}"
-                                    class="flex items-center gap-2 px-3 py-1 bg-card rounded-full w-fit">
-                                    <p class="text-sm">{{ ucfirst($spec) }}</p>
-                                    <button wire:click="removeSubject({{ $i }})" type="button"
-                                        class="text-red-500 hover:text-red-700">✕</button>
-                                </div>
-                            @endforeach
-                        </div>
-                        <div
-                            class="flex items-center justify-between pl-3 pr-2 py-1 rounded-lg border border-dashed border-paragraph placeholder-paragraph inputs">
-                            <p class="text-paragraph">Add another Subject</p>
-                            <span class="material-symbols-rounded small-icons text-paragraph">add</span>
+                                    <option value="kindergarter 2" class="text-sm text-paragraph">
+                                        Kindergarter 2
+                                    </option>
+                                    <option value="kindergarter 3" class="text-sm text-paragraph">
+                                        Kindergarter 3
+                                    </option>
+                                </select>
+                            </div>
+
+                            <button class="pl-3 pr-1 py-1 rounded-lg bg-card text-paragraph w-full text-left hover:bg-gray-300 flex items-center justify-between"
+                                type="button" wire:click="openSpecializationModal">
+                                <p>Select Specialization</p>
+                                {{-- <span class="material-symbols-rounded text-paragraph">keyboard_arrow_down</span> --}}
+                                <span class="material-symbols-rounded text-paragraph">keyboard_arrow_up</span>
+                            </button>
+
+                            <div class="rounded-lg bg-card h-fit">
+
+                                {{-- Specialization checkbox --}}
+                                <div class="p-3 rounded-lg bg-card relative flex flex-col gap-2 h-full">
+                                    {{-- Header --}}
+                                    <div class="flex items-center justify-between w-full mb-2">
+                                        <p class="text-paragraph">Specialization</p>
+                                        <button type="button" wire:click="clearStudents"
+                                            class="flex items-center justify-center gap-1 px-3 py-1 rounded-lg text-paragraph hover:text-white cursor-pointer bg-white hover:bg-blue-button">
+                                            <p class="text-sm">Clear Selected</p>
+                                            <span class="material-symbols-rounded">clear_all</span>
+                                        </button>
+                                    </div>
+
+                                    {{-- Specialization List --}}
+                                    <div class="h-full flex flex-col gap-1 bg-white p-2 rounded-lg">
+                                        <div class="flex flex-col gap-1 h-full overflow-y-scroll pr-2 rounded-lg">
+
+                                                <div
+                                                    class="flex items-center gap-2 w-full p-2 hover:bg-card rounded-lg cursor-pointer">
+                                                    <label class="container w-fit">
+                                                        <input type="checkbox">
+                                                        <div class="checkmark"></div>
+                                                    </label>
+                                                    <p class="w-full text-paragraph">Hearing Impairement</p>
+                                                </div>
+
+                                                <div
+                                                    class="flex items-center gap-2 w-full p-2 hover:bg-card rounded-lg cursor-pointer">
+                                                    <label class="container w-fit">
+                                                        <input type="checkbox">
+                                                        <div class="checkmark"></div>
+                                                    </label>
+                                                    <p class="w-full text-paragraph">Speech Impairement</p>
+                                                </div>
+
+                                                <div
+                                                    class="flex items-center gap-2 w-full p-2 hover:bg-card rounded-lg cursor-pointer">
+                                                    <label class="container w-fit">
+                                                        <input type="checkbox">
+                                                        <div class="checkmark"></div>
+                                                    </label>
+                                                    <p class="w-full text-paragraph">Autism</p>
+                                                </div>
+                                                {{-- <p class="text-center text-sm text-gray-500 h-full flex justify-center items-center">No Specialization found.</p> --}}
+
+                                        </div>
+                                    </div>
+                                </div>{{-- End of Specialization checkbox --}}
+                            </div>
+
+
+
+                            <button class="pl-3 pr-1 py-1 rounded-lg bg-card text-paragraph w-full text-left hover:bg-gray-300 flex items-center justify-between"
+                                type="button" wire:click="openSpecializationModal">
+                                <p>Select Subjects</p>
+                                {{-- <span class="material-symbols-rounded text-paragraph">keyboard_arrow_down</span> --}}
+                                <span class="material-symbols-rounded text-paragraph">keyboard_arrow_up</span>
+                            </button>
+
+                            <div class="rounded-lg bg-card h-fit">
+
+                                {{-- Subject Checkbox --}}
+                                <div class="p-3 rounded-lg bg-card relative flex flex-col gap-2 h-full">
+                                    {{-- Header --}}
+                                    <div class="flex items-center justify-between w-full mb-2">
+                                        <p class="text-paragraph">Subjects</p>
+                                        <button type="button" wire:click="clearStudents"
+                                            class="flex items-center justify-center gap-1 px-3 py-1 rounded-lg text-paragraph hover:text-white cursor-pointer bg-white hover:bg-blue-button">
+                                            <p class="text-sm">Clear Selected</p>
+                                            <span class="material-symbols-rounded">clear_all</span>
+                                        </button>
+                                    </div>
+
+                                    {{-- Subject List --}}
+                                    <div class="h-48 flex flex-col gap-1 bg-white p-2 rounded-lg">
+                                        <div class="flex flex-col gap-1 h-full overflow-y-scroll pr-2 rounded-lg">
+                                            <div
+                                                    class="flex items-center gap-2 w-full p-2 hover:bg-card rounded-lg cursor-pointer">
+                                                    <label class="container w-fit">
+                                                        <input type="checkbox">
+                                                        <div class="checkmark"></div>
+                                                    </label>
+                                                    <p class="w-full text-paragraph">Mathematics</p>
+                                                </div>
+
+                                            {{-- <p class="text-center text-sm text-gray-500 h-full flex justify-center items-center">No Subjects found.</p> --}}
+
+                                        </div>
+                                    </div>
+                                </div>{{-- End of Subject Checkbox --}}
+                            </div>
+                            <textarea wire:model.live="add_description" name="" id="" maxlength="200"
+                                placeholder="Description (Optional)"
+                                class="px-3 py-2 rounded-lg bg-card placeholder-paragraph resize-none h-40 outline-none mb-28"></textarea>
                         </div>
                     </div>
-                </div>
-                <!-- buttons -->
-                <div class="flex items-center gap-2">
-                    <button wire:click='closeModal' type="button"
-                        class="bg-gray-100 py-1.5 px-3 w-full rounded-xl text-heading-dark font-medium cursor-pointer hover:scale-103">
-                        Cancel
-                    </button>
-                    <button type="submit"
-                        class="bg-blue-button py-1.5 px-3 w-full rounded-xl text-white font-medium cursor-pointer hover:scale-103">
-                        Save
-                    </button>
-                </div>
-                <div wire:loading wire:target="addCurriculum"
-                    class="bg-black/10 fixed top-0 left-0 w-dvw h-dvh z-50 flex justify-center items-center backdrop-blur-sm">
-                    <svg aria-hidden="true"
-                        class="w-12 h-12 text-gray-200 animate-spin fill-blue-600 absolute top-1/2 left-[49%]"
-                        viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path
-                            d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
-                            fill="currentColor" />
-                        <path
-                            d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-                            fill="currentFill" />
-                    </svg>
-                    <span class="sr-only">Loading...</span>
-                </div>
-            </form>
+
+                    <div wire:loading wire:target="addCurriculum"
+                        class="bg-black/10 fixed top-0 left-0 w-dvw h-dvh z-50 flex justify-center items-center backdrop-blur-sm">
+                        <svg aria-hidden="true"
+                            class="w-12 h-12 text-gray-200 animate-spin fill-blue-600 absolute top-1/2 left-[49%]"
+                            viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+                                fill="currentColor" />
+                            <path
+                                d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+                                fill="currentFill" />
+                        </svg>
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                    <!-- buttons -->
+                    <div
+                        class="flex items-center gap-2 absolute w-full left-0 bottom-0 px-8 pb-8 pt-4 rounded-b-4xl bg-white">
+                        <button wire:click='closeModal' type="button"
+                            class="bg-gray-100 py-1.5 px-3 w-full rounded-xl text-heading-dark font-medium hover:bg-gray-300 cursor-pointer">
+                            Cancel
+                        </button>
+                        <button type="submit"
+                            class="bg-blue-button py-1.5 px-3 w-full rounded-xl text-white font-medium cursor-pointer hover:bg-blue-700">
+                            Save
+                        </button>
+                    </div>
+                </form>
+            </div>
+
         </div>
     @endif
 </div>

@@ -12,15 +12,6 @@
                     <span class="font-bold text-blue-button">Dave</span>
                 </h1>
                 <p class="text-lg text-paragraph leading-4">Here is your summary today</p>
-                <div
-                    class="w-max px-2 py-1 mt-4 rounded-lg border-1 border-gray-300 hover:border-blue-button shadow-2xl/15">
-                    <select class="w-full outline-none text-heading-dark font-medium text-lg">
-                        <option class="text-sm text-black" selected disabled>
-                            S.Y 2025-2026
-                        </option>
-
-                    </select>
-                </div>
             </div>
         </div>
 
@@ -99,7 +90,10 @@
                                 <th class="px-4 pb-3 text-center font-semibold">
                                     Curriculum Name
                                 </th>
-                                <th class="px-4 pb-3 text-center font-semibold w-20">
+                                <th class="px-4 pb-3 text-center font-semibold">
+                                    Grade Level
+                                </th>
+                                <th class="px-4 pb-3 text-center font-semibold">
                                     No. of Subjects
                                 </th>
                                 <th class="px-4 pb-3 text-center font-semibold">Status</th>
@@ -114,6 +108,7 @@
                                     <td class="px-4 py-3 text-center text-paragraph">{{ $curriculum->id }}</td>
                                     <td class="px-4 py-3 text-center text-paragraph">{{ ucwords($curriculum->name) }}
                                     </td>
+                                    <td class="px-4 py-3 text-center text-paragraph">Grade 1</td>
                                     <td class="px-4 py-3 text-center text-paragraph">
                                         {{ count($curriculum->curriculumSubjects) }}</td>
                                     <td class="px-4 py-3 text-center">
