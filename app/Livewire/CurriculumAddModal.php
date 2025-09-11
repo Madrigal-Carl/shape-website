@@ -15,6 +15,8 @@ use Illuminate\Validation\ValidationException;
 class CurriculumAddModal extends Component
 {
     public $isOpen = false;
+    public $showSpecializationDropdown = false;
+    public $showSubjectDropdown = false;
     public $specializations;
 
     public $add_name, $add_grade_level, $add_specialization, $add_description, $add_subject, $subjects, $grade_levels;
@@ -48,30 +50,24 @@ class CurriculumAddModal extends Component
         ]);
     }
 
-    public function updatedAddSpecialization($value)
+    public function openSpecializationModal()
     {
-        if ($value && !in_array($value, $this->selectedSpecializations)) {
-            $this->selectedSpecializations[] = $value;
-        }
+        $this->showSpecializationDropdown = !$this->showSpecializationDropdown;
     }
 
-    public function removeSpecialization($index)
+    public function clearSpecializations()
     {
-        unset($this->selectedSpecializations[$index]);
-        $this->selectedSpecializations = array_values($this->selectedSpecializations);
+        $this->selectedSpecializations = [];
     }
 
-    public function updatedAddSubject($value)
+    public function openSubjectModal()
     {
-        if ($value && !in_array($value, $this->selectedSubjects)) {
-            $this->selectedSubjects[] = $value;
-        }
+        $this->showSubjectDropdown = !$this->showSubjectDropdown;
     }
 
-    public function removeSubject($index)
+    public function clearSubjects()
     {
-        unset($this->selectedSubjects[$index]);
-        $this->selectedSubjects = array_values($this->selectedSubjects);
+        $this->selectedSubjects = [];
     }
 
     public function addCurriculum()
@@ -92,10 +88,9 @@ class CurriculumAddModal extends Component
                 'add_description.max' => 'Description must not exceed 255 characters.',
                 'add_subject.required' => 'At least one subject is required.',
             ]);
-
         } catch (ValidationException $e) {
             $message = $e->validator->errors()->first();
-            return $this->dispatch('swal-toast', icon : 'error', title : $message);
+            return $this->dispatch('swal-toast', icon: 'error', title: $message);
         }
 
         $curriculum = Curriculum::create([
@@ -121,7 +116,7 @@ class CurriculumAddModal extends Component
             'message' => "A new curriculum named '{$this->add_name}' has been created.",
         ]);
 
-        $this->dispatch('swal-toast', icon : 'success', title : 'Curriculum has been created successfully.');
+        $this->dispatch('swal-toast', icon: 'success', title: 'Curriculum has been created successfully.');
         return $this->closeModal();
     }
 

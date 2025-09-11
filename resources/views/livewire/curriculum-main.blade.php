@@ -6,7 +6,7 @@
             <div class="flex flex-col gap-1">
                 <h1 class="text-2xl font-semibold leading-tight">
                     Welcome back,
-                    <span class="font-bold text-blue-button">{{auth()->user()->accountable->first_name}}</span>
+                    <span class="font-bold text-blue-button">{{ auth()->user()->accountable->first_name }}</span>
                 </h1>
                 <p class="text-lg text-paragraph leading-4">Here is your summary today</p>
             </div>
@@ -105,7 +105,8 @@
                                     <td class="px-4 py-3 text-center text-paragraph">{{ $curriculum->id }}</td>
                                     <td class="px-4 py-3 text-center text-paragraph">{{ ucwords($curriculum->name) }}
                                     </td>
-                                    <td class="px-4 py-3 text-center text-paragraph">Grade 1</td>
+                                    <td class="px-4 py-3 text-center text-paragraph">
+                                        {{ ucwords($curriculum->grade_level) }}</td>
                                     <td class="px-4 py-3 text-center text-paragraph">
                                         {{ count($curriculum->curriculumSubjects) }}</td>
                                     <td class="px-4 py-3 text-center">

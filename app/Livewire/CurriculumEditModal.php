@@ -2,7 +2,6 @@
 
 namespace App\Livewire;
 
-use App\Models\Student;
 use App\Models\Subject;
 use Livewire\Component;
 use App\Models\Curriculum;
@@ -14,6 +13,8 @@ use Illuminate\Validation\ValidationException;
 class CurriculumEditModal extends Component
 {
     public $isOpen = false, $curriculum_id = null, $specializations, $grade_levels;
+    public $showSpecializationDropdown = false;
+    public $showSubjectDropdown = false;
     public $subjects, $edit_name, $edit_grade_level, $edit_specialization, $edit_description, $edit_subject;
     public $selectedSpecializations = [], $selectedSubjects = [], $original = [];
 
@@ -28,7 +29,7 @@ class CurriculumEditModal extends Component
         $this->curriculum_id = $id;
         $this->isOpen = true;
 
-        $curriculum = Curriculum::with('specializations','curriculumSubjects.subject')->find($this->curriculum_id);
+        $curriculum = Curriculum::with('specializations', 'curriculumSubjects.subject')->find($this->curriculum_id);
 
         $this->edit_name = $curriculum->name;
         $this->edit_grade_level = $curriculum->grade_level;
@@ -117,35 +118,35 @@ class CurriculumEditModal extends Component
             'specialization' => [$this->selectedSpecializations, $this->original['specialization']],
             'subjects'       => [$this->selectedSubjects, $this->original['subjects']],
         ])
-        ->filter(fn($pair) => $pair[0] !== $pair[1])
-        ->map(fn($pair) => $pair[0])
-        ->toArray();
+            ->filter(fn($pair) => $pair[0] !== $pair[1])
+            ->map(fn($pair) => $pair[0])
+            ->toArray();
 
         if (empty($changes)) {
             $this->dispatch('swal-toast', icon: 'info', title: 'No changes detected.');
             return;
         }
 
-            $curriculum = Curriculum::find($this->curriculum_id);
-            $curriculum->update([
-                'name' => $this->edit_name,
-                'grade_level' => $this->edit_grade_level,
-                'description' => $this->edit_description,
+        $curriculum = Curriculum::find($this->curriculum_id);
+        $curriculum->update([
+            'name' => $this->edit_name,
+            'grade_level' => $this->edit_grade_level,
+            'description' => $this->edit_description,
+        ]);
+
+        // Sync specializations
+        $curriculum->specializations()->sync($this->selectedSpecializations);
+
+        $curriculum->curriculumSubjects()->delete();
+        $subjectIds = Subject::whereIn('name', $this->selectedSubjects)->pluck('id');
+        foreach ($subjectIds as $subjectId) {
+            CurriculumSubject::create([
+                'curriculum_id' => $curriculum->id,
+                'subject_id' => $subjectId,
             ]);
+        }
 
-            // Sync specializations
-            $curriculum->specializations()->sync($this->selectedSpecializations);
-
-            $curriculum->curriculumSubjects()->delete();
-            $subjectIds = Subject::whereIn('name', $this->selectedSubjects)->pluck('id');
-            foreach ($subjectIds as $subjectId) {
-                CurriculumSubject::create([
-                    'curriculum_id' => $curriculum->id,
-                    'subject_id' => $subjectId,
-                ]);
-            }
-
-        $this->dispatch('swal-toast', icon : 'success', title : 'Curriculum has been updated successfully.');
+        $this->dispatch('swal-toast', icon: 'success', title: 'Curriculum has been updated successfully.');
         return $this->closeModal();
     }
 

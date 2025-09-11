@@ -1,7 +1,8 @@
 <div>
     @if ($isOpen)
-        <div class="bg-black/30 fixed w-dvw h-dvh top-0 left-0 z-50 backdrop-blur-xs flex justify-center items-center p-10">
-            <div class="w-180 h-full flex flex-col bg-card p-8 rounded-4xl relative gap-8 ">
+        <div
+            class="bg-black/30 fixed w-dvw h-dvh top-0 left-0 z-50 backdrop-blur-xs flex justify-center items-center p-10">
+            <div class="w-180 max-h-full flex flex-col bg-card p-8 rounded-4xl relative gap-8 ">
                 <form wire:submit='addCurriculum' class="w-full h-full flex flex-col gap-8 overflow-auto Addlesson">
                     <div class="flex items-center gap-4">
                         <img src="{{ asset('images/book.png') }}" alt="" />
@@ -33,105 +34,95 @@
                                 </select>
                             </div>
 
-                            <button class="pl-4 pr-2 py-2 rounded-lg bg-white text-paragraph w-full text-left hover:bg-gray-300 flex items-center justify-between"
+                            <button
+                                class="pl-4 pr-2 py-2 rounded-lg bg-white text-paragraph w-full text-left hover:bg-gray-300 flex items-center justify-between"
                                 type="button" wire:click="openSpecializationModal">
                                 <p>Select Specialization</p>
-                                {{-- <span class="material-symbols-rounded text-paragraph">keyboard_arrow_down</span> --}}
-                                <span class="material-symbols-rounded text-paragraph">keyboard_arrow_up</span>
+                                <span class="material-symbols-rounded text-paragraph">
+                                    {{ $showSpecializationDropdown ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}
+                                </span>
                             </button>
 
-                            <div class="rounded-lg bg-white h-fit">
-
-                                {{-- Specialization checkbox --}}
-                                <div class="p-4 rounded-lg bg-white relative flex flex-col gap-2 h-full">
-                                    {{-- Header --}}
-                                    <div class="flex items-center justify-between w-full">
-                                        <p class="text-paragraph">Specialization</p>
-                                        <button type="button" wire:click="clearStudents"
-                                            class="flex items-center justify-center gap-1 px-3 py-1 rounded-lg text-paragraph border-1 border-gray-300 hover:border-blue-button hover:text-white cursor-pointer bg-white hover:bg-blue-button">
-                                            <p class="text-sm">Clear Selected</p>
-                                            <span class="material-symbols-rounded">clear_all</span>
-                                        </button>
-                                    </div>
-
-                                    {{-- Specialization List --}}
-                                    <div class="h-full flex flex-col gap-1 bg-white rounded-lg">
-                                        <div class="flex flex-col gap-1 h-full overflow-y-scroll pr-2 rounded-lg">
-
-                                                <div
-                                                    class="flex items-center gap-2 w-full p-2 hover:bg-card rounded-lg cursor-pointer">
-                                                    <label class="container w-fit">
-                                                        <input type="checkbox">
-                                                        <div class="checkmark"></div>
-                                                    </label>
-                                                    <p class="w-full text-paragraph">Hearing Impairement</p>
-                                                </div>
-
-                                                <div
-                                                    class="flex items-center gap-2 w-full p-2 hover:bg-card rounded-lg cursor-pointer">
-                                                    <label class="container w-fit">
-                                                        <input type="checkbox">
-                                                        <div class="checkmark"></div>
-                                                    </label>
-                                                    <p class="w-full text-paragraph">Speech Impairement</p>
-                                                </div>
-
-                                                <div
-                                                    class="flex items-center gap-2 w-full p-2 hover:bg-card rounded-lg cursor-pointer">
-                                                    <label class="container w-fit">
-                                                        <input type="checkbox">
-                                                        <div class="checkmark"></div>
-                                                    </label>
-                                                    <p class="w-full text-paragraph">Autism</p>
-                                                </div>
-                                                {{-- <p class="text-center text-sm text-gray-500 h-full flex justify-center items-center">No Specialization found.</p> --}}
-
+                            @if ($showSpecializationDropdown)
+                                <div class="rounded-lg bg-white h-fit mt-2">
+                                    <div class="p-4 rounded-lg bg-white relative flex flex-col gap-2 h-full">
+                                        <div class="flex items-center justify-between w-full">
+                                            <p class="text-paragraph">Specialization</p>
+                                            <button type="button" wire:click="clearSpecializations"
+                                                class="flex items-center justify-center gap-1 px-3 py-1 rounded-lg text-paragraph border-1 border-gray-300 hover:border-blue-button hover:text-white cursor-pointer bg-white hover:bg-blue-button">
+                                                <p class="text-sm">Clear Selected</p>
+                                                <span class="material-symbols-rounded">clear_all</span>
+                                            </button>
+                                        </div>
+                                        <div class="h-full flex flex-col gap-1 bg-white rounded-lg">
+                                            <div class="flex flex-col gap-1 h-full overflow-y-scroll pr-2 rounded-lg">
+                                                @forelse($specializations as $specialization)
+                                                    <div
+                                                        class="flex items-center gap-2 w-full p-2 hover:bg-card rounded-lg cursor-pointer">
+                                                        <label class="container w-fit">
+                                                            <input type="checkbox" value="{{ $specialization->id }}"
+                                                                wire:model="selectedSpecializations">
+                                                            <div class="checkmark"></div>
+                                                        </label>
+                                                        <p class="w-full text-paragraph">
+                                                            {{ ucwords($specialization->name) }}</p>
+                                                    </div>
+                                                @empty
+                                                    <p
+                                                        class="text-center text-sm text-gray-500 h-full flex justify-center items-center">
+                                                        No Specialization found.</p>
+                                                @endforelse
+                                            </div>
                                         </div>
                                     </div>
-                                </div>{{-- End of Specialization checkbox --}}
-                            </div>
+                                </div>
+                            @endif
 
 
 
-                            <button class="pl-4 pr-2 py-2 rounded-lg bg-white text-paragraph w-full text-left hover:bg-gray-300 flex items-center justify-between"
-                                type="button" wire:click="openSpecializationModal">
+                            <button
+                                class="pl-4 pr-2 py-2 rounded-lg bg-white text-paragraph w-full text-left hover:bg-gray-300 flex items-center justify-between"
+                                type="button" wire:click="openSubjectModal">
                                 <p>Select Subjects</p>
-                                {{-- <span class="material-symbols-rounded text-paragraph">keyboard_arrow_down</span> --}}
-                                <span class="material-symbols-rounded text-paragraph">keyboard_arrow_up</span>
+                                <span class="material-symbols-rounded text-paragraph">
+                                    {{ $showSubjectDropdown ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}
+                                </span>
                             </button>
 
-                            <div class="rounded-lg bg-white h-fit">
-
-                                {{-- Subject Checkbox --}}
-                                <div class="p-4 rounded-lg bg-white relative flex flex-col gap-2 h-full">
-                                    {{-- Header --}}
-                                    <div class="flex items-center justify-between w-full">
-                                        <p class="text-paragraph">Subjects</p>
-                                        <button type="button" wire:click="clearStudents"
-                                            class="flex items-center justify-center gap-1 px-3 py-1 rounded-lg text-paragraph border-1 border-gray-300 hover:border-blue-button hover:text-white cursor-pointer bg-white hover:bg-blue-button">
-                                            <p class="text-sm">Clear Selected</p>
-                                            <span class="material-symbols-rounded">clear_all</span>
-                                        </button>
-                                    </div>
-
-                                    {{-- Subject List --}}
-                                    <div class="h-48 flex flex-col gap-1 bg-white rounded-lg">
-                                        <div class="flex flex-col gap-1 h-full overflow-y-scroll pr-2 rounded-lg">
-                                            <div
-                                                    class="flex items-center gap-2 w-full p-2 hover:bg-card rounded-lg cursor-pointer">
-                                                    <label class="container w-fit">
-                                                        <input type="checkbox">
-                                                        <div class="checkmark"></div>
-                                                    </label>
-                                                    <p class="w-full text-paragraph">Mathematics</p>
-                                                </div>
-
-                                            {{-- <p class="text-center text-sm text-gray-500 h-full flex justify-center items-center">No Subjects found.</p> --}}
-
+                            @if ($showSubjectDropdown)
+                                <div class="rounded-lg bg-white h-fit mt-2">
+                                    <div class="p-4 rounded-lg bg-white relative flex flex-col gap-2 h-full">
+                                        <div class="flex items-center justify-between w-full">
+                                            <p class="text-paragraph">Subjects</p>
+                                            <button type="button" wire:click="clearSubjects"
+                                                class="flex items-center justify-center gap-1 px-3 py-1 rounded-lg text-paragraph border-1 border-gray-300 hover:border-blue-button hover:text-white cursor-pointer bg-white hover:bg-blue-button">
+                                                <p class="text-sm">Clear Selected</p>
+                                                <span class="material-symbols-rounded">clear_all</span>
+                                            </button>
+                                        </div>
+                                        <div class="h-48 flex flex-col gap-1 bg-white rounded-lg">
+                                            <div class="flex flex-col gap-1 h-full overflow-y-scroll pr-2 rounded-lg">
+                                                @forelse($subjects as $subject)
+                                                    <div
+                                                        class="flex items-center gap-2 w-full p-2 hover:bg-card rounded-lg cursor-pointer">
+                                                        <label class="container w-fit">
+                                                            <input type="checkbox" value="{{ $subject->name }}"
+                                                                wire:model="selectedSubjects">
+                                                            <div class="checkmark"></div>
+                                                        </label>
+                                                        <p class="w-full text-paragraph">{{ ucwords($subject->name) }}
+                                                        </p>
+                                                    </div>
+                                                @empty
+                                                    <p
+                                                        class="text-center text-sm text-gray-500 h-full flex justify-center items-center">
+                                                        No Subjects found.</p>
+                                                @endforelse
+                                            </div>
                                         </div>
                                     </div>
-                                </div>{{-- End of Subject Checkbox --}}
-                            </div>
+                                </div>
+                            @endif
                             <textarea wire:model.live="add_description" name="" id="" maxlength="200"
                                 placeholder="Description (Optional)"
                                 class="p-4 rounded-lg bg-white placeholder-paragraph resize-none h-40 outline-none mb-18"></textarea>
@@ -170,14 +161,3 @@
         </div>
     @endif
 </div>
-
-
-
-
-
-
-
-
-
-
-
