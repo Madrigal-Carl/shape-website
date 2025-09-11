@@ -122,7 +122,7 @@
                             Cancel
                         </button>
                         <button type="button"
-                            class="bg-blue-button py-1.5 px-4 w-full rounded-xl text-white font-medium hover:to-blue-700 cursor-pointer"
+                            class="bg-blue-button py-1.5 px-4 w-full rounded-xl text-white font-medium hover:bg-blue-700 cursor-pointer"
                             wire:click="nextStep">
                             Next
                         </button>

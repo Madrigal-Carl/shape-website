@@ -3,16 +3,13 @@
     <img src="{{ asset('images/Shape-logo-w-text.png') }}" class="w-38" alt="" />
 
     <!-- Account Info -->
-    @php
-        $user = App\Models\Account::with('accountable')->find(auth()->id());
-    @endphp
     <div class="flex flex-col gap-2 items-center">
-        <img src="{{asset('images/default_profiles/default-male-teacher-pfp.png')}}" class="w-24 rounded-full" alt="" />
+        <img src="{{ asset('storage/' . auth()->user()->accountable->path) }}" class="w-24 rounded-full" alt="" />
         <!-- Profile Pic -->
         <div class="flex flex-col items-center">
             <p class="text-lg">
-                <span class="font-semibold leading-none">{{ $user->accountable->last_name }},
-                </span>{{ $user->accountable->first_name }}
+                <span class="font-semibold leading-none">{{ auth()->user()->accountable->last_name }},
+                </span>{{ auth()->user()->accountable->first_name }}
             </p>
             <!-- Fullname -->
             <small
