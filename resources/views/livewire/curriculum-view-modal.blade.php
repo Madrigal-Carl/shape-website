@@ -22,7 +22,8 @@
                         <h1 class="text-5xl font-bold">{{ count($curriculum->curriculumSubjects) }}</h1>
                     </div>
 
-                    <div class=" bg-white p-6 rounded-3xl w-full flex flex-col justify-between shadow-2xl/10 col-span-2">
+                    <div
+                        class=" bg-white p-6 rounded-3xl w-full flex flex-col justify-between shadow-2xl/10 col-span-2">
                         <div class="flex items-center w-auto gap-4">
                             <h3 class="text-sm font-semibold w-40">Status:</h3>
                             <div class=" w-full">
@@ -69,10 +70,13 @@
                     <h1 class="text-lg font-medium">Subjects</h1>
                     <div class="grid grid-cols-3 gap-4">
                         @foreach ($curriculum->curriculumSubjects as $curriculumSubject)
-                            <div class="flex flex-col h-30 gap-6 bg-white rounded-3xl p-4 col-span-1 justify-between shadow-2xl/10">
+                            <div
+                                class="flex flex-col h-30 gap-6 bg-white rounded-3xl p-4 col-span-1 justify-between shadow-2xl/10">
                                 <div class="flex items-start justify-between gap-4 leading-4.5 w-full">
-                                    <h2 class="text-base font-semibold">{{ ucfirst($curriculumSubject->subject->name) }}</h2>
-                                    <img src="{{asset('images/subject_icons/mathematics-icon.png')}}" alt="" class="h-6">
+                                    <h2 class="text-base font-semibold">{{ ucfirst($curriculumSubject->subject->name) }}
+                                    </h2>
+                                    <img src="{{ asset('images/subject_icons/' . $curriculumSubject->subject->icon) }}"
+                                        alt="" class="h-6">
                                 </div>
 
                                 <div>
