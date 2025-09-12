@@ -9,9 +9,9 @@
                     <span class="font-bold text-blue-button">Dave</span>
                 </h1>
                 <p class="text-lg text-paragraph leading-4">Here is your summary today</p>
-                <div class="w-max px-2 py-1 mt-4 rounded-lg border-1 border-gray-300 hover:border-blue-button shadow-2xl/15">
-                    <select
-                        class="w-full outline-none text-heading-dark font-medium text-lg">
+                <div
+                    class="w-max px-2 py-1 mt-4 rounded-lg border-1 border-gray-300 hover:border-blue-button shadow-2xl/15">
+                    <select class="w-full outline-none text-heading-dark font-medium text-lg">
                         <option class="text-sm text-black" selected disabled>
                             S.Y 2025-2026
                         </option>
@@ -40,7 +40,7 @@
                 <div class="flex justify-between">
                     <div>
                         <p class="text-sm leading-snug font-normal">Total Students</p>
-                        <h1 class="text-2xl font-semibold leading-6">EBROLLED</h1>
+                        <h1 class="text-2xl font-semibold leading-6">ENROLLED</h1>
                     </div>
                     <span class="material-symbols-rounded icon">people</span>
                 </div>
@@ -89,7 +89,8 @@
         </div>
 
         <div class="grid grid-cols-4 grid-rows-1 gap-4">
-            <div class="bg-white p-6 h-48 text-heading-dark shadow-2xl/5 rounded-3xl flex flex-col justify-between gap-6">
+            <div
+                class="bg-white p-6 h-48 text-heading-dark shadow-2xl/5 rounded-3xl flex flex-col justify-between gap-6">
                 <div class="flex justify-between">
                     <div>
                         <p class="text-sm leading-snug font-normal text-paragraph">
@@ -102,7 +103,8 @@
                 <h1 class="text-5xl font-bold text-blue-button">2</h1>
             </div>
 
-            <div class="bg-white p-6 h-48 text-heading-dark shadow-2xl/5 rounded-3xl flex flex-col justify-between gap-6">
+            <div
+                class="bg-white p-6 h-48 text-heading-dark shadow-2xl/5 rounded-3xl flex flex-col justify-between gap-6">
                 <div class="flex justify-between">
                     <div>
                         <p class="text-sm leading-snug font-normal text-paragraph">
@@ -115,7 +117,8 @@
                 <h1 class="text-5xl font-bold text-lime">10</h1>
             </div>
 
-            <div class="bg-white p-6 h-48 text-heading-dark shadow-2xl/5 rounded-3xl flex flex-col justify-between gap-6">
+            <div
+                class="bg-white p-6 h-48 text-heading-dark shadow-2xl/5 rounded-3xl flex flex-col justify-between gap-6">
                 <div class="flex justify-between">
                     <div>
                         <p class="text-sm leading-snug font-normal text-paragraph">
@@ -128,7 +131,8 @@
                 <h1 class="text-5xl font-bold text-yellowOrange">15</h1>
             </div>
 
-            <div class="bg-white p-6 h-48 text-heading-dark shadow-2xl/5 rounded-3xl flex flex-col justify-between gap-6">
+            <div
+                class="bg-white p-6 h-48 text-heading-dark shadow-2xl/5 rounded-3xl flex flex-col justify-between gap-6">
                 <div class="flex justify-between">
                     <div>
                         <p class="text-sm leading-snug font-normal text-paragraph">
@@ -173,7 +177,7 @@
                     fill: { opacity: 1 },
                     tooltip: { y: { formatter: val => `$ ${val} thousands` } },
                 };
-
+            
                 var chart = new ApexCharts(document.querySelector('#Barchart'), options);
                 chart.render();
             }">
@@ -181,16 +185,16 @@
         </div>
 
         <div class="col-span-1 row-span-2 h-full bg-white p-6 rounded-3xl flex flex-col gap-4 shadow-2xl/5">
-            <h1 class="text-2xl font-semibold">Weekly Activities</h1>
+            <h1 class="text-2xl font-semibold">Overall Learning Skills Progress</h1>
             <div id="Piechart" class="w-full" wire:ignore x-data="{}" x-init="() => {
                 var options = {
-                    series: [44, 55, 13, 43, 22],
+                    series: [44, 55, 13, 43, 22, 43, 22],
                     chart: {
                         width: 460,
                         type: 'pie',
                         toolbar: { show: false }
                     },
-                    labels: ['Team A', 'Team B', 'Team C', 'Team D', 'Team E'],
+                    labels: ['Self-Help', 'Social', 'Numeracy', 'Literacy', 'Motor', 'Pre-Vocational', 'Vocational'],
                     responsive: [{
                         breakpoint: 500,
                         options: {
@@ -199,7 +203,7 @@
                         }
                     }]
                 };
-
+            
                 var chart = new ApexCharts(document.querySelector('#Piechart'), options);
                 chart.render();
             }">
@@ -208,7 +212,7 @@
         </div>
 
         <div class="col-span-2 row-span-2 h-full bg-white p-6 rounded-3xl flex flex-col gap-4 shadow-2xl/5">
-            <h1 class="text-2xl font-semibold">Weekly Activities</h1>
+            <h1 class="text-2xl font-semibold">Overall Time Spent on Activities</h1>
             <div id="Linechart" class="w-full" wire:ignore x-data="{}" x-init="() => {
                 var options = {
                     series: [
@@ -238,7 +242,7 @@
                         x: { format: 'dd/MM/yy HH:mm' }
                     }
                 };
-
+            
                 var chart = new ApexCharts(document.querySelector('#Linechart'), options);
                 chart.render();
             }">
@@ -260,7 +264,8 @@
         <!-- Student Notifications -->
         <div class="flex flex-col gap-2 px-3 overflow-y-auto">
             <div class="flex gap-2 w-full bg-card p-3 rounded-full">
-                <img src="{{ asset('images/default_profiles/default-male-student-pfp.png') }}" class="rounded-full w-10" alt="" />
+                <img src="{{ asset('images/default_profiles/default-male-student-pfp.png') }}" class="rounded-full w-10"
+                    alt="" />
                 <!-- notification Details -->
                 <div>
                     <h2 class="leading-tight font-semibold text-md">
@@ -273,7 +278,8 @@
             </div>
 
             <div class="flex gap-2 w-full bg-card p-3 rounded-full">
-                <img src="{{ asset('images/default_profiles/default-male-student-pfp.png') }}" class="rounded-full w-10" alt="" />
+                <img src="{{ asset('images/default_profiles/default-male-student-pfp.png') }}"
+                    class="rounded-full w-10" alt="" />
                 <!-- notification Details -->
                 <div>
                     <h2 class="leading-tight font-semibold text-md">
@@ -286,7 +292,8 @@
             </div>
 
             <div class="flex gap-2 w-full bg-card p-3 rounded-full">
-                <img src="{{ asset('images/default_profiles/default-male-student-pfp.png') }}" class="rounded-full w-10" alt="" />
+                <img src="{{ asset('images/default_profiles/default-male-student-pfp.png') }}"
+                    class="rounded-full w-10" alt="" />
                 <!-- notification Details -->
                 <div>
                     <h2 class="leading-tight font-semibold text-md">
@@ -299,7 +306,8 @@
             </div>
 
             <div class="flex gap-2 w-full bg-card p-3 rounded-full">
-                <img src="{{ asset('images/default_profiles/default-male-student-pfp.png') }}" class="rounded-full w-10" alt="" />
+                <img src="{{ asset('images/default_profiles/default-male-student-pfp.png') }}"
+                    class="rounded-full w-10" alt="" />
                 <!-- notification Details -->
                 <div>
                     <h2 class="leading-tight font-semibold text-md">
@@ -312,7 +320,8 @@
             </div>
 
             <div class="flex gap-2 w-full bg-card p-3 rounded-full">
-                <img src="{{ asset('images/default_profiles/default-male-student-pfp.png') }}" class="rounded-full w-10" alt="" />
+                <img src="{{ asset('images/default_profiles/default-male-student-pfp.png') }}"
+                    class="rounded-full w-10" alt="" />
                 <!-- notification Details -->
                 <div>
                     <h2 class="leading-tight font-semibold text-md">
@@ -325,7 +334,8 @@
             </div>
 
             <div class="flex gap-2 w-full bg-card p-3 rounded-full">
-                <img src="{{ asset('images/default_profiles/default-male-student-pfp.png') }}" class="rounded-full w-10" alt="" />
+                <img src="{{ asset('images/default_profiles/default-male-student-pfp.png') }}"
+                    class="rounded-full w-10" alt="" />
                 <!-- notification Details -->
                 <div>
                     <h2 class="leading-tight font-semibold text-md">

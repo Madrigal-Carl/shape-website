@@ -24,7 +24,8 @@
                             <h1 class="text-5xl font-bold">{{ count($lesson->students) }}</h1>
                         </div>
 
-                        <div class="bg-white p-6 rounded-3xl w-full flex flex-col justify-between shadow-2xl/10 col-span-2">
+                        <div
+                            class="bg-white p-6 rounded-3xl w-full flex flex-col justify-between shadow-2xl/10 col-span-2">
                             <div class="flex items-center w-auto gap-4">
                                 <h3 class="text-sm font-semibold w-40">Subject:</h3>
                                 <p class="text-sm w-full">
@@ -40,7 +41,8 @@
 
                             <div class="flex items-center w-auto gap-4">
                                 <h3 class="text-sm font-semibold w-40">Grade level:</h3>
-                                <p class="text-sm w-full">1</p>
+                                <p class="text-sm w-full">
+                                    {{ ucwords($lesson->lessonSubjectStudents->first()->curriculum->grade_level) }}</p>
                             </div>
 
                             <div class="flex items-center w-auto gap-4">

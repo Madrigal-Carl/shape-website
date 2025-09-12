@@ -4,15 +4,18 @@ namespace App\Livewire;
 
 use Livewire\Component;
 use App\Models\Activity;
+use App\Models\Curriculum;
 use Livewire\Attributes\On;
 use App\Models\Specialization;
+use App\Models\CurriculumSubject;
+use Illuminate\Support\Facades\Auth;
 
 class ActivityHub extends Component
 {
     public $isOpen = false;
     public $targetComponent = null;
     public $isOpenActivityView = false;
-    public $activities = [], $categories = [], $selectedCategories = [];
+    public $activities = [], $specializations = [], $selectedSpecializations = [];
     public $act;
     public $isPreviewOpen = false;
     public $previewImages = [];
@@ -20,10 +23,24 @@ class ActivityHub extends Component
 
 
     #[On('openModal')]
-    public function openModal()
+    public function openModal($curriculumId = null)
     {
         $this->isOpen = true;
-        $this->activities = Activity::with('activityImages')->get();
+
+        if ($curriculumId) {
+            $curriculum = Curriculum::find($curriculumId);
+            if ($curriculum) {
+                $this->selectedSpecializations = $curriculum
+                    ->specializations()
+                    ->pluck('name')
+                    ->toArray();
+            } else {
+                $this->selectedSpecializations = [];
+            }
+        } else {
+            $this->selectedSpecializations = [];
+        }
+
         $this->loadActivities();
     }
 
@@ -53,16 +70,16 @@ class ActivityHub extends Component
     public function addActivity($activityId)
     {
         $activity = Activity::with('specializations')->find($activityId);
-        $this->dispatch('swal-toast', icon : 'success', title : 'Activity has been added successfully.');
+        $this->dispatch('swal-toast', icon: 'success', title: 'Activity has been added successfully.');
         $this->dispatch('addActivity', activity: $activity)->to($this->targetComponent);
     }
 
     public function toggleCategory($categoryId)
     {
-        if (in_array($categoryId, $this->selectedCategories)) {
-            $this->selectedCategories = array_diff($this->selectedCategories, [$categoryId]);
+        if (in_array($categoryId, $this->selectedSpecializations)) {
+            $this->selectedSpecializations = array_diff($this->selectedSpecializations, [$categoryId]);
         } else {
-            $this->selectedCategories[] = $categoryId;
+            $this->selectedSpecializations[] = $categoryId;
         }
 
         $this->loadActivities();
@@ -72,8 +89,8 @@ class ActivityHub extends Component
     {
         $q = Activity::with('specializations');
 
-        if (!empty($this->selectedCategories)) {
-            foreach ($this->selectedCategories as $catName) {
+        if (!empty($this->selectedSpecializations)) {
+            foreach ($this->selectedSpecializations as $catName) {
                 $q->whereHas('specializations', function ($query) use ($catName) {
                     $query->where('specializations.name', $catName);
                 });
@@ -125,8 +142,10 @@ class ActivityHub extends Component
     public function mount($targetComponent = null)
     {
         $this->targetComponent = $targetComponent;
-        $this->categories = Specialization::orderBy('name')->pluck('name')->toArray();
+
+        $this->specializations = Specialization::orderBy('name')->pluck('name')->toArray();
     }
+
 
     public function render()
     {

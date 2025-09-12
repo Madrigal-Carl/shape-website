@@ -67,75 +67,75 @@
                     <h1 class="font-semibold text-xl">Specialization:</h1>
                     <!--Categories-->
                     <div class="w-full flex items-center gap-2 gameCategories overflow-x-auto pb-2">
-                        @foreach ($categories as $name)
+                        @foreach ($specializations as $name)
                             <div wire:click="toggleCategory('{{ $name }}')"
                                 class="w-fit shrink-0 flex items-center gap-2 px-4 py-2 rounded-xl cursor-pointer
-                                    {{ in_array($name, $selectedCategories, true) ? 'bg-blue-button text-white' : 'bg-white hover:bg-blue-button hover:text-white' }}">
-                                <img src="{{asset('images/specialization_icons/autism-icon.png')}}"
-                                    alt="" class="h-6">
+                                    {{ in_array($name, $selectedSpecializations, true) ? 'bg-blue-button text-white' : 'bg-white hover:bg-blue-button hover:text-white' }}">
+                                <img src="{{ asset('images/specialization_icons/autism-icon.png') }}" alt=""
+                                    class="h-6">
                                 <p class="text-base">{{ ucwords($name) }}</p>
                             </div>
                         @endforeach
                     </div>
                 </div>
 
-                <div class="w-full flex flex-col gap-2">
+                {{-- <div class="w-full flex flex-col gap-2">
                     <h1 class="font-semibold text-xl">Subjects:</h1>
                     <!-- Subject Categories-->
                     <div class="w-full flex items-center gap-2 gameCategories overflow-x-auto pb-2">
                         <div wire:click="toggleCategory('{{ $name }}')"
                             class="w-fit shrink-0 flex items-center gap-2 px-4 py-2 rounded-xl cursor-pointer
-                                {{ in_array($name, $selectedCategories, true) ? 'bg-blue-button text-white' : 'bg-white hover:bg-blue-button hover:text-white' }}">
-                            <img src="{{asset('images/subject_icons/mathematics-icon.png')}}"
-                                alt="" class="h-6">
+                                {{ in_array($name, $selectedSpecializations, true) ? 'bg-blue-button text-white' : 'bg-white hover:bg-blue-button hover:text-white' }}">
+                            <img src="{{ asset('images/subject_icons/mathematics-icon.png') }}" alt=""
+                                class="h-6">
                             <p class="text-base">Mathematics</p>
                         </div>
 
                         <div wire:click="toggleCategory('{{ $name }}')"
                             class="w-fit shrink-0 flex items-center gap-2 px-4 py-2 rounded-xl cursor-pointer
-                                {{ in_array($name, $selectedCategories, true) ? 'bg-blue-button text-white' : 'bg-white hover:bg-blue-button hover:text-white' }}">
-                            <img src="{{asset('images/subject_icons/science-icon.png')}}"
-                                alt="" class="h-6">
+                                {{ in_array($name, $selectedSpecializations, true) ? 'bg-blue-button text-white' : 'bg-white hover:bg-blue-button hover:text-white' }}">
+                            <img src="{{ asset('images/subject_icons/science-icon.png') }}" alt=""
+                                class="h-6">
                             <p class="text-base">Science</p>
                         </div>
 
                         <div wire:click="toggleCategory('{{ $name }}')"
                             class="w-fit shrink-0 flex items-center gap-2 px-4 py-2 rounded-xl cursor-pointer
-                                {{ in_array($name, $selectedCategories, true) ? 'bg-blue-button text-white' : 'bg-white hover:bg-blue-button hover:text-white' }}">
-                            <img src="{{asset('images/subject_icons/self-care-icon.png')}}"
-                                alt="" class="h-6">
+                                {{ in_array($name, $selectedCselectedSpecializationsategories, true) ? 'bg-blue-button text-white' : 'bg-white hover:bg-blue-button hover:text-white' }}">
+                            <img src="{{ asset('images/subject_icons/self-care-icon.png') }}" alt=""
+                                class="h-6">
                             <p class="text-base">Self- Care</p>
                         </div>
 
                         <div wire:click="toggleCategory('{{ $name }}')"
                             class="w-fit shrink-0 flex items-center gap-2 px-4 py-2 rounded-xl cursor-pointer
-                                {{ in_array($name, $selectedCategories, true) ? 'bg-blue-button text-white' : 'bg-white hover:bg-blue-button hover:text-white' }}">
-                            <img src="{{asset('images/subject_icons/filipino-sign-language-icon.png')}}"
+                                {{ in_array($name, $selectedSpecializations, true) ? 'bg-blue-button text-white' : 'bg-white hover:bg-blue-button hover:text-white' }}">
+                            <img src="{{ asset('images/subject_icons/filipino-sign-language-icon.png') }}"
                                 alt="" class="h-6">
                             <p class="text-base">Filipino Sign Language</p>
                         </div>
 
                         <div wire:click="toggleCategory('{{ $name }}')"
                             class="w-fit shrink-0 flex items-center gap-2 px-4 py-2 rounded-xl cursor-pointer
-                                {{ in_array($name, $selectedCategories, true) ? 'bg-blue-button text-white' : 'bg-white hover:bg-blue-button hover:text-white' }}">
-                            <img src="{{asset('images/subject_icons/araling-panlipunan-icon.png')}}"
-                                alt="" class="h-6">
+                                {{ in_array($name, $selectedSpecializations, true) ? 'bg-blue-button text-white' : 'bg-white hover:bg-blue-button hover:text-white' }}">
+                            <img src="{{ asset('images/subject_icons/araling-panlipunan-icon.png') }}" alt=""
+                                class="h-6">
                             <p class="text-base">Araling Panlipunan</p>
                         </div>
 
                         <div wire:click="toggleCategory('{{ $name }}')"
                             class="w-fit shrink-0 flex items-center gap-2 px-4 py-2 rounded-xl cursor-pointer
-                                {{ in_array($name, $selectedCategories, true) ? 'bg-blue-button text-white' : 'bg-white hover:bg-blue-button hover:text-white' }}">
-                            <img src="{{asset('images/subject_icons/filipino-icon.png')}}"
-                                alt="" class="h-6">
+                                {{ in_array($name, $selectedSpecializations, true) ? 'bg-blue-button text-white' : 'bg-white hover:bg-blue-button hover:text-white' }}">
+                            <img src="{{ asset('images/subject_icons/filipino-icon.png') }}" alt=""
+                                class="h-6">
                             <p class="text-base">Filipino</p>
                         </div>
 
                         <div wire:click="toggleCategory('{{ $name }}')"
                             class="w-fit shrink-0 flex items-center gap-2 px-4 py-2 rounded-xl cursor-pointer
-                                {{ in_array($name, $selectedCategories, true) ? 'bg-blue-button text-white' : 'bg-white hover:bg-blue-button hover:text-white' }}">
-                            <img src="{{asset('images/subject_icons/english-icon.png')}}"
-                                alt="" class="h-6">
+                                {{ in_array($name, $selectedSpecializations, true) ? 'bg-blue-button text-white' : 'bg-white hover:bg-blue-button hover:text-white' }}">
+                            <img src="{{ asset('images/subject_icons/english-icon.png') }}" alt=""
+                                class="h-6">
                             <p class="text-base">English</p>
                         </div>
 
@@ -143,7 +143,7 @@
 
 
                     </div>
-                </div>
+                </div> --}}
 
                 <div class="grid grid-cols-2 gap-2 overflow-y-auto rounded-xl gamesGrid">
                     <!--Game container at game hub-->

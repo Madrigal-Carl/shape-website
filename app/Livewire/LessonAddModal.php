@@ -93,7 +93,7 @@ class LessonAddModal extends Component
 
     public function openActivityHub()
     {
-        $this->dispatch('openModal')->to('activity-hub');
+        $this->dispatch('openModal', curriculumId: $this->curriculum)->to('activity-hub');
     }
 
     public function updatedVideos()
@@ -185,7 +185,7 @@ class LessonAddModal extends Component
                 'grade_level'        => 'required',
                 'curriculum'         => 'required',
                 'subject'            => 'required',
-                'selected_activities'=> 'required',
+                'selected_activities' => 'required',
             ], [
                 'lesson_name.required' => 'Lesson name is required.',
                 'lesson_name.min'      => 'Lesson name must be at least 5 characters.',
@@ -252,7 +252,7 @@ class LessonAddModal extends Component
             ]);
         }
 
-       foreach ($this->selected_activities as $activity) {
+        foreach ($this->selected_activities as $activity) {
             $lesson->activityLessons()->create([
                 'activity_id'  => $activity->id,
             ]);
@@ -315,18 +315,18 @@ class LessonAddModal extends Component
             $query->where('curriculum_id', $this->curriculum);
         })->get();
         $this->students = Auth::user()->accountable->students()
-        ->where('status', 'active')
-        ->whereHas('enrollments', function ($query) {
-            $query->where('grade_level', $this->grade_level)
-                ->where('school_year', now()->schoolYear());
-        })
-        ->whereIn(
-            'disability_type',
-            Curriculum::find($this->curriculum)
-                ->specializations()
-                ->pluck('name')
-        )
-        ->get();
+            ->where('status', 'active')
+            ->whereHas('enrollments', function ($query) {
+                $query->where('grade_level', $this->grade_level)
+                    ->where('school_year', now()->schoolYear());
+            })
+            ->whereIn(
+                'disability_type',
+                Curriculum::find($this->curriculum)
+                    ->specializations()
+                    ->pluck('name')
+            )
+            ->get();
     }
 
     public function render()

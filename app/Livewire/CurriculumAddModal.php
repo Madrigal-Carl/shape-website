@@ -74,7 +74,7 @@ class CurriculumAddModal extends Component
     {
         try {
             $this->validate([
-                'add_name' => 'required|min:5|max:24',
+                'add_name' => 'required|min:5|max:30',
                 'add_grade_level' => 'required',
                 'add_description' => 'nullable|max:255',
                 'selectedSpecializations' => 'required|min:1',
@@ -82,7 +82,7 @@ class CurriculumAddModal extends Component
             ], [
                 'add_name.required' => 'Name is required.',
                 'add_name.min' => 'Name must be at least 5 characters.',
-                'add_name.max' => 'Name must not be more than 24 characters.',
+                'add_name.max' => 'Name must not be more than 30 characters.',
                 'add_grade_level.required' => 'Grade level is required.',
                 'add_specialization.required' => 'At least one specialization is required.',
                 'add_description.max' => 'Description must not exceed 255 characters.',

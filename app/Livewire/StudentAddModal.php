@@ -3,7 +3,6 @@
 namespace App\Livewire;
 
 use App\Models\Feed;
-use App\Models\Profile;
 use App\Models\Student;
 use Livewire\Component;
 use Livewire\Attributes\On;
@@ -30,6 +29,15 @@ class StudentAddModal extends Component
         $this->account_password = "{$birthdate}-{$lastName}";
     }
 
+    public function generateUsername()
+    {
+        $firstName = strtolower(trim($this->first_name));
+        $lastName = strtolower(trim($this->last_name));
+
+        $this->account_username = "{$lastName}{$firstName}";
+    }
+
+
     #[On('openModal')]
     public function openModal()
     {
@@ -38,7 +46,7 @@ class StudentAddModal extends Component
 
     public function nextStep()
     {
-        if ($this->validateStep()){
+        if ($this->validateStep()) {
             $this->step++;
             if ($this->step === 2) {
                 $this->generatePassword();
@@ -58,35 +66,34 @@ class StudentAddModal extends Component
         if ($this->step === 1) {
             try {
                 $this->validate([
-                'photo' => 'nullable|image|max:5120',
-                'lrn' => 'required|digits:12',
-                'first_name' => 'required',
-                'middle_name' => 'required',
-                'last_name' => 'required',
-                'birthdate' => 'required|date|before_or_equal:today',
-                'sex' => 'required',
-                'grade_level' => 'required',
-                'disability' => 'required',
-                'description' => 'nullable|max:255',
+                    'photo' => 'nullable|image|max:5120',
+                    'lrn' => 'required|digits:12',
+                    'first_name' => 'required',
+                    'middle_name' => 'required',
+                    'last_name' => 'required',
+                    'birthdate' => 'required|before_or_equal:today',
+                    'sex' => 'required',
+                    'grade_level' => 'required',
+                    'disability' => 'required',
+                    'description' => 'nullable|max:255',
                 ], [
-                'photo.image'            => 'The photo must be an image file.',
-                'photo.max'              => 'The photo size must not exceed 5MB.',
-                'lrn.required'           => 'The LRN field is required.',
-                'lrn.digits'             => 'The LRN must be exactly 12 digits.',
-                'first_name.required'    => 'The first name is required.',
-                'middle_name.required'   => 'The middle name is required.',
-                'last_name.required'     => 'The last name is required.',
-                'birthdate.required'     => 'The birthdate is required.',
-                'birthdate.date'         => 'The birthdate must be a valid date.',
-                'birthdate.before_or_equal' => 'The birthdate cannot be in the future.',
-                'sex.required'           => 'Please select a sex.',
-                'grade_level.required'   => 'The grade level is required.',
-                'disability.required'    => 'Please specify the disability.',
-                'description.max'   => 'The description is too long.',
+                    'photo.image'            => 'The photo must be an image file.',
+                    'photo.max'              => 'The photo size must not exceed 5MB.',
+                    'lrn.required'           => 'The LRN field is required.',
+                    'lrn.digits'             => 'The LRN must be exactly 12 digits.',
+                    'first_name.required'    => 'The first name is required.',
+                    'middle_name.required'   => 'The middle name is required.',
+                    'last_name.required'     => 'The last name is required.',
+                    'birthdate.required'     => 'The birthdate is required.',
+                    'birthdate.before_or_equal' => 'The birthdate must not advance on the present date.',
+                    'sex.required'           => 'Please select a sex.',
+                    'grade_level.required'   => 'The grade level is required.',
+                    'disability.required'    => 'Please specify the disability.',
+                    'description.max'   => 'The description is too long.',
                 ]);
             } catch (ValidationException $e) {
                 $message = $e->validator->errors()->first();
-                $this->dispatch('swal-toast', icon : 'error', title : $message);
+                $this->dispatch('swal-toast', icon: 'error', title: $message);
                 return false;
             }
             return true;
@@ -130,24 +137,24 @@ class StudentAddModal extends Component
         }
 
         if ($this->step === 3) {
-            try {
-                $this->validate([
-                    'account_username' => 'required|min:5|max:18',
-                    'account_password' => 'required|min:5|max:18|regex:/^[a-zA-Z0-9]+$/',
-                ], [
-                    'account_username.required'    => 'Username is required.',
-                    'account_username.min'      => 'Username must be at least 5 characters.',
-                    'account_username.max'      => 'Username must not be more than 18 characters.',
-                    'account_password.required' => 'Password is required.',
-                    'account_password.min'      => 'Password must be at least 5 characters.',
-                    'account_password.max'      => 'Password must not be more than 18 characters.',
-                    'account_password.regex'    => 'Password must contain only letters and numbers (no special characters).',
-                ]);
-            } catch (ValidationException $e) {
-                $message = $e->validator->errors()->first();
-                $this->dispatch('swal-toast', icon: 'error', title: $message);
-                return false;
-            }
+            // try {
+            //     $this->validate([
+            //         'account_username' => 'required|min:5|max:18',
+            //         'account_password' => 'required|min:5|max:18|regex:/^[a-zA-Z0-9]+$/',
+            //     ], [
+            //         'account_username.required'    => 'Username is required.',
+            //         'account_username.min'      => 'Username must be at least 5 characters.',
+            //         'account_username.max'      => 'Username must not be more than 18 characters.',
+            //         'account_password.required' => 'Password is required.',
+            //         'account_password.min'      => 'Password must be at least 5 characters.',
+            //         'account_password.max'      => 'Password must not be more than 18 characters.',
+            //         'account_password.regex'    => 'Password must contain only letters and numbers (no special characters).',
+            //     ]);
+            // } catch (ValidationException $e) {
+            //     $message = $e->validator->errors()->first();
+            //     $this->dispatch('swal-toast', icon: 'error', title: $message);
+            //     return false;
+            // }
             return true;
         }
     }
@@ -157,7 +164,6 @@ class StudentAddModal extends Component
         $this->dispatch('refresh')->to('student-main');
         $this->dispatch('refresh')->to('student-aside');
         $this->reset();
-        $this->step = 0;
     }
 
     public function addStudent()
@@ -229,10 +235,10 @@ class StudentAddModal extends Component
         Feed::create([
             'group' => 'student',
             'title' => 'New Student Registered',
-            'message' => "'{$student->last_name}, {$student->first_name}' has been registered as a student.",
+            'message' => "'{$student->fullname}' has been registered as a student.",
         ]);
 
-        $this->dispatch('swal-toast', icon : 'success', title : 'Student has been registered successfully.');
+        $this->dispatch('swal-toast', icon: 'success', title: 'Student has been registered successfully.');
         return $this->closeModal();
     }
 
@@ -252,33 +258,167 @@ class StudentAddModal extends Component
     {
         $this->barangayData = [
             "boac" => [
-                "agot","agumaymayan","apitong","balagasan","balaring","balimbing","bangbang","bantad","bayanan",
-                "binunga","boi","boton","caganhao","canat","catubugan","cawit","daig","duyay","hinapulan","ibaba",
-                "isok i","isok ii","laylay","libtangin","lupac","mahinhin","malbog","malindig","maligaya","mansiwat",
-                "mercado","murallon","pawa","poras","pulang lupa","puting buhangin","san miguel","tabi","tabigue",
-                "tampus","tambunan","tugos","tumalum",
+                "agot",
+                "agumaymayan",
+                "apitong",
+                "balagasan",
+                "balaring",
+                "balimbing",
+                "bangbang",
+                "bantad",
+                "bayanan",
+                "binunga",
+                "boi",
+                "boton",
+                "caganhao",
+                "canat",
+                "catubugan",
+                "cawit",
+                "daig",
+                "duyay",
+                "hinapulan",
+                "ibaba",
+                "isok i",
+                "isok ii",
+                "laylay",
+                "libtangin",
+                "lupac",
+                "mahinhin",
+                "malbog",
+                "malindig",
+                "maligaya",
+                "mansiwat",
+                "mercado",
+                "murallon",
+                "pawa",
+                "poras",
+                "pulang lupa",
+                "puting buhangin",
+                "san miguel",
+                "tabi",
+                "tabigue",
+                "tampus",
+                "tambunan",
+                "tugos",
+                "tumalum",
             ],
             "mogpog" => [
-                "bintakay","bocboc","butansapa","candahon","capayang","danao","dulong bayan","gitnang bayan",
-                "hinadharan","hinanggayon","ino","janagdong","malayak","mampaitan","market site","nangka i","nangka ii",
-                "silangan","sumangga","tabi","tarug","villa mendez",
+                "bintakay",
+                "bocboc",
+                "butansapa",
+                "candahon",
+                "capayang",
+                "danao",
+                "dulong bayan",
+                "gitnang bayan",
+                "hinadharan",
+                "hinanggayon",
+                "ino",
+                "janagdong",
+                "malayak",
+                "mampaitan",
+                "market site",
+                "nangka i",
+                "nangka ii",
+                "silangan",
+                "sumangga",
+                "tabi",
+                "tarug",
+                "villa mendez",
             ],
             "gasan" => [
-                "antipolo","bachao ibaba","bachao ilaya","bacong-bacong","bahi","banot","banuyo","cabugao","dawis","ipil",
-                "mangili","masiga","mataas na bayan","pangi","pinggan","tabionan","tiguion",
+                "antipolo",
+                "bachao ibaba",
+                "bachao ilaya",
+                "bacong-bacong",
+                "bahi",
+                "banot",
+                "banuyo",
+                "cabugao",
+                "dawis",
+                "ipil",
+                "mangili",
+                "masiga",
+                "mataas na bayan",
+                "pangi",
+                "pinggan",
+                "tabionan",
+                "tiguion",
             ],
             "buenavista" => [
-                "bagacay","bagtingon","bicas-bicas","caigangan","daykitin","libas","malbog","sihi","timbo","tungib-lipata","yook",
+                "bagacay",
+                "bagtingon",
+                "bicas-bicas",
+                "caigangan",
+                "daykitin",
+                "libas",
+                "malbog",
+                "sihi",
+                "timbo",
+                "tungib-lipata",
+                "yook",
             ],
             "torrijos" => [
-                "bangwayin","bayakbakin","bolo","buangan","cagpo","dampulan","kay duke","macawayan","malibago","malinao",
-                "marlangga","matuyatuya","poblacion","poctoy","sibuyao","suha","talawan","tigwi",
+                "bangwayin",
+                "bayakbakin",
+                "bolo",
+                "buangan",
+                "cagpo",
+                "dampulan",
+                "kay duke",
+                "macawayan",
+                "malibago",
+                "malinao",
+                "marlangga",
+                "matuyatuya",
+                "poblacion",
+                "poctoy",
+                "sibuyao",
+                "suha",
+                "talawan",
+                "tigwi",
             ],
             "santa cruz" => [
-                "alobo","angas","aturan","baguidbirin","banahaw","bangcuangan","biga","bolo","bonliw","botilao","buyabod",
-                "dating bayan","devilla","dolores","haguimit","ipil","jolo","kaganhao","kalangkang","kasily","kilo-kilo",
-                "kinyaman","lamesa","lapu-lapu","lipata","lusok","maharlika","maniwaya","masaguisi","matalaba","mongpong",
-                "pantayin","pili","poblacion","punong","san antonio","tagum","tamayo","tawiran","taytay",
+                "alobo",
+                "angas",
+                "aturan",
+                "baguidbirin",
+                "banahaw",
+                "bangcuangan",
+                "biga",
+                "bolo",
+                "bonliw",
+                "botilao",
+                "buyabod",
+                "dating bayan",
+                "devilla",
+                "dolores",
+                "haguimit",
+                "ipil",
+                "jolo",
+                "kaganhao",
+                "kalangkang",
+                "kasily",
+                "kilo-kilo",
+                "kinyaman",
+                "lamesa",
+                "lapu-lapu",
+                "lipata",
+                "lusok",
+                "maharlika",
+                "maniwaya",
+                "masaguisi",
+                "matalaba",
+                "mongpong",
+                "pantayin",
+                "pili",
+                "poblacion",
+                "punong",
+                "san antonio",
+                "tagum",
+                "tamayo",
+                "tawiran",
+                "taytay",
             ],
         ];
         $this->municipalities = array_keys($this->barangayData);

@@ -15,9 +15,11 @@
                     <div class="flex flex-col items-center gap-4">
                         <div>
                             @if ($photo)
-                                <img src="{{ $photo->temporaryUrl() }}" class="w-25 h-25 rounded-full object-cover bg-white p-2 shadow-2xl" />
+                                <img src="{{ $photo->temporaryUrl() }}"
+                                    class="w-25 h-25 rounded-full object-cover bg-white p-2 shadow-2xl" />
                             @else
-                                <img src="https://placehold.co/100x100" class="w-25 h-25 rounded-full object-cover bg-white p-2 shadow-2xl" />
+                                <img src="https://placehold.co/100x100"
+                                    class="w-25 h-25 rounded-full object-cover bg-white p-2 shadow-2xl" />
                             @endif
                         </div>
                         <label for="photo-upload"
@@ -268,7 +270,7 @@
                         <h2 class="font-semibold text-xl">Student's Account</h2>
                         <div class="flex flex-col gap-2">
                             <input type="text" name="" id="" placeholder="Username"
-                                wire:model.live='account_username'
+                                wire:model.live='account_username' disabled
                                 class="px-4 py-2 rounded-lg bg-white placeholder-paragraph outline-none w-full" />
                             <input type="text" name="" id="" placeholder="Password"
                                 wire:model.live='account_password' disabled
