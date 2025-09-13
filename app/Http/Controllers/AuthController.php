@@ -6,6 +6,11 @@ use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {
+    public function landingPage()
+    {
+        return view('landing_page');
+    }
+
     public function authentication()
     {
         return view('authentication');
