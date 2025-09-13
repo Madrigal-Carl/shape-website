@@ -32,7 +32,7 @@
                     class="font-black text-blue-button italic">SHAPE</span>
                 makes learning
                 personal.</h1>
-            <p class="text-paragraph text-2xl w-[90%]">Design for children with unique learning journeys, our app makes
+            <p class="text-paragraph text-2xl w-[70%]">Design for children with unique learning journeys, our app makes
                 education more inclusive, engaging, and accessible</p>
 
             {{-- Buttons --}}
