@@ -85,42 +85,71 @@ class Student extends Model
         );
     }
 
-    public function getTotalLessonsCountAttribute()
+    // Dynamic methods (you can pass school year)
+    public function totalLessonsCount($schoolYear = null)
     {
-        return $this->lessonSubjectStudents->count();
+        $schoolYear = $schoolYear ?? now()->schoolYear();
+
+        return $this->lessonSubjectStudents()
+            ->whereHas('lesson', function ($q) use ($schoolYear) {
+                $q->where('school_year', $schoolYear);
+            })
+            ->count();
     }
 
-    public function getCompletedLessonsCountAttribute()
+    public function completedLessonsCount($schoolYear = null)
     {
-        return $this->lessonSubjectStudents->filter(function ($lss) {
-            return $lss->lesson->isCompletedByStudent($this->id);
-        })->count();
+        $schoolYear = $schoolYear ?? now()->schoolYear();
+
+        return $this->lessonSubjectStudents()
+            ->whereHas('lesson', function ($q) use ($schoolYear) {
+                $q->where('school_year', $schoolYear);
+            })
+            ->get()
+            ->filter(function ($lss) {
+                return $lss->lesson->isCompletedByStudent($this->id);
+            })
+            ->count();
     }
 
-    public function getTotalActivitiesCountAttribute()
+    public function totalActivitiesCount($schoolYear = null)
     {
-        return $this->lessonSubjectStudents->sum(function ($lss) {
-            return $lss->lesson->activityLessons->count();
-        });
+        $schoolYear = $schoolYear ?? now()->schoolYear();
+
+        return $this->lessonSubjectStudents()
+            ->whereHas('lesson', function ($q) use ($schoolYear) {
+                $q->where('school_year', $schoolYear);
+            })
+            ->get()
+            ->sum(function ($lss) {
+                return $lss->lesson->activityLessons->count();
+            });
     }
 
-    public function getCompletedActivitiesCountAttribute()
+    public function completedActivitiesCount($schoolYear = null)
     {
-        return $this->lessonSubjectStudents->sum(function ($lss) {
-            return $lss->lesson->activityLessons->filter(function ($activityLesson) {
-                $studentActivity = $activityLesson->studentActivities()
-                    ->where('student_id', $this->id)
-                    ->first();
+        $schoolYear = $schoolYear ?? now()->schoolYear();
 
-                if (!$studentActivity) return false;
+        return $this->lessonSubjectStudents()
+            ->whereHas('lesson', function ($q) use ($schoolYear) {
+                $q->where('school_year', $schoolYear);
+            })
+            ->get()
+            ->sum(function ($lss) {
+                return $lss->lesson->activityLessons->filter(function ($activityLesson) {
+                    $studentActivity = $activityLesson->studentActivities()
+                        ->where('student_id', $this->id)
+                        ->first();
 
-                $log = $studentActivity->logs()
-                    ->latest('attempt_number')
-                    ->first();
+                    if (!$studentActivity) return false;
 
-                return $log && $log->status === 'completed';
-            })->count();
-        });
+                    $log = $studentActivity->logs()
+                        ->latest('attempt_number')
+                        ->first();
+
+                    return $log && $log->status === 'completed';
+                })->count();
+            });
     }
 
     public function studentAwards()

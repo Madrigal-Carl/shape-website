@@ -6,7 +6,7 @@
             <div class="flex flex-col gap-1">
                 <h1 class="text-2xl font-semibold leading-tight">
                     Welcome back, Sir
-                    <span class="font-bold text-blue-button">{{auth()->user()->accountable->first_name}}</span>
+                    <span class="font-bold text-blue-button">{{ auth()->user()->accountable->first_name }}</span>
                 </h1>
                 <p class="text-lg text-paragraph leading-4">Here is your summary today</p>
                 <div
@@ -43,19 +43,18 @@
             <div class="flex items-center">
                 <div
                     class="flex items-center bg-white py-3 px-5 rounded-full shadow-2xl/15 border-2 border-white hover:border-blue-button text-paragraph hover:bg-blue-button hover:text-white cursor-pointer">
-                    <select name="" id="" class="w-30 outline-none"
-                        wire:change="$set('status', $event.target.value)">
-                        <option class=" text-heading-dark" selected disabled>
+                    <select name="" id="" class="w-30 outline-none" wire:model.live="grade_level">
+                        <option value="" class=" text-heading-dark" disabled>
                             Grade Level
                         </option>
-
                         <option value="all" class=" text-heading-dark">
                             All
                         </option>
-
-                        <option value="all" class=" text-heading-dark">
-                            Grade 1
-                        </option>
+                        @foreach ($grade_levels as $grade)
+                            <option value="{{ $grade }}" class=" text-heading-dark">
+                                {{ ucwords($grade) }}
+                            </option>
+                        @endforeach
                     </select>
                 </div>
             </div>

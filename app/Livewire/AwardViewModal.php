@@ -14,17 +14,29 @@ class AwardViewModal extends Component
     public $award;
 
     #[On('openModal')]
-    public function openModal($id)
+    public function openModal($id, $school_year, $grade_level)
     {
         $this->award_id = $id;
         $this->isOpen = true;
-        $this->award = Award::with(['students' => function ($query) {
-            $query->where('instructor_id', Auth::user()->accountable->id);
+        $this->award = Award::with(['students' => function ($query) use ($school_year, $grade_level) {
+            $query->where('instructor_id', Auth::user()->accountable->id)
+                ->whereHas('enrollments', function ($enrollmentQuery) use ($school_year, $grade_level) {
+                    $enrollmentQuery->where('school_year', $school_year)
+                        ->when($grade_level && $grade_level !== 'all', function ($q) use ($grade_level) {
+                            $q->where('grade_level', $grade_level);
+                        });
+                });
         }])
-        ->withCount(['students as awardees_count' => function ($query) {
-            $query->where('instructor_id', Auth::user()->accountable->id);
-        }])
-        ->find($this->award_id);
+            ->withCount(['students as awardees_count' => function ($query) use ($school_year, $grade_level) {
+                $query->where('instructor_id', Auth::user()->accountable->id)
+                    ->whereHas('enrollments', function ($enrollmentQuery) use ($school_year, $grade_level) {
+                        $enrollmentQuery->where('school_year', $school_year)
+                            ->when($grade_level && $grade_level !== 'all', function ($q) use ($grade_level) {
+                                $q->where('grade_level', $grade_level);
+                            });
+                    });
+            }])
+            ->find($this->award_id);
     }
 
     public function closeModal()

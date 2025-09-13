@@ -21,13 +21,13 @@
 
                     <div class="w-full flex flex-col gap-2">
                         <h2 class="text-xl font-semibold">Description</h2>
-                        <p class=" text-justify text-paragraph">Lorem ipsum dolor sit amet consectetur adipisicing elit. Minus corrupti ad ratione debitis consectetur facilis est sequi possimus nam autem in ab, odio tempore quae eos, fugit non aperiam labore. Possimus officiis impedit vero nesciunt, quidem ipsum nemo asperiores eum autem quod iure quisquam? Earum vel suscipit consequuntur necessitatibus ad?</p>
+                        <p class=" text-justify text-paragraph">{{ $award->description }}</p>
                     </div>
 
                     <div class="w-full flex flex-col gap-2">
                         <div class="w-full flex items-center gap-4 justify-between text-xl ">
                             <h2 class="text-xl font-semibold">Awardees:</h2>
-                            {{-- <p class="text-paragraph">{{ $award->awardees_count }}</p> --}}
+                            <p class="text-paragraph">{{ $award->awardees_count }} </p>
                         </div>
 
                         <!-- student list of awardees -->
@@ -36,8 +36,7 @@
                             @forelse ($award->students as $student)
                                 <div
                                     class="w-full col-span-1 bg-white p-8 text-center flex flex-col items-center justify-center rounded-2xl">
-                                    <img src="{{asset('images/default_profiles/default-male-student-pfp.png')}}"
-                                        class="h-16 mb-2 rounded-full"
+                                    <img src="{{ asset('storage/' . $student->path) }}" class="h-16 mb-2 rounded-full"
                                         alt="">
                                     <p class="font-semibold text-lg">{{ $student->full_name }}</p>
                                 </div>

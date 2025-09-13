@@ -5,7 +5,6 @@ namespace App\Console\Commands;
 use App\Models\Feed;
 use App\Models\Award;
 use App\Models\Student;
-use App\Models\Instructor;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
 
@@ -52,7 +51,7 @@ class GrantAwardsScheduler extends Command
             if ($this->isSubjectSpecialist($student)) $awards[] = 'Subject Specialist';
             if (in_array($student->id, $speedLearnerIds)) $awards[] = 'Speed Learner';
 
-            foreach (['Activity Ace','Lesson Finisher','Resilient Learner','Progress Pioneer','Subject Specialist','Speed Learner'] as $awardName) {
+            foreach (['Activity Ace', 'Lesson Finisher', 'Resilient Learner', 'Progress Pioneer', 'Subject Specialist', 'Speed Learner'] as $awardName) {
                 $this->grantOrRevokeAward($student, $awardName, in_array($awardName, $awards));
             }
         }
@@ -91,11 +90,12 @@ class GrantAwardsScheduler extends Command
         }
     }
 
-        // Activity Ace: Top 3 students with most activities completed (ties included)
+    // Activity Ace: Top 3 students with most activities completed (current school year)
     protected function getActivityAceStudentIds($students)
     {
-        $completedCounts = $students->mapWithKeys(function ($student) {
-            return [$student->id => $student->getCompletedActivitiesCountAttribute()];
+        $schoolYear = now()->schoolYear();
+        $completedCounts = $students->mapWithKeys(function ($student) use ($schoolYear) {
+            return [$student->id => $student->completedActivitiesCount($schoolYear)];
         });
         $sorted = $completedCounts->sortDesc();
         $topCounts = $sorted->take(3)->values();
@@ -104,20 +104,25 @@ class GrantAwardsScheduler extends Command
         return $completedCounts->filter(fn($count) => $count >= $minTop && $count > 0)->keys()->toArray();
     }
 
-    // Lesson Finisher: All lessons completed
+    // Lesson Finisher: All lessons completed (current school year)
     protected function isLessonFinisher(Student $student)
     {
-        $total = $student->getTotalLessonsCountAttribute();
-        $completed = $student->getCompletedLessonsCountAttribute();
+        $schoolYear = now()->schoolYear();
+        $total = $student->totalLessonsCount($schoolYear);
+        $completed = $student->completedLessonsCount($schoolYear);
         return $total > 0 && $completed == $total;
     }
 
-    // Resilient Learner: Top 3 students with most attempts before completing any activity, must have completed at least 50% of lessons
+    // Resilient Learner: Top 3 students with most attempts before completing any activity, must have completed at least 50% of lessons (current school year)
     protected function getResilientLearnerStudentIds($students)
     {
-        $attempts = $students->mapWithKeys(function ($student) {
+        $schoolYear = now()->schoolYear();
+        $attempts = $students->mapWithKeys(function ($student) use ($schoolYear) {
             $maxAttempts = 0;
-            foreach ($student->lessonSubjectStudents as $lss) {
+            $lssList = $student->lessonSubjectStudents->filter(function ($lss) use ($schoolYear) {
+                return $lss->lesson && $lss->lesson->school_year === $schoolYear;
+            });
+            foreach ($lssList as $lss) {
                 foreach ($lss->lesson->activityLessons as $al) {
                     $sa = $al->studentActivities->where('student_id', $student->id)->first();
                     if ($sa) {
@@ -129,9 +134,9 @@ class GrantAwardsScheduler extends Command
                     }
                 }
             }
-            // Only consider if completed at least 50% of lessons
-            $total = $student->getTotalLessonsCountAttribute();
-            $completed = $student->getCompletedLessonsCountAttribute();
+            // Only consider if completed at least 50% of lessons (current school year)
+            $total = $student->totalLessonsCount($schoolYear);
+            $completed = $student->completedLessonsCount($schoolYear);
             $ratio = $total > 0 ? $completed / $total : 0;
             return [$student->id => ($ratio >= 0.5 ? $maxAttempts : 0)];
         });
@@ -142,13 +147,17 @@ class GrantAwardsScheduler extends Command
         return $attempts->filter(fn($count) => $count >= $minTop && $count > 0)->keys()->toArray();
     }
 
-    // Progress Pioneer: Top 3 students with greatest average improvement (ties included)
+    // Progress Pioneer: Top 3 students with greatest average improvement (current school year)
     protected function getProgressPioneerStudentIds($students)
     {
-        $improvements = $students->mapWithKeys(function ($student) {
+        $schoolYear = now()->schoolYear();
+        $improvements = $students->mapWithKeys(function ($student) use ($schoolYear) {
             $totalImprovement = 0;
             $count = 0;
-            foreach ($student->lessonSubjectStudents as $lss) {
+            $lssList = $student->lessonSubjectStudents->filter(function ($lss) use ($schoolYear) {
+                return $lss->lesson && $lss->lesson->school_year === $schoolYear;
+            });
+            foreach ($lssList as $lss) {
                 foreach ($lss->lesson->activityLessons as $al) {
                     $sa = $al->studentActivities->where('student_id', $student->id)->first();
                     if ($sa && $sa->logs->count() >= 2) {
@@ -169,13 +178,16 @@ class GrantAwardsScheduler extends Command
         return $improvements->filter(fn($val) => $val >= $minTop && $val > 0)->keys()->toArray();
     }
 
-    // Subject Specialist: Completed every activity in any subject
+    // Subject Specialist: Completed every activity in any subject (current school year)
     protected function isSubjectSpecialist(Student $student)
     {
-        $subjects = $student->lessonSubjectStudents->pluck('curriculumSubject.subject')->unique('id')->filter();
+        $schoolYear = now()->schoolYear();
+        $subjects = $student->lessonSubjectStudents
+            ->filter(fn($lss) => $lss->lesson && $lss->lesson->school_year === $schoolYear)
+            ->pluck('curriculumSubject.subject')->unique('id')->filter();
         foreach ($subjects as $subject) {
             $allActivities = $subject->curriculumSubjects
-                ->flatMap(fn($cs) => $cs->lessons)
+                ->flatMap(fn($cs) => $cs->lessons->where('school_year', $schoolYear))
                 ->flatMap(fn($lesson) => $lesson->activityLessons);
             if ($allActivities->isEmpty()) continue;
             $allCompleted = $allActivities->every(function ($al) use ($student) {
@@ -189,12 +201,16 @@ class GrantAwardsScheduler extends Command
         return false;
     }
 
-    // Speed Learner: Top 3 students with shortest total time, must have completed at least 50% of lessons
+    // Speed Learner: Top 3 students with shortest total time, must have completed at least 50% of lessons (current school year)
     protected function getSpeedLearnerStudentIds($students)
     {
-        $times = $students->mapWithKeys(function ($student) {
+        $schoolYear = now()->schoolYear();
+        $times = $students->mapWithKeys(function ($student) use ($schoolYear) {
             $totalTime = 0;
-            foreach ($student->lessonSubjectStudents as $lss) {
+            $lssList = $student->lessonSubjectStudents->filter(function ($lss) use ($schoolYear) {
+                return $lss->lesson && $lss->lesson->school_year === $schoolYear;
+            });
+            foreach ($lssList as $lss) {
                 foreach ($lss->lesson->activityLessons as $al) {
                     $sa = $al->studentActivities->where('student_id', $student->id)->first();
                     if ($sa) {
@@ -203,9 +219,9 @@ class GrantAwardsScheduler extends Command
                     }
                 }
             }
-            // Only consider if completed at least 50% of lessons
-            $total = $student->getTotalLessonsCountAttribute();
-            $completed = $student->getCompletedLessonsCountAttribute();
+            // Only consider if completed at least 50% of lessons (current school year)
+            $total = $student->totalLessonsCount($schoolYear);
+            $completed = $student->completedLessonsCount($schoolYear);
             $ratio = $total > 0 ? $completed / $total : 0;
             return [$student->id => ($ratio >= 0.5 ? $totalTime : null)];
         })->filter(fn($t) => !is_null($t) && $t > 0);
