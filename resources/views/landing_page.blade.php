@@ -17,7 +17,7 @@
             </div>
 
             <button
-                class="flex items-center gap-2 text-white font-medium px-4 py-2 rounded-full bg-gradient-to-tr from-blue-button to-[#00EEFF] shadow-blue-button shadow-lg/30 hover:scale-105 cursor-pointer">
+                class="flex items-center gap-2 text-white font-medium px-4 py-2 rounded-full bg-gradient-to-tr from-blue-button to-[#ea00ff] shadow-blue-button shadow-lg/30 hover:scale-105 cursor-pointer">
                 <span class="material-symbols-rounded">
                     login
                 </span>
@@ -29,7 +29,7 @@
         {{-- Heading --}}
         <div class="w-[60%] text-center flex flex-col items-center gap-6 z-30 mt-10">
             <h1 class="text-7xl font-semibold">Every child learns differently - <span
-                    class="font-black text-blue-button italic">SHAPE</span>
+                    class="font-bold text-blue-button italic">SHAPE</span>
                 makes learning
                 personal.</h1>
             <p class="text-paragraph text-2xl w-[70%]">Design for children with unique learning journeys, our app makes
@@ -38,11 +38,19 @@
             {{-- Buttons --}}
             <div class="flex items-center gap-2">
                 <button
-                    class="text-white font-medium px-6 py-3 rounded-full bg-gradient-to-tr from-blue-button to-[#00EEFF] shadow-blue-button shadow-lg/30 hover:scale-105 cursor-pointer">Download
-                    APK</button>
+                    class="flex items-center gap-2 text-white font-medium px-6 py-3 rounded-full bg-gradient-to-tr from-blue-button to-[#ea00ff] shadow-blue-button shadow-xl/30 hover:scale-105 cursor-pointer">
+                    <span class="material-symbols-rounded">
+                        android
+                    </span>
+                    <p>Download APK</p>
+                </button>
                 <button
-                    class="text-paragraph font-medium px-6 py-3 rounded-full border-2 border-paragraph hover:border-blue-button hover:bg-blue-button hover:text-white cursor-pointer">Read
-                    Research</button>
+                    class="flex items-center gap-2 bg-white text-paragraph font-medium px-6 py-3 rounded-full border-paragraph hover:bg-gradient-to-tr from-blue-button to-[#ea00ff] hover:scale-105 hover:text-white cursor-pointer">
+                    <span class="material-symbols-rounded">
+                        auto_stories
+                    </span>
+                    <p>Read Study</p>
+                </button>
             </div>
         </div>
         <img src="{{ asset('images/Landing-page/hero.png') }}" alt="" class="w-[60%] z-20">
