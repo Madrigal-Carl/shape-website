@@ -18,8 +18,17 @@ class RoleMiddleware
     {
         if (in_array('guest', $roles)) {
             if (Auth::check()) {
-                return redirect()->route('landing.page');
+                $user = Auth::user();
+                $role = strtolower(class_basename($user->accountable_type));
+
+                // Redirect to respective panels
+                return match ($role) {
+                    'admin' => redirect()->route('admin.panel'),
+                    'instructor' => redirect()->route('instructor.panel'),
+                    default => redirect()->route('landing.page'),
+                };
             }
+
             return $next($request);
         }
 
