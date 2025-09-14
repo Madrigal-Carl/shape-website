@@ -215,10 +215,10 @@
                                         <div class="flex justify-center items-center gap-1 text-white">
                                             <button wire:click='openEditStudentModal({{ $student->id }})'
                                                 class="px-2 py-1 flex gap-2 items-center rounded-lg min-w-[50px] justify-center relative transition
-                                                {{ optional($student->currentEnrollment)->school_year === now()->schoolYear()
+                                                {{ optional($student->isEnrolledIn($school_year))->school_year === now()->schoolYear()
                                                     ? 'bg-danger cursor-pointer hover:scale-110'
                                                     : 'bg-gray-400 cursor-not-allowed' }}"
-                                                {{ optional($student->currentEnrollment)->school_year !== now()->schoolYear() ? 'disabled' : '' }}>
+                                                {{ optional($student->isEnrolledIn($school_year))->school_year !== now()->schoolYear() ? 'disabled' : '' }}>
 
                                                 <!-- Text (hidden when loading) -->
                                                 <small class="transition-opacity duration-150"
@@ -243,7 +243,7 @@
                                                 </svg>
                                             </button>
                                             <button wire:click='openViewStudentModal({{ $student->id }})'
-                                                class="bg-blue-button px-2 py-1 flex gap-2 items-center rounded-lg cursor-pointer hover:scale-110 min-w-[50px] justify-center relative">
+                                                class="bg-blue-button cursor-pointer hover:scale-110 px-2 py-1 flex gap-2 items-center rounded-lg min-w-[50px] justify-center relative">
 
                                                 <!-- Text (hidden when loading) -->
                                                 <small class="transition-opacity duration-150"

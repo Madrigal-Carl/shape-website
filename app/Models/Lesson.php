@@ -41,26 +41,6 @@ class Lesson extends Model
     }
     public function isCompletedByStudent($studentId)
     {
-        // Check quiz
-        if ($this->quiz) {
-            $studentQuiz = $this->quiz->studentQuizzes()
-                ->where('student_id', $studentId)
-                ->first();
-
-            if (!$studentQuiz) {
-                return false;
-            }
-
-            $log = $studentQuiz->logs()
-                ->latest('attempt_number')
-                ->first();
-
-            if (!$log || $log->status !== 'completed') {
-                return false;
-            }
-        }
-
-        // Check activities
         foreach ($this->activityLessons as $activityLesson) {
             $studentActivity = $activityLesson->studentActivities()
                 ->where('student_id', $studentId)
@@ -90,5 +70,4 @@ class Lesson extends Model
             }
         });
     }
-
 }

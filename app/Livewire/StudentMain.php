@@ -55,7 +55,7 @@ class StudentMain extends Component
 
     public function openViewStudentModal($id)
     {
-        $this->dispatch('openModal', id: $id)->to('student-view-modal');
+        $this->dispatch('openModal', id: $id, school_year: $this->school_year)->to('student-view-modal');
     }
 
     public function render()

@@ -23,11 +23,11 @@
                             <p class="text-sm">Generate Reports</p>
                         </button>
 
-                        <button
+                        {{-- <button
                             class="profile-button flex items-center bg-white py-2 px-5 rounded-full gap-2 shadow-2xl text-paragraph cursor-pointer hover:text-white hover:bg-blue-button hover:shadow-xl/35 hover:shadow-blue-button hover:scale-105">
                             <span class="material-symbols-rounded">calendar_month</span>
                             <p class="text-sm">Select Date</p>
-                        </button>
+                        </button> --}}
 
                         <button type="button" wire:click='closeModal'
                             class="profile-button flex items-center p-2 rounded-full gap-2 shadow-2xl text-paragraph cursor-pointer hover:text-white hover:bg-blue-button hover:shadow-xl/35 hover:shadow-blue-button hover:scale-105">
@@ -83,7 +83,7 @@
                                 </div>
                                 <span class="material-symbols-rounded icon">award_star</span>
                             </div>
-                            <h1 class="text-5xl font-bold">24</h1>
+                            <h1 class="text-5xl font-bold">{{ $student->totalAwardsCount($school_year) }}</h1>
                         </div>
 
                         <div
@@ -95,7 +95,7 @@
                                 </div>
                                 <span class="material-symbols-rounded icon">book_ribbon</span>
                             </div>
-                            <h1 class="text-5xl font-bold">{{ $student->completed_lessons_count }}</h1>
+                            <h1 class="text-5xl font-bold">{{ $student->completedLessonsCount($school_year) }}</h1>
                         </div>
 
                         <div
@@ -107,7 +107,7 @@
                                 </div>
                                 <span class="material-symbols-rounded icon">stadia_controller</span>
                             </div>
-                            <h1 class="text-5xl font-bold">{{ $student->completed_activities_count }}</h1>
+                            <h1 class="text-5xl font-bold">{{ $student->completedActivitiesCount($school_year) }}</h1>
                         </div>
 
                         {{-- <div
@@ -154,7 +154,8 @@
                                 <p class="text-paragraph">{{ ucwords($student->permanentAddress->barangay) }},
                                     {{ ucwords($student->permanentAddress->municipality) }},
                                     {{ ucwords($student->permanentAddress->province) }}</p>
-                                <p class="text-paragraph">{{ ucwords($student->currentEnrollment->grade_level) }}</p>
+                                <p class="text-paragraph">
+                                    {{ ucwords($student->isEnrolledIn($school_year)->grade_level) }}</p>
                                 <p class="text-paragraph">{{ ucwords($student->disability_type) }}</p>
                                 <p class="text-paragraph">{{ $student->guardian->fullname }}</p>
                                 <p class="text-paragraph">{{ ucwords($student->guardian->phone_number) }}</p>
@@ -182,7 +183,7 @@
                             </thead>
 
                             <tbody>
-                                @forelse ($student->lessons as $lesson)
+                                @forelse ($student->lessons->where('school_year', $school_year) as $lesson)
                                     <tr>
                                         <td class="text-left px-2 py-4">{{ $lesson->title }}</td>
                                         <td class="text-center px-2 py-4">{{ count($lesson->videos) }}</td>
@@ -204,7 +205,7 @@
                     <div class="flex flex-col gap-4 bg-white p-6 rounded-2xl">
                         <div class="flex flex-col gap-2 mb-4">
                             <h1 class="text-2xl font-semibold text-heading-dark">
-                            Student Performance
+                                Student Performance
                             </h1>
                             <p class="text-paragraph">Overview of student's lesson progress and quiz scores.</p>
                         </div>
@@ -212,8 +213,7 @@
 
                         <!-- LineChart -->
                         <div class="flex flex-col gap-4">
-                            <div
-                                class="col-span-1 row-span-2 h-full bg-white rounded-2xl flex flex-col gap-4">
+                            <div class="col-span-1 row-span-2 h-full bg-white rounded-2xl flex flex-col gap-4">
                                 <h1 class="text-xl font-semibold">Lesson Progress Over Time</h1>
                                 <div id="PerformanceLinechart" class="w-full" wire:ignore x-data="{}"
                                     x-init="() => {
@@ -250,7 +250,7 @@
                                                 x: { format: 'dd/MM/yy HH:mm' },
                                             },
                                         };
-
+                                    
                                         var chart = new ApexCharts(document.querySelector('#PerformanceLinechart'), options);
                                         chart.render();
                                     }">
@@ -261,8 +261,7 @@
 
                         <!-- BarChart -->
                         <div class="flex flex-col gap-4">
-                            <div
-                                class="col-span-1 row-span-2 h-full bg-white rounded-2xl flex flex-col gap-4">
+                            <div class="col-span-1 row-span-2 h-full bg-white rounded-2xl flex flex-col gap-4">
                                 <h1 class="text-xl font-semibold">Average Quiz Score per Subjects</h1>
                                 <div id="PerformanceBarchart" class="w-full" wire:ignore x-data="{}"
                                     x-init="() => {
@@ -291,7 +290,7 @@
                                             fill: { opacity: 1 },
                                             tooltip: { y: { formatter: val => `${val}%` } },
                                         };
-
+                                    
                                         var chart = new ApexCharts(document.querySelector('#PerformanceBarchart'), options);
                                         chart.render();
                                     }">
