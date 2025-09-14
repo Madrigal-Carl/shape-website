@@ -1,6 +1,6 @@
 <x-default class="bg-card" :title="'SHAPE: Landing Page'">
     <section
-        class="bg-card w-dvw lg:h-dvh overflow-hidden p-4 lg:px-8 lg:pt-8 flex flex-col gap-14 items-center lg:justify-between relative hero-section mask-b-from-90% to-transparent
+        class="bg-card w-dvw lg:h-dvh overflow-hidden p-4 lg:px-8 lg:pt-8 flex flex-col gap-14 items-center lg:justify-between relative hero-section mask-b-from-85% to-transparent
                 ">
         {{-- Navbar --}}
         <nav
