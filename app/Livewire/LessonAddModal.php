@@ -279,7 +279,7 @@ class LessonAddModal extends Component
     public function mount()
     {
         $this->activities = Activity::orderBy('id')->get();
-        $this->grade_levels = Curriculum::where('instructor_id', Auth::id())
+        $this->grade_levels = Curriculum::where('instructor_id', Auth::user()->accountable->id)
             ->where('status', 'active')
             ->orderBy('grade_level')
             ->pluck('grade_level')
@@ -293,7 +293,7 @@ class LessonAddModal extends Component
 
     public function updatedGradeLevel()
     {
-        $this->curriculums = Curriculum::where('instructor_id', Auth::id())->where('grade_level', $this->grade_level)->where('status', 'active')->get();
+        $this->curriculums = Curriculum::where('instructor_id', Auth::user()->accountable->id)->where('grade_level', $this->grade_level)->where('status', 'active')->get();
         if (!empty($this->selected_students)) {
             $this->selected_students = [];
         }

@@ -33,25 +33,20 @@
                         </div>
 
                         <div class="flex items-center w-auto gap-4">
-                            <h3 class="text-sm font-semibold w-40">Grade level:</h3>
-                            <p class="text-sm w-full">1</p>
+                            <h3 class="text-sm font-semibold w-40">Grade Level:</h3>
+                            <p class="text-sm w-full">{{ ucwords($curriculum->grade_level) }}</p>
                         </div>
 
-                        <div class="flex items-center w-auto gap-4">
+                        {{-- <div class="flex items-center w-auto gap-4">
                             <h3 class="text-sm font-semibold w-40">Id:</h3>
                             <p class="text-sm w-full">{{ $curriculum->id }}</p>
-                        </div>
+                        </div> --}}
 
                         <div class="flex items-center w-auto gap-4">
                             <h3 class="text-sm font-semibold w-40">Specialize:</h3>
                             <p class="text-sm w-full">
                                 {{ collect($curriculum->specializations)->map(fn($s) => ucfirst(explode(' ', $s->name)[0]))->implode(', ') }}
                             </p>
-                        </div>
-
-                        <div class="flex items-center w-auto gap-4">
-                            <h3 class="text-sm font-semibold w-40">Grade Level:</h3>
-                            <p class="text-sm w-full">{{ ucwords($curriculum->grade_level) }}</p>
                         </div>
 
                     </div>

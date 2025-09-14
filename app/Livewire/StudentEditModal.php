@@ -245,7 +245,8 @@ class StudentEditModal extends Component
 
         $photoChanged = $this->photo instanceof UploadedFile;
         if (!$photoChanged && empty($changes)) {
-            $this->dispatch('swal-toast', icon: 'info', title: 'No changes detected.');
+            $this->dispatch('swal-toast', icon: 'info', title: 'No changes has been made.');
+            $this->closeModal();
             return;
         }
 

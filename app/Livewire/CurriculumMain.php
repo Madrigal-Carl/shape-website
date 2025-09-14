@@ -32,20 +32,20 @@ class CurriculumMain extends Component
 
     public function toggleStatus($id)
     {
-        $curriculum = Curriculum::where('instructor_id', Auth::id())->findOrFail($id);
+        $curriculum = Curriculum::where('instructor_id', Auth::user()->accountable->id)->findOrFail($id);
         if ($curriculum->status === 'inactive') {
             $curriculum->update(['status' => 'active']);
-            return $this->dispatch('swal-toast', icon : 'success', title : 'Curriculum has been activated.');
+            return $this->dispatch('swal-toast', icon: 'success', title: 'Curriculum has been activated.');
         }
         $curriculum->update(['status' => 'inactive']);
-        $this->dispatch('swal-toast', icon : 'warning', title : 'Curriculum has been deactived.');
+        $this->dispatch('swal-toast', icon: 'warning', title: 'Curriculum has been deactived.');
     }
 
 
     public function render()
     {
         $curriculums = Curriculum::with('curriculumSubjects')
-            ->where('instructor_id', Auth::id())
+            ->where('instructor_id', Auth::user()->accountable->id)
             ->when($this->status !== 'all', function ($query) {
                 $query->where('status', $this->status);
             })

@@ -176,7 +176,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="8" class="text-center py-6 text-gray-500">
+                                    <td colspan="7" class="text-center py-6 text-gray-500">
                                         No curriculums found.
                                     </td>
                                 </tr>

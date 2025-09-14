@@ -63,9 +63,14 @@ class DatabaseSeeder extends Seeder
                 $specializations->random(rand(1, 2))->pluck('id')->toArray()
             );
         });
+        $instructorTest = Instructor::factory()->create();
+        $instructorTest->specializations()->attach(
+            $specializations->random(rand(1, 2))->pluck('id')->toArray()
+        );
 
         // 2. Create Admins
         $admins = Admin::factory()->count(3)->create();
+        $adminTest = Admin::factory()->create();
 
         // 3. Create Curriculums for each instructor
         $curriculums = $instructors->map(function ($instructor) {
@@ -105,6 +110,15 @@ class DatabaseSeeder extends Seeder
         })->flatten();
 
         // 7. Create Accounts
+        Account::factory()->instructor($instructorTest)->create([
+            'username' => 'instructor',
+            'password' => 'instructor',
+        ]);
+        Account::factory()->admin($adminTest)->create([
+            'username' => 'admin',
+            'password' => 'admin',
+        ]);
+
         $instructors->each(function ($instructor) {
             Account::factory()->instructor($instructor)->create([
                 'username' => strtolower($instructor->first_name . $instructor->id),
@@ -178,7 +192,7 @@ class DatabaseSeeder extends Seeder
             ActivityImage::factory()->count(7)->create(['activity_id' => $activity->id]);
         });
 
-        $lessons->each(function ($lesson) use($activities) {
+        $lessons->each(function ($lesson) use ($activities) {
             Video::factory()->create(['lesson_id' => $lesson->id]);
 
             $lessonActivity = ActivityLesson::firstOrCreate([

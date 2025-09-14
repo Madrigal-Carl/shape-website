@@ -13,16 +13,21 @@
                     class="w-max px-2 py-1 mt-4 rounded-lg border-1 border-gray-300 hover:border-blue-button shadow-2xl/15">
                     <select class="w-full outline-none text-heading-dark font-medium text-lg"
                         wire:model.live='school_year'>
-                        @foreach ($school_years as $sy)
-                            @if ($sy == $school_year)
-                                <option value="{{ $school_year }}" class="text-sm text-black" selected>
-                                    S.Y {{ $school_year }}
-                                </option>
-                            @else
-                                <option value="{{ $sy }}" class="text-sm text-paragraph">
-                                    S.Y {{ $sy }}
-                                </option>
-                            @endif
+                        @php
+                            $currentYear = now()->schoolYear();
+                            $years = collect($school_years);
+
+                            if (!$years->contains($currentYear)) {
+                                $years->push($currentYear);
+                            }
+                        @endphp
+
+                        @foreach ($years as $sy)
+                            <option value="{{ $sy }}"
+                                class="text-sm {{ $sy == $currentYear ? 'text-black' : 'text-paragraph' }}"
+                                {{ $sy == $currentYear ? 'selected' : '' }}>
+                                S.Y {{ $sy }}
+                            </option>
                         @endforeach
 
                     </select>

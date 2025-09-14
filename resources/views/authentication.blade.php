@@ -1,3 +1,3 @@
-<x-default :title="'SHAPE: Login'">
+<x-default :title="'SHAPE: Auth'">
     <livewire:authentication />
 </x-default>

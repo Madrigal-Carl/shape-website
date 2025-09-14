@@ -77,18 +77,18 @@ class LessonEditModal extends Component
         $this->description = $lesson->description;
 
         $this->students = Auth::user()->accountable->students()
-        ->where('status', 'active')
-        ->whereHas('enrollments', function ($query) {
-            $query->where('grade_level', $this->grade_level)
-                ->where('school_year', now()->schoolYear());
-        })
-        ->whereIn(
-            'disability_type',
-            Curriculum::find($this->curriculum_id)
-                ->specializations()
-                ->pluck('name')
-        )
-        ->get();
+            ->where('status', 'active')
+            ->whereHas('enrollments', function ($query) {
+                $query->where('grade_level', $this->grade_level)
+                    ->where('school_year', now()->schoolYear());
+            })
+            ->whereIn(
+                'disability_type',
+                Curriculum::find($this->curriculum_id)
+                    ->specializations()
+                    ->pluck('name')
+            )
+            ->get();
 
         $this->uploadedVideos = $lesson->videos->map(function ($video) {
             return [
@@ -252,7 +252,7 @@ class LessonEditModal extends Component
                 'grade_level'        => 'required',
                 'curriculum_id'      => 'required',
                 'subject_id'         => 'required',
-                'selected_activities'=> 'required',
+                'selected_activities' => 'required',
             ], [
                 'lesson_name.required' => 'Lesson name is required.',
                 'lesson_name.min'      => 'Lesson name must be at least 5 characters.',
@@ -294,7 +294,8 @@ class LessonEditModal extends Component
         ];
 
         if ($current == $this->original) {
-            $this->dispatch('swal-toast', icon: 'info', title: 'No changes detected.');
+            $this->closeModal();
+            $this->dispatch('swal-toast', icon: 'info', title: 'No changes have been made.');
             return;
         }
 
@@ -345,7 +346,7 @@ class LessonEditModal extends Component
 
     public function updatedGradeLevel()
     {
-        $this->curriculums = Curriculum::where('instructor_id', Auth::id())->where('grade_level', $this->grade_level)->where('status', 'active')->get();
+        $this->curriculums = Curriculum::where('instructor_id', Auth::user()->accountable->id)->where('grade_level', $this->grade_level)->where('status', 'active')->get();
         if (!empty($this->selected_students)) {
             $this->selected_students = [];
         }
@@ -368,32 +369,32 @@ class LessonEditModal extends Component
                 $query->where('curriculum_id', $this->curriculum_id);
             })->get();
             $this->students = Auth::user()->accountable->students()
-            ->where('status', 'active')
-            ->whereHas('enrollments', function ($query) {
-                $query->where('grade_level', $this->grade_level)
-                    ->where('school_year', now()->schoolYear());
-            })
-            ->whereIn(
-                'disability_type',
-                Curriculum::find($this->curriculum)
-                    ->specializations()
-                    ->pluck('name')
-            )
-            ->get();
+                ->where('status', 'active')
+                ->whereHas('enrollments', function ($query) {
+                    $query->where('grade_level', $this->grade_level)
+                        ->where('school_year', now()->schoolYear());
+                })
+                ->whereIn(
+                    'disability_type',
+                    Curriculum::find($this->curriculum)
+                        ->specializations()
+                        ->pluck('name')
+                )
+                ->get();
         }
     }
 
     public function render()
     {
         $this->activities = Activity::orderBy('id')->get();
-        $this->grade_levels = Curriculum::where('instructor_id', Auth::id())
+        $this->grade_levels = Curriculum::where('instructor_id', Auth::user()->accountable->id)
             ->where('status', 'active')
             ->orderBy('grade_level')
             ->pluck('grade_level')
             ->unique()
             ->values()
             ->toArray();
-        $this->curriculums = Curriculum::where('instructor_id', Auth::id())->where('grade_level', $this->grade_level)->where('status', 'active')->get();
+        $this->curriculums = Curriculum::where('instructor_id', Auth::user()->accountable->id)->where('grade_level', $this->grade_level)->where('status', 'active')->get();
         $this->subjects = Subject::whereHas('curriculumSubjects', function ($query) {
             $query->where('curriculum_id', $this->curriculum_id);
         })->get();

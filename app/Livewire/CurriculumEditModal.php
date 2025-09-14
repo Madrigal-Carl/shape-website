@@ -88,7 +88,7 @@ class CurriculumEditModal extends Component
     {
         try {
             $this->validate([
-                'edit_name'              => 'required|min:5|max:24',
+                'edit_name'              => 'required|min:5|max:30',
                 'edit_grade_level'       => 'required',
                 'edit_description' => 'nullable|max:255',
                 'selectedSpecializations' => 'required|min:1',
@@ -123,7 +123,8 @@ class CurriculumEditModal extends Component
             ->toArray();
 
         if (empty($changes)) {
-            $this->dispatch('swal-toast', icon: 'info', title: 'No changes detected.');
+            $this->dispatch('swal-toast', icon: 'info', title: 'No changes has been made.');
+            $this->closeModal();
             return;
         }
 
@@ -134,7 +135,6 @@ class CurriculumEditModal extends Component
             'description' => $this->edit_description,
         ]);
 
-        // Sync specializations
         $curriculum->specializations()->sync($this->selectedSpecializations);
 
         $curriculum->curriculumSubjects()->delete();

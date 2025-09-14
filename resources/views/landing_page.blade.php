@@ -20,13 +20,13 @@
                     class="text-paragraph font-medium px-4 py-2 rounded-full hover:bg-blue-button hover:text-white cursor-pointer ">Contacts</a>
             </div>
 
-            <button
+            <a href="/auth"
                 class="hidden lg:flex items-center gap-2 text-white font-medium px-4 py-2 rounded-full bg-gradient-to-tr from-blue-button to-[#ea00ff] shadow-blue-button shadow-lg/30 hover:scale-105 cursor-pointer">
                 <span class="material-symbols-rounded">
                     login
                 </span>
                 <p>Login</p>
-            </button>
+            </a>
 
             <button
                 class="flex lg:hidden items-center gap-2 text-white font-medium p-2 rounded-full bg-gradient-to-tr from-blue-button to-[#ea00ff] shadow-blue-button shadow-lg/30 hover:scale-105 cursor-pointer">

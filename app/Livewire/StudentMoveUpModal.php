@@ -14,6 +14,14 @@ class StudentMoveUpModal extends Component
     public $grade_level = '';
     public $student_search = '';
     public $selectedStudents = [];
+    protected $gradeLevels = [
+        'kindergarten 1',
+        'kindergarten 2',
+        'kindergarten 3',
+        'grade 1',
+        'grade 2',
+    ];
+
 
     #[On('openModal')]
     public function openModal()
@@ -95,17 +103,24 @@ class StudentMoveUpModal extends Component
                 continue;
             }
 
-            $currentLevel = strtolower($latestEnrollment->grade_level);
-            $currentIndex = array_search($currentLevel, $this->gradeLevels);
+            $currentLevel = strtolower(trim($latestEnrollment->grade_level));
+            $currentIndex = array_search($currentLevel, $this->gradeLevels, true);
 
             if ($currentIndex !== false && $currentIndex < count($this->gradeLevels) - 1) {
                 $nextLevel = $this->gradeLevels[$currentIndex + 1];
-                Enrollment::create([
-                    'student_id' => $student->id,
-                    'grade_level' => $nextLevel,
-                    'school_year' => now()->schoolYear(),
-                ]);
-                $movedUp++;
+
+                if (!Enrollment::where('student_id', $student->id)
+                    ->where('school_year', now()->schoolYear())
+                    ->exists()) {
+                    Enrollment::create([
+                        'student_id' => $student->id,
+                        'grade_level' => $nextLevel,
+                        'school_year' => now()->schoolYear(),
+                    ]);
+                    $movedUp++;
+                } else {
+                    $skipped++;
+                }
             } else {
                 $skipped++;
             }
