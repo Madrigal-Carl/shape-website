@@ -53,14 +53,11 @@ class Student extends Model
         return $this->hasMany(Enrollment::class);
     }
 
-    public function currentEnrollment()
+    public function isEnrolledIn($schoolYear)
     {
-        $currentSchoolYear = now()->month >= 6
-            ? now()->year . '-' . (now()->year + 1)
-            : (now()->year - 1) . '-' . now()->year;
-
-        return $this->hasOne(Enrollment::class)
-            ->where('school_year', $currentSchoolYear);
+        return $this->enrollments()
+            ->where('school_year', $schoolYear)
+            ->first();
     }
 
     public function guardian()
@@ -85,7 +82,15 @@ class Student extends Model
         );
     }
 
-    // Dynamic methods (you can pass school year)
+    public function totalAwardsCount($schoolYear = null)
+    {
+        $schoolYear = $schoolYear ?? now()->schoolYear();
+
+        return $this->studentAwards()
+            ->where('school_year', $schoolYear)
+            ->count();
+    }
+
     public function totalLessonsCount($schoolYear = null)
     {
         $schoolYear = $schoolYear ?? now()->schoolYear();

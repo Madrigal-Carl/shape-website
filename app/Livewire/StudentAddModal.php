@@ -22,19 +22,14 @@ class StudentAddModal extends Component
     public $account_username, $account_password = '';
 
 
-    public function generatePassword()
+    public function generateAccount()
     {
         $birthdate = str_replace('-', '', $this->birthdate);
         $lastName = strtolower(trim($this->last_name));
-        $this->account_password = "{$birthdate}-{$lastName}";
-    }
-
-    public function generateUsername()
-    {
         $firstName = strtolower(trim($this->first_name));
-        $lastName = strtolower(trim($this->last_name));
 
         $this->account_username = "{$lastName}{$firstName}";
+        $this->account_password = "{$birthdate}-{$lastName}";
     }
 
 
@@ -49,7 +44,7 @@ class StudentAddModal extends Component
         if ($this->validateStep()) {
             $this->step++;
             if ($this->step === 2) {
-                $this->generatePassword();
+                $this->generateAccount();
             }
         }
     }

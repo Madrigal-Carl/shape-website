@@ -30,7 +30,7 @@ class StudentEditModal extends Component
         $this->step = 1;
         $this->isOpen = true;
 
-        $student = Student::with('guardian', 'currentEnrollment', 'addresses','account','permanentAddress', 'currentAddress')->findOrFail($id);
+        $student = Student::with('guardian', 'addresses', 'account', 'permanentAddress', 'currentAddress')->findOrFail($id);
 
         $this->first_name = $student->first_name;
         $this->middle_name = $student->middle_name;
@@ -40,7 +40,7 @@ class StudentEditModal extends Component
         $this->status        = $student->status;
         $this->currentPhoto = $student->path;
         $this->lrn         = $student->lrn;
-        $this->grade_level = $student->currentEnrollment->grade_level;
+        $this->grade_level = $student->isEnrolledIn(now()->schoolYear())->grade_level;
         $this->disability  = $student->disability_type;
         $this->description = $student->support_need;
 
@@ -68,16 +68,16 @@ class StudentEditModal extends Component
         $this->original = [
             'lrn'        => $this->lrn,
             'first_name' => $this->first_name,
-            'middle_name'=> $this->middle_name,
+            'middle_name' => $this->middle_name,
             'last_name'  => $this->last_name,
             'birthdate'  => $this->birthdate,
             'sex'        => $this->sex,
             'status'        => $this->status,
-            'grade_level'=> $this->grade_level,
+            'grade_level' => $this->grade_level,
             'disability' => $this->disability,
-            'description'=> $this->description,
+            'description' => $this->description,
             'guardian_first_name' => $this->guardian_first_name,
-            'guardian_middle_name'=> $this->guardian_middle_name,
+            'guardian_middle_name' => $this->guardian_middle_name,
             'guardian_last_name'  => $this->guardian_last_name,
             'guardian_email'      => $this->guardian_email,
             'guardian_phone'      => $this->guardian_phone,
@@ -105,7 +105,10 @@ class StudentEditModal extends Component
         }
     }
 
-    public function previousStep() { if ($this->step > 1) $this->step--; }
+    public function previousStep()
+    {
+        if ($this->step > 1) $this->step--;
+    }
 
     protected function validateEdit()
     {
@@ -199,7 +202,7 @@ class StudentEditModal extends Component
             return;
         }
 
-        $student = Student::with('guardian','addresses','account')->findOrFail($this->student_id);
+        $student = Student::with('guardian', 'addresses', 'account')->findOrFail($this->student_id);
 
         if ($this->photo instanceof UploadedFile) {
             if ($student->path && Storage::disk('public')->exists($student->path)) {
@@ -217,16 +220,16 @@ class StudentEditModal extends Component
         $changes = collect([
             'lrn'        => [$this->lrn, $this->original['lrn']],
             'first_name' => [$this->first_name, $this->original['first_name']],
-            'middle_name'=> [$this->middle_name, $this->original['middle_name']],
+            'middle_name' => [$this->middle_name, $this->original['middle_name']],
             'last_name'  => [$this->last_name, $this->original['last_name']],
             'birthdate'  => [$this->birthdate, $this->original['birthdate']],
             'sex'        => [$this->sex, $this->original['sex']],
             'status'        => [$this->status, $this->original['status']],
-            'grade_level'=> [$this->grade_level, $this->original['grade_level']],
+            'grade_level' => [$this->grade_level, $this->original['grade_level']],
             'disability' => [$this->disability, $this->original['disability']],
-            'description'=> [$this->description, $this->original['description']],
+            'description' => [$this->description, $this->original['description']],
             'guardian_first_name' => [$this->guardian_first_name, $this->original['guardian_first_name']],
-            'guardian_middle_name'=> [$this->guardian_middle_name, $this->original['guardian_middle_name']],
+            'guardian_middle_name' => [$this->guardian_middle_name, $this->original['guardian_middle_name']],
             'guardian_last_name'  => [$this->guardian_last_name, $this->original['guardian_last_name']],
             'guardian_email'      => [$this->guardian_email, $this->original['guardian_email']],
             'guardian_phone'      => [$this->guardian_phone, $this->original['guardian_phone']],
@@ -236,19 +239,19 @@ class StudentEditModal extends Component
             'current_barangay'    => [$this->current_barangay, $this->original['current_barangay']],
             'account_username'    => [$this->account_username, $this->original['account_username']],
         ])
-        ->filter(fn($pair) => $pair[0] !== $pair[1])
-        ->map(fn($pair) => $pair[0])
-        ->toArray();
+            ->filter(fn($pair) => $pair[0] !== $pair[1])
+            ->map(fn($pair) => $pair[0])
+            ->toArray();
 
         $photoChanged = $this->photo instanceof UploadedFile;
         if (!$photoChanged && empty($changes)) {
-            $this->dispatch('swal-toast', icon:'info', title:'No changes detected.');
+            $this->dispatch('swal-toast', icon: 'info', title: 'No changes detected.');
             return;
         }
 
         $student->update([
             'first_name' => $this->first_name,
-            'middle_name'=> $this->middle_name,
+            'middle_name' => $this->middle_name,
             'last_name'  => $this->last_name,
             'birth_date' => $this->birthdate,
             'sex'        => $this->sex,
@@ -258,22 +261,22 @@ class StudentEditModal extends Component
             'support_need' => $this->description,
         ]);
 
-        $student->currentEnrollment()->update([
+        $student->isEnrolledIn(now()->schoolYear())->update([
             'grade_level' => $this->grade_level,
         ]);
         $student->guardian->update([
             'first_name' => $this->guardian_first_name,
-            'middle_name'=> $this->guardian_middle_name,
+            'middle_name' => $this->guardian_middle_name,
             'last_name'  => $this->guardian_last_name,
             'email'      => $this->guardian_email,
-            'phone_number'=> $this->guardian_phone,
+            'phone_number' => $this->guardian_phone,
         ]);
 
-        $student->addresses()->where('type','permanent')->update([
+        $student->addresses()->where('type', 'permanent')->update([
             'municipality' => $this->permanent_municipal,
             'barangay'     => $this->permanent_barangay,
         ]);
-        $student->addresses()->where('type','current')->update([
+        $student->addresses()->where('type', 'current')->update([
             'municipality' => $this->current_municipal,
             'barangay'     => $this->current_barangay,
         ]);
@@ -283,7 +286,7 @@ class StudentEditModal extends Component
             'password' => $this->account_password ?: $student->account->password,
         ]);
 
-        $this->dispatch('swal-toast', icon:'success', title:'Student has been updated successfully.');
+        $this->dispatch('swal-toast', icon: 'success', title: 'Student has been updated successfully.');
         return $this->closeModal();
     }
 
@@ -303,33 +306,167 @@ class StudentEditModal extends Component
     {
         $this->barangayData = [
             "boac" => [
-                "agot","agumaymayan","apitong","balagasan","balaring","balimbing","bangbang","bantad","bayanan",
-                "binunga","boi","boton","caganhao","canat","catubugan","cawit","daig","duyay","hinapulan","ibaba",
-                "isok i","isok ii","laylay","libtangin","lupac","mahinhin","malbog","malindig","maligaya","mansiwat",
-                "mercado","murallon","pawa","poras","pulang lupa","puting buhangin","san miguel","tabi","tabigue",
-                "tampus","tambunan","tugos","tumalum",
+                "agot",
+                "agumaymayan",
+                "apitong",
+                "balagasan",
+                "balaring",
+                "balimbing",
+                "bangbang",
+                "bantad",
+                "bayanan",
+                "binunga",
+                "boi",
+                "boton",
+                "caganhao",
+                "canat",
+                "catubugan",
+                "cawit",
+                "daig",
+                "duyay",
+                "hinapulan",
+                "ibaba",
+                "isok i",
+                "isok ii",
+                "laylay",
+                "libtangin",
+                "lupac",
+                "mahinhin",
+                "malbog",
+                "malindig",
+                "maligaya",
+                "mansiwat",
+                "mercado",
+                "murallon",
+                "pawa",
+                "poras",
+                "pulang lupa",
+                "puting buhangin",
+                "san miguel",
+                "tabi",
+                "tabigue",
+                "tampus",
+                "tambunan",
+                "tugos",
+                "tumalum",
             ],
             "mogpog" => [
-                "bintakay","bocboc","butansapa","candahon","capayang","danao","dulong bayan","gitnang bayan",
-                "hinadharan","hinanggayon","ino","janagdong","malayak","mampaitan","market site","nangka i","nangka ii",
-                "silangan","sumangga","tabi","tarug","villa mendez",
+                "bintakay",
+                "bocboc",
+                "butansapa",
+                "candahon",
+                "capayang",
+                "danao",
+                "dulong bayan",
+                "gitnang bayan",
+                "hinadharan",
+                "hinanggayon",
+                "ino",
+                "janagdong",
+                "malayak",
+                "mampaitan",
+                "market site",
+                "nangka i",
+                "nangka ii",
+                "silangan",
+                "sumangga",
+                "tabi",
+                "tarug",
+                "villa mendez",
             ],
             "gasan" => [
-                "antipolo","bachao ibaba","bachao ilaya","bacong-bacong","bahi","banot","banuyo","cabugao","dawis","ipil",
-                "mangili","masiga","mataas na bayan","pangi","pinggan","tabionan","tiguion",
+                "antipolo",
+                "bachao ibaba",
+                "bachao ilaya",
+                "bacong-bacong",
+                "bahi",
+                "banot",
+                "banuyo",
+                "cabugao",
+                "dawis",
+                "ipil",
+                "mangili",
+                "masiga",
+                "mataas na bayan",
+                "pangi",
+                "pinggan",
+                "tabionan",
+                "tiguion",
             ],
             "buenavista" => [
-                "bagacay","bagtingon","bicas-bicas","caigangan","daykitin","libas","malbog","sihi","timbo","tungib-lipata","yook",
+                "bagacay",
+                "bagtingon",
+                "bicas-bicas",
+                "caigangan",
+                "daykitin",
+                "libas",
+                "malbog",
+                "sihi",
+                "timbo",
+                "tungib-lipata",
+                "yook",
             ],
             "torrijos" => [
-                "bangwayin","bayakbakin","bolo","buangan","cagpo","dampulan","kay duke","macawayan","malibago","malinao",
-                "marlangga","matuyatuya","poblacion","poctoy","sibuyao","suha","talawan","tigwi",
+                "bangwayin",
+                "bayakbakin",
+                "bolo",
+                "buangan",
+                "cagpo",
+                "dampulan",
+                "kay duke",
+                "macawayan",
+                "malibago",
+                "malinao",
+                "marlangga",
+                "matuyatuya",
+                "poblacion",
+                "poctoy",
+                "sibuyao",
+                "suha",
+                "talawan",
+                "tigwi",
             ],
             "santa cruz" => [
-                "alobo","angas","aturan","baguidbirin","banahaw","bangcuangan","biga","bolo","bonliw","botilao","buyabod",
-                "dating bayan","devilla","dolores","haguimit","ipil","jolo","kaganhao","kalangkang","kasily","kilo-kilo",
-                "kinyaman","lamesa","lapu-lapu","lipata","lusok","maharlika","maniwaya","masaguisi","matalaba","mongpong",
-                "pantayin","pili","poblacion","punong","san antonio","tagum","tamayo","tawiran","taytay",
+                "alobo",
+                "angas",
+                "aturan",
+                "baguidbirin",
+                "banahaw",
+                "bangcuangan",
+                "biga",
+                "bolo",
+                "bonliw",
+                "botilao",
+                "buyabod",
+                "dating bayan",
+                "devilla",
+                "dolores",
+                "haguimit",
+                "ipil",
+                "jolo",
+                "kaganhao",
+                "kalangkang",
+                "kasily",
+                "kilo-kilo",
+                "kinyaman",
+                "lamesa",
+                "lapu-lapu",
+                "lipata",
+                "lusok",
+                "maharlika",
+                "maniwaya",
+                "masaguisi",
+                "matalaba",
+                "mongpong",
+                "pantayin",
+                "pili",
+                "poblacion",
+                "punong",
+                "san antonio",
+                "tagum",
+                "tamayo",
+                "tawiran",
+                "taytay",
             ],
         ];
         $this->municipalities = array_keys($this->barangayData);
