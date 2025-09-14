@@ -19,7 +19,7 @@
     @livewireStyles
 </head>
 
-<body class="">
+<body class="overflow-x-hidden ">
     {{ $slot }}
     @livewireScripts
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
