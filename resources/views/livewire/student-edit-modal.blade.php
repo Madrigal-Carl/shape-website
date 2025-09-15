@@ -327,7 +327,7 @@
                                 Edit Student Account
                             </h1>
                         </div>
-                        <button
+                        <button wire:click="resetAccount"
                             class="flex items-center-safe gap-2 text-sm bg-white py-1.5 px-3 rounded-xl hover:bg-danger hover:text-white cursor-pointer">
                             <span class="material-symbols-rounded">
                                 settings_backup_restore
@@ -336,19 +336,17 @@
                         </button>
                     </div>
 
-
                     <div class="flex flex-col gap-3">
                         <div class="flex w-full items-center-safe justify-between">
                             <h2 class="font-semibold text-xl">Student's Account</h2>
-
                         </div>
 
                         <div class="flex flex-col gap-2">
-                            <input type="text" name="" id="" placeholder="Username"
-                                wire:model.live='account_username'
+                            <input type="text"placeholder="Username"
+                                value="{{ $account_username_changed ? '**********' : $account_username }}" disabled
                                 class="px-4 py-2 rounded-lg bg-white placeholder-paragraph outline-none w-full" />
-                            <input type="password" name="" id="" placeholder="Password"
-                                wire:model.live='account_password'
+                            <input type="password" placeholder="Password"
+                                value="{{ $account_password_changed ? '**********' : $account_password }}" disabled
                                 class="px-4 py-2 rounded-lg bg-white placeholder-paragraph outline-none w-full" />
                         </div>
                     </div>

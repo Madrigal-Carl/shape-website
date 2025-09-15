@@ -20,6 +20,8 @@ class StudentEditModal extends Component
     public $permanent_barangay, $permanent_municipal, $current_barangay, $current_municipal;
     public $guardian_first_name, $guardian_middle_name, $guardian_last_name, $guardian_email, $guardian_phone;
     public $account_username, $account_password;
+    public $account_username_changed = false;
+    public $account_password_changed = false;
     public $grade_levels = [], $specializations = [], $barangayData = [], $municipalities = [], $permanent_barangays = [], $current_barangays = [];
     public $original = [];
 
@@ -43,6 +45,12 @@ class StudentEditModal extends Component
         $this->grade_level = $student->isEnrolledIn(now()->schoolYear())->grade_level;
         $this->disability  = $student->disability_type;
         $this->description = $student->support_need;
+        $this->account_username = $student->account->username;
+        $this->account_password = $student->account->password;
+        $defaultUsername = strtolower(trim($student->last_name . $student->first_name));
+        $defaultPassword = str_replace('-', '', $student->birth_date) . '-' . strtolower(trim($student->last_name));
+        $this->account_username_changed = $this->account_username !== $defaultUsername;
+        $this->account_password_changed = $this->account_password !== $defaultPassword;
 
         $this->guardian_first_name  = $student->guardian->first_name;
         $this->guardian_middle_name = $student->guardian->middle_name;
@@ -108,6 +116,23 @@ class StudentEditModal extends Component
     public function previousStep()
     {
         if ($this->step > 1) $this->step--;
+    }
+
+    public function resetAccount()
+    {
+        $student = Student::findOrFail($this->student_id);
+
+        $birthdate = str_replace('-', '', $student->birth_date);
+        $lastName  = strtolower(trim($student->last_name));
+        $firstName = strtolower(trim($student->first_name));
+
+        $this->account_username = "{$lastName}{$firstName}";
+        $this->account_password = "{$birthdate}-{$lastName}";
+
+        $this->account_username_changed = false;
+        $this->account_password_changed = false;
+
+        $this->dispatch('swal-toast', icon: 'info', title: 'Account reset to default.');
     }
 
     protected function validateEdit()
