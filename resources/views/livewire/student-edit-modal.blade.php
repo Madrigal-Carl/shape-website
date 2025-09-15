@@ -319,16 +319,30 @@
 
             <!-- Third form -->
             @if ($step === 3)
-                <div class="bg-card p-8 rounded-4xl w-150 flex flex-col gap-8">
-                    <div class="flex items-center gap-2">
-                        <img src="{{ asset('images/form.png') }}" alt="" />
-                        <h1 class="text-3xl font-bold text-heading-dark">
-                            Edit Student Account
-                        </h1>
+                <div class="bg-card p-8 rounded-4xl w-160 flex flex-col gap-8">
+                    <div class="flex w-full items-center-safe justify-between">
+                        <div class="flex items-center gap-2">
+                            <img src="{{ asset('images/form.png') }}" alt="" />
+                            <h1 class="text-3xl font-bold text-heading-dark">
+                                Edit Student Account
+                            </h1>
+                        </div>
+                        <button
+                            class="flex items-center-safe gap-2 text-sm bg-white py-1.5 px-3 rounded-xl hover:bg-danger hover:text-white cursor-pointer">
+                            <span class="material-symbols-rounded">
+                                settings_backup_restore
+                            </span>
+                            <p>Reset to Default</p>
+                        </button>
                     </div>
 
+
                     <div class="flex flex-col gap-3">
-                        <h2 class="font-semibold text-xl">Student's Account</h2>
+                        <div class="flex w-full items-center-safe justify-between">
+                            <h2 class="font-semibold text-xl">Student's Account</h2>
+
+                        </div>
+
                         <div class="flex flex-col gap-2">
                             <input type="text" name="" id="" placeholder="Username"
                                 wire:model.live='account_username'
