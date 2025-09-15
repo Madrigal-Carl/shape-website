@@ -114,14 +114,18 @@
                                 <tr>
                                     <td class="px-4 py-3 text-center text-paragraph">{{ $lesson->id }}</td>
                                     <td class="px-4 py-3 text-center text-paragraph">{{ ucwords($lesson->title) }}</td>
-                                    <td class="px-4 py-3 text-center text-paragraph">
-                                        {{ ucwords($lesson->lessonSubjectStudents->first()->curriculumSubject->curriculum->name) }}
+                                    <td class="px-4 py-3 text-center text-paragraph flex flex-col items-center">
+                                        <p class="w-30 truncate">
+                                            {{ ucwords($lesson->lessonSubjectStudents->first()->curriculumSubject->curriculum->name) }}
+                                        </p>
                                     </td>
                                     <td class="px-4 py-3 text-center text-paragraph">
                                         {{ ucwords($lesson->lessonSubjectStudents->first()->curriculumSubject->curriculum->grade_level) }}
                                     </td>
-                                    <td class="px-4 py-3 text-center text-paragraph">
-                                        {{ ucwords($lesson->lessonSubjectStudents->first()->curriculumSubject->subject->name) }}
+                                    <td class="px-4 py-3 text-center text-paragraph flex flex-col items-center">
+                                        <p class="w-30 truncate">
+                                            {{ ucwords($lesson->lessonSubjectStudents->first()->curriculumSubject->subject->name) }}
+                                        </p>
                                     </td>
                                     <td class="px-4 py-3 text-center text-paragraph">
                                         {{ $lesson->lesson_subject_students_count }}</td>

@@ -104,12 +104,14 @@
                                 <tr>
                                     <!-- Your original cells -->
                                     <td class="px-4 py-3 text-center text-paragraph">{{ $curriculum->id }}</td>
-                                    <td class="px-4 py-3 text-center text-paragraph">{{ ucwords($curriculum->name) }}
+                                    <td class="px-4 py-3 text-center text-paragraph flex flex-col items-center">
+                                        <p class="w-40   truncate">{{ ucwords($curriculum->name) }}</p>
                                     </td>
                                     <td class="px-4 py-3 text-center text-paragraph">
                                         {{ ucwords($curriculum->grade_level) }}</td>
                                     <td class="px-4 py-3 text-center text-paragraph">
-                                        {{ count($curriculum->curriculumSubjects) }}</td>
+                                        {{ count($curriculum->curriculumSubjects) }}
+                                    </td>
                                     <td class="px-4 py-3 text-center">
                                         <div class="flex justify-center items-center">
                                             <div>

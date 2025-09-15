@@ -182,8 +182,9 @@
                                 <tr>
                                     <td class="px-4 py-3 text-center text-paragraph">{{ $student->id }}</td>
                                     <td class="px-4 py-3 text-center text-paragraph">{{ $student->full_name }}</td>
-                                    <td class="px-4 py-3 text-center text-paragraph ">
-                                        {{ ucwords($student->disability_type) }}</td>
+                                    <td class="px-4 py-3 text-center text-paragraph flex flex-col items-center">
+                                        <p class="w-30 truncate">{{ ucwords($student->disability_type) }}</p>
+                                    </td>
                                     <td class="px-4 py-3 text-center text-paragraph">
                                         {{ $student->completedLessonsCount($school_year) }}/{{ $student->totalLessonsCount($school_year) }}
                                     </td>

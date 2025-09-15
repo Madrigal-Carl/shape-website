@@ -1,33 +1,37 @@
 <main class="col-span-5 px-8 py-4 flex flex-col h-dvh gap-16 overflow-y-auto">
     <!-- Greetings -->
-    <div class="flex gap-2 w-auto justify-between">
+    <div class="flex gap-2 mt-4 w-auto justify-between">
         <div class="flex gap-4">
-            <span class="w-1 h-full bg-blue-button rounded-full"></span>
-            <div>
-                <h1 class="text-2xl font-medium">
+            <span class="w-2 h-full bg-blue-button rounded-full"></span>
+            <div class="flex flex-col gap-1">
+                <h1 class="text-2xl font-semibold leading-tight">
                     Welcome back, Sir
-                    <span class="font-bold text-blue-button">Elpie</span>
+                    <span class="font-bold text-blue-button">Dave</span>
                 </h1>
-                <p class="text-sm text-paragraph">Here is your summary today</p>
+                <p class="text-lg text-paragraph leading-4">Here is your summary today</p>
+                <div
+                    class="w-max px-2 py-1 mt-4 rounded-lg border-1 border-gray-300 hover:border-blue-button shadow-2xl/15">
+                    <select class="w-full outline-none text-heading-dark font-medium text-lg">
+                        <option class="text-sm text-black" selected disabled>
+                            S.Y 2025-2026
+                        </option>
+
+                    </select>
+                </div>
             </div>
         </div>
 
         <!-- Buttons -->
-        <div class="flex gap-4">
-            <button
-                class="flex items-center bg-white py-2 px-5 rounded-full gap-2 shadow-2xl text-paragraph cursor-pointer hover:text-white hover:bg-blue-button hover:shadow-xl/35 hover:shadow-blue-button hover:scale-105">
-                <span class="material-symbols-rounded">calendar_month</span>
-                <p class="text-sm">Select Date</p>
-            </button>
+        <div class="flex gap-4 self-start">
             <button wire:click="openAddInstructorModal"
-                class="relative flex items-center justify-center bg-white py-2 px-5 rounded-full gap-2 shadow-2xl text-paragraph cursor-pointer hover:text-white hover:bg-blue-button hover:shadow-xl/35 hover:shadow-blue-button hover:scale-105"
+                class="flex items-center bg-white py-3 px-5 rounded-full gap-2 shadow-2xl/15 text-paragraph cursor-pointer border-2 border-white hover:border-blue-button hover:text-white hover:bg-blue-button hover:shadow-xl/35 hover:shadow-blue-button hover:scale-105"
                 wire:loading.attr="disabled" wire:target="openAddInstructorModal">
 
                 <!-- Normal state -->
                 <div class="flex items-center gap-2" wire:loading.class="invisible"
                     wire:target="openAddInstructorModal">
                     <span class="material-symbols-rounded">add</span>
-                    <p class="text-sm">Add Teacher</p>
+                    <p class="">Add Teacher</p>
                 </div>
 
                 <!-- Loading spinner -->
@@ -48,60 +52,16 @@
         </div>
     </div>
 
-    <!-- Summary -->
-    <div class="mt-1 flex flex-col gap-4">
-        <h1 class="text-4xl font-medium">Summary</h1>
-        <div class="grid grid-cols-4 gap-4">
-            <!-- Teachers Registered -->
-            <div
-                class="bg-gradient-to-tr from-blue-button to-[#00EEFF] shadow-blue-button shadow-2xl/45 p-6 text-white rounded-3xl flex items-center gap-4">
-                <h1 class="text-5xl font-semibold leading-none">23</h1>
-                <div class="flex flex-col justify-center">
-                    <p class="text-sm font-normal leading-tight">Teachers</p>
-                    <h2 class="text-xl font-semibold leading-tight">REGISTERED</h2>
-                </div>
-            </div>
 
-            <!-- Teachers for Autism -->
-            <div
-                class="bg-gradient-to-tr from-lime to-[#00ff80] shadow-lime shadow-2xl/45 p-6 text-white rounded-3xl flex items-center gap-4">
-                <h1 class="text-5xl font-semibold leading-none">09</h1>
-                <div class="flex flex-col justify-center">
-                    <p class="text-sm font-normal leading-tight">Teachers for</p>
-                    <h2 class="text-xl font-semibold leading-tight">AUTISM</h2>
-                </div>
-            </div>
-
-            <!-- Teachers for Hearing Impaired -->
-            <div
-                class="bg-gradient-to-tr from-yellowOrange to-[#FFEA00] shadow-yellowOrange shadow-2xl/45 p-6 text-white rounded-3xl flex items-center gap-4">
-                <h1 class="text-5xl font-semibold leading-none">08</h1>
-                <div class="flex flex-col justify-center">
-                    <p class="text-sm font-normal leading-tight">Teachers for</p>
-                    <h2 class="text-xl font-semibold leading-tight">HEARING IMPAIRED</h2>
-                </div>
-            </div>
-
-            <!-- Teachers for Speech Impaired -->
-            <div
-                class="bg-gradient-to-tr from-danger to-[#ff00aa] shadow-danger shadow-2xl/45 p-6 text-white rounded-3xl flex items-center gap-4">
-                <h1 class="text-5xl font-semibold leading-none">06</h1>
-                <div class="flex flex-col justify-center">
-                    <p class="text-sm font-normal leading-tight">Teachers for</p>
-                    <h2 class="text-xl font-semibold leading-tight">SPEECH IMPAIRED</h2>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <!-- Teachers Directory -->
-    <div class="flex flex-col gap-4 min-h-[20%]">
-        <div class="side flex items-center justify-between gap-2">
-            <h1 class="text-4xl font-medium">Teachers Directory</h1>
+    <div class="mt-12 flex flex-col gap-4 min-h-[20%]">
+        <div class="side flex items-center justify-between gap-2 mb-2">
+            <h1 class="text-4xl font-bold">Teachers Directory</h1>
             <div class="flex items-center gap-4">
                 <div
-                    class="flex items-center bg-white py-3 px-5 rounded-full shadow-2xl text-paragraph hover:bg-blue-button hover:text-white cursor-pointer">
-                    <select name="" id="" class="w-20 outline-none">
+                    class="flex items-center bg-white py-3 px-5 rounded-full shadow-2xl/15 border-2 border-white hover:border-blue-button text-paragraph hover:bg-blue-button hover:text-white cursor-pointer">
+                    <select name="" id="" class="w-30 outline-none">
                         <option value="pending" class="text-sm text-heading-dark" selected disabled>
                             Sort
                         </option>
@@ -121,9 +81,10 @@
                 </div>
 
                 <div
-                    class="flex items-center bg-white py-3 px-5 rounded-full shadow-2xl text-paragraph hover:text-white cursor-pointer">
-                    <input type="text" placeholder="Search Teacher"
-                        class="w-30 outline-none bg-transparent text-sm placeholder:text-paragraph focus:outline-none" />
+                    class="flex gap-2 items-center bg-white py-3 px-5 rounded-full shadow-2xl/15 text-paragraph border-2 border-white hover:border-blue-button cursor-pointer">
+                    <span class="material-symbols-rounded">search</span>
+                    <input type="text" class="outline-none w-20 focus:w-60 placeholder-paragraph"
+                        wire:model.live="search" placeholder="Search">
                 </div>
             </div>
         </div>
@@ -177,11 +138,9 @@
                                             </small>
 
                                             <!-- Spinner (overlay) -->
-                                            <svg wire:loading
-                                                wire:target='openEditInstructorModal({{ 1 }})'
+                                            <svg wire:loading wire:target='openEditInstructorModal({{ 1 }})'
                                                 aria-hidden="true" class="w-4 h-4 text-white animate-spin absolute"
-                                                viewBox="0 0 100 101" fill="none"
-                                                xmlns="http://www.w3.org/2000/svg">
+                                                viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                 <path
                                                     d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
                                                     fill="currentColor" />
@@ -201,8 +160,7 @@
                                             </small>
 
                                             <!-- Spinner (overlay) -->
-                                            <svg wire:loading
-                                                wire:target='openViewInstructorModal({{ 1 }})'
+                                            <svg wire:loading wire:target='openViewInstructorModal({{ 1 }})'
                                                 class="w-4 h-4 text-white animate-spin absolute" viewBox="0 0 100 101"
                                                 fill="none" xmlns="http://www.w3.org/2000/svg">
                                                 <path

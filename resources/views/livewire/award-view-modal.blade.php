@@ -19,15 +19,15 @@
                         <h1 class="text-5xl font-bold text-center w-80%">{{ $award->name }}</h1>
                     </div>
 
-                    <div class="w-full flex flex-col gap-2">
+                    <div class="w-full flex flex-col gap-4 mb-4">
                         <h2 class="text-xl font-semibold">Description</h2>
                         <p class=" text-justify text-paragraph">{{ $award->description }}</p>
                     </div>
 
-                    <div class="w-full flex flex-col gap-2">
+                    <div class="w-full flex flex-col gap-4">
                         <div class="w-full flex items-center gap-4 justify-between text-xl ">
                             <h2 class="text-xl font-semibold">Awardees:</h2>
-                            <p class="text-paragraph">{{ $award->awardees_count }} </p>
+                            <p class="text-paragraph px-4 border-b-2 border-gray-300">{{ $award->awardees_count }} </p>
                         </div>
 
                         <!-- student list of awardees -->
