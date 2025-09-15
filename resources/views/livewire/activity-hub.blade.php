@@ -68,7 +68,7 @@
                     <!--Categories-->
                     <div class="w-full flex items-center gap-2 gameCategories overflow-x-auto pb-2">
                         @foreach ($specializations as $name)
-                            <div wire:click="toggleCategory('{{ $name }}')"
+                            <div wire:click="toggleSpecialization('{{ $name }}')"
                                 class="w-fit shrink-0 flex items-center gap-2 px-4 py-2 rounded-xl cursor-pointer
                                     {{ in_array($name, $selectedSpecializations, true) ? 'bg-blue-button text-white' : 'bg-white hover:bg-blue-button hover:text-white' }}">
                                 <img src="{{ asset('images/specialization_icons/autism-icon.png') }}" alt=""
@@ -79,75 +79,25 @@
                     </div>
                 </div>
 
-                {{-- <div class="w-full flex flex-col gap-2">
+                <div class="w-full flex flex-col gap-2">
                     <h1 class="font-semibold text-xl">Subjects:</h1>
                     <!-- Subject Categories-->
                     <div class="w-full flex items-center gap-2 gameCategories overflow-x-auto pb-2">
-                        <div wire:click="toggleCategory('{{ $name }}')"
-                            class="w-fit shrink-0 flex items-center gap-2 px-4 py-2 rounded-xl cursor-pointer
-                                {{ in_array($name, $selectedSpecializations, true) ? 'bg-blue-button text-white' : 'bg-white hover:bg-blue-button hover:text-white' }}">
-                            <img src="{{ asset('images/subject_icons/mathematics-icon.png') }}" alt=""
-                                class="h-6">
-                            <p class="text-base">Mathematics</p>
-                        </div>
-
-                        <div wire:click="toggleCategory('{{ $name }}')"
-                            class="w-fit shrink-0 flex items-center gap-2 px-4 py-2 rounded-xl cursor-pointer
-                                {{ in_array($name, $selectedSpecializations, true) ? 'bg-blue-button text-white' : 'bg-white hover:bg-blue-button hover:text-white' }}">
-                            <img src="{{ asset('images/subject_icons/science-icon.png') }}" alt=""
-                                class="h-6">
-                            <p class="text-base">Science</p>
-                        </div>
-
-                        <div wire:click="toggleCategory('{{ $name }}')"
-                            class="w-fit shrink-0 flex items-center gap-2 px-4 py-2 rounded-xl cursor-pointer
-                                {{ in_array($name, $selectedCselectedSpecializationsategories, true) ? 'bg-blue-button text-white' : 'bg-white hover:bg-blue-button hover:text-white' }}">
-                            <img src="{{ asset('images/subject_icons/self-care-icon.png') }}" alt=""
-                                class="h-6">
-                            <p class="text-base">Self- Care</p>
-                        </div>
-
-                        <div wire:click="toggleCategory('{{ $name }}')"
-                            class="w-fit shrink-0 flex items-center gap-2 px-4 py-2 rounded-xl cursor-pointer
-                                {{ in_array($name, $selectedSpecializations, true) ? 'bg-blue-button text-white' : 'bg-white hover:bg-blue-button hover:text-white' }}">
-                            <img src="{{ asset('images/subject_icons/filipino-sign-language-icon.png') }}"
-                                alt="" class="h-6">
-                            <p class="text-base">Filipino Sign Language</p>
-                        </div>
-
-                        <div wire:click="toggleCategory('{{ $name }}')"
-                            class="w-fit shrink-0 flex items-center gap-2 px-4 py-2 rounded-xl cursor-pointer
-                                {{ in_array($name, $selectedSpecializations, true) ? 'bg-blue-button text-white' : 'bg-white hover:bg-blue-button hover:text-white' }}">
-                            <img src="{{ asset('images/subject_icons/araling-panlipunan-icon.png') }}" alt=""
-                                class="h-6">
-                            <p class="text-base">Araling Panlipunan</p>
-                        </div>
-
-                        <div wire:click="toggleCategory('{{ $name }}')"
-                            class="w-fit shrink-0 flex items-center gap-2 px-4 py-2 rounded-xl cursor-pointer
-                                {{ in_array($name, $selectedSpecializations, true) ? 'bg-blue-button text-white' : 'bg-white hover:bg-blue-button hover:text-white' }}">
-                            <img src="{{ asset('images/subject_icons/filipino-icon.png') }}" alt=""
-                                class="h-6">
-                            <p class="text-base">Filipino</p>
-                        </div>
-
-                        <div wire:click="toggleCategory('{{ $name }}')"
-                            class="w-fit shrink-0 flex items-center gap-2 px-4 py-2 rounded-xl cursor-pointer
-                                {{ in_array($name, $selectedSpecializations, true) ? 'bg-blue-button text-white' : 'bg-white hover:bg-blue-button hover:text-white' }}">
-                            <img src="{{ asset('images/subject_icons/english-icon.png') }}" alt=""
-                                class="h-6">
-                            <p class="text-base">English</p>
-                        </div>
-
-
-
-
+                        @foreach ($subjects as $subj)
+                            <div wire:click="toggleSubject({{ $subj->id }})"
+                                class="w-fit shrink-0 flex items-center gap-2 px-4 py-2 rounded-xl cursor-pointer
+                                {{ in_array($subj->id, $selectedSubjects ?? []) ? 'bg-blue-button text-white' : 'bg-white hover:bg-blue-button hover:text-white' }}">
+                                <img src="{{ asset('images/subject_icons/' . $subj->icon) }}"
+                                    alt="{{ $subj->name }}" class="h-6">
+                                <p class="text-base">{{ ucwords($subj->name) }}</p>
+                            </div>
+                        @endforeach
                     </div>
-                </div> --}}
+                </div>
 
                 <div class="grid grid-cols-2 gap-2 overflow-y-auto rounded-xl gamesGrid">
                     <!--Game container at game hub-->
-                    @foreach ($activities as $activity)
+                    @forelse ($activities as $activity)
                         <div class="w-fit shrink-0 flex flex-col gap-2 relative cursor-pointer">
                             <img src="{{ asset($activity->activityImages->first()->path) }}"
                                 class="aspect-video w-auto h-fit rounded-xl object-cover" />
@@ -181,7 +131,11 @@
                                 </div>
                             </div>
                         </div>
-                    @endforeach
+                    @empty
+                        <div class="col-span-2 flex flex-col items-center justify-center py-10">
+                            <p class="text-gray-400 text-sm">No activities found</p>
+                        </div>
+                    @endforelse
                 </div>
             </div>
 

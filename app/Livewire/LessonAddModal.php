@@ -93,7 +93,7 @@ class LessonAddModal extends Component
 
     public function openActivityHub()
     {
-        $this->dispatch('openModal', curriculumId: $this->curriculum)->to('activity-hub');
+        $this->dispatch('openModal', curriculumId: $this->curriculum, subjectId: $this->subject)->to('activity-hub');
     }
 
     public function updatedVideos()

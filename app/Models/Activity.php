@@ -34,4 +34,9 @@ class Activity extends Model
     {
         return $this->hasMany(ActivityImage::class);
     }
+
+    public function subjects()
+    {
+        return $this->belongsToMany(Subject::class, 'activity_subject');
+    }
 }

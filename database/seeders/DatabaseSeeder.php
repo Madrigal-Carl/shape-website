@@ -184,12 +184,14 @@ class DatabaseSeeder extends Seeder
 
         // 9. Create Lessons, Activities, Videos (once per lesson)
         $lessons = Lesson::factory()->count(10)->create();
-        $activities = Activity::factory()->count(10)->create();
+        $activities = Activity::factory()->count(30)->create();
         $activities->each(function ($activity) use ($specializations) {
             $activity->specializations()->attach(
                 $specializations->random(rand(1, 2))->pluck('id')->toArray()
             );
             ActivityImage::factory()->count(7)->create(['activity_id' => $activity->id]);
+            $randomSubjects = Subject::inRandomOrder()->take(rand(1, 2))->pluck('id');
+            $activity->subjects()->attach($randomSubjects);
         });
 
         $lessons->each(function ($lesson) use ($activities) {

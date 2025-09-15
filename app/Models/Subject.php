@@ -17,4 +17,9 @@ class Subject extends Model
     {
         return $this->hasMany(CurriculumSubject::class);
     }
+
+    public function activities()
+    {
+        return $this->belongsToMany(Activity::class, 'activity_subject');
+    }
 }

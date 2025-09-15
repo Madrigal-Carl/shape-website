@@ -127,7 +127,7 @@ class LessonEditModal extends Component
 
     public function openActivityHub()
     {
-        $this->dispatch('openModal')->to('activity-hub');
+        $this->dispatch('openModal', curriculumId: $this->curriculum_id, subjectId: $this->subject_id)->to('activity-hub');
     }
 
     #[On('addActivity')]

@@ -15,12 +15,14 @@
                     <div class="flex flex-col items-center gap-4">
                         <div>
                             @if ($photo instanceof \Illuminate\Http\UploadedFile)
-                                <img src="{{ $photo->temporaryUrl() }}" class="w-25 h-25 rounded-full object-cover bg-white p-2 shadow-2xl" />
+                                <img src="{{ $photo->temporaryUrl() }}"
+                                    class="w-25 h-25 rounded-full object-cover bg-white p-2 shadow-2xl" />
                             @elseif ($currentPhoto)
                                 <img src="{{ Storage::url($currentPhoto) }}"
                                     class="w-25 h-25 rounded-full object-cover bg-white p-2 shadow-2xlr" />
                             @else
-                                <img src="https://placehold.co/100x100" class="w-25 h-25 rounded-full object-cover bg-white p-2 shadow-2xl" />
+                                <img src="https://placehold.co/100x100"
+                                    class="w-25 h-25 rounded-full object-cover bg-white p-2 shadow-2xl" />
                             @endif
                         </div>
                         <label for="photo-upload"
@@ -202,7 +204,7 @@
                                     @foreach ($municipalities as $municipality)
                                         @if ($permanent_municipal === $municipality)
                                             <option value="{{ $permanent_municipal }}" class="text-sm text-black"
-                                                selected disabled>
+                                                selected>
                                                 {{ ucwords($permanent_municipal) }}
                                             </option>
                                         @else
@@ -218,7 +220,7 @@
                                     @foreach ($permanent_barangays as $pbarangay)
                                         @if ($permanent_barangay === $pbarangay)
                                             <option value="{{ $permanent_barangay }}" class="text-sm text-black"
-                                                selected disabled>
+                                                selected>
                                                 {{ ucwords($permanent_barangay) }}
                                             </option>
                                         @else
@@ -246,7 +248,7 @@
                                     @foreach ($municipalities as $municipality)
                                         @if ($current_municipal === $municipality)
                                             <option value="{{ $current_municipal }}" class="text-sm text-black"
-                                                selected disabled>
+                                                selected>
                                                 {{ ucwords($current_municipal) }}
                                             </option>
                                         @else
@@ -262,7 +264,7 @@
                                     @foreach ($current_barangays as $cbarangay)
                                         @if ($current_barangay === $cbarangay)
                                             <option value="{{ $current_barangay }}" class="text-sm text-black"
-                                                selected disabled>
+                                                selected>
                                                 {{ ucwords($current_barangay) }}
                                             </option>
                                         @else

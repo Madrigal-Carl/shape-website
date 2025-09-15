@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Models\Subject;
 use Livewire\Component;
 use App\Models\Activity;
 use App\Models\Curriculum;
@@ -15,7 +16,7 @@ class ActivityHub extends Component
     public $isOpen = false;
     public $targetComponent = null;
     public $isOpenActivityView = false;
-    public $activities = [], $specializations = [], $selectedSpecializations = [];
+    public $activities = [], $specializations = [], $selectedSpecializations = [], $subjects, $selectedSubjects;
     public $act;
     public $isPreviewOpen = false;
     public $previewImages = [];
@@ -23,9 +24,12 @@ class ActivityHub extends Component
 
 
     #[On('openModal')]
-    public function openModal($curriculumId = null)
+    public function openModal($curriculumId = null, $subjectId = null)
     {
         $this->isOpen = true;
+
+        $this->selectedSpecializations = [];
+        $this->selectedSubjects = [];
 
         if ($curriculumId) {
             $curriculum = Curriculum::find($curriculumId);
@@ -34,15 +38,16 @@ class ActivityHub extends Component
                     ->specializations()
                     ->pluck('name')
                     ->toArray();
-            } else {
-                $this->selectedSpecializations = [];
             }
-        } else {
-            $this->selectedSpecializations = [];
+        }
+
+        if ($subjectId) {
+            $this->selectedSubjects[] = $subjectId;
         }
 
         $this->loadActivities();
     }
+
 
     public function closeModal()
     {
@@ -74,12 +79,23 @@ class ActivityHub extends Component
         $this->dispatch('addActivity', activity: $activity)->to($this->targetComponent);
     }
 
-    public function toggleCategory($categoryId)
+    public function toggleSpecialization($specialization)
     {
-        if (in_array($categoryId, $this->selectedSpecializations)) {
-            $this->selectedSpecializations = array_diff($this->selectedSpecializations, [$categoryId]);
+        if (in_array($specialization, $this->selectedSpecializations)) {
+            $this->selectedSpecializations = array_diff($this->selectedSpecializations, [$specialization]);
         } else {
-            $this->selectedSpecializations[] = $categoryId;
+            $this->selectedSpecializations[] = $specialization;
+        }
+
+        $this->loadActivities();
+    }
+
+    public function toggleSubject($subjectId)
+    {
+        if (in_array($subjectId, $this->selectedSubjects ?? [])) {
+            $this->selectedSubjects = array_diff($this->selectedSubjects, [$subjectId]);
+        } else {
+            $this->selectedSubjects[] = $subjectId;
         }
 
         $this->loadActivities();
@@ -97,6 +113,11 @@ class ActivityHub extends Component
             }
         }
 
+        if (!empty($this->selectedSubjects)) {
+            $q->whereHas('subjects', function ($query) {
+                $query->whereIn('subjects.id', $this->selectedSubjects);
+            });
+        }
         $this->activities = $q->orderByDesc('created_at')->get();
     }
 
@@ -144,6 +165,7 @@ class ActivityHub extends Component
         $this->targetComponent = $targetComponent;
 
         $this->specializations = Specialization::orderBy('name')->pluck('name')->toArray();
+        $this->subjects = Subject::orderBy('name')->get();
     }
 
 
