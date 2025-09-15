@@ -5,6 +5,7 @@
         ['name' => 'Students', 'icon' => 'group', 'content' => 'instructor.students'],
         ['name' => 'Lessons', 'icon' => 'library_books', 'content' => 'instructor.lessons'],
         ['name' => 'Awards', 'icon' => 'award_star', 'content' => 'instructor.awards'],
+        ['name' => 'Settings', 'icon' => 'settings', 'content' => 'layouts.settings'],
     ];
 @endphp
 

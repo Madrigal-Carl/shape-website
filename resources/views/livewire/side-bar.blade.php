@@ -28,11 +28,6 @@
             </a>
         @endforeach
         {{-- -------------- --}}
-        <a
-            class="hover:bg-blue-button hover:text-white flex gap-2 active:bg-blue-button px-8 py-4 active:text-white rounded-xl">
-            <span class="material-symbols-rounded">settings</span>
-            <p class="">Settings</p>
-        </a>
         <a wire:click="logoutConfirm"
             class="cursor-pointer hover:bg-blue-button hover:text-white flex gap-2 active:bg-blue-button px-8 py-4 active:text-white rounded-xl">
             <span class="material-symbols-rounded">door_back</span>

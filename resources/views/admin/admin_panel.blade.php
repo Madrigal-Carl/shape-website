@@ -2,6 +2,7 @@
     $sidebar = [
         ['name' => 'Dashboard', 'icon' => 'space_dashboard', 'content' => 'admin.dashboard'],
         ['name' => 'Teacher', 'icon' => 'person', 'content' => 'admin.instructor'],
+        ['name' => 'Settings', 'icon' => 'settings', 'content' => 'layouts.settings'],
     ];
 @endphp
 
