@@ -5,8 +5,9 @@
             <span class="w-2 h-full bg-blue-button rounded-full"></span>
             <div class="flex flex-col gap-1">
                 <h1 class="text-2xl font-semibold leading-tight">
-                    Welcome back,
-                    <span class="font-bold text-blue-button">{{ auth()->user()->accountable->first_name }}</span>
+                    Welcome back, {{ auth()->user()->accountable->sex == 'male' ? 'Sir' : 'Ma\'am' }}
+                    <span class="font-bold text-blue-button">
+                        {{ auth()->user()->accountable->first_name }}</span>
                 </h1>
                 <p class="text-lg text-paragraph leading-4">Here is your summary today</p>
             </div>
