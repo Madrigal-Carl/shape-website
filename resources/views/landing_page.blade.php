@@ -24,7 +24,7 @@
                 <span class="material-symbols-rounded">
                     login
                 </span>
-                <p>Login</p>
+                <p>{{ auth()->check() ? 'Dashboard' : 'Login' }}</p>
             </a>
 
             <button
