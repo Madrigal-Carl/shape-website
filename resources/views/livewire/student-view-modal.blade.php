@@ -255,29 +255,59 @@
                                 </div>
                             </div>
 
-                            {{-- Pie Graph --}}
+                            {{-- Radar Graph --}}
                             <div class="col-span-1 h-full bg-white rounded-2xl flex flex-col gap-4">
                                 <h1 class="text-xl font-semibold">Average Quiz Score per Subjects</h1>
-                                <div id="Piechart" class="w-full" wire:ignore x-data="{}"
+                                <div id="RadarChart" class="w-full" wire:ignore x-data="{}"
                                     x-init="() => {
                                         var options = {
-                                            series: [44, 55, 13, 43, 22, 43, 22],
+                                            series: [{
+                                                name: 'Average Score',
+                                                data: [44, 55, 13, 43, 22, 43, 22]
+                                            }],
+                                            plotOptions: {
+                                                radar: {
+                                                    polygons: {
+                                                        strokeColor: '#e8e8e8',
+                                                        fill: {
+                                                            colors: ['#f8f8f8', '#fff']
+                                                        }
+                                                    }
+                                                }
+                                            },
                                             chart: {
-                                                width: 460,
-                                                type: 'pie',
+                                                height: 410,
+                                                type: 'radar',
                                                 toolbar: { show: false }
                                             },
-                                            labels: ['Self-Help', 'Social', 'Numeracy', 'Literacy', 'Motor', 'Pre-Vocational', 'Vocational'],
+                                            xaxis: {
+                                                categories: [
+                                                    'Self-Help',
+                                                    'Social',
+                                                    'Numeracy',
+                                                    'Literacy',
+                                                    'Motor',
+                                                    'Pre-Vocational',
+                                                    'Vocational'
+                                                ]
+                                            },
+                                            dataLabels: {
+                                                enabled: true,
+                                                background: {
+                                                    enabled: true,
+                                                    borderRadius: 2,
+                                                }
+                                            },
                                             responsive: [{
                                                 breakpoint: 500,
                                                 options: {
-                                                    chart: { width: 200 },
+                                                    chart: { height: 300 },
                                                     legend: { position: 'bottom' }
                                                 }
                                             }]
                                         };
                                     
-                                        var chart = new ApexCharts(document.querySelector('#Piechart'), options);
+                                        var chart = new ApexCharts(document.querySelector('#RadarChart'), options);
                                         chart.render();
                                     }">
                                 </div>
