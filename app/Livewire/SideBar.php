@@ -12,7 +12,8 @@ class SideBar extends Component
     public $sideBarItems;
     public $activeSideBar;
     public $activeSubContent = null;
-    public $expanded = null; // which parent is expanded
+    public $expanded = null;
+    public $listeners = ["refresh" => '$refresh'];
 
     public function mount($sideBarItems = [])
     {
