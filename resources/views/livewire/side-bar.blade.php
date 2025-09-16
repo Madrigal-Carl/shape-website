@@ -4,7 +4,8 @@
 
     <!-- Account Info -->
     <div class="flex flex-col gap-2 items-center">
-        <img src="{{ asset('storage/' . auth()->user()->accountable->path) }}" class="w-24 rounded-full" alt="" />
+        <img src="{{ asset('storage/' . auth()->user()->accountable->path) }}"
+            class="w-24 h-24 aspect-square rounded-full" alt="" />
         <div class="flex flex-col items-center">
             <p class="text-lg">
                 <span class="font-semibold leading-none">{{ auth()->user()->accountable->last_name }},
