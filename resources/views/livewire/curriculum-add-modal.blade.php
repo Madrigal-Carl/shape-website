@@ -22,20 +22,20 @@
                                     <option class="text-sm text-black" selected disabled>
                                         Grade Level
                                     </option>
-                                    <option value="kindergarter 1" class="text-sm text-paragraph">
-                                        Kindergarter 1
+                                    <option value="kindergarten 1" class="text-sm text-paragraph">
+                                        Kindergarten 1
                                     </option>
-                                    <option value="kindergarter 2" class="text-sm text-paragraph">
-                                        Kindergarter 2
+                                    <option value="kindergarten 2" class="text-sm text-paragraph">
+                                        Kindergarten 2
                                     </option>
-                                    <option value="kindergarter 3" class="text-sm text-paragraph">
-                                        Kindergarter 3
+                                    <option value="kindergarten 3" class="text-sm text-paragraph">
+                                        Kindergarten 3
                                     </option>
                                 </select>
                             </div>
 
                             <button
-                                class="pl-4 pr-2 py-2 rounded-lg bg-white text-paragraph w-full text-left hover:bg-gray-300 flex items-center justify-between"
+                                class="cursor-pointer pl-4 pr-2 py-2 rounded-lg bg-white text-paragraph w-full text-left hover:bg-gray-300 flex items-center justify-between"
                                 type="button" wire:click="openSpecializationModal">
                                 <p>Select Specialization</p>
                                 <span class="material-symbols-rounded text-paragraph">
@@ -81,7 +81,7 @@
 
 
                             <button
-                                class="pl-4 pr-2 py-2 rounded-lg bg-white text-paragraph w-full text-left hover:bg-gray-300 flex items-center justify-between"
+                                class="cursor-pointer pl-4 pr-2 py-2 rounded-lg bg-white text-paragraph w-full text-left hover:bg-gray-300 flex items-center justify-between"
                                 type="button" wire:click="openSubjectModal">
                                 <p>Select Subjects</p>
                                 <span class="material-symbols-rounded text-paragraph">

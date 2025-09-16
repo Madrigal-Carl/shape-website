@@ -9,6 +9,7 @@ use Livewire\WithFileUploads;
 use App\Models\Specialization;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Hash;
 
 class StudentEditModal extends Component
 {
@@ -19,7 +20,7 @@ class StudentEditModal extends Component
     public $province = "marinduque";
     public $permanent_barangay, $permanent_municipal, $current_barangay, $current_municipal;
     public $guardian_first_name, $guardian_middle_name, $guardian_last_name, $guardian_email, $guardian_phone;
-    public $account_username, $account_password;
+    public $account_username, $account_password, $default_password;
     public $account_username_changed = false;
     public $account_password_changed = false;
     public $grade_levels = [], $specializations = [], $barangayData = [], $municipalities = [], $permanent_barangays = [], $current_barangays = [];
@@ -47,10 +48,10 @@ class StudentEditModal extends Component
         $this->description = $student->support_need;
         $this->account_username = $student->account->username;
         $this->account_password = $student->account->password;
+        $this->default_password = str_replace('-', '', $student->birth_date) . '-' . strtolower(trim($student->last_name));
         $defaultUsername = strtolower(trim($student->last_name . $student->first_name));
-        $defaultPassword = str_replace('-', '', $student->birth_date) . '-' . strtolower(trim($student->last_name));
         $this->account_username_changed = $this->account_username !== $defaultUsername;
-        $this->account_password_changed = $this->account_password !== $defaultPassword;
+        $this->account_password_changed = ! Hash::check($this->default_password, $student->account->password);
 
         $this->guardian_first_name  = $student->guardian->first_name;
         $this->guardian_middle_name = $student->guardian->middle_name;

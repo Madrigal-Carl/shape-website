@@ -30,12 +30,6 @@ class StudentMain extends Component
             ->unique()
             ->sort()
             ->values();
-
-        $this->grade_levels = Enrollment::whereIn('student_id', Auth::user()->accountable->students->pluck('id'))
-            ->pluck('grade_level')
-            ->unique()
-            ->sort()
-            ->values();
     }
 
     public function openAddStudentModal()
@@ -81,6 +75,11 @@ class StudentMain extends Component
             ->orderBy('first_name')
             ->paginate(10);
 
+        $this->grade_levels = Enrollment::whereIn('student_id', Auth::user()->accountable->students->pluck('id'))
+            ->pluck('grade_level')
+            ->unique()
+            ->sort()
+            ->values();
         return view('livewire.student-main', compact('students'));
     }
 }

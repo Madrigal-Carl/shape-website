@@ -2,25 +2,25 @@
 
 namespace Database\Factories;
 
-use App\Models\ActivityImage;
+use App\Models\GameImage;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\ActivityImage>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\GameImage>
  */
-class ActivityImageFactory extends Factory
+class GameImageFactory extends Factory
 {
     /**
      * Define the model's default state.
      *
      * @return array<string, mixed>
      */
-    protected $model = ActivityImage::class;
+    protected $model = GameImage::class;
     public function definition(): array
     {
         return [
             'path' => 'images/game-icons/game-posters/mario-kart-world-review-1.jpg',
-            'activity_id' => null,
+            'game_activity_id' => null,
         ];
     }
 }

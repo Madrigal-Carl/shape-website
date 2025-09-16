@@ -270,8 +270,10 @@
                         <h2 class="font-semibold text-xl">Student's Account</h2>
                         <div class="flex flex-col gap-2">
                             <input type="text" name="" id="" placeholder="Username" disabled
+                                value="{{ $account_username }}"
                                 class="px-4 py-2 rounded-lg bg-white placeholder-paragraph outline-none w-full" />
                             <input type="text" name="" id="" placeholder="Password" disabled
+                                value="{{ $account_password }}"
                                 class="px-4 py-2 rounded-lg bg-white placeholder-paragraph outline-none w-full" />
                         </div>
                     </div>

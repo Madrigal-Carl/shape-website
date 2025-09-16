@@ -99,7 +99,7 @@
                     <!--Game container at game hub-->
                     @forelse ($activities as $activity)
                         <div class="w-fit shrink-0 flex flex-col gap-2 relative cursor-pointer">
-                            <img src="{{ asset($activity->activityImages->first()->path) }}"
+                            <img src="{{ asset($activity->gameImages->first()->path) }}"
                                 class="aspect-video w-auto h-fit rounded-xl object-cover" />
                             <div
                                 class="absolute bottom-0 bg-gradient-to-t from-black/80 via-black/10 to-black/0 w-full h-full rounded-xl items-center">
@@ -152,7 +152,7 @@
                     </div>
 
                     <div class="relative">
-                        <img src="{{ asset($act->activityImages->first()->path) }}" alt=""
+                        <img src="{{ asset($act->gameImages->first()->path) }}" alt=""
                             class=" aspect-[3/1.2] object-cover rounded-t-4xl">
                         <div
                             class="absolute bottom-0 bg-gradient-to-b from-black/80 via-black/0 to-black/0 w-full h-full rounded-t-4xl items-center">
@@ -178,7 +178,7 @@
                         <div class="flex flex-col gap-2">
                             <h1 class="text-xl font-semibold">Preview:</h1>
                             <div class="grid grid-cols-3 grid-rows-3 gap-1">
-                                @foreach ($act->activityImages as $image)
+                                @foreach ($act->gameImages as $image)
                                     @if ($loop->iteration == 2)
                                         <img src="{{ asset($image->path) }}" alt=""
                                             wire:click="openPreview({{ $act->id }}, {{ $loop->index }})"

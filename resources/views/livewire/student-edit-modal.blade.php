@@ -345,8 +345,8 @@
                             <input type="text"placeholder="Username"
                                 value="{{ $account_username_changed ? '**********' : $account_username }}" disabled
                                 class="px-4 py-2 rounded-lg bg-white placeholder-paragraph outline-none w-full" />
-                            <input type="password" placeholder="Password"
-                                value="{{ $account_password_changed ? '**********' : $account_password }}" disabled
+                            <input type="text" placeholder="Password"
+                                value="{{ $account_password_changed ? '**********' : $default_password }}" disabled
                                 class="px-4 py-2 rounded-lg bg-white placeholder-paragraph outline-none w-full" />
                         </div>
                     </div>

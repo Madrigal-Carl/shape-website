@@ -2,21 +2,20 @@
 
 namespace Database\Factories;
 
-use App\Models\Lesson;
-use App\Models\Activity;
+use App\Models\GameActivity;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Activity>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\GameActivity>
  */
-class ActivityFactory extends Factory
+class GameActivityFactory extends Factory
 {
     /**
      * Define the model's default state.
      *
      * @return array<string, mixed>
      */
-    protected $model = Activity::class;
+    protected $model = GameActivity::class;
 
     public function definition(): array
     {

@@ -7,10 +7,10 @@ use App\Models\Lesson;
 use App\Models\Student;
 use App\Models\Subject;
 use Livewire\Component;
-use App\Models\Activity;
 use App\Models\Curriculum;
 use Illuminate\Support\Str;
 use Livewire\Attributes\On;
+use App\Models\GameActivity;
 use Livewire\WithFileUploads;
 use FFMpeg\Coordinate\TimeCode;
 use App\Models\CurriculumSubject;
@@ -66,7 +66,7 @@ class LessonEditModal extends Component
         $this->lesson_id = $id;
         $this->isOpen = true;
 
-        $lesson = Lesson::with('students', 'videos', 'activityLessons.activity.specializations', 'lessonSubjectStudents.curriculumSubject.curriculum', 'lessonSubjectStudents.curriculumSubject.subject')->find($id);
+        $lesson = Lesson::with('students', 'videos', 'lessonSubjectStudents.curriculumSubject.curriculum', 'lessonSubjectStudents.curriculumSubject.subject')->find($id);
         $this->lesson_name = $lesson->title;
         $this->grade_level = $lesson->lessonSubjectStudents->first()->curriculumSubject->curriculum->grade_level;
         $this->curriculum = $lesson->lessonSubjectStudents->first()->curriculumSubject->curriculum->name;
@@ -99,11 +99,12 @@ class LessonEditModal extends Component
         })->toArray();
 
         $this->selected_activities = $lesson->activityLessons->map(function ($al) {
+            $activity = $al->activityLessonable;
             return (object) [
-                'id'              => $al->activity->id,
-                'name'            => $al->activity->name,
-                'path'            => $al->activity->path,
-                'specializations' => collect($al->activity->specializations ?? [])->pluck('name')->toArray(),
+                'id'              => $activity->id,
+                'name'            => $activity->name,
+                'path'            => $activity->path,
+                'specializations' => collect($activity->specializations ?? [])->pluck('name')->toArray(),
             ];
         })->toArray();
 
@@ -127,7 +128,7 @@ class LessonEditModal extends Component
 
     public function openActivityHub()
     {
-        $this->dispatch('openModal', curriculumId: $this->curriculum_id, subjectId: $this->subject_id)->to('activity-hub');
+        $this->dispatch('openModal', curriculumId: $this->curriculum_id, subjectId: $this->subject_id)->to('game-activity-hub');
     }
 
     #[On('addActivity')]
@@ -336,7 +337,8 @@ class LessonEditModal extends Component
         $lesson->activityLessons()->delete();
         foreach ($this->selected_activities as $activity) {
             $lesson->activityLessons()->create([
-                'activity_id' => $activity->id,
+                'activity_lessonable_id' => $activity->id,
+                'activity_lessonable_type' => GameActivity::class,
             ]);
         }
 
@@ -386,7 +388,7 @@ class LessonEditModal extends Component
 
     public function render()
     {
-        $this->activities = Activity::orderBy('id')->get();
+        $this->activities = GameActivity::orderBy('id')->get();
         $this->grade_levels = Curriculum::where('instructor_id', Auth::user()->accountable->id)
             ->where('status', 'active')
             ->orderBy('grade_level')

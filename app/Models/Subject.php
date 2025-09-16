@@ -18,8 +18,8 @@ class Subject extends Model
         return $this->hasMany(CurriculumSubject::class);
     }
 
-    public function activities()
+    public function gameActivities()
     {
-        return $this->belongsToMany(Activity::class, 'activity_subject');
+        return $this->belongsToMany(GameActivity::class, 'activity_subject');
     }
 }

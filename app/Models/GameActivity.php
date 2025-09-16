@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Activity extends Model
+class GameActivity extends Model
 {
     use HasFactory;
 
@@ -27,16 +27,16 @@ class Activity extends Model
 
     public function activityLesson()
     {
-        return $this->hasOne(ActivityLesson::class);
+        return $this->morphOne(ActivityLesson::class, 'activity_lessonable');
     }
 
-    public function activityImages()
+    public function gameImages()
     {
-        return $this->hasMany(ActivityImage::class);
+        return $this->hasMany(GameImage::class);
     }
 
     public function subjects()
     {
-        return $this->belongsToMany(Subject::class, 'activity_subject');
+        return $this->belongsToMany(Subject::class, 'game_activity_subject');
     }
 }

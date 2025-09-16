@@ -11,13 +11,15 @@ use App\Models\Video;
 use App\Models\Lesson;
 use App\Models\Account;
 use App\Models\Address;
-use App\Models\Enrollment;
 use App\Models\Student;
 use App\Models\Subject;
 use App\Models\Activity;
 use App\Models\Guardian;
+use App\Models\GameImage;
 use App\Models\Curriculum;
+use App\Models\Enrollment;
 use App\Models\Instructor;
+use App\Models\GameActivity;
 use App\Models\StudentAward;
 use App\Models\ActivityImage;
 use App\Models\ActivityLesson;
@@ -184,12 +186,12 @@ class DatabaseSeeder extends Seeder
 
         // 9. Create Lessons, Activities, Videos (once per lesson)
         $lessons = Lesson::factory()->count(10)->create();
-        $activities = Activity::factory()->count(30)->create();
+        $activities = GameActivity::factory()->count(30)->create();
         $activities->each(function ($activity) use ($specializations) {
             $activity->specializations()->attach(
                 $specializations->random(rand(1, 2))->pluck('id')->toArray()
             );
-            ActivityImage::factory()->count(7)->create(['activity_id' => $activity->id]);
+            GameImage::factory()->count(7)->create(['game_activity_id' => $activity->id]);
             $randomSubjects = Subject::inRandomOrder()->take(rand(1, 2))->pluck('id');
             $activity->subjects()->attach($randomSubjects);
         });
@@ -199,7 +201,8 @@ class DatabaseSeeder extends Seeder
 
             $lessonActivity = ActivityLesson::firstOrCreate([
                 'lesson_id' => $lesson->id,
-                'activity_id' => $activities->random()->id,
+                'activity_lessonable_id' => $activities->random()->id,
+                'activity_lessonable_type' => GameActivity::class,
             ]);
             $lesson->setRelation('lessonActivity', $lessonActivity);
         });

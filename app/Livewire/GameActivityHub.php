@@ -4,14 +4,12 @@ namespace App\Livewire;
 
 use App\Models\Subject;
 use Livewire\Component;
-use App\Models\Activity;
 use App\Models\Curriculum;
 use Livewire\Attributes\On;
+use App\Models\GameActivity;
 use App\Models\Specialization;
-use App\Models\CurriculumSubject;
-use Illuminate\Support\Facades\Auth;
 
-class ActivityHub extends Component
+class GameActivityHub extends Component
 {
     public $isOpen = false;
     public $targetComponent = null;
@@ -57,7 +55,7 @@ class ActivityHub extends Component
     public function viewActivity($activityId)
     {
         $this->act = null;
-        $this->act = Activity::with('specializations', 'activityImages')->find($activityId);
+        $this->act = GameActivity::with('specializations', 'gameImages')->find($activityId);
         $this->openViewActivity();
     }
 
@@ -74,7 +72,7 @@ class ActivityHub extends Component
 
     public function addActivity($activityId)
     {
-        $activity = Activity::with('specializations')->find($activityId);
+        $activity = GameActivity::with('specializations')->find($activityId);
         $this->dispatch('swal-toast', icon: 'success', title: 'Activity has been added successfully.');
         $this->dispatch('addActivity', activity: $activity)->to($this->targetComponent);
     }
@@ -103,7 +101,7 @@ class ActivityHub extends Component
 
     private function loadActivities()
     {
-        $q = Activity::with('specializations');
+        $q = GameActivity::with('specializations');
 
         if (!empty($this->selectedSpecializations)) {
             foreach ($this->selectedSpecializations as $catName) {
@@ -123,7 +121,7 @@ class ActivityHub extends Component
 
     public function openPreview($activityId, $imageIndex = 0)
     {
-        $activity = Activity::with('activityImages')->find($activityId);
+        $activity = GameActivity::with('gameImages')->find($activityId);
 
         if (!$activity) return;
 
@@ -171,6 +169,6 @@ class ActivityHub extends Component
 
     public function render()
     {
-        return view('livewire.activity-hub');
+        return view('livewire.game-activity-hub');
     }
 }

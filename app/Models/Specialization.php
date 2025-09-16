@@ -21,8 +21,8 @@ class Specialization extends Model
         return $this->morphedByMany(Curriculum::class, 'specializable');
     }
 
-    public function activities()
+    public function gameActivities()
     {
-        return $this->morphedByMany(Activity::class, 'specializable');
+        return $this->morphedByMany(GameActivity::class, 'specializable');
     }
 }

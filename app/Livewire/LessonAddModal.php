@@ -13,6 +13,7 @@ use App\Models\Activity;
 use App\Models\Curriculum;
 use Illuminate\Support\Str;
 use Livewire\Attributes\On;
+use App\Models\GameActivity;
 use Livewire\WithFileUploads;
 use FFMpeg\Coordinate\TimeCode;
 use App\Models\CurriculumSubject;
@@ -93,7 +94,7 @@ class LessonAddModal extends Component
 
     public function openActivityHub()
     {
-        $this->dispatch('openModal', curriculumId: $this->curriculum, subjectId: $this->subject)->to('activity-hub');
+        $this->dispatch('openModal', curriculumId: $this->curriculum, subjectId: $this->subject)->to('game-activity-hub');
     }
 
     public function updatedVideos()
@@ -254,7 +255,8 @@ class LessonAddModal extends Component
 
         foreach ($this->selected_activities as $activity) {
             $lesson->activityLessons()->create([
-                'activity_id'  => $activity->id,
+                'activity_lessonable_id' => $activity->id,
+                'activity_lessonable_type' => GameActivity::class,
             ]);
         }
 
@@ -278,7 +280,7 @@ class LessonAddModal extends Component
 
     public function mount()
     {
-        $this->activities = Activity::orderBy('id')->get();
+        $this->activities = GameActivity::orderBy('id')->get();
         $this->grade_levels = Curriculum::where('instructor_id', Auth::user()->accountable->id)
             ->where('status', 'active')
             ->orderBy('grade_level')

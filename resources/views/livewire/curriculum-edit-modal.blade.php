@@ -38,7 +38,7 @@
                             </div>
 
                             <button
-                                class="pl-4 pr-2 py-2 rounded-lg bg-white text-paragraph w-full text-left hover:bg-gray-300 flex items-center justify-between"
+                                class="cursor-pointer pl-4 pr-2 py-2 rounded-lg bg-white text-paragraph w-full text-left hover:bg-gray-300 flex items-center justify-between"
                                 type="button" wire:click="$toggle('showSpecializationDropdown')">
                                 <p>Select Specialization</p>
                                 <span class="material-symbols-rounded text-paragraph">
@@ -83,7 +83,7 @@
                             @endif
 
                             <button
-                                class="pl-4 pr-2 py-2 rounded-lg bg-white text-paragraph w-full text-left hover:bg-gray-300 flex items-center justify-between"
+                                class="cursor-pointer pl-4 pr-2 py-2 rounded-lg bg-white text-paragraph w-full text-left hover:bg-gray-300 flex items-center justify-between"
                                 type="button" wire:click="$toggle('showSubjectDropdown')">
                                 <p>Select Subjects</p>
                                 <span class="material-symbols-rounded text-paragraph">
@@ -126,7 +126,7 @@
                                     </div>
                                 </div>
                             @endif
-                            <textarea wire:model.live="add_description" name="" id="" maxlength="200"
+                            <textarea wire:model.live="edit_description" name="" id="" maxlength="200"
                                 placeholder="Description (Optional)"
                                 class="p-4 rounded-lg bg-white placeholder-paragraph resize-none h-40 outline-none mb-18">{{ $edit_description }}</textarea>
                         </div>

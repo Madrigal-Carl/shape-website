@@ -5,17 +5,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class ActivityImage extends Model
+class GameImage extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'path',
-        'activity_id',
+        'game_activity_id',
     ];
 
-    public function activity()
+    public function gameActivity()
     {
-        return $this->belongsTo(Activity::class);
+        return $this->belongsTo(GameActivity::class);
     }
 }

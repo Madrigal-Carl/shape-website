@@ -14,10 +14,14 @@ return new class extends Migration
         Schema::create('activity_lessons', function (Blueprint $table) {
             $table->id();
             $table->foreignId('lesson_id')->constrained()->onDelete('cascade');
-            $table->foreignId('activity_id')->constrained()->onDelete('cascade');
+            $table->string('activity_lessonable_type');
+            $table->unsignedBigInteger('activity_lessonable_id');
             $table->unsignedInteger('score')->nullable();
             $table->timestamps();
-            $table->unique(['lesson_id', 'activity_id']);
+            $table->index(
+                ['activity_lessonable_type', 'activity_lessonable_id'],
+                'activity_lessonable_idx'
+            );
         });
     }
 

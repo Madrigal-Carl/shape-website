@@ -87,8 +87,7 @@
                                 {{-- Search --}}
                                 <div class="flex items-center gap-2 px-4 py-2 rounded-lg bg-white w-full">
                                     <span class="material-symbols-rounded">person_search</span>
-                                    <input type="text" placeholder="Search Student"
-                                        wire:model.live="student_search"
+                                    <input type="text" placeholder="Search Student" wire:model.live="student_search"
                                         class="w-full outline-none text-paragraph placeholder-paragraph" />
                                 </div>
 
@@ -109,7 +108,9 @@
                                                 <p class="w-full text-paragraph">{{ $student->full_name }}</p>
                                             </div>
                                         @empty
-                                            <p class="text-center text-sm text-gray-500 h-full flex justify-center items-center">No students found.</p>
+                                            <p
+                                                class="text-center text-sm text-gray-500 h-full flex justify-center items-center">
+                                                No students found.</p>
                                         @endforelse
                                     </div>
                                 </div>
@@ -136,19 +137,23 @@
                                             'border-gray-300 text-gray-600'"
                                         class="flex items-center h-48 mb-2 justify-center border-2 border-dashed rounded-lg w-full cursor-pointer transition-colors duration-200 hover:border-blue-500 hover:text-blue-500"
                                         id="dropzone">
-                                        <label for="videoUpload" class="cursor-pointer flex flex-col items-center gap-2">
-                                            <span class="material-symbols-rounded p-4 bg-blue-button rounded-3xl text-white large-icon">video_camera_back_add</span>
-                                            <h1 class="w-60 text-center">Drag and Drop a video here or Click to Upload Video</h1>
+                                        <label for="videoUpload"
+                                            class="cursor-pointer flex flex-col items-center gap-2">
+                                            <span
+                                                class="material-symbols-rounded p-4 bg-blue-button rounded-3xl text-white large-icon">video_camera_back_add</span>
+                                            <h1 class="w-60 text-center">Drag and Drop a video here or Click to Upload
+                                                Video</h1>
                                         </label>
-                                        <input type="file" wire:model="videos" multiple class="hidden" id="videoUpload"
-                                            x-ref="videoUpload" />
+                                        <input type="file" wire:model="videos" multiple class="hidden"
+                                            id="videoUpload" x-ref="videoUpload" />
                                     </div>
 
                                     <div class=" grid grid-cols-5 gap-2">
                                         <div class="col-span-4 flex items-center px-4 py-2 bg-card gap-2 rounded-lg">
                                             <span class="material-symbols-rounded">youtube_activity</span>
-                                            <input type="text" placeholder="Paste YouTube Link" wire:model="youtube_link"
-                                            class=" rounded-lg placeholder-paragraph outline-none w-full" />
+                                            <input type="text" placeholder="Paste YouTube Link"
+                                                wire:model="youtube_link"
+                                                class=" rounded-lg placeholder-paragraph outline-none w-full" />
                                         </div>
                                         <button type="button" wire:click="addYoutubeVideo"
                                             class="bg-blue-button text-sm text-white px-3 py-2 rounded-lg w-full col-span-1 hover:bg-blue-700 cursor-pointer">
@@ -177,7 +182,8 @@
 
                                     <div class="w-full grid grid-cols-2 gap-2">
                                         @foreach ($uploadedVideos as $index => $video)
-                                            <div class="flex flex-col gap-2 relative video-container-{{ $index }}">
+                                            <div
+                                                class="flex flex-col gap-2 relative video-container-{{ $index }}">
                                                 <div class="w-full flex flex-col items-center justify-center shrink-0">
                                                     <img src="{{ $video['thumbnail'] }}"
                                                         class="aspect-video w-max h-fit rounded-lg object-cover video-thumb-{{ $index }}" />
@@ -194,7 +200,8 @@
                                                 <div
                                                     class="absolute bottom-0 bg-gradient-to-t from-black/80 via-black/0 to-black/0 w-full h-full rounded-lg">
                                                     <div class="h-full w-full flex items-end justify-between p-3">
-                                                        <h1 class="text-white font-medium text-sm ml-1 truncate w-[80%]">
+                                                        <h1
+                                                            class="text-white font-medium text-sm ml-1 truncate w-[80%]">
                                                             {{ $video['title'] }}
                                                         </h1>
                                                         <button wire:click="removeVideo({{ $index }})"
@@ -225,7 +232,7 @@
 
                                     <div class="flex items-center gap-2 w-full">
                                         <span class="material-symbols-rounded">joystick</span>
-                                        <p class="text-paragraph">choose Game/Activity</p>
+                                        <p class="text-paragraph">Choose Game</p>
                                     </div>
                                     <span class="material-symbols-rounded">add</span>
                                 </button>
@@ -251,14 +258,15 @@
                                             </button>
                                         </div>
                                     @empty
-                                        <div class="bg-card col-span-2 h-48 flex items-center justify-center rounded-lg">
+                                        <div
+                                            class="bg-card col-span-2 h-48 flex items-center justify-center rounded-lg">
                                             <h1 class="text-paragraph">No Game/Activity added</h1>
                                         </div>
                                     @endforelse
 
                                 </div>
                             </div>
-                            <livewire:activity-hub targetComponent="lesson-add-modal" />
+                            <livewire:game-activity-hub targetComponent="lesson-add-modal" />
                         </div>
                         <div
                             class="flex items-center gap-2 absolute w-full left-0 bottom-0 px-8 pb-8 pt-4 rounded-b-4xl bg-card">

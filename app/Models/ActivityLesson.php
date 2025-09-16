@@ -10,8 +10,8 @@ class ActivityLesson extends Model
     use HasFactory;
 
     protected $fillable = [
-        'activity_id',
-        'lesson_id',
+        'activity_lessonable_id',
+        'activity_lessonable_type',
         'score',
     ];
 
@@ -20,9 +20,9 @@ class ActivityLesson extends Model
         return $this->belongsTo(Lesson::class);
     }
 
-    public function activity()
+    public function activityLessonable()
     {
-        return $this->belongsTo(Activity::class);
+        return $this->morphTo();
     }
 
     public function studentActivities()

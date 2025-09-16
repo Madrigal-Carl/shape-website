@@ -30,7 +30,7 @@ class LessonSubjectStudent extends Model
         return $this->belongsTo(Student::class);
     }
 
-        public function curriculum()
+    public function curriculum()
     {
         return $this->hasOneThrough(
             Curriculum::class,
@@ -54,10 +54,10 @@ class LessonSubjectStudent extends Model
         );
     }
 
-    public function activities()
+    public function gameActivities()
     {
         return $this->hasManyThrough(
-            Activity::class,
+            GameActivity::class,
             Lesson::class,
             'id',
             'lesson_id',

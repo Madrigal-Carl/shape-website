@@ -244,7 +244,7 @@
 
                                     <div class="flex items-center gap-2 w-full">
                                         <span class="material-symbols-rounded">joystick</span>
-                                        <p class="text-paragraph">choose Game/Activity</p>
+                                        <p class="text-paragraph">Choose Game</p>
                                     </div>
                                     <span class="material-symbols-rounded">add</span>
                                 </button>
@@ -280,7 +280,7 @@
                                 </div>
                             </div>
 
-                            <livewire:activity-hub targetComponent="lesson-edit-modal" />
+                            <livewire:game-activity-hub targetComponent="lesson-edit-modal" />
                         </div>
 
                         <div

@@ -30,28 +30,27 @@ class Authentication extends Component
             ]);
         } catch (ValidationException $e) {
             $message = $e->validator->errors()->first();
-            return $this->dispatch('swal-toast', icon : 'error', title : $message);
+            return $this->dispatch('swal-toast', icon: 'error', title: $message);
         }
 
         $account = Account::with('accountable')->where('username', $this->username)->first();
-        if (!$account || !Hash::check($this->password, $account->password)){
-            return $this->dispatch('swal-toast', icon : 'error', title : 'Invalid credentials.');
+        if (!$account || !Hash::check($this->password, $account->password)) {
+            return $this->dispatch('swal-toast', icon: 'error', title: 'Invalid credentials.');
         }
 
-        request()->session()->regenerate();
         Auth::login($account);
 
         if ($account->accountable_type === 'App\Models\Instructor' && $account->accountable->status !== 'active') {
             Auth::logout();
-            return $this->dispatch('swal-toast', icon : 'error', title : "You cannot login because your account is " . Auth::user()->status . ".");
+            return $this->dispatch('swal-toast', icon: 'error', title: "You cannot login because your account is " . Auth::user()->status . ".");
         }
 
-        if($account->accountable_type === 'App\Models\Student'){
+        if ($account->accountable_type === 'App\Models\Student') {
             Auth::logout();
-            return $this->dispatch('swal-toast', icon : 'error', title : 'Student accounts cannot log in here.');
+            return $this->dispatch('swal-toast', icon: 'error', title: 'Student accounts cannot log in here.');
         }
 
-        if($account->accountable_type === 'App\Models\Instructor'){
+        if ($account->accountable_type === 'App\Models\Instructor') {
             return redirect()->route('instructor.panel')->with('toast', [
                 'icon' => 'success',
                 'title' => 'You\'ve successfully logged in.'
@@ -62,7 +61,6 @@ class Authentication extends Component
             'icon' => 'success',
             'title' => 'You\'ve successfully logged in.'
         ]);
-
     }
     public function render()
     {
