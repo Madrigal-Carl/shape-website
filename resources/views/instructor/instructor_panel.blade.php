@@ -7,9 +7,7 @@
             'name' => 'Lessons',
             'icon' => 'library_books',
             'content' => 'instructor.lessons',
-            'subcontent' => [
-                ['name' => 'Activity', 'icon' => 'library_books', 'content' => 'instructor.lesson_activity'],
-            ],
+            'subcontent' => [['name' => 'Activity', 'icon' => 'assignment', 'content' => 'instructor.lesson_activity']],
         ],
         ['name' => 'Awards', 'icon' => 'award_star', 'content' => 'instructor.awards'],
         ['name' => 'Settings', 'icon' => 'settings', 'content' => 'layouts.settings'],
