@@ -113,6 +113,7 @@ class GrantAwardsScheduler extends Command
         return $total > 0 && $completed == $total;
     }
 
+    // include even if the log is only 1
     // Resilient Learner: Top 3 students with most attempts before completing any activity, must have completed at least 50% of lessons (current school year)
     protected function getResilientLearnerStudentIds($students)
     {
@@ -147,6 +148,7 @@ class GrantAwardsScheduler extends Command
         return $attempts->filter(fn($count) => $count >= $minTop && $count > 0)->keys()->toArray();
     }
 
+    // include even if the log is only 1
     // Progress Pioneer: Top 3 students with greatest average improvement (current school year)
     protected function getProgressPioneerStudentIds($students)
     {

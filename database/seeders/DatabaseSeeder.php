@@ -69,6 +69,16 @@ class DatabaseSeeder extends Seeder
         $instructorTest->specializations()->attach(
             $specializations->random(rand(1, 2))->pluck('id')->toArray()
         );
+        Address::factory()->instructor()->create([
+            'owner_id' => $instructorTest->id,
+            'owner_type' => Instructor::class,
+            'type' => 'permanent',
+        ]);
+        Address::factory()->instructor()->create([
+            'owner_id' => $instructorTest->id,
+            'owner_type' => Instructor::class,
+            'type' => 'current',
+        ]);
 
         // 2. Create Admins
         $admins = Admin::factory()->count(3)->create();
