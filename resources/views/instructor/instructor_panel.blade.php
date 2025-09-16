@@ -10,7 +10,7 @@
             'subcontent' => [['name' => 'Activity', 'icon' => 'assignment', 'content' => 'instructor.lesson_activity']],
         ],
         ['name' => 'Awards', 'icon' => 'award_star', 'content' => 'instructor.awards'],
-        ['name' => 'Settings', 'icon' => 'settings', 'content' => 'layouts.settings'],
+        ['name' => 'Profile', 'icon' => 'account_circle', 'content' => 'layouts.profile'],
     ];
 @endphp
 
