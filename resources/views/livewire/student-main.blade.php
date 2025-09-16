@@ -102,7 +102,7 @@
             <div class="flex items-center gap-4 self-start">
                 <div
                     class="flex items-center bg-white py-3 px-5 rounded-full shadow-2xl/15 border-2 border-white hover:border-blue-button text-paragraph hover:bg-blue-button hover:text-white cursor-pointer">
-                    <select class="w-30 outline-none" wire:model.live="grade_level">
+                    <select class="w-max outline-none" wire:model.live="grade_level">
                         <option value="" class=" text-heading-dark" disabled>
                             Grade Level
                         </option>
@@ -119,7 +119,7 @@
 
                 <div
                     class="flex items-center bg-white py-3 px-5 rounded-full shadow-2xl/15 border-2 border-white hover:border-blue-button text-paragraph hover:bg-blue-button hover:text-white cursor-pointer">
-                    <select name="" id="" class="w-30 outline-none"
+                    <select name="" id="" class="w-max outline-none"
                         wire:change="$set('status', $event.target.value)">
                         <option class=" text-heading-dark" selected disabled>
                             Status
@@ -182,7 +182,7 @@
                                 <tr>
                                     <td class="px-4 py-3 text-center text-paragraph">{{ $student->id }}</td>
                                     <td class="px-4 py-3 text-center text-paragraph">{{ $student->full_name }}</td>
-                                    <td class="px-4 py-3 text-center text-paragraph flex flex-col items-center">
+                                    <td class="px-4 py-3 text-center text-paragraph flex justify-center items-center">
                                         <p class="w-30 truncate">{{ ucwords($student->disability_type) }}</p>
                                     </td>
                                     <td class="px-4 py-3 text-center text-paragraph">

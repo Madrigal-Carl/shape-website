@@ -5,10 +5,10 @@
             <!-- Third form -->
             <div class="bg-card p-8 rounded-4xl w-250 flex flex-col gap-12 self-center-safe">
                 <div class="flex items-center justify-between gap-2">
-                    <div class="flex items-center gap-4">
+                    <div class="flex items-center gap-2">
                         <img src="{{ asset('images/person.png') }}" class="h-8" alt="" />
                         <h1 class="text-3xl font-bold text-heading-dark">
-                            Student Info.
+                            Student's Info.
                         </h1>
                     </div>
 
