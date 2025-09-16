@@ -5,9 +5,13 @@
             <!-- Third form -->
             <div class="bg-card p-8 rounded-4xl w-250 flex flex-col gap-12 self-center-safe">
                 <div class="flex items-center justify-between gap-2">
-                    <h1 class="text-3xl font-bold text-heading-dark">
-                        Student Info.
-                    </h1>
+                    <div class="flex items-center gap-4">
+                        <img src="{{ asset('images/person.png') }}" class="h-8" alt="" />
+                        <h1 class="text-3xl font-bold text-heading-dark">
+                            Student Info.
+                        </h1>
+                    </div>
+
 
                     <!-- Action Buttons -->
                     <div class="flex items-center gap-2">
@@ -30,7 +34,7 @@
                         </button> --}}
 
                         <button type="button" wire:click='closeModal'
-                            class="bg-white profile-button flex items-center p-2 rounded-full gap-2 shadow-2xl text-paragraph cursor-pointer hover:text-white hover:bg-blue-button hover:shadow-xl/35 hover:shadow-blue-button hover:scale-105">
+                            class="bg-white profile-button flex items-center p-2 rounded-full gap-2 shadow-2xl text-paragraph cursor-pointer hover:text-white hover:bg-blue-button hover:shadow-xl/35 hover:shadow-blue-button">
                             <span class="material-symbols-rounded">close</span>
                         </button>
                     </div>

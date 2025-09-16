@@ -4,7 +4,7 @@
     <!-- System Feed -->
     <div class="bg-white w-full h-full rounded-3xl px-3 pt-3 pb-6 flex flex-col shadow-2xl/5">
         <div class="flex gap-2 items-center p-3">
-            <span class="material-symbols-rounded text-danger">settings_alert</span>
+            <img src="{{ asset('images/system-feed.png') }}" class="h-6" alt="">
             <h1 class="text-2xl font-bold">System Feed</h1>
         </div>
 

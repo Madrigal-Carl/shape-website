@@ -5,8 +5,8 @@
             <div class="w-200 h-full Addlesson bg-card py-8 rounded-4xl relative flex">
                 <div
                     class="Addlesson w-full h-full flex flex-col pr-8 pl-8 pb-18 gap-8 self-center-safe overflow-y-auto">
-                    <div class="flex items-center gap-4">
-                        <img src="src/images/cube.png" alt="">
+                    <div class="flex items-center gap-2">
+                        <img src="{{ asset('images/lesson-icon.png') }}" class="h-8" alt="" />
                         <h1 class=" text-2xl font-semibold text-heading-dark">{{ $lesson->title }}</h1>
                     </div>
 

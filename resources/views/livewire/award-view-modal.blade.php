@@ -7,7 +7,7 @@
 
                     <div class="flex items-center justify-between">
                         <div class="flex items-center gap-4">
-                            <img src="{{ asset('images/award-icon.png') }}" alt="" class="h-15">
+                            <img src="{{ asset('images/award-icon.png') }}" alt="" class="h-10">
                             <h1 class=" text-3xl font-bold text-heading-dark">Awards View</h1>
                         </div>
                         <!-- Buttons -->
