@@ -219,7 +219,7 @@
                             <!-- BarChart -->
                             <div class="flex flex-col gap-4">
                                 <div class="col-span-1 h-full bg-white rounded-2xl flex flex-col gap-4">
-                                    <h1 class="text-xl font-semibold">Average Quiz Score per Subjects</h1>
+                                    <h1 class="text-xl font-semibold">Weekly Activities</h1>
                                     <div id="PerformanceBarchart" class="w-full" wire:ignore x-data="{}"
                                         x-init="() => {
                                             var options = {
@@ -257,7 +257,7 @@
 
                             {{-- Radar Graph --}}
                             <div class="col-span-1 h-full bg-white rounded-2xl flex flex-col gap-4">
-                                <h1 class="text-xl font-semibold">Average Quiz Score per Subjects</h1>
+                                <h1 class="text-xl font-semibold">Student Performance Stats</h1>
                                 <div id="RadarChart" class="w-full" wire:ignore x-data="{}"
                                     x-init="() => {
                                         var options = {
@@ -297,6 +297,20 @@
                                                     enabled: true,
                                                     borderRadius: 2,
                                                 }
+                                            },
+                                            fill: {
+                                                opacity: 0.3, // adjust transparency
+                                                colors: ['#247BFF'] // bg color
+                                            },
+                                            stroke: {
+                                                colors: ['#247BFF'], //  outline color
+                                                width: 2
+                                            },
+                                            markers: {
+                                                size: 4,
+                                                colors: ['#247BFF'], // marker color
+                                                strokeColors: '#fff',
+                                                strokeWidth: 2
                                             },
                                             responsive: [{
                                                 breakpoint: 500,
