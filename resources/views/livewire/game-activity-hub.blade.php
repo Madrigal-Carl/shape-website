@@ -50,8 +50,8 @@
             <div class="flex flex-col w-[50%] h-full gap-8 bg-card shadow-2xl rounded-4xl p-8">
 
                 <div class="w-full flex items-center justify-between">
-                    <div class="flex items-center gap-4">
-                        <img src="{{ asset('images/game-icons/gamehub.png') }}" class="h-8" alt="">
+                    <div class="flex items-center gap-2">
+                        <img src="{{ asset('images/activity-hub-icon.png') }}" class="h-8" alt="">
                         <p class="font-bold text-3xl">Activity Hub</p>
                     </div>
 

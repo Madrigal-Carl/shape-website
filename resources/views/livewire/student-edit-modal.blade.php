@@ -6,7 +6,7 @@
             @if ($step === 1)
                 <div class="bg-card white p-8 rounded-4xl w-180 flex flex-col gap-8">
                     <div class="flex items-center gap-2">
-                        <img src="{{ asset('images/form.png') }}" alt="" />
+                        <img src="{{ asset('images/form-icon.png') }}" class="h-8" alt="" />
                         <h1 class="text-3xl font-bold text-heading-dark">
                             Edit Enrollment Form
                         </h1>
@@ -182,7 +182,7 @@
             @if ($step === 2)
                 <div class="bg-card p-8 rounded-4xl w-180 flex flex-col gap-8">
                     <div class="flex items-center gap-2">
-                        <img src="{{ asset('images/form.png') }}" alt="" />
+                        <img src="{{ asset('images/form-icon.png') }}" class="h-8" alt="" />
                         <h1 class="text-3xl font-bold text-heading-dark">
                             Edit Enrollment Form
                         </h1>
@@ -322,7 +322,7 @@
                 <div class="bg-card p-8 rounded-4xl w-160 flex flex-col gap-8">
                     <div class="flex w-full items-center-safe justify-between">
                         <div class="flex items-center gap-2">
-                            <img src="{{ asset('images/form.png') }}" alt="" />
+                            <img src="{{ asset('images/account.png') }}" class="h-8" alt="" />
                             <h1 class="text-3xl font-bold text-heading-dark">
                                 Edit Student Account
                             </h1>

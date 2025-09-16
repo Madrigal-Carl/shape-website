@@ -54,7 +54,11 @@
         {{-- Personal Basic Info --}}
         <div class="w-full border-1 border-card p-4 rounded-[12px] flex flex-col gap-2">
             <div class="flex w-full items-start justify-between">
-                <h1 class="text-2xl font-semibold">Full name</h1>
+                <div class="flex items-center gap-2">
+                    <img src="{{ asset('images/person.png') }}" class="h-6" alt="">
+                    <h1 class="text-2xl font-semibold">Full name</h1>
+                </div>
+
 
                 <div class="flex gap-2 items-center">
                     <!-- Edit / Cancel -->
@@ -103,7 +107,10 @@
 
         <div class="w-full border-1 border-card p-4 rounded-[12px] flex flex-col gap-2">
             <div class="flex w-full items-start justify-between">
-                <h1 class=" text-2xl font-semibold">Address</h1>
+                <div class="flex items-center gap-2">
+                    <img src="{{ asset('images/address.png') }}" class="h-6" alt="">
+                    <h1 class="text-2xl font-semibold">Address</h1>
+                </div>
 
                 <div class="flex gap-2 items-center">
                     <button wire:click="toggleEditAddress"
@@ -230,7 +237,10 @@
 
         <div class="w-full bg-card p-4 rounded-[12px] flex flex-col gap-2">
             <div class="flex w-full items-start justify-between">
-                <h1 class=" text-2xl font-semibold">Account Info</h1>
+                <div class="flex items-center gap-2">
+                    <img src="{{ asset('images/account.png') }}" class="h-6" alt="">
+                    <h1 class="text-2xl font-semibold">Account Info.</h1>
+                </div>
                 <div class="flex gap-2 items-center">
                     <button wire:click="toggleEditAccount"
                         class="w-fit flex items-center border-1 border-gray-300 gap-1 px-4 py-2 bg-white rounded-2xl cursor-pointer hover:text-white hover:border-blue-button hover:bg-blue-button">

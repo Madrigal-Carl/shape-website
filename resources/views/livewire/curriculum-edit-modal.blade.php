@@ -4,9 +4,9 @@
             class="bg-black/30 fixed w-dvw h-dvh top-0 left-0 z-50 backdrop-blur-xs flex justify-center items-center p-10">
             <div class="w-180 max-h-full flex flex-col bg-card p-8 rounded-4xl relative gap-8 ">
                 <form wire:submit='editCurriculum' class="w-full h-full flex flex-col gap-8 overflow-auto Addlesson">
-                    <div class="flex items-center gap-4">
-                        <img src="{{ asset('images/book.png') }}" alt="" />
-                        <h1 class="text-2xl font-semibold text-heading-dark">
+                    <div class="flex items-center gap-2">
+                        <img src="{{ asset('images/curriculum-icon.png') }}" class="h-8" alt="" />
+                        <h1 class="text-3xl font-bold text-heading-dark">
                             Edit Curriculumn
                         </h1>
                     </div>

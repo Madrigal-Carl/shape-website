@@ -7,7 +7,7 @@
                     <!-- first form -->
                     <div class="Addlesson w-full h-[100%] flex flex-col gap-8 self-center-safe overflow-y-auto">
                         <div class="flex items-center gap-2">
-                            <img src="{{ asset('images/cube.png') }}" alt="" />
+                            <img src="{{ asset('images/lesson-icon.png') }}" class="h-8" alt="" />
                             <h1 class="text-3xl font-bold text-heading-dark">
                                 Add Lesson
                             </h1>
