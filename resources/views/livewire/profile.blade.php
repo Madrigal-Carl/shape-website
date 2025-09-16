@@ -2,7 +2,7 @@
     <h1 class="text-4xl font-bold">Profile Info.</h1>
     <!-- Greetings -->
     <div class="bg-white flex gap-2 w-auto justify-between p-12 rounded-3xl">
-        <div class="flex gap-8 items-center">
+        <div class="flex gap-4 items-center">
             <div class="relative w-36 h-36">
                 @if ($photo)
                     <img src="{{ $photo->temporaryUrl() }}" class="w-36 h-36 aspect-square rounded-full object-cover"
@@ -52,7 +52,7 @@
 
     <div class="bg-white flex flex-col gap-4 w-auto justify-between p-12 rounded-[24px]">
         {{-- Personal Basic Info --}}
-        <div class="w-full border-1 border-card p-4 rounded-[12px] flex flex-col gap-2">
+        <div class="w-full border-1 border-card p-4 rounded-[12px] flex flex-col gap-4">
             <div class="flex w-full items-start justify-between">
                 <div class="flex items-center gap-2">
                     <img src="{{ asset('images/person.png') }}" class="h-6" alt="">
@@ -105,7 +105,7 @@
         </div>
 
 
-        <div class="w-full border-1 border-card p-4 rounded-[12px] flex flex-col gap-2">
+        <div class="w-full border-1 border-card p-4 rounded-[12px] flex flex-col gap-4">
             <div class="flex w-full items-start justify-between">
                 <div class="flex items-center gap-2">
                     <img src="{{ asset('images/address.png') }}" class="h-6" alt="">
@@ -235,7 +235,7 @@
             </div>
         </div>
 
-        <div class="w-full bg-card p-4 rounded-[12px] flex flex-col gap-2">
+        <div class="w-full bg-card p-4 rounded-[12px] flex flex-col gap-4">
             <div class="flex w-full items-start justify-between">
                 <div class="flex items-center gap-2">
                     <img src="{{ asset('images/account.png') }}" class="h-6" alt="">
