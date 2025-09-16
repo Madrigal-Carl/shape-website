@@ -5,36 +5,55 @@
     <!-- Account Info -->
     <div class="flex flex-col gap-2 items-center">
         <img src="{{ asset('storage/' . auth()->user()->accountable->path) }}" class="w-24 rounded-full" alt="" />
-        <!-- Profile Pic -->
         <div class="flex flex-col items-center">
             <p class="text-lg">
                 <span class="font-semibold leading-none">{{ auth()->user()->accountable->last_name }},
                 </span>{{ auth()->user()->accountable->first_name }}
             </p>
-            <!-- Fullname -->
-            <small
-                class="leading-none text-paragraph">{{ auth()->user()->accountable_type === 'App\Models\Instructor' ? 'Sned Teacher' : 'Sned Admin' }}</small>
-            <!-- Specializzation -->
+            <small class="leading-none text-paragraph">
+                {{ auth()->user()->accountable_type === 'App\Models\Instructor' ? 'Sned Teacher' : 'Sned Admin' }}
+            </small>
         </div>
     </div>
 
     <!-- Nav Controls -->
     <div class="w-full text-paragraph flex flex-col gap-2">
         @foreach ($sideBarItems as $item)
-            <a wire:click="setActiveSideBar('{{ $item['name'] }}')"
-                class="cursor-pointer hover:bg-blue-button hover:text-white flex gap-2 px-8 py-4 rounded-xl {{ $activeSideBar === $item['name'] ? 'active:bg-blue-button active:text-white active-nav shadow-blue-button shadow-xl/35' : '' }}">
-                <span class="material-symbols-rounded">{{ $item['icon'] }}</span>
-                <p class="">{{ $item['name'] }}</p>
-            </a>
+            <div class="flex flex-col">
+                <a wire:click="setActiveSideBar('{{ $item['name'] }}')"
+                    class="cursor-pointer hover:bg-blue-button hover:text-white flex items-center gap-2 px-8 py-4 rounded-xl
+                        {{ $activeSideBar === $item['name'] && !$activeSubContent ? 'active:bg-blue-button active:text-white active-nav shadow-blue-button shadow-xl/35' : '' }}">
+                    <span class="material-symbols-rounded">{{ $item['icon'] }}</span>
+                    <p>{{ $item['name'] }}</p>
+                </a>
+
+                {{-- Check if item has subcontent --}}
+                @if (isset($item['subcontent']))
+                    <div
+                        class="ml-10 mt-1 flex flex-col gap-1 transition-all duration-200 ease-in-out
+                        {{ $expanded === $item['name'] ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0 overflow-hidden' }}">
+                        @foreach ($item['subcontent'] as $sub)
+                            <a wire:click="setActiveSubContent('{{ $item['name'] }}', '{{ $sub['name'] }}')"
+                                class="cursor-pointer hover:bg-blue-500 hover:text-white flex items-center gap-2 px-4 py-2 rounded-lg text-sm
+                                    {{ $activeSubContent === $sub['name'] ? 'active:bg-blue-button active:text-white active-nav shadow-blue-button shadow-xl/35' : '' }}">
+                                <span class="material-symbols-rounded text-sm">{{ $sub['icon'] }}</span>
+                                <p>{{ $sub['name'] }}</p>
+                            </a>
+                        @endforeach
+                    </div>
+                @endif
+            </div>
         @endforeach
-        {{-- -------------- --}}
+
+        {{-- Logout --}}
         <a wire:click="logoutConfirm"
             class="cursor-pointer hover:bg-blue-button hover:text-white flex gap-2 active:bg-blue-button px-8 py-4 active:text-white rounded-xl">
             <span class="material-symbols-rounded">door_back</span>
-            <p class="">Logout</p>
+            <p>Logout</p>
         </a>
     </div>
 </nav>
+
 
 <script>
     document.addEventListener('livewire:init', () => {

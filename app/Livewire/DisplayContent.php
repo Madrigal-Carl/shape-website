@@ -9,17 +9,21 @@ class DisplayContent extends Component
 {
     public $sideBarItems;
     public $activeSideBar = '';
+    public $activeSubContent = null;
 
     public function mount($sideBarItems = [])
     {
         $this->sideBarItems = $sideBarItems;
-        $this->activeSideBar = session('activeSideBar', $this->sideBarItem[0]['name'] ?? '');
+        $this->activeSideBar = session('activeSideBar', $this->sideBarItems[0]['name'] ?? '');
+        $this->activeSubContent = session('activeSubContent', null);
     }
 
     #[On('setAcivatedSideBar')]
-    public function updateActive($activatedSideBar)
+    public function updateActive($activated)
     {
-        $this->activeSideBar = $activatedSideBar;
+        // activated may be either a parent or a child
+        $this->activeSideBar = session('activeSideBar', $this->activeSideBar);
+        $this->activeSubContent = session('activeSubContent', $this->activeSubContent);
     }
 
     public function render()

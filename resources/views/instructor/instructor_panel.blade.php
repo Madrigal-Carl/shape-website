@@ -3,7 +3,14 @@
         ['name' => 'Dashboard', 'icon' => 'space_dashboard', 'content' => 'instructor.dashboard'],
         ['name' => 'Curriculums', 'icon' => 'book_4', 'content' => 'instructor.curriculums'],
         ['name' => 'Students', 'icon' => 'group', 'content' => 'instructor.students'],
-        ['name' => 'Lessons', 'icon' => 'library_books', 'content' => 'instructor.lessons'],
+        [
+            'name' => 'Lessons',
+            'icon' => 'library_books',
+            'content' => 'instructor.lessons',
+            'subcontent' => [
+                ['name' => 'Activity', 'icon' => 'library_books', 'content' => 'instructor.lesson_activity'],
+            ],
+        ],
         ['name' => 'Awards', 'icon' => 'award_star', 'content' => 'instructor.awards'],
         ['name' => 'Settings', 'icon' => 'settings', 'content' => 'layouts.settings'],
     ];
