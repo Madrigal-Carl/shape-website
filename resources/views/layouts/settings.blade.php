@@ -1,7 +1,7 @@
-<main class="col-span-7 pl-4 pr-8 py-4 flex flex-col h-dvh gap-4 overflow-y-auto">
+<main class="col-span-7 pl-4 pr-7 py-4 flex flex-col h-dvh gap-4 overflow-y-auto">
     <h1 class="text-4xl font-bold">Profile Info.</h1>
     <!-- Greetings -->
-    <div class="bg-white flex gap-2 mt-4 w-auto justify-between p-12 rounded-3xl">
+    <div class="bg-white flex gap-2 w-auto justify-between p-12 rounded-3xl">
         <div class="flex gap-8 items-center">
             <img src="{{ asset('storage/' . auth()->user()->accountable->path) }}"
                 class="w-36 h-36 aspect-square rounded-full" alt="" />
@@ -99,45 +99,100 @@
             </div>
 
 
-            <!-- Address Inputs -->
-            <div class="grid grid-cols-3 gap-4">
-                <div class="flex flex-col gap-1">
-                    <label for="" class="text-paragraph">Province</label>
-                    <div
-                        class="w-full bg-card px-3 py-1.5 rounded-xl outline-none border-1 border-white focus:border-blue-button hover:border-blue-button">
-                        <select name="" id="" class="w-full outline-none text-heading-dark font-medium">
-                            <option value="marinduque" class="text-sm text-heading-dark" selected disabled>
-                                Marinduque
-                            </option>
-                        </select>
+            <!--Permanent Address Inputs -->
+            <div class="flex flex-col gap-2">
+                <h2 class="font-semibold text-lg">Permanent Address</h2>
+                <div class="grid grid-cols-3 gap-4">
+                    <div class="flex flex-col gap-1">
+                        <label for="" class="text-paragraph">Province</label>
+                        <div
+                            class="w-full bg-card px-3 py-1.5 rounded-xl outline-none border-1 border-white focus:border-blue-button hover:border-blue-button">
+                            <select name="" id=""
+                                class="w-full outline-none text-heading-dark font-medium">
+                                <option value="marinduque" class="text-sm text-heading-dark" selected disabled>
+                                    Marinduque
+                                </option>
+                            </select>
+                        </div>
                     </div>
-                </div>
 
-                <div class="flex flex-col gap-1">
-                    <label for="" class="text-paragraph">Municipality</label>
-                    <div
-                        class="w-full bg-card px-3 py-1.5 rounded-xl outline-none border-1 border-white focus:border-blue-button hover:border-blue-button">
-                        <select name="" id="" class="w-full outline-none text-heading-dark font-medium">
-                            <option value="marinduque" class="text-sm text-heading-dark" selected disabled>
-                                Boac
-                            </option>
-                        </select>
+                    <div class="flex flex-col gap-1">
+                        <label for="" class="text-paragraph">Municipality</label>
+                        <div
+                            class="w-full bg-card px-3 py-1.5 rounded-xl outline-none border-1 border-white focus:border-blue-button hover:border-blue-button">
+                            <select name="" id=""
+                                class="w-full outline-none text-heading-dark font-medium">
+                                <option value="marinduque" class="text-sm text-heading-dark" selected disabled>
+                                    Boac
+                                </option>
+                            </select>
+                        </div>
                     </div>
-                </div>
 
-                <div class="flex flex-col gap-1">
-                    <label for="" class="text-paragraph">Barangay</label>
-                    <div
-                        class="w-full bg-card px-3 py-1.5 rounded-xl outline-none border-1 border-white focus:border-blue-button hover:border-blue-button">
-                        <select name="" id="" class="w-full outline-none text-heading-dark font-medium">
-                            <option value="marinduque" class="text-sm text-heading-dark" selected disabled>
-                                Balimbing
-                            </option>
-                        </select>
+                    <div class="flex flex-col gap-1">
+                        <label for="" class="text-paragraph">Barangay</label>
+                        <div
+                            class="w-full bg-card px-3 py-1.5 rounded-xl outline-none border-1 border-white focus:border-blue-button hover:border-blue-button">
+                            <select name="" id=""
+                                class="w-full outline-none text-heading-dark font-medium">
+                                <option value="marinduque" class="text-sm text-heading-dark" selected disabled>
+                                    Balimbing
+                                </option>
+                            </select>
+                        </div>
                     </div>
-                </div>
 
+                </div>
             </div>
+
+
+
+            <!--Current Address Inputs -->
+            <div class="flex flex-col gap-2 mt-2">
+                <h2 class="font-semibold text-lg">Current Address</h2>
+                <div class="grid grid-cols-3 gap-4">
+                    <div class="flex flex-col gap-1">
+                        <label for="" class="text-paragraph">Province</label>
+                        <div
+                            class="w-full bg-card px-3 py-1.5 rounded-xl outline-none border-1 border-white focus:border-blue-button hover:border-blue-button">
+                            <select name="" id=""
+                                class="w-full outline-none text-heading-dark font-medium">
+                                <option value="marinduque" class="text-sm text-heading-dark" selected disabled>
+                                    Marinduque
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col gap-1">
+                        <label for="" class="text-paragraph">Municipality</label>
+                        <div
+                            class="w-full bg-card px-3 py-1.5 rounded-xl outline-none border-1 border-white focus:border-blue-button hover:border-blue-button">
+                            <select name="" id=""
+                                class="w-full outline-none text-heading-dark font-medium">
+                                <option value="marinduque" class="text-sm text-heading-dark" selected disabled>
+                                    Boac
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col gap-1">
+                        <label for="" class="text-paragraph">Barangay</label>
+                        <div
+                            class="w-full bg-card px-3 py-1.5 rounded-xl outline-none border-1 border-white focus:border-blue-button hover:border-blue-button">
+                            <select name="" id=""
+                                class="w-full outline-none text-heading-dark font-medium">
+                                <option value="marinduque" class="text-sm text-heading-dark" selected disabled>
+                                    Balimbing
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
         </div>
 
 
