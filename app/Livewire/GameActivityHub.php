@@ -162,7 +162,7 @@ class GameActivityHub extends Component
     {
         $this->targetComponent = $targetComponent;
 
-        $this->specializations = Specialization::orderBy('name')->pluck('name')->toArray();
+        $this->specializations = Specialization::orderBy('name')->get();
         $this->subjects = Subject::orderBy('name')->get();
     }
 

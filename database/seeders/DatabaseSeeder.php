@@ -53,9 +53,18 @@ class DatabaseSeeder extends Seeder
         }
 
         $specializations = collect([
-            Specialization::firstOrCreate(['name' => 'autism spectrum disorder']),
-            Specialization::firstOrCreate(['name' => 'speech disorder']),
-            Specialization::firstOrCreate(['name' => 'hearing impairment']),
+            Specialization::firstOrCreate(
+                ['name' => 'autism spectrum disorder'],
+                ['icon' => 'autism-icon.png']
+            ),
+            Specialization::firstOrCreate(
+                ['name' => 'speech disorder'],
+                ['icon' => 'speech-icon.png']
+            ),
+            Specialization::firstOrCreate(
+                ['name' => 'hearing impairment'],
+                ['icon' => 'hearing-icon.png']
+            ),
         ]);
 
         // 1. Create Instructors

@@ -67,13 +67,13 @@
                     <h1 class="font-semibold text-xl">Specialization:</h1>
                     <!--Categories-->
                     <div class="w-full flex items-center gap-2 gameCategories overflow-x-auto pb-2">
-                        @foreach ($specializations as $name)
-                            <div wire:click="toggleSpecialization('{{ $name }}')"
+                        @foreach ($specializations as $spec)
+                            <div wire:click="toggleSpecialization('{{ $spec->name }}')"
                                 class="w-fit shrink-0 flex items-center gap-2 px-4 py-2 rounded-xl cursor-pointer
-                                    {{ in_array($name, $selectedSpecializations, true) ? 'bg-blue-button text-white' : 'bg-white hover:bg-blue-button hover:text-white' }}">
-                                <img src="{{ asset('images/specialization_icons/autism-icon.png') }}" alt=""
+                                    {{ in_array($spec->name, $selectedSpecializations, true) ? 'bg-blue-button text-white' : 'bg-white hover:bg-blue-button hover:text-white' }}">
+                                <img src="{{ asset('images/specialization_icons/' . $spec->icon) }}" alt=""
                                     class="h-6">
-                                <p class="text-base">{{ ucwords($name) }}</p>
+                                <p class="text-base">{{ ucwords($spec->name) }}</p>
                             </div>
                         @endforeach
                     </div>

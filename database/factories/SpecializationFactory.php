@@ -19,11 +19,30 @@ class SpecializationFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->unique()->randomElement([
-                'autism spectrum disorder',
-                'speech disorder',
-                'hearing impairment',
-            ]),
+            'name' => $this->faker->unique()->word(),
+            'icon' => 'default-icon.png',
         ];
+    }
+
+    public function createDefaults()
+    {
+        $specializations = [
+            [
+                'name' => 'autism spectrum disorder',
+                'icon' => 'autism-icon.png',
+            ],
+            [
+                'name' => 'speech disorder',
+                'icon' => 'hearing-icon.png',
+            ],
+            [
+                'name' => 'hearing impairment',
+                'icon' => 'speech-icon.png',
+            ],
+        ];
+
+        foreach ($specializations as $data) {
+            Specialization::firstOrCreate(['name' => $data['name']], $data);
+        }
     }
 }
