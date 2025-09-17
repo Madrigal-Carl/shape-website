@@ -19,6 +19,7 @@ class AdminFactory extends Factory
     public function definition(): array
     {
         return [
+            'path' => $this->faker->randomElement(['default_profiles/default-male-teacher-pfp.png', 'default_profiles/default-female-teacher-pfp.png']),
             'first_name' => $this->faker->firstName,
             'middle_name' => $this->faker->firstName,
             'last_name' => $this->faker->lastName,
