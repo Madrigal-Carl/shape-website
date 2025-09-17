@@ -5,8 +5,8 @@
             <div class="w-180 h-full flex flex-col bg-card p-8 rounded-4xl relative gap-8 ">
                 <form wire:submit='moveUp' class="w-full h-full flex flex-col gap-8 overflow-auto Addlesson">
                     <div class=" w-full flex items-center justify-between gap-4">
-                        <div class="flex items-center gap-4">
-                            <img src="{{ asset('images/move-up.png') }}" alt="" class="h-10" />
+                        <div class="flex items-center gap-2">
+                            <img src="{{ asset('images/move-up-icon.png') }}" alt="" class="h-8" />
                             <h1 class="text-3xl font-bold text-heading-dark">
                                 Move Up Student
                             </h1>
@@ -15,7 +15,7 @@
                         <div>
                             <div
                                 class="flex items-center bg-white py-1 px-2 rounded-full shadow-2xl/15 border-2 border-white hover:border-blue-button text-paragraph hover:bg-blue-button hover:text-white cursor-pointer">
-                                <select class="w-30 outline-none" wire:model.live="grade_level">
+                                <select class="w-max outline-none" wire:model.live="grade_level">
                                     <option value="" class=" text-heading-dark" disabled>Grade Level</option>
                                     <option value="all" class=" text-heading-dark">All</option>
                                     @foreach ($gradeLevelOptions as $level)

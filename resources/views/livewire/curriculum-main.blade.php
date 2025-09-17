@@ -104,8 +104,8 @@
                                 <tr>
                                     <!-- Your original cells -->
                                     <td class="px-4 py-3 text-center text-paragraph">{{ $curriculum->id }}</td>
-                                    <td class="px-4 py-3 text-center text-paragraph flex flex-col items-center">
-                                        <p class="w-40   truncate">{{ ucwords($curriculum->name) }}</p>
+                                    <td class="px-4 py-3 text-center text-paragraph flex items-center justify-center">
+                                        <p class="w-30 truncate">{{ ucwords($curriculum->name) }}</p>
                                     </td>
                                     <td class="px-4 py-3 text-center text-paragraph">
                                         {{ ucwords($curriculum->grade_level) }}</td>

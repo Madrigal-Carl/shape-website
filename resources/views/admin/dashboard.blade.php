@@ -98,7 +98,7 @@
                             </p>
                             <h1 class="text-2xl font-semibold leading-6">INSTRUCTORS</h1>
                         </div>
-                        <span class="material-symbols-rounded icon">groups</span>
+                        <img src="{{ asset('images/student-feed.png') }}" class="h-6" alt="">
                     </div>
                     <h1 class="text-5xl font-bold text-lime">10</h1>
                 </div>
@@ -111,7 +111,7 @@
                             </p>
                             <h1 class="text-2xl font-semibold leading-6">CURRICULUM</h1>
                         </div>
-                        <span class="material-symbols-rounded icon">book_4</span>
+                        <img src="{{ asset('images/curriculum-icon.png') }}" class="h-6" alt="">
                     </div>
                     <h1 class="text-5xl font-bold text-blue-button">2</h1>
                 </div>
@@ -268,8 +268,8 @@
             </div>
 
             <div class="flex gap-2 w-full bg-card p-3 rounded-full">
-                <img src="{{ asset('images/default_profiles/default-male-student-pfp.png') }}" class="rounded-full w-10"
-                    alt="" />
+                <img src="{{ asset('images/default_profiles/default-male-student-pfp.png') }}"
+                    class="rounded-full w-10" alt="" />
                 <!-- notification Details -->
                 <div>
                     <h2 class="leading-tight font-semibold text-md">

@@ -49,7 +49,7 @@
             <div class="flex items-center">
                 <div
                     class="flex items-center bg-white py-3 px-5 rounded-full shadow-2xl/15 border-2 border-white hover:border-blue-button text-paragraph hover:bg-blue-button hover:text-white cursor-pointer">
-                    <select name="" id="" class="w-30 outline-none" wire:model.live="grade_level">
+                    <select name="" id="" class="w-max outline-none" wire:model.live="grade_level">
                         <option value="" class=" text-heading-dark" disabled>
                             Grade Level
                         </option>
