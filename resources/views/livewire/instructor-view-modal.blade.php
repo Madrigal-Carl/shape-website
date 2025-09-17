@@ -17,19 +17,19 @@
                             <!-- Action Buttons -->
                             <div class="flex items-center gap-2">
                                 <button
-                                    class="z-20 profile-button flex items-center bg-white py-2 px-5 rounded-full gap-2 shadow-2xl text-paragraph cursor-pointer hover:text-white hover:bg-blue-button hover:shadow-xl/35 hover:shadow-blue-button">
+                                    class="z-20 profile-button flex items-center bg-white py-2 px-5 rounded-full gap-2 text-paragraph cursor-pointer hover:text-white hover:bg-blue-button">
                                     <span class="material-symbols-rounded">save</span>
                                     <p class="text-sm">Export Form</p>
                                 </button>
 
                                 <button
-                                    class="z-20 profile-button flex items-center bg-white py-2 px-5 rounded-full gap-2 shadow-2xl text-paragraph cursor-pointer hover:text-white hover:bg-blue-button hover:shadow-xl/35 hover:shadow-blue-button">
+                                    class="z-20 profile-button flex items-center bg-white py-2 px-5 rounded-full gap-2 text-paragraph cursor-pointer hover:text-white hover:bg-blue-button">
                                     <span class="material-symbols-rounded">docs</span>
                                     <p class="text-sm">Generate Reports</p>
                                 </button>
 
                                 {{-- <button
-                            class="profile-button flex items-center bg-white py-2 px-5 rounded-full gap-2 shadow-2xl text-paragraph cursor-pointer hover:text-white hover:bg-blue-button hover:shadow-xl/35 hover:shadow-blue-button hover:scale-105">
+                            class="profile-button flex items-center bg-white py-2 px-5 rounded-full gap-2 shadow-2xl text-paragraph cursor-pointer hover:text-white hover:bg-blue-button hover:scale-105">
                             <span class="material-symbols-rounded">calendar_month</span>
                             <p class="text-sm">Select Date</p>
                         </button> --}}
@@ -60,7 +60,7 @@
                             <h1 class="text-2xl font-semibold text-heading-dark">Summary</h1>
                             <div class="grid grid-cols-3 grid-rows-1 gap-4">
                                 <div
-                                    class="bg-gradient-to-tr h-48 from-blue-button to-[#00EEFF] shadow-blue-button shadow-2xl/45 p-6 text-white rounded-3xl flex flex-col justify-between gap-6">
+                                    class="bg-gradient-to-tr h-48 from-blue-button to-[#00EEFF] p-6 text-white rounded-3xl flex flex-col justify-between gap-6">
                                     <div class="flex justify-between w-full">
                                         <div>
                                             <p class="text-xs leading-snug font-normal">Total</p>
@@ -72,7 +72,7 @@
                                 </div>
 
                                 <div
-                                    class="bg-gradient-to-tr h-48 from-lime to-[#00ff80] shadow-lime shadow-2xl/45 p-6 text-white rounded-3xl flex flex-col justify-between gap-6">
+                                    class="bg-gradient-to-tr h-48 from-lime to-[#00ff80] p-6 text-white rounded-3xl flex flex-col justify-between gap-6">
                                     <div class="flex justify-between w-full">
                                         <div>
                                             <p class="text-xs leading-snug font-normal">No. of created</p>
@@ -84,7 +84,7 @@
                                 </div>
 
                                 <div
-                                    class="bg-gradient-to-tr h-48 from-yellowOrange to-[#FFEA00] shadow-yellowOrange shadow-2xl/45 p-6 text-white rounded-3xl flex flex-col justify-between gap-6">
+                                    class="bg-gradient-to-tr h-48 from-yellowOrange to-[#FFEA00] p-6 text-white rounded-3xl flex flex-col justify-between gap-6">
                                     <div class="flex justify-between w-full">
                                         <div>
                                             <p class="text-xs leading-snug font-normal">No. of uploaded</p>
@@ -211,7 +211,7 @@
                             <div class="flex flex-col gap-4 bg-white p-6 rounded-2xl">
                                 <div class="flex flex-col gap-2 mb-4">
                                     <h1 class="text-2xl font-semibold text-heading-dark">
-                                        Student Performance
+                                        Teacher's Performance
                                     </h1>
                                     <p class="text-paragraph">Overview of student's lesson progress and quiz scores.</p>
                                 </div>
@@ -324,7 +324,7 @@
                                 <h1 class="text-2xl font-semibold text-heading-dark">Student List</h1>
                                 <div class="flex items-center gap-4 self-start">
                                     <div
-                                        class="profile-button flex items-center bg-white py-2 px-5 rounded-full gap-2 shadow-2xl text-paragraph cursor-pointer hover:text-white hover:bg-blue-button hover:shadow-xl/35 hover:shadow-blue-button">
+                                        class="profile-button flex items-center bg-white py-2 px-5 rounded-full gap-2 text-paragraph cursor-pointer hover:text-white hover:bg-blue-button">
                                         <select class="w-30 outline-none">
                                             <option value="" class=" text-heading-dark" selected disabled>
                                                 Grade Level
@@ -339,7 +339,7 @@
                                     </div>
 
                                     <div
-                                        class="profile-button flex items-center bg-white py-2 px-5 rounded-full gap-2 shadow-2xl text-paragraph cursor-pointer hover:text-white hover:bg-blue-button hover:shadow-xl/35 hover:shadow-blue-button">
+                                        class="profile-button flex items-center bg-white py-2 px-5 rounded-full gap-2 text-paragraph cursor-pointer hover:text-white hover:bg-blue-button">
                                         <select name="" id="" class="w-30 outline-none"
                                             wire:change="$set('status', $event.target.value)">
                                             <option class=" text-heading-dark" selected disabled>
@@ -375,13 +375,13 @@
                                             placeholder="Search">
                                     </div> --}}
                                     <button type="button" wire:click='closeModal'
-                                        class="bg-white profile-button flex items-center p-2 rounded-full gap-2 shadow-2xl text-paragraph cursor-pointer hover:text-white hover:bg-blue-button hover:shadow-xl/35 hover:shadow-blue-button">
+                                        class="bg-white profile-button flex items-center p-2 rounded-full gap-2 text-paragraph cursor-pointer hover:text-white hover:bg-blue-button hover:shadow-blue-button">
                                         <span class="material-symbols-rounded">close</span>
                                     </button>
                                 </div>
                             </div>
 
-                            <div class="flex flex-col w-full p-6 min-h-[20%] bg-white rounded-3xl shadow-2xl/5">
+                            <div class="flex flex-col w-full p-6 min-h-[20%] bg-white rounded-3xl">
                                 <div class="flex flex-col overflow-y-scroll min-h-[20%]">
                                     <div class="flex flex-col rounded-3xl bg-white">
                                         <table class="table-auto border-separate relative">
@@ -433,29 +433,7 @@
                                                     </td>
                                                     <td class="px-4 py-3 text-center">
                                                         <div class="flex justify-center items-center gap-1 text-white">
-                                                            <button
-                                                                class="px-2 py-1 flex gap-2 items-center rounded-lg min-w-[50px] justify-center relative transition bg-danger cursor-pointer hover:scale-110">
 
-                                                                <!-- Text (hidden when loading) -->
-                                                                <small class="transition-opacity duration-150">
-                                                                    Edit
-                                                                </small>
-
-                                                                <!-- Spinner (overlay) -->
-                                                                {{-- <svg wire:loading
-                                                                    wire:target='openEditStudentModal({{ $student->id }})'
-                                                                    aria-hidden="true"
-                                                                    class="w-4 h-4 text-white animate-spin absolute"
-                                                                    viewBox="0 0 100 101" fill="none"
-                                                                    xmlns="http://www.w3.org/2000/svg">
-                                                                    <path
-                                                                        d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
-                                                                        fill="currentColor" />
-                                                                    <path
-                                                                        d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-                                                                        fill="currentFill" />
-                                                                </svg> --}}
-                                                            </button>
                                                             <button
                                                                 class="bg-blue-button cursor-pointer hover:scale-110 px-2 py-1 flex gap-2 items-center rounded-lg min-w-[50px] justify-center relative">
 

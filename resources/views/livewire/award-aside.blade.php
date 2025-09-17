@@ -1,6 +1,6 @@
 <aside class="col-span-2 grid grid-cols-1 grid-rows-1 pr-4 pl-4 py-4 gap-4 h-dvh">
     <!-- System Feed -->
-    <div class="bg-white w-full h-full rounded-3xl px-3 pt-3 pb-6 flex flex-col shadow-2xl/15">
+    <div class="bg-white w-full h-full rounded-3xl px-3 pt-3 pb-6 flex flex-col">
         <div class="flex gap-2 items-center p-3">
             <img src="{{ asset('images/award-feed.png') }}" class="h-6" alt="">
             <h1 class="text-2xl font-bold">Award Feed</h1>
