@@ -14,7 +14,7 @@
 
                         <div class="flex items-center gap-2">
                             <button type="button" wire:click='closeModal'
-                                class="bg-white profile-button flex items-center p-2 rounded-full gap-2 shadow-2xl text-paragraph cursor-pointer hover:text-white hover:bg-blue-button hover:shadow-xl/35 hover:shadow-blue-button">
+                                class="bg-white profile-button flex items-center p-2 rounded-full gap-2 text-paragraph cursor-pointer hover:text-white hover:bg-blue-button">
                                 <span class="material-symbols-rounded">close</span>
                             </button>
                         </div>
@@ -23,7 +23,7 @@
 
                     <div class="grid grid-cols-3 gap-4">
                         <div
-                            class="bg-gradient-to-tr h-48 col-span-1 from-blue-button to-[#00EEFF] shadow-blue-button shadow-2xl/45 p-6 text-white rounded-3xl flex flex-col justify-between gap-6">
+                            class="bg-gradient-to-tr h-48 col-span-1 from-blue-button to-[#00EEFF] p-6 text-white rounded-3xl flex flex-col justify-between gap-6">
                             <div class="flex justify-between">
                                 <div>
                                     <p class="text-xs leading-snug font-normal">No. of Students</p>
@@ -34,8 +34,7 @@
                             <h1 class="text-5xl font-bold">30</h1>
                         </div>
 
-                        <div
-                            class="bg-white p-6 rounded-3xl w-full flex flex-col justify-between shadow-2xl/10 col-span-2">
+                        <div class="bg-white p-6 rounded-3xl w-full flex flex-col justify-between col-span-2">
                             <div class="flex items-center w-auto gap-4">
                                 <h3 class="text-sm font-semibold w-40">Subject:</h3>
                                 <p class="text-sm w-full">

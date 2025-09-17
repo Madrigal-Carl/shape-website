@@ -10,8 +10,7 @@
                         {{ auth()->user()->accountable->first_name }}</span>
                 </h1>
                 <p class="text-lg text-paragraph leading-4">Here is your summary today</p>
-                <div
-                    class="w-max px-2 py-1 mt-4 rounded-lg border-1 border-gray-300 hover:border-blue-button shadow-2xl/15">
+                <div class="w-max px-2 py-1 mt-4 rounded-lg border-1 border-gray-300 hover:border-blue-button">
                     <select class="w-full outline-none text-heading-dark font-medium text-lg"
                         wire:model.live='school_year'>
                         @php
@@ -39,7 +38,7 @@
         <!-- Buttons -->
         <div class="flex gap-4 self-start">
             <button wire:click="openMoveUpStudentModal"
-                class="relative flex items-center justify-center bg-white py-3 px-5 rounded-full gap-2 shadow-2xl/15 text-paragraph cursor-pointer border-2 border-white hover:border-blue-button hover:text-white hover:bg-blue-button hover:shadow-xl/35 hover:shadow-blue-button hover:scale-105"
+                class="relative flex items-center justify-center bg-white py-3 px-5 rounded-full gap-2 text-paragraph cursor-pointer border-2 border-white hover:border-blue-button hover:text-white hover:bg-blue-button"
                 wire:loading.attr="disabled" wire:target="openMoveUpStudentModal">
 
                 <div class="flex items-center gap-2" wire:loading.class="invisible"
@@ -65,7 +64,7 @@
 
 
             <button wire:click="openAddStudentModal"
-                class="relative flex items-center justify-center bg-white py-3 px-5 rounded-full gap-2 shadow-2xl/15 text-paragraph cursor-pointer border-2 border-white hover:border-blue-button hover:text-white hover:bg-blue-button hover:shadow-xl/35 hover:shadow-blue-button hover:scale-105"
+                class="relative flex items-center justify-center bg-white py-3 px-5 rounded-full gap-2 text-paragraph cursor-pointer border-2 border-white hover:border-blue-button hover:text-white hover:bg-blue-button"
                 wire:loading.attr="disabled" wire:target="openAddStudentModal">
 
                 <div class="flex items-center gap-2" wire:loading.class="invisible" wire:target="openAddStudentModal">
@@ -101,7 +100,7 @@
             <livewire:student-move-up-modal />
             <div class="flex items-center gap-4 self-start">
                 <div
-                    class="flex items-center bg-white py-3 px-5 rounded-full shadow-2xl/15 border-2 border-white hover:border-blue-button text-paragraph hover:bg-blue-button hover:text-white cursor-pointer">
+                    class="flex items-center bg-white py-3 px-5 rounded-full border-2 border-white hover:border-blue-button text-paragraph hover:bg-blue-button hover:text-white cursor-pointer">
                     <select class="w-max outline-none" wire:model.live="grade_level">
                         <option value="" class=" text-heading-dark" disabled>
                             Grade Level
@@ -118,7 +117,7 @@
                 </div>
 
                 <div
-                    class="flex items-center bg-white py-3 px-5 rounded-full shadow-2xl/15 border-2 border-white hover:border-blue-button text-paragraph hover:bg-blue-button hover:text-white cursor-pointer">
+                    class="flex items-center bg-white py-3 px-5 rounded-full border-2 border-white hover:border-blue-button text-paragraph hover:bg-blue-button hover:text-white cursor-pointer">
                     <select name="" id="" class="w-max outline-none"
                         wire:change="$set('status', $event.target.value)">
                         <option class=" text-heading-dark" selected disabled>
@@ -147,7 +146,7 @@
 
 
                 <div
-                    class="flex gap-2 items-center bg-white py-3 px-5 rounded-full shadow-2xl/15 text-paragraph border-2 border-white hover:border-blue-button cursor-pointer">
+                    class="flex gap-2 items-center bg-white py-3 px-5 rounded-full text-paragraph border-2 border-white hover:border-blue-button cursor-pointer">
                     <span class="material-symbols-rounded">search</span>
                     <input type="text" class="outline-none w-20 focus:w-60 placeholder-paragraph"
                         wire:model.live="search" placeholder="Search">
@@ -155,7 +154,7 @@
             </div>
         </div>
 
-        <div class="flex flex-col min-h-[20%] p-6 bg-white rounded-3xl shadow-2xl/5">
+        <div class="flex flex-col min-h-[20%] p-6 bg-white rounded-3xl">
             <div class="flex flex-col overflow-y-scroll min-h-[20%]">
                 <div class="flex flex-col rounded-3xl bg-white">
                     <table class="table-auto border-separate relative">
@@ -289,7 +288,7 @@
             </div>
         </div>
         @if ($students->lastPage() > 1)
-            <div class="rounded-full bg-white gap-1 p-2 w-fit self-center-safe flex items-center text-sm shadow-2xl">
+            <div class="rounded-full bg-white gap-1 p-2 w-fit self-center-safe flex items-center text-sm">
                 <button
                     class="cursor-pointer py-1 flex items-center px-3 {{ $students->onFirstPage() ? 'hidden' : '' }}"
                     @if (!$students->onFirstPage()) wire:click="gotoPage({{ $students->currentPage() - 1 }})" @endif>

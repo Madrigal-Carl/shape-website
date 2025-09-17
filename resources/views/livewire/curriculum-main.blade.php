@@ -15,7 +15,7 @@
 
         <!-- Buttons -->
         <button wire:click="openAddCurriculumModal"
-            class="relative flex items-center self-start justify-center bg-white py-3 px-5 rounded-full gap-2 shadow-2xl/15 text-paragraph cursor-pointer border-2 border-white hover:border-blue-button hover:text-white hover:bg-blue-button hover:shadow-xl/35 hover:shadow-blue-button hover:scale-105"
+            class="relative flex items-center self-start justify-center bg-white py-3 px-5 rounded-full gap-2 text-paragraph cursor-pointer border-2 border-white hover:border-blue-button hover:text-white hover:bg-blue-button"
             wire:loading.attr="disabled" wire:target="openAddCurriculumModal">
 
             <!-- Normal state -->
@@ -50,7 +50,7 @@
             <livewire:curriculum-view-modal />
             <div class="flex items-center gap-4">
                 <div
-                    class="flex items-center h-fit bg-white py-3 px-5 rounded-full shadow-2xl/15 text-paragraph border-2 border-white hover:border-blue-button hover:bg-blue-button hover:text-white cursor-pointer">
+                    class="flex items-center h-fit bg-white py-3 px-5 rounded-full text-paragraph border-2 border-white hover:border-blue-button hover:bg-blue-button hover:text-white cursor-pointer">
                     <select wire:change="$set('status', $event.target.value)" name="" id=""
                         class="w-25 outline-none">
                         <option value="pending" class="text-sm text-heading-dark" selected disabled>
@@ -69,7 +69,7 @@
                 </div>
 
                 <div
-                    class="flex gap-2 items-center self-start h-fit bg-white py-3 px-5 rounded-full shadow-2xl/15 text-paragraph border-2 border-white hover:border-blue-button cursor-pointer">
+                    class="flex gap-2 items-center self-start h-fit bg-white py-3 px-5 rounded-full text-paragraph border-2 border-white hover:border-blue-button cursor-pointer">
                     <span class="material-symbols-rounded">search</span>
                     <input type="text" class="outline-none w-20 focus:w-60 placeholder-paragraph"
                         wire:model.live="search" placeholder="Search">
@@ -78,7 +78,7 @@
 
         </div>
 
-        <div class="flex flex-col items-center min-h-[20%] p-6 bg-white rounded-3xl w-full shadow-2xl/5">
+        <div class="flex flex-col items-center min-h-[20%] p-6 bg-white rounded-3xl w-full">
             <div class="flex flex-col overflow-y-scroll w-full">
                 <div class="flex flex-col bg-whitel rounded-3xl bg-white">
                     <table class="table-auto border-collapse border-0">

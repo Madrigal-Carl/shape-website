@@ -10,8 +10,7 @@
                         {{ auth()->user()->accountable->first_name }}</span>
                 </h1>
                 <p class="text-lg text-paragraph leading-4">Here is your summary today</p>
-                <div
-                    class="w-max px-2 py-1 mt-4 rounded-lg border-1 border-gray-300 hover:border-blue-button shadow-2xl/15">
+                <div class="w-max px-2 py-1 mt-4 rounded-lg border-1 border-gray-300 hover:border-blue-button">
                     <select class="w-full outline-none text-heading-dark font-medium text-lg"
                         wire:model.live='school_year'>
 
@@ -26,7 +25,7 @@
 
         <!-- Buttons -->
         <button wire:click="openAddActivityModal"
-            class="relative self-start flex items-center justify-center bg-white py-3 px-5 rounded-full gap-2 shadow-2xl/15 text-paragraph cursor-pointer border-2 border-white hover:border-blue-button hover:text-white hover:bg-blue-button hover:shadow-xl/35 hover:shadow-blue-button hover:scale-105"
+            class="relative self-start flex items-center justify-center bg-white py-3 px-5 rounded-full gap-2 text-paragraph cursor-pointer border-2 border-white hover:border-blue-button hover:text-white hover:bg-blue-button"
             wire:loading.attr="disabled" wire:target="openAddActivityModal">
 
             <!-- Normal state -->
@@ -61,7 +60,7 @@
             <livewire:lesson-view-modal /> --}}
             <div class="flex gap-4">
                 <div
-                    class="flex gap-2 items-center bg-white py-3 px-5 rounded-full shadow-2xl/15 text-paragraph border-2 border-white hover:border-blue-button cursor-pointer">
+                    class="flex gap-2 items-center bg-white py-3 px-5 rounded-full text-paragraph border-2 border-white hover:border-blue-button cursor-pointer">
                     <span class="material-symbols-rounded">search</span>
                     <input type="text" class="outline-none w-20 focus:w-60 placeholder-paragraph"
                         wire:model.live="search" placeholder="Search">
@@ -69,7 +68,7 @@
             </div>
         </div>
 
-        <div class="flex flex-col min-h-[20%] p-6 bg-white rounded-3xl shadow-2xl/5">
+        <div class="flex flex-col min-h-[20%] p-6 bg-white rounded-3xl">
             <div class="flex flex-col overflow-y-scroll">
                 <div class="flex flex-col bg-whitel rounded-3xl bg-white">
                     <table class="table-auto border-separate relative">
@@ -185,7 +184,7 @@
         </div>
 
 
-        <div class="rounded-full bg-white gap-1 p-2 w-fit self-center-safe flex items-center text-sm shadow-2xl">
+        <div class="rounded-full bg-white gap-1 p-2 w-fit self-center-safe flex items-center text-sm">
             <button class="cursor-pointer py-1 flex items-center px-3">
                 <span class="material-symbols-outlined">
                     chevron_left

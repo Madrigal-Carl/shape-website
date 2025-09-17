@@ -16,25 +16,25 @@
                     <!-- Action Buttons -->
                     <div class="flex items-center gap-2">
                         <button
-                            class="profile-button flex items-center bg-white py-2 px-5 rounded-full gap-2 shadow-2xl text-paragraph cursor-pointer hover:text-white hover:bg-blue-button hover:shadow-xl/35 hover:shadow-blue-button">
+                            class="profile-button flex items-center bg-white py-2 px-5 rounded-full gap-2 text-paragraph cursor-pointer hover:text-white hover:bg-blue-button">
                             <span class="material-symbols-rounded">save</span>
                             <p class="text-sm">Export Form</p>
                         </button>
 
                         <button
-                            class="profile-button flex items-center bg-white py-2 px-5 rounded-full gap-2 shadow-2xl text-paragraph cursor-pointer hover:text-white hover:bg-blue-button hover:shadow-xl/35 hover:shadow-blue-button">
+                            class="profile-button flex items-center bg-white py-2 px-5 rounded-full gap-2 text-paragraph cursor-pointer hover:text-white hover:bg-blue-button">
                             <span class="material-symbols-rounded">docs</span>
                             <p class="text-sm">Generate Reports</p>
                         </button>
 
                         {{-- <button
-                            class="profile-button flex items-center bg-white py-2 px-5 rounded-full gap-2 shadow-2xl text-paragraph cursor-pointer hover:text-white hover:bg-blue-button hover:shadow-xl/35 hover:shadow-blue-button hover:scale-105">
+                            class="profile-button flex items-center bg-white py-2 px-5 rounded-full gap-2 text-paragraph cursor-pointer hover:text-white hover:bg-blue-button hover:scale-105">
                             <span class="material-symbols-rounded">calendar_month</span>
                             <p class="text-sm">Select Date</p>
                         </button> --}}
 
                         <button type="button" wire:click='closeModal'
-                            class="bg-white profile-button flex items-center p-2 rounded-full gap-2 shadow-2xl text-paragraph cursor-pointer hover:text-white hover:bg-blue-button hover:shadow-xl/35 hover:shadow-blue-button">
+                            class="bg-white profile-button flex items-center p-2 rounded-full gap-2 text-paragraph cursor-pointer hover:text-white hover:bg-blue-button">
                             <span class="material-symbols-rounded">close</span>
                         </button>
                     </div>
@@ -79,7 +79,7 @@
                     <h1 class="text-2xl font-semibold text-heading-dark">Summary</h1>
                     <div class="grid grid-cols-3 grid-rows-1 gap-4">
                         <div
-                            class="bg-gradient-to-tr h-48 from-blue-button to-[#00EEFF] shadow-blue-button shadow-2xl/45 p-6 text-white rounded-3xl flex flex-col justify-between gap-6">
+                            class="bg-gradient-to-tr h-48 from-blue-button to-[#00EEFF] p-6 text-white rounded-3xl flex flex-col justify-between gap-6">
                             <div class="flex justify-between w-full">
                                 <div>
                                     <p class="text-xs leading-snug font-normal">Earned</p>
@@ -91,7 +91,7 @@
                         </div>
 
                         <div
-                            class="bg-gradient-to-tr h-48 from-lime to-[#00ff80] shadow-lime shadow-2xl/45 p-6 text-white rounded-3xl flex flex-col justify-between gap-6">
+                            class="bg-gradient-to-tr h-48 from-lime to-[#00ff80] p-6 text-white rounded-3xl flex flex-col justify-between gap-6">
                             <div class="flex justify-between w-full">
                                 <div>
                                     <p class="text-xs leading-snug font-normal">Completed</p>
@@ -103,7 +103,7 @@
                         </div>
 
                         <div
-                            class="bg-gradient-to-tr h-48 from-yellowOrange to-[#FFEA00] shadow-yellowOrange shadow-2xl/45 p-6 text-white rounded-3xl flex flex-col justify-between gap-6">
+                            class="bg-gradient-to-tr h-48 from-yellowOrange to-[#FFEA00] p-6 text-white rounded-3xl flex flex-col justify-between gap-6">
                             <div class="flex justify-between w-full">
                                 <div>
                                     <p class="text-xs leading-snug font-normal">Completed</p>

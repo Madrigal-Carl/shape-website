@@ -9,8 +9,7 @@
                     <span class="font-bold text-blue-button">Dave</span>
                 </h1>
                 <p class="text-lg text-paragraph leading-4">Here is your summary today</p>
-                <div
-                    class="w-max px-2 py-1 mt-4 rounded-lg border-1 border-gray-300 hover:border-blue-button shadow-2xl/15">
+                <div class="w-max px-2 py-1 mt-4 rounded-lg border-1 border-gray-300 hover:border-blue-button">
                     <select class="w-full outline-none text-heading-dark font-medium text-lg">
                         <option class="text-sm text-black" selected disabled>
                             S.Y 2025-2026
@@ -24,7 +23,7 @@
         <!-- Buttons -->
         <div class="flex gap-4 self-start">
             <button
-                class="flex items-center bg-white py-3 px-5 rounded-full gap-2 shadow-2xl/15 text-paragraph cursor-pointer border-2 border-white hover:border-blue-button hover:text-white hover:bg-blue-button hover:shadow-xl/35 hover:shadow-blue-button hover:scale-105">
+                class="flex items-center bg-white py-3 px-5 rounded-full gap-2 shadow-2xl/15 text-paragraph cursor-pointer border-2 border-white hover:border-blue-button hover:text-white hover:bg-blue-button">
                 <span class="material-symbols-rounded">save</span>
                 <p class="">Export</p>
             </button>
