@@ -116,7 +116,7 @@ class DatabaseSeeder extends Seeder
 
         // === Curriculums for each instructor ===
         $curriculums = $instructors->map(function ($instructor) {
-            return Curriculum::factory()->count(5)->create(['instructor_id' => $instructor->id]);
+            return Curriculum::factory()->count(12)->create(['instructor_id' => $instructor->id]);
         })->flatten();
 
         Subject::factory()->allSubjects();
@@ -173,7 +173,7 @@ class DatabaseSeeder extends Seeder
         });
 
         // === Lessons, Activities, Videos ===
-        $lessons = Lesson::factory()->count(10)->create();
+        $lessons = Lesson::factory()->count(36)->create();
         $activities = GameActivity::factory()->count(30)->create();
 
         $activities->each(function ($activity) use ($specializations) {
