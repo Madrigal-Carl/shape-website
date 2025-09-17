@@ -15,11 +15,6 @@ class GameActivity extends Model
         'description',
     ];
 
-    public function lesson()
-    {
-        return $this->belongsTo(Lesson::class);
-    }
-
     public function specializations()
     {
         return $this->morphToMany(Specialization::class, 'specializable');

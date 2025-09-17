@@ -3,7 +3,7 @@
         <div
             class="bg-black/30 fixed w-dvw h-dvh top-0 left-0 z-50 backdrop-blur-xs flex justify-center items-center p-10">
             <!-- Add lesson container -->
-            <form wire:submit='addLesson' class="flex h-full justify-center gap-6">
+            <div class="flex h-full justify-center gap-6">
                 <div class="w-180 h-full Addlesson bg-card p-8 rounded-4xl relative">
                     <!-- first form -->
                     <div class="Addlesson w-full h-[100%] flex flex-col gap-8 self-center-safe overflow-y-auto">
@@ -26,39 +26,31 @@
                                         <option value="" class="text-sm text-black" selected disabled>
                                             Grade & Section
                                         </option>
-                                        <option class="text-sm text-paragraph">
-                                            Kindergarten
-                                        </option>
+                                        @foreach ($grade_levels as $grade_level)
+                                            <option value="{{ $grade_level }}" class="text-sm text-paragraph">
+                                                {{ ucwords($grade_level) }}
+                                            </option>
+                                        @endforeach
                                     </select>
                                 </div>
                                 <div class="flex items-center gap-2 w-full">
                                     <div class="px-4 py-2 rounded-lg bg-white w-full">
-                                        <select name="" id=""
-                                            class="w-full outline-none text-paragraph">
+                                        <select name="" id="" wire:model.live="curriculum"
+                                            wire:key="{{ $grade_level }}" class="w-full outline-none text-paragraph">
                                             <option value="" class="text-sm text-black" selected disabled>
                                                 Curriculum
                                             </option>
-                                            <option class="text-sm text-paragraph">
-                                                FSL Curriculum
-                                            </option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="flex items-center gap-2 w-full">
-                                    <div class="px-4 py-2 rounded-lg bg-white w-full">
-                                        <select name="" id=""
-                                            class="w-full outline-none text-paragraph">
-                                            <option value="" class="text-sm text-black" selected disabled>
-                                                Subject
-                                            </option>
-                                            <option class="text-sm text-paragraph">
-                                                Mathematics
-                                            </option>
+                                            @foreach ($curriculums as $curriculum)
+                                                <option value="{{ $curriculum->id }}" class="text-sm text-paragraph">
+                                                    {{ ucwords($curriculum->name) }}
+                                                </option>
+                                            @endforeach
                                         </select>
                                     </div>
                                 </div>
 
                                 <textarea name="" id="" maxlength="200" placeholder="Description (Optional)"
+                                    wire:model.live="description"
                                     class="px-3 py-2 rounded-lg bg-white placeholder-paragraph resize-none h-24 outline-none"></textarea>
                             </div>
                         </div>
@@ -71,7 +63,7 @@
                                 {{-- Header --}}
                                 <div class="flex items-center justify-between w-full">
                                     <p class="text-paragraph">Select Student for specialize learning.</p>
-                                    <button type="button"
+                                    <button type="button" wire:click="clearStudents"
                                         class="flex items-center justify-center gap-1 px-3 py-2 rounded-lg text-paragraph hover:text-white cursor-pointer bg-white hover:bg-blue-button">
                                         <p class="text-sm">Clear All</p>
                                         <span class="material-symbols-rounded">clear_all</span>
@@ -82,26 +74,31 @@
                                 <div class="flex items-center gap-2 px-4 py-2 rounded-lg bg-white w-full">
                                     <span class="material-symbols-rounded">person_search</span>
                                     <input type="text" placeholder="Search Student" wire:model.live="student_search"
-                                        class="w-full outline-none text-paragraph placeholder-paragraph" />
+                                        class="w-full outline-none text-heading-dark placeholder-heading-dark" />
                                 </div>
 
 
 
                                 {{-- Student List --}}
-                                <div class="flex-1 min-h-0 bg-white rounded-lg p-2">
-                                    <div class="flex flex-col gap-1 h-full overflow-y-scroll pr-2 rounded-lg">
-                                        <div
-                                            class="flex items-center gap-2 w-full p-2 hover:bg-card rounded-lg cursor-pointer">
-                                            <label class="container w-fit">
-                                                <input type="checkbox">
-                                                <div class="checkmark"></div>
-                                            </label>
-                                            <p class="w-full text-paragraph">Carl Madrigal</p>
-                                        </div>
-
-                                        {{-- <p
+                                <div class="flex-1 min-h-0 flex flex-col gap-1 bg-white rounded-lg p-2">
+                                    <div class="flex flex-col gap-1 flex-1 min-h-0 overflow-y-scroll pr-2 rounded-lg">
+                                        @forelse($this->filteredStudents as $student)
+                                            <div
+                                                class="flex items-center gap-2 w-full p-2 hover:bg-card rounded-lg cursor-pointer">
+                                                <label class="container w-fit">
+                                                    <input type="checkbox"
+                                                        wire:click="toggleStudent({{ $student->id }})"
+                                                        @checked(in_array($student->id, $selected_students))>
+                                                    <div class="checkmark"></div>
+                                                </label>
+                                                <p class="w-full text-paragraph">{{ $student->full_name }}</p>
+                                            </div>
+                                        @empty
+                                            <p
                                                 class="text-center text-sm text-gray-500 h-full flex justify-center items-center">
-                                                No students found.</p> --}}
+                                                No students found.</p>
+                                        @endforelse
+
                                     </div>
                                 </div>
                             </div>{{-- End of Specilize selected Student --}}
@@ -120,312 +117,98 @@
                         </div>
 
                         {{-- Students-con --}}
-                        <div class="flex flex-col gap-3">
+                        <div class="flex flex-col gap-3 h-full">
 
-                            {{-- Individual Student Con --}}
-                            <div class="flex flex-col gap-4 items-center bg-white rounded-2xl p-4">
-                                {{-- Student profile --}}
-                                <div class="flex gap-2 items-start  justify-between bg-white w-full">
-                                    <div class="flex gap-2 items-center w-full">
-                                        <img src="{{ asset('storage/' . auth()->user()->accountable->path) }}"
-                                            class="w-12 h-12 aspect-square object-cover rounded-full" alt="" />
-                                        <div class="flex flex-col">
-                                            <p class="text-lg font-semibold">
-                                                Carl S. Madrigal
-                                            </p>
-                                            <small class="leading-none text-paragraph">
-                                                Hearing Impaired
-                                            </small>
+                            {{-- Per Student container --}}
+                            @forelse ($studentsToRender as $stud)
+                                <div class="flex flex-col gap-4 items-center bg-white rounded-2xl p-4">
+                                    {{-- Student profile --}}
+                                    <button wire:click="toggleStudentAccordion({{ $stud->id }})"
+                                        class="cursor-pointer flex gap-2 items-start justify-between bg-white w-full hover:bg-gray-100 transition-all duration-200">
+                                        <div class="flex gap-2 items-center w-full">
+                                            <img src="{{ asset('storage/' . $stud->path) }}"
+                                                class="w-12 h-12 aspect-square object-cover rounded-full"
+                                                alt="" />
+                                            <div class="flex flex-col">
+                                                <p class="text-lg font-semibold">
+                                                    {{ $stud->fullname }}
+                                                </p>
+                                                <small class="leading-none text-paragraph text-start">
+                                                    {{ ucwords($stud->disability_type) }}
+                                                </small>
+                                            </div>
                                         </div>
+                                        <div class="w-45 flex items-center gap-2">
+                                            <p class="font-semibold">Attemp:</p>
+                                            <input type="number" name="" id=""
+                                                value="{{ count($attempts[$stud->id] ?? [['score' => '', 'time' => '']]) }}"
+                                                readonly
+                                                class="w-full outline-none bg-card px-2 py-1 text-blue-button font-semibold rounded-lg placeholder:text-blue-button"
+                                                placeholder="999">
+                                        </div>
+                                    </button>
 
-                                    </div>
-                                    <div class="w-45 flex items-center gap-2">
-                                        <p class="font-semibold">Attemp:</p>
-                                        <input type="number" name="" id=""
-                                            class="w-full outline-none bg-card px-2 py-1 text-blue-button font-semibold rounded-lg placeholder:text-blue-button"
-                                            placeholder="999">
-                                    </div>
+                                    @if ($activeStudentId === $stud->id)
+                                        <div class="flex w-full flex-col gap-2 pt-4 border-t-1 border-gray-300">
+
+                                            {{-- Heading --}}
+                                            <div class="grid grid-cols-2 w-full">
+                                                <h1 class="font-semibold">Score</h1>
+                                                <h1 class="font-semibold">Time</h1>
+                                            </div>
+
+                                            {{-- input cons --}}
+                                            <div class="flex flex-col w-full items-start justify-between gap-2">
+                                                @foreach ($attempts[$stud->id] ?? [['score' => '', 'time' => '']] as $index => $attempt)
+                                                    <div class="grid grid-cols-2 gap-2 w-full">
+                                                        {{-- Score --}}
+                                                        <div class="w-full px-4 py-2 rounded-lg bg-card">
+                                                            <input type="number"
+                                                                wire:model="attempts.{{ $stud->id }}.{{ $index }}.score"
+                                                                class="w-full outline-none text-heading-dark"
+                                                                placeholder="Enter Score">
+                                                        </div>
+                                                        {{-- Time --}}
+                                                        <div class="w-full px-4 py-2 rounded-lg bg-card">
+                                                            <input type="number"
+                                                                wire:model="attempts.{{ $stud->id }}.{{ $index }}.time"
+                                                                class="w-full outline-none text-heading-dark"
+                                                                placeholder="Enter time spent">
+                                                        </div>
+                                                    </div>
+                                                @endforeach
+
+                                                <div class="flex gap-2 self-end-safe">
+                                                    {{-- Add attempt --}}
+                                                    <button type="button"
+                                                        wire:click="addAttempt({{ $stud->id }})"
+                                                        class="px-4 py-2 flex items-center gap-1 bg-white border-1 border-gray-300 rounded-xl hover:bg-blue-button hover:text-white hover:border-blue-button cursor-pointer">
+                                                        <span class="material-symbols-rounded">add</span>
+                                                        <p class="text-sm">Add Attempt</p>
+                                                    </button>
+
+                                                    {{-- Remove attempt --}}
+                                                    <button type="button"
+                                                        wire:click="removeAttempt({{ $stud->id }})"
+                                                        class="px-4 py-2 flex items-center gap-1 bg-white border-1 border-gray-300 rounded-xl hover:bg-red-500 hover:text-white hover:border-red-500 cursor-pointer">
+                                                        <span class="material-symbols-rounded">delete</span>
+                                                        <p class="text-sm">Delete</p>
+                                                    </button>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    @endif
                                 </div>
-
-                                {{-- Inputs (score, time) note: Make this flex for accordion --}}
-                                <div class="hidden w-full flex-col gap-2 pt-4 border-t-1 border-gray-300">
-
-                                    {{-- Heading --}}
-                                    <div class="grid grid-cols-2 w-full">
-                                        <h1 class="font-semibold">Score</h1>
-                                        <h1 class="font-semibold">Time</h1>
-                                    </div>
-
-                                    {{-- input cons --}}
-                                    <div class="flex flex-col w-full items-start justify-between gap-2">
-
-                                        {{-- Indiv cons --}}
-                                        <div class="grid grid-cols-2 gap-2 w-full">
-                                            {{-- Score --}}
-                                            <div class="w-full px-4 py-2 rounded-lg bg-card">
-                                                <input type="number" name="" id=""
-                                                    class="w-full outline-none text-heading-dark"
-                                                    placeholder="Enter Score">
-                                            </div>
-
-                                            {{-- Time --}}
-                                            <div class="w-full px-4 py-2 rounded-lg bg-card">
-                                                <input type="number" name="" id=""
-                                                    class="w-full outline-none text-heading-dark"
-                                                    placeholder="Enter time spent">
-                                            </div>
-                                        </div>
-
-                                        {{-- Indiv cons --}}
-                                        <div class="grid grid-cols-2 gap-2 w-full">
-                                            {{-- Score --}}
-                                            <div class="w-full px-4 py-2 rounded-lg bg-card">
-                                                <input type="number" name="" id=""
-                                                    class="w-full outline-none text-heading-dark"
-                                                    placeholder="Enter Score">
-                                            </div>
-
-                                            {{-- Time --}}
-                                            <div class="w-full px-4 py-2 rounded-lg bg-card">
-                                                <input type="number" name="" id=""
-                                                    class="w-full outline-none text-heading-dark"
-                                                    placeholder="Enter time spent">
-                                            </div>
-                                        </div>
-
-                                        {{-- Indiv cons --}}
-                                        <div class="grid grid-cols-2 gap-2 w-full">
-                                            {{-- Score --}}
-                                            <div class="w-full px-4 py-2 rounded-lg bg-card">
-                                                <input type="number" name="" id=""
-                                                    class="w-full outline-none text-heading-dark"
-                                                    placeholder="Enter Score">
-                                            </div>
-
-                                            {{-- Time --}}
-                                            <div class="w-full px-4 py-2 rounded-lg bg-card">
-                                                <input type="number" name="" id=""
-                                                    class="w-full outline-none text-heading-dark"
-                                                    placeholder="Enter time spent">
-                                            </div>
-
-                                        </div>
-
-                                        <button
-                                            class="self-end-safe px-4 py-2 flex items-center gap-1 bg-white border-1 border-gray-300 rounded-xl hover:bg-blue-button hover:text-white hover:border-blue-button cursor-pointer">
-                                            <span class="material-symbols-rounded">
-                                                add
-                                            </span>
-                                            <p class="text-sm">Add Attemp</p>
-                                        </button>
-                                    </div>
-
+                            @empty
+                                <div
+                                    class="flex flex-col items-center justify-center gap-4 py-12 bg-white rounded-2xl shadow-inner h-full">
+                                    <h2 class="text-lg font-semibold text-heading-dark">No Students Found</h2>
+                                    <p class="text-paragraph text-center">Add students to see their activity records
+                                        here.</p>
                                 </div>
-                            </div>
+                            @endforelse
 
-
-                            {{-- Individual Student Con --}}
-                            <div class="flex flex-col gap-4 items-center bg-white rounded-2xl p-4">
-                                {{-- Student profile --}}
-                                <div class="flex gap-2 items-start  justify-between bg-white w-full">
-                                    <div class="flex gap-2 items-center w-full">
-                                        <img src="{{ asset('storage/' . auth()->user()->accountable->path) }}"
-                                            class="w-12 h-12 aspect-square object-cover rounded-full"
-                                            alt="" />
-                                        <div class="flex flex-col">
-                                            <p class="text-lg font-semibold">
-                                                Carl S Madrigal
-                                            </p>
-                                            <small class="leading-none text-paragraph">
-                                                Hearing Impaired
-                                            </small>
-                                        </div>
-
-                                    </div>
-                                    <div class="w-45 flex items-center gap-2">
-                                        <p class="font-semibold">Attemp:</p>
-                                        <input type="number" name="" id=""
-                                            class="w-full outline-none bg-card px-2 py-1 text-blue-button font-semibold rounded-lg placeholder:text-blue-button"
-                                            placeholder="999">
-                                    </div>
-                                </div>
-
-                                {{-- Inputs (score, time) --}}
-                                <div class="flex w-full flex-col gap-2 pt-4 border-t-1 border-gray-300">
-                                    {{-- Heading --}}
-                                    <div class="grid grid-cols-2 w-full">
-                                        <h1 class="font-semibold">Score</h1>
-                                        <h1 class="font-semibold">Time</h1>
-                                    </div>
-
-                                    {{-- input cons --}}
-                                    <div class="flex flex-col w-full items-start justify-between gap-2">
-
-                                        {{-- Indiv cons --}}
-                                        <div class="grid grid-cols-2 gap-2 w-full">
-                                            {{-- Score --}}
-                                            <div class="w-full px-4 py-2 rounded-lg bg-card">
-                                                <input type="number" name="" id=""
-                                                    class="w-full outline-none text-heading-dark"
-                                                    placeholder="Enter Score">
-                                            </div>
-
-                                            {{-- Time --}}
-                                            <div class="w-full px-4 py-2 rounded-lg bg-card">
-                                                <input type="number" name="" id=""
-                                                    class="w-full outline-none text-heading-dark"
-                                                    placeholder="Enter time spent">
-                                            </div>
-                                        </div>
-
-                                        {{-- Indiv cons --}}
-                                        <div class="grid grid-cols-2 gap-2 w-full">
-                                            {{-- Score --}}
-                                            <div class="w-full px-4 py-2 rounded-lg bg-card">
-                                                <input type="number" name="" id=""
-                                                    class="w-full outline-none text-heading-dark"
-                                                    placeholder="Enter Score">
-                                            </div>
-
-                                            {{-- Time --}}
-                                            <div class="w-full px-4 py-2 rounded-lg bg-card">
-                                                <input type="number" name="" id=""
-                                                    class="w-full outline-none text-heading-dark"
-                                                    placeholder="Enter time spent">
-                                            </div>
-                                        </div>
-
-                                        {{-- Indiv cons --}}
-                                        <div class="grid grid-cols-2 gap-2 w-full">
-                                            {{-- Score --}}
-                                            <div class="w-full px-4 py-2 rounded-lg bg-card">
-                                                <input type="number" name="" id=""
-                                                    class="w-full outline-none text-heading-dark"
-                                                    placeholder="Enter Score">
-                                            </div>
-
-                                            {{-- Time --}}
-                                            <div class="w-full px-4 py-2 rounded-lg bg-card">
-                                                <input type="number" name="" id=""
-                                                    class="w-full outline-none text-heading-dark"
-                                                    placeholder="Enter time spent">
-                                            </div>
-
-                                        </div>
-
-                                        <button
-                                            class="self-end-safe px-4 py-2 flex items-center gap-1 bg-white border-1 border-gray-300 rounded-xl hover:bg-blue-button hover:text-white hover:border-blue-button cursor-pointer">
-                                            <span class="material-symbols-rounded">
-                                                add
-                                            </span>
-                                            <p class="text-sm">Add Attemp</p>
-                                        </button>
-                                    </div>
-
-                                </div>
-                            </div>
-
-
-                            {{-- Individual Student Con --}}
-                            <div class="flex flex-col gap-4 items-center bg-white rounded-2xl p-4">
-                                {{-- Student profile --}}
-                                <div class="flex gap-2 items-start  justify-between bg-white w-full">
-                                    <div class="flex gap-2 items-center w-full">
-                                        <img src="{{ asset('storage/' . auth()->user()->accountable->path) }}"
-                                            class="w-12 h-12 aspect-square object-cover rounded-full"
-                                            alt="" />
-                                        <div class="flex flex-col">
-                                            <p class="text-lg font-semibold">
-                                                Carl S. Madrigal
-                                            </p>
-                                            <small class="leading-none text-paragraph">
-                                                Hearing Impaired
-                                            </small>
-                                        </div>
-
-                                    </div>
-                                    <div class="w-45 flex items-center gap-2">
-                                        <p class="font-semibold">Attemp:</p>
-                                        <input type="number" name="" id=""
-                                            class="w-full outline-none bg-card px-2 py-1 text-blue-button font-semibold rounded-lg placeholder:text-blue-button"
-                                            placeholder="999">
-                                    </div>
-                                </div>
-
-                                {{-- Inputs (score, time) --}}
-                                <div class="flex w-full flex-col gap-2 pt-4 border-t-1 border-gray-300">
-                                    {{-- Heading --}}
-                                    <div class="grid grid-cols-2 w-full">
-                                        <h1 class="font-semibold">Score</h1>
-                                        <h1 class="font-semibold">Time</h1>
-                                    </div>
-
-                                    {{-- input cons --}}
-                                    <div class="flex flex-col w-full items-start justify-between gap-2">
-
-                                        {{-- Indiv cons --}}
-                                        <div class="grid grid-cols-2 gap-2 w-full">
-                                            {{-- Score --}}
-                                            <div class="w-full px-4 py-2 rounded-lg bg-card">
-                                                <input type="number" name="" id=""
-                                                    class="w-full outline-none text-heading-dark"
-                                                    placeholder="Enter Score">
-                                            </div>
-
-                                            {{-- Time --}}
-                                            <div class="w-full px-4 py-2 rounded-lg bg-card">
-                                                <input type="number" name="" id=""
-                                                    class="w-full outline-none text-heading-dark"
-                                                    placeholder="Enter time spent">
-                                            </div>
-                                        </div>
-
-                                        {{-- Indiv cons --}}
-                                        <div class="grid grid-cols-2 gap-2 w-full">
-                                            {{-- Score --}}
-                                            <div class="w-full px-4 py-2 rounded-lg bg-card">
-                                                <input type="number" name="" id=""
-                                                    class="w-full outline-none text-heading-dark"
-                                                    placeholder="Enter Score">
-                                            </div>
-
-                                            {{-- Time --}}
-                                            <div class="w-full px-4 py-2 rounded-lg bg-card">
-                                                <input type="number" name="" id=""
-                                                    class="w-full outline-none text-heading-dark"
-                                                    placeholder="Enter time spent">
-                                            </div>
-                                        </div>
-
-                                        {{-- Indiv cons --}}
-                                        <div class="grid grid-cols-2 gap-2 w-full">
-                                            {{-- Score --}}
-                                            <div class="w-full px-4 py-2 rounded-lg bg-card">
-                                                <input type="number" name="" id=""
-                                                    class="w-full outline-none text-heading-dark"
-                                                    placeholder="Enter Score">
-                                            </div>
-
-                                            {{-- Time --}}
-                                            <div class="w-full px-4 py-2 rounded-lg bg-card">
-                                                <input type="number" name="" id=""
-                                                    class="w-full outline-none text-heading-dark"
-                                                    placeholder="Enter time spent">
-                                            </div>
-
-                                        </div>
-
-                                        <button
-                                            class="self-end-safe px-4 py-2 flex items-center gap-1 bg-white border-1 border-gray-300 rounded-xl hover:bg-blue-button hover:text-white hover:border-blue-button cursor-pointer">
-                                            <span class="material-symbols-rounded">
-                                                add
-                                            </span>
-                                            <p class="text-sm">Add Attemp</p>
-                                        </button>
-                                    </div>
-
-                                </div>
-                            </div>
                         </div>
                     </div>
 
@@ -437,14 +220,13 @@
                             class="bg-white py-1.5 px-3 w-full rounded-xl text-heading-dark font-medium hover:bg-gray-300 cursor-pointer">
                             Cancel
                         </button>
-                        <button type="submit"
+                        <button type="button" wire:click='addActivity'
                             class="bg-blue-button py-1.5 px-3 w-full rounded-xl text-white font-medium cursor-pointer hover:bg-blue-700">
                             Save
                         </button>
                     </div>
                 </div>
+            </div>
         </div>
-        </form>
-</div>
-@endif
+    @endif
 </div>

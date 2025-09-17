@@ -4,12 +4,10 @@ namespace App\Livewire;
 
 use FFMpeg\FFMpeg;
 use App\Models\Feed;
-use App\Models\Quiz;
 use App\Models\Lesson;
 use App\Models\Student;
 use App\Models\Subject;
 use Livewire\Component;
-use App\Models\Activity;
 use App\Models\Curriculum;
 use Illuminate\Support\Str;
 use Livewire\Attributes\On;
