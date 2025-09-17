@@ -6,11 +6,11 @@
             <form wire:submit='addLesson' class="flex h-full justify-center gap-6">
                 <div class="w-180 h-full Addlesson bg-card p-8 rounded-4xl relative">
                     <!-- first form -->
-                    <div class="Addlesson w-full h-full flex flex-col gap-8 self-center-safe overflow-y-auto">
+                    <div class="Addlesson w-full h-[100%] flex flex-col gap-8 self-center-safe overflow-y-auto">
                         <div class="flex items-center gap-2">
-                            <img src="{{ asset('images/lesson-icon.png') }}" class="h-8" alt="" />
+                            <img src="{{ asset('images/activity-add-icon.png') }}" class="h-8" alt="" />
                             <h1 class="text-3xl font-bold text-heading-dark">
-                                Add Lesson
+                                Add Activity
                             </h1>
                         </div>
 
@@ -111,24 +111,761 @@
                 <!-- End Add lesson container -->
 
                 <div class="w-180 h-full Addlesson bg-card p-8 rounded-4xl relative">
-                    <div class="Addlesson w-full h-[100%] flex flex-col pb-12 gap-8 self-center-safe overflow-y-auto">
+                    <div class="Addlesson w-full h-[100%] flex flex-col pb-12 gap-4 self-center-safe overflow-y-auto">
+                        <div class="flex items-center gap-2 sticky top-0 left-0 w-full bg-card pb-4">
+                            <img src="{{ asset('images/activity-record-icon.png') }}" class="h-8" alt="" />
+                            <h1 class="text-3xl font-bold text-heading-dark">
+                                Class Activity Record
+                            </h1>
+                        </div>
+
+                        {{-- Students-con --}}
+                        <div class="flex flex-col gap-3">
+
+                            {{-- Individual Student Con --}}
+                            <div class="flex flex-col gap-4 items-center bg-white rounded-2xl p-4">
+                                {{-- Student profile --}}
+                                <div class="flex gap-2 items-start  justify-between bg-white w-full">
+                                    <div class="flex gap-2 items-center w-full">
+                                        <img src="{{ asset('storage/' . auth()->user()->accountable->path) }}"
+                                            class="w-12 h-12 aspect-square object-cover rounded-full" alt="" />
+                                        <div class="flex flex-col">
+                                            <p class="text-lg">
+                                                <span
+                                                    class="font-semibold leading-none">{{ auth()->user()->accountable->last_name }},
+                                                </span>{{ auth()->user()->accountable->first_name }}
+                                            </p>
+                                            <small class="leading-none text-paragraph">
+                                                Hearing Impaired
+                                            </small>
+                                        </div>
+
+                                    </div>
+                                    <div class="w-45 flex items-center gap-2">
+                                        <p class="font-semibold">Attemp:</p>
+                                        <input type="number" name="" id=""
+                                            class="w-full outline-none bg-card px-2 py-1 text-blue-button font-semibold rounded-lg placeholder:text-blue-button"
+                                            placeholder="999">
+                                    </div>
+                                </div>
+
+                                {{-- Inputs (score, time) note: Make this flex for accordion --}}
+                                <div class="hidden w-full flex-col gap-2 pt-4 border-t-1 border-gray-300">
+
+                                    {{-- Heading --}}
+                                    <div class="grid grid-cols-2 w-full">
+                                        <h1 class="font-semibold">Score</h1>
+                                        <h1 class="font-semibold">Time</h1>
+                                    </div>
+
+                                    {{-- input cons --}}
+                                    <div class="flex flex-col w-full items-start justify-between gap-2">
+
+                                        {{-- Indiv cons --}}
+                                        <div class="grid grid-cols-2 gap-2 w-full">
+                                            {{-- Score --}}
+                                            <div class="w-full px-4 py-2 rounded-lg bg-card">
+                                                <input type="number" name="" id=""
+                                                    class="w-full outline-none text-heading-dark"
+                                                    placeholder="Enter Score">
+                                            </div>
+
+                                            {{-- Time --}}
+                                            <div class="w-full px-4 py-2 rounded-lg bg-card">
+                                                <input type="number" name="" id=""
+                                                    class="w-full outline-none text-heading-dark"
+                                                    placeholder="Enter time spent">
+                                            </div>
+                                        </div>
+
+                                        {{-- Indiv cons --}}
+                                        <div class="grid grid-cols-2 gap-2 w-full">
+                                            {{-- Score --}}
+                                            <div class="w-full px-4 py-2 rounded-lg bg-card">
+                                                <input type="number" name="" id=""
+                                                    class="w-full outline-none text-heading-dark"
+                                                    placeholder="Enter Score">
+                                            </div>
+
+                                            {{-- Time --}}
+                                            <div class="w-full px-4 py-2 rounded-lg bg-card">
+                                                <input type="number" name="" id=""
+                                                    class="w-full outline-none text-heading-dark"
+                                                    placeholder="Enter time spent">
+                                            </div>
+                                        </div>
+
+                                        {{-- Indiv cons --}}
+                                        <div class="grid grid-cols-2 gap-2 w-full">
+                                            {{-- Score --}}
+                                            <div class="w-full px-4 py-2 rounded-lg bg-card">
+                                                <input type="number" name="" id=""
+                                                    class="w-full outline-none text-heading-dark"
+                                                    placeholder="Enter Score">
+                                            </div>
+
+                                            {{-- Time --}}
+                                            <div class="w-full px-4 py-2 rounded-lg bg-card">
+                                                <input type="number" name="" id=""
+                                                    class="w-full outline-none text-heading-dark"
+                                                    placeholder="Enter time spent">
+                                            </div>
+
+                                        </div>
+
+                                        <button
+                                            class="self-end-safe px-4 py-2 flex items-center gap-1 bg-white border-1 border-gray-300 rounded-xl hover:bg-blue-button hover:text-white hover:border-blue-button cursor-pointer">
+                                            <span class="material-symbols-rounded">
+                                                add
+                                            </span>
+                                            <p class="text-sm">Add Attemp</p>
+                                        </button>
+                                    </div>
+
+                                </div>
+                            </div>
 
 
+                            {{-- Individual Student Con --}}
+                            <div class="flex flex-col gap-4 items-center bg-white rounded-2xl p-4">
+                                {{-- Student profile --}}
+                                <div class="flex gap-2 items-start  justify-between bg-white w-full">
+                                    <div class="flex gap-2 items-center w-full">
+                                        <img src="{{ asset('storage/' . auth()->user()->accountable->path) }}"
+                                            class="w-12 h-12 aspect-square object-cover rounded-full"
+                                            alt="" />
+                                        <div class="flex flex-col">
+                                            <p class="text-lg">
+                                                <span
+                                                    class="font-semibold leading-none">{{ auth()->user()->accountable->last_name }},
+                                                </span>{{ auth()->user()->accountable->first_name }}
+                                            </p>
+                                            <small class="leading-none text-paragraph">
+                                                Hearing Impaired
+                                            </small>
+                                        </div>
 
-                        <div
-                            class="flex items-center gap-2 absolute w-full left-0 bottom-0 px-8 pb-8 pt-4 rounded-b-4xl bg-card">
-                            <button wire:click='closeModal' type="button"
-                                class="bg-white py-1.5 px-3 w-full rounded-xl text-heading-dark font-medium hover:bg-gray-300 cursor-pointer">
-                                Cancel
-                            </button>
-                            <button type="submit"
-                                class="bg-blue-button py-1.5 px-3 w-full rounded-xl text-white font-medium cursor-pointer hover:bg-blue-700">
-                                Save
-                            </button>
+                                    </div>
+                                    <div class="w-45 flex items-center gap-2">
+                                        <p class="font-semibold">Attemp:</p>
+                                        <input type="number" name="" id=""
+                                            class="w-full outline-none bg-card px-2 py-1 text-blue-button font-semibold rounded-lg placeholder:text-blue-button"
+                                            placeholder="999">
+                                    </div>
+                                </div>
+
+                                {{-- Inputs (score, time) --}}
+                                <div class="flex w-full flex-col gap-2 pt-4 border-t-1 border-gray-300">
+                                    {{-- Heading --}}
+                                    <div class="grid grid-cols-2 w-full">
+                                        <h1 class="font-semibold">Score</h1>
+                                        <h1 class="font-semibold">Time</h1>
+                                    </div>
+
+                                    {{-- input cons --}}
+                                    <div class="flex flex-col w-full items-start justify-between gap-2">
+
+                                        {{-- Indiv cons --}}
+                                        <div class="grid grid-cols-2 gap-2 w-full">
+                                            {{-- Score --}}
+                                            <div class="w-full px-4 py-2 rounded-lg bg-card">
+                                                <input type="number" name="" id=""
+                                                    class="w-full outline-none text-heading-dark"
+                                                    placeholder="Enter Score">
+                                            </div>
+
+                                            {{-- Time --}}
+                                            <div class="w-full px-4 py-2 rounded-lg bg-card">
+                                                <input type="number" name="" id=""
+                                                    class="w-full outline-none text-heading-dark"
+                                                    placeholder="Enter time spent">
+                                            </div>
+                                        </div>
+
+                                        {{-- Indiv cons --}}
+                                        <div class="grid grid-cols-2 gap-2 w-full">
+                                            {{-- Score --}}
+                                            <div class="w-full px-4 py-2 rounded-lg bg-card">
+                                                <input type="number" name="" id=""
+                                                    class="w-full outline-none text-heading-dark"
+                                                    placeholder="Enter Score">
+                                            </div>
+
+                                            {{-- Time --}}
+                                            <div class="w-full px-4 py-2 rounded-lg bg-card">
+                                                <input type="number" name="" id=""
+                                                    class="w-full outline-none text-heading-dark"
+                                                    placeholder="Enter time spent">
+                                            </div>
+                                        </div>
+
+                                        {{-- Indiv cons --}}
+                                        <div class="grid grid-cols-2 gap-2 w-full">
+                                            {{-- Score --}}
+                                            <div class="w-full px-4 py-2 rounded-lg bg-card">
+                                                <input type="number" name="" id=""
+                                                    class="w-full outline-none text-heading-dark"
+                                                    placeholder="Enter Score">
+                                            </div>
+
+                                            {{-- Time --}}
+                                            <div class="w-full px-4 py-2 rounded-lg bg-card">
+                                                <input type="number" name="" id=""
+                                                    class="w-full outline-none text-heading-dark"
+                                                    placeholder="Enter time spent">
+                                            </div>
+
+                                        </div>
+
+                                        <button
+                                            class="self-end-safe px-4 py-2 flex items-center gap-1 bg-white border-1 border-gray-300 rounded-xl hover:bg-blue-button hover:text-white hover:border-blue-button cursor-pointer">
+                                            <span class="material-symbols-rounded">
+                                                add
+                                            </span>
+                                            <p class="text-sm">Add Attemp</p>
+                                        </button>
+                                    </div>
+
+                                </div>
+                            </div>
+
+
+                            {{-- Individual Student Con --}}
+                            <div class="flex flex-col gap-4 items-center bg-white rounded-2xl p-4">
+                                {{-- Student profile --}}
+                                <div class="flex gap-2 items-start  justify-between bg-white w-full">
+                                    <div class="flex gap-2 items-center w-full">
+                                        <img src="{{ asset('storage/' . auth()->user()->accountable->path) }}"
+                                            class="w-12 h-12 aspect-square object-cover rounded-full"
+                                            alt="" />
+                                        <div class="flex flex-col">
+                                            <p class="text-lg">
+                                                <span
+                                                    class="font-semibold leading-none">{{ auth()->user()->accountable->last_name }},
+                                                </span>{{ auth()->user()->accountable->first_name }}
+                                            </p>
+                                            <small class="leading-none text-paragraph">
+                                                Hearing Impaired
+                                            </small>
+                                        </div>
+
+                                    </div>
+                                    <div class="w-45 flex items-center gap-2">
+                                        <p class="font-semibold">Attemp:</p>
+                                        <input type="number" name="" id=""
+                                            class="w-full outline-none bg-card px-2 py-1 text-blue-button font-semibold rounded-lg placeholder:text-blue-button"
+                                            placeholder="999">
+                                    </div>
+                                </div>
+
+                                {{-- Inputs (score, time) --}}
+                                <div class="flex w-full flex-col gap-2 pt-4 border-t-1 border-gray-300">
+                                    {{-- Heading --}}
+                                    <div class="grid grid-cols-2 w-full">
+                                        <h1 class="font-semibold">Score</h1>
+                                        <h1 class="font-semibold">Time</h1>
+                                    </div>
+
+                                    {{-- input cons --}}
+                                    <div class="flex flex-col w-full items-start justify-between gap-2">
+
+                                        {{-- Indiv cons --}}
+                                        <div class="grid grid-cols-2 gap-2 w-full">
+                                            {{-- Score --}}
+                                            <div class="w-full px-4 py-2 rounded-lg bg-card">
+                                                <input type="number" name="" id=""
+                                                    class="w-full outline-none text-heading-dark"
+                                                    placeholder="Enter Score">
+                                            </div>
+
+                                            {{-- Time --}}
+                                            <div class="w-full px-4 py-2 rounded-lg bg-card">
+                                                <input type="number" name="" id=""
+                                                    class="w-full outline-none text-heading-dark"
+                                                    placeholder="Enter time spent">
+                                            </div>
+                                        </div>
+
+                                        {{-- Indiv cons --}}
+                                        <div class="grid grid-cols-2 gap-2 w-full">
+                                            {{-- Score --}}
+                                            <div class="w-full px-4 py-2 rounded-lg bg-card">
+                                                <input type="number" name="" id=""
+                                                    class="w-full outline-none text-heading-dark"
+                                                    placeholder="Enter Score">
+                                            </div>
+
+                                            {{-- Time --}}
+                                            <div class="w-full px-4 py-2 rounded-lg bg-card">
+                                                <input type="number" name="" id=""
+                                                    class="w-full outline-none text-heading-dark"
+                                                    placeholder="Enter time spent">
+                                            </div>
+                                        </div>
+
+                                        {{-- Indiv cons --}}
+                                        <div class="grid grid-cols-2 gap-2 w-full">
+                                            {{-- Score --}}
+                                            <div class="w-full px-4 py-2 rounded-lg bg-card">
+                                                <input type="number" name="" id=""
+                                                    class="w-full outline-none text-heading-dark"
+                                                    placeholder="Enter Score">
+                                            </div>
+
+                                            {{-- Time --}}
+                                            <div class="w-full px-4 py-2 rounded-lg bg-card">
+                                                <input type="number" name="" id=""
+                                                    class="w-full outline-none text-heading-dark"
+                                                    placeholder="Enter time spent">
+                                            </div>
+
+                                        </div>
+
+                                        <button
+                                            class="self-end-safe px-4 py-2 flex items-center gap-1 bg-white border-1 border-gray-300 rounded-xl hover:bg-blue-button hover:text-white hover:border-blue-button cursor-pointer">
+                                            <span class="material-symbols-rounded">
+                                                add
+                                            </span>
+                                            <p class="text-sm">Add Attemp</p>
+                                        </button>
+                                    </div>
+
+                                </div>
+                            </div>
+
+
+                            {{-- Individual Student Con --}}
+                            <div class="flex flex-col gap-4 items-center bg-white rounded-2xl p-4">
+                                {{-- Student profile --}}
+                                <div class="flex gap-2 items-start  justify-between bg-white w-full">
+                                    <div class="flex gap-2 items-center w-full">
+                                        <img src="{{ asset('storage/' . auth()->user()->accountable->path) }}"
+                                            class="w-12 h-12 aspect-square object-cover rounded-full"
+                                            alt="" />
+                                        <div class="flex flex-col">
+                                            <p class="text-lg">
+                                                <span
+                                                    class="font-semibold leading-none">{{ auth()->user()->accountable->last_name }},
+                                                </span>{{ auth()->user()->accountable->first_name }}
+                                            </p>
+                                            <small class="leading-none text-paragraph">
+                                                Hearing Impaired
+                                            </small>
+                                        </div>
+
+                                    </div>
+                                    <div class="w-45 flex items-center gap-2">
+                                        <p class="font-semibold">Attemp:</p>
+                                        <input type="number" name="" id=""
+                                            class="w-full outline-none bg-card px-2 py-1 text-blue-button font-semibold rounded-lg placeholder:text-blue-button"
+                                            placeholder="999">
+                                    </div>
+                                </div>
+
+                                {{-- Inputs (score, time) --}}
+                                <div class="flex w-full flex-col gap-2 pt-4 border-t-1 border-gray-300">
+                                    {{-- Heading --}}
+                                    <div class="grid grid-cols-2 w-full">
+                                        <h1 class="font-semibold">Score</h1>
+                                        <h1 class="font-semibold">Time</h1>
+                                    </div>
+
+                                    {{-- input cons --}}
+                                    <div class="flex flex-col w-full items-start justify-between gap-2">
+
+                                        {{-- Indiv cons --}}
+                                        <div class="grid grid-cols-2 gap-2 w-full">
+                                            {{-- Score --}}
+                                            <div class="w-full px-4 py-2 rounded-lg bg-card">
+                                                <input type="number" name="" id=""
+                                                    class="w-full outline-none text-heading-dark"
+                                                    placeholder="Enter Score">
+                                            </div>
+
+                                            {{-- Time --}}
+                                            <div class="w-full px-4 py-2 rounded-lg bg-card">
+                                                <input type="number" name="" id=""
+                                                    class="w-full outline-none text-heading-dark"
+                                                    placeholder="Enter time spent">
+                                            </div>
+                                        </div>
+
+                                        {{-- Indiv cons --}}
+                                        <div class="grid grid-cols-2 gap-2 w-full">
+                                            {{-- Score --}}
+                                            <div class="w-full px-4 py-2 rounded-lg bg-card">
+                                                <input type="number" name="" id=""
+                                                    class="w-full outline-none text-heading-dark"
+                                                    placeholder="Enter Score">
+                                            </div>
+
+                                            {{-- Time --}}
+                                            <div class="w-full px-4 py-2 rounded-lg bg-card">
+                                                <input type="number" name="" id=""
+                                                    class="w-full outline-none text-heading-dark"
+                                                    placeholder="Enter time spent">
+                                            </div>
+                                        </div>
+
+                                        {{-- Indiv cons --}}
+                                        <div class="grid grid-cols-2 gap-2 w-full">
+                                            {{-- Score --}}
+                                            <div class="w-full px-4 py-2 rounded-lg bg-card">
+                                                <input type="number" name="" id=""
+                                                    class="w-full outline-none text-heading-dark"
+                                                    placeholder="Enter Score">
+                                            </div>
+
+                                            {{-- Time --}}
+                                            <div class="w-full px-4 py-2 rounded-lg bg-card">
+                                                <input type="number" name="" id=""
+                                                    class="w-full outline-none text-heading-dark"
+                                                    placeholder="Enter time spent">
+                                            </div>
+
+                                        </div>
+
+                                        <button
+                                            class="self-end-safe px-4 py-2 flex items-center gap-1 bg-white border-1 border-gray-300 rounded-xl hover:bg-blue-button hover:text-white hover:border-blue-button cursor-pointer">
+                                            <span class="material-symbols-rounded">
+                                                add
+                                            </span>
+                                            <p class="text-sm">Add Attemp</p>
+                                        </button>
+                                    </div>
+
+                                </div>
+                            </div>
+
+
+                            {{-- Individual Student Con --}}
+                            <div class="flex flex-col gap-4 items-center bg-white rounded-2xl p-4">
+                                {{-- Student profile --}}
+                                <div class="flex gap-2 items-start  justify-between bg-white w-full">
+                                    <div class="flex gap-2 items-center w-full">
+                                        <img src="{{ asset('storage/' . auth()->user()->accountable->path) }}"
+                                            class="w-12 h-12 aspect-square object-cover rounded-full"
+                                            alt="" />
+                                        <div class="flex flex-col">
+                                            <p class="text-lg">
+                                                <span
+                                                    class="font-semibold leading-none">{{ auth()->user()->accountable->last_name }},
+                                                </span>{{ auth()->user()->accountable->first_name }}
+                                            </p>
+                                            <small class="leading-none text-paragraph">
+                                                Hearing Impaired
+                                            </small>
+                                        </div>
+
+                                    </div>
+                                    <div class="w-45 flex items-center gap-2">
+                                        <p class="font-semibold">Attemp:</p>
+                                        <input type="number" name="" id=""
+                                            class="w-full outline-none bg-card px-2 py-1 text-blue-button font-semibold rounded-lg placeholder:text-blue-button"
+                                            placeholder="999">
+                                    </div>
+                                </div>
+
+                                {{-- Inputs (score, time) --}}
+                                <div class="flex w-full flex-col gap-2 pt-4 border-t-1 border-gray-300">
+                                    {{-- Heading --}}
+                                    <div class="grid grid-cols-2 w-full">
+                                        <h1 class="font-semibold">Score</h1>
+                                        <h1 class="font-semibold">Time</h1>
+                                    </div>
+
+                                    {{-- input cons --}}
+                                    <div class="flex flex-col w-full items-start justify-between gap-2">
+
+                                        {{-- Indiv cons --}}
+                                        <div class="grid grid-cols-2 gap-2 w-full">
+                                            {{-- Score --}}
+                                            <div class="w-full px-4 py-2 rounded-lg bg-card">
+                                                <input type="number" name="" id=""
+                                                    class="w-full outline-none text-heading-dark"
+                                                    placeholder="Enter Score">
+                                            </div>
+
+                                            {{-- Time --}}
+                                            <div class="w-full px-4 py-2 rounded-lg bg-card">
+                                                <input type="number" name="" id=""
+                                                    class="w-full outline-none text-heading-dark"
+                                                    placeholder="Enter time spent">
+                                            </div>
+                                        </div>
+
+                                        {{-- Indiv cons --}}
+                                        <div class="grid grid-cols-2 gap-2 w-full">
+                                            {{-- Score --}}
+                                            <div class="w-full px-4 py-2 rounded-lg bg-card">
+                                                <input type="number" name="" id=""
+                                                    class="w-full outline-none text-heading-dark"
+                                                    placeholder="Enter Score">
+                                            </div>
+
+                                            {{-- Time --}}
+                                            <div class="w-full px-4 py-2 rounded-lg bg-card">
+                                                <input type="number" name="" id=""
+                                                    class="w-full outline-none text-heading-dark"
+                                                    placeholder="Enter time spent">
+                                            </div>
+                                        </div>
+
+                                        {{-- Indiv cons --}}
+                                        <div class="grid grid-cols-2 gap-2 w-full">
+                                            {{-- Score --}}
+                                            <div class="w-full px-4 py-2 rounded-lg bg-card">
+                                                <input type="number" name="" id=""
+                                                    class="w-full outline-none text-heading-dark"
+                                                    placeholder="Enter Score">
+                                            </div>
+
+                                            {{-- Time --}}
+                                            <div class="w-full px-4 py-2 rounded-lg bg-card">
+                                                <input type="number" name="" id=""
+                                                    class="w-full outline-none text-heading-dark"
+                                                    placeholder="Enter time spent">
+                                            </div>
+
+                                        </div>
+
+                                        <button
+                                            class="self-end-safe px-4 py-2 flex items-center gap-1 bg-white border-1 border-gray-300 rounded-xl hover:bg-blue-button hover:text-white hover:border-blue-button cursor-pointer">
+                                            <span class="material-symbols-rounded">
+                                                add
+                                            </span>
+                                            <p class="text-sm">Add Attemp</p>
+                                        </button>
+                                    </div>
+
+                                </div>
+                            </div>
+
+
+                            {{-- Individual Student Con --}}
+                            <div class="flex flex-col gap-4 items-center bg-white rounded-2xl p-4">
+                                {{-- Student profile --}}
+                                <div class="flex gap-2 items-start  justify-between bg-white w-full">
+                                    <div class="flex gap-2 items-center w-full">
+                                        <img src="{{ asset('storage/' . auth()->user()->accountable->path) }}"
+                                            class="w-12 h-12 aspect-square object-cover rounded-full"
+                                            alt="" />
+                                        <div class="flex flex-col">
+                                            <p class="text-lg">
+                                                <span
+                                                    class="font-semibold leading-none">{{ auth()->user()->accountable->last_name }},
+                                                </span>{{ auth()->user()->accountable->first_name }}
+                                            </p>
+                                            <small class="leading-none text-paragraph">
+                                                Hearing Impaired
+                                            </small>
+                                        </div>
+
+                                    </div>
+                                    <div class="w-45 flex items-center gap-2">
+                                        <p class="font-semibold">Attemp:</p>
+                                        <input type="number" name="" id=""
+                                            class="w-full outline-none bg-card px-2 py-1 text-blue-button font-semibold rounded-lg placeholder:text-blue-button"
+                                            placeholder="999">
+                                    </div>
+                                </div>
+
+                                {{-- Inputs (score, time) --}}
+                                <div class="flex w-full flex-col gap-2 pt-4 border-t-1 border-gray-300">
+                                    {{-- Heading --}}
+                                    <div class="grid grid-cols-2 w-full">
+                                        <h1 class="font-semibold">Score</h1>
+                                        <h1 class="font-semibold">Time</h1>
+                                    </div>
+
+                                    {{-- input cons --}}
+                                    <div class="flex flex-col w-full items-start justify-between gap-2">
+
+                                        {{-- Indiv cons --}}
+                                        <div class="grid grid-cols-2 gap-2 w-full">
+                                            {{-- Score --}}
+                                            <div class="w-full px-4 py-2 rounded-lg bg-card">
+                                                <input type="number" name="" id=""
+                                                    class="w-full outline-none text-heading-dark"
+                                                    placeholder="Enter Score">
+                                            </div>
+
+                                            {{-- Time --}}
+                                            <div class="w-full px-4 py-2 rounded-lg bg-card">
+                                                <input type="number" name="" id=""
+                                                    class="w-full outline-none text-heading-dark"
+                                                    placeholder="Enter time spent">
+                                            </div>
+                                        </div>
+
+                                        {{-- Indiv cons --}}
+                                        <div class="grid grid-cols-2 gap-2 w-full">
+                                            {{-- Score --}}
+                                            <div class="w-full px-4 py-2 rounded-lg bg-card">
+                                                <input type="number" name="" id=""
+                                                    class="w-full outline-none text-heading-dark"
+                                                    placeholder="Enter Score">
+                                            </div>
+
+                                            {{-- Time --}}
+                                            <div class="w-full px-4 py-2 rounded-lg bg-card">
+                                                <input type="number" name="" id=""
+                                                    class="w-full outline-none text-heading-dark"
+                                                    placeholder="Enter time spent">
+                                            </div>
+                                        </div>
+
+                                        {{-- Indiv cons --}}
+                                        <div class="grid grid-cols-2 gap-2 w-full">
+                                            {{-- Score --}}
+                                            <div class="w-full px-4 py-2 rounded-lg bg-card">
+                                                <input type="number" name="" id=""
+                                                    class="w-full outline-none text-heading-dark"
+                                                    placeholder="Enter Score">
+                                            </div>
+
+                                            {{-- Time --}}
+                                            <div class="w-full px-4 py-2 rounded-lg bg-card">
+                                                <input type="number" name="" id=""
+                                                    class="w-full outline-none text-heading-dark"
+                                                    placeholder="Enter time spent">
+                                            </div>
+
+                                        </div>
+
+                                        <button
+                                            class="self-end-safe px-4 py-2 flex items-center gap-1 bg-white border-1 border-gray-300 rounded-xl hover:bg-blue-button hover:text-white hover:border-blue-button cursor-pointer">
+                                            <span class="material-symbols-rounded">
+                                                add
+                                            </span>
+                                            <p class="text-sm">Add Attemp</p>
+                                        </button>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            {{-- Individual Student Con --}}
+                            <div class="flex flex-col gap-4 items-center bg-white rounded-2xl p-4">
+                                {{-- Student profile --}}
+                                <div class="flex gap-2 items-start  justify-between bg-white w-full">
+                                    <div class="flex gap-2 items-center w-full">
+                                        <img src="{{ asset('storage/' . auth()->user()->accountable->path) }}"
+                                            class="w-12 h-12 aspect-square object-cover rounded-full"
+                                            alt="" />
+                                        <div class="flex flex-col">
+                                            <p class="text-lg">
+                                                <span
+                                                    class="font-semibold leading-none">{{ auth()->user()->accountable->last_name }},
+                                                </span>{{ auth()->user()->accountable->first_name }}
+                                            </p>
+                                            <small class="leading-none text-paragraph">
+                                                Hearing Impaired
+                                            </small>
+                                        </div>
+
+                                    </div>
+                                    <div class="w-45 flex items-center gap-2">
+                                        <p class="font-semibold">Attemp:</p>
+                                        <input type="number" name="" id=""
+                                            class="w-full outline-none bg-card px-2 py-1 text-blue-button font-semibold rounded-lg placeholder:text-blue-button"
+                                            placeholder="999">
+                                    </div>
+                                </div>
+
+                                {{-- Inputs (score, time) --}}
+                                <div class="flex w-full flex-col gap-2 pt-4 border-t-1 border-gray-300">
+                                    {{-- Heading --}}
+                                    <div class="grid grid-cols-2 w-full">
+                                        <h1 class="font-semibold">Score</h1>
+                                        <h1 class="font-semibold">Time</h1>
+                                    </div>
+
+                                    {{-- input cons --}}
+                                    <div class="flex flex-col w-full items-start justify-between gap-2">
+
+                                        {{-- Indiv cons --}}
+                                        <div class="grid grid-cols-2 gap-2 w-full">
+                                            {{-- Score --}}
+                                            <div class="w-full px-4 py-2 rounded-lg bg-card">
+                                                <input type="number" name="" id=""
+                                                    class="w-full outline-none text-heading-dark"
+                                                    placeholder="Enter Score">
+                                            </div>
+
+                                            {{-- Time --}}
+                                            <div class="w-full px-4 py-2 rounded-lg bg-card">
+                                                <input type="number" name="" id=""
+                                                    class="w-full outline-none text-heading-dark"
+                                                    placeholder="Enter time spent">
+                                            </div>
+                                        </div>
+
+                                        {{-- Indiv cons --}}
+                                        <div class="grid grid-cols-2 gap-2 w-full">
+                                            {{-- Score --}}
+                                            <div class="w-full px-4 py-2 rounded-lg bg-card">
+                                                <input type="number" name="" id=""
+                                                    class="w-full outline-none text-heading-dark"
+                                                    placeholder="Enter Score">
+                                            </div>
+
+                                            {{-- Time --}}
+                                            <div class="w-full px-4 py-2 rounded-lg bg-card">
+                                                <input type="number" name="" id=""
+                                                    class="w-full outline-none text-heading-dark"
+                                                    placeholder="Enter time spent">
+                                            </div>
+                                        </div>
+
+                                        {{-- Indiv cons --}}
+                                        <div class="grid grid-cols-2 gap-2 w-full">
+                                            {{-- Score --}}
+                                            <div class="w-full px-4 py-2 rounded-lg bg-card">
+                                                <input type="number" name="" id=""
+                                                    class="w-full outline-none text-heading-dark"
+                                                    placeholder="Enter Score">
+                                            </div>
+
+                                            {{-- Time --}}
+                                            <div class="w-full px-4 py-2 rounded-lg bg-card">
+                                                <input type="number" name="" id=""
+                                                    class="w-full outline-none text-heading-dark"
+                                                    placeholder="Enter time spent">
+                                            </div>
+
+                                        </div>
+
+                                        <button
+                                            class="self-end-safe px-4 py-2 flex items-center gap-1 bg-white border-1 border-gray-300 rounded-xl hover:bg-blue-button hover:text-white hover:border-blue-button cursor-pointer">
+                                            <span class="material-symbols-rounded">
+                                                add
+                                            </span>
+                                            <p class="text-sm">Add Attemp</p>
+                                        </button>
+                                    </div>
+
+                                </div>
+                            </div>
                         </div>
                     </div>
+
+
+
+                    <div
+                        class="flex items-center gap-2 absolute w-full left-0 bottom-0 px-8 pb-8 pt-4 rounded-b-4xl bg-card">
+                        <button wire:click='closeModal' type="button"
+                            class="bg-white py-1.5 px-3 w-full rounded-xl text-heading-dark font-medium hover:bg-gray-300 cursor-pointer">
+                            Cancel
+                        </button>
+                        <button type="submit"
+                            class="bg-blue-button py-1.5 px-3 w-full rounded-xl text-white font-medium cursor-pointer hover:bg-blue-700">
+                            Save
+                        </button>
+                    </div>
                 </div>
-            </form>
         </div>
-    @endif
+        </form>
+</div>
+@endif
 </div>
