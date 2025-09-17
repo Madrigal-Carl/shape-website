@@ -39,6 +39,7 @@ class Profile extends Component
     // Account
     public $username;
     public $password;
+    public $old_password;
     public $password_confirmation;
     public $isEditingAccount = false;
     public $isDefaultAccount = false;
@@ -507,22 +508,29 @@ class Profile extends Component
         try {
             $this->validate([
                 'username' => 'required|max:255|unique:accounts,username,' . $this->user->id,
-                'old_password' => 'required|min:8',
+                'old_password' => 'nullable|min:8',
                 'password' => 'nullable|min:8|confirmed',
             ], [
                 'username.required' => 'The username is required.',
                 'username.unique'   => 'This username is already taken.',
                 'username.max'      => 'The username may not be greater than 255 characters.',
-
-                'old_password.required' => 'The old password is required.',
+                // 'old_password.required' => 'The old password is required.',
                 'old_password.min'      => 'The old password must be at least 8 characters.',
-
                 'password.min'       => 'The new password must be at least 8 characters.',
                 'password.confirmed' => 'The password confirmation does not match.',
             ]);
         } catch (ValidationException $e) {
             $message = $e->validator->errors()->first();
             return $this->dispatch('swal-toast', icon: 'error', title: $message);
+        }
+
+        $usernameUnchanged = $this->username === $this->user->username;
+        $passwordUnchanged = empty($this->password);
+
+        if ($usernameUnchanged && $passwordUnchanged) {
+            $this->isEditingAccount = false;
+            $this->dispatch('swal-toast', icon: 'info', title: 'No changes have been made.');
+            return;
         }
 
         if (!Hash::check($this->old_password, $this->user->password)) {
@@ -537,7 +545,7 @@ class Profile extends Component
 
         $this->user->refresh();
         $this->isEditingAccount = false;
-
+        $this->reset(['old_password', 'password', 'password_confirmation']);
         $this->dispatch('swal-toast', icon: 'success', title: 'Account updated successfully!');
     }
 

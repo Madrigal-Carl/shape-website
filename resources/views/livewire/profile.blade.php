@@ -85,19 +85,19 @@
             <div class="grid grid-cols-3 gap-4">
                 <div class="flex flex-col gap-1">
                     <label class="text-paragraph">First name</label>
-                    <input wire:model="first_name"
+                    <input wire:model.live="first_name"
                         class="placeholder:text-heading-dark placeholder:font-medium bg-card px-3 py-1.5 rounded-xl outline-none border-1 border-white focus:border-blue-button hover:border-blue-button"
                         type="text" placeholder="Erickson Dave" {{ $isEditing ? '' : 'disabled' }} />
                 </div>
                 <div class="flex flex-col gap-1">
                     <label class="text-paragraph">Middle name</label>
-                    <input wire:model="middle_name"
+                    <input wire:model.live="middle_name"
                         class="placeholder:text-heading-dark placeholder:font-medium bg-card px-3 py-1.5 rounded-xl outline-none border-1 border-white focus:border-blue-button hover:border-blue-button"
                         type="text" placeholder="Cruzado" {{ $isEditing ? '' : 'disabled' }} />
                 </div>
                 <div class="flex flex-col gap-1">
                     <label class="text-paragraph">Last name</label>
-                    <input wire:model="last_name"
+                    <input wire:model.live="last_name"
                         class="placeholder:text-heading-dark placeholder:font-medium bg-card px-3 py-1.5 rounded-xl outline-none border-1 border-white focus:border-blue-button hover:border-blue-button"
                         type="text" placeholder="Geroleo" {{ $isEditing ? '' : 'disabled' }} />
                 </div>
@@ -282,7 +282,7 @@
                 <div class="grid grid-cols-4 gap-4">
                     <div class="flex flex-col gap-1">
                         <label class="text-paragraph">Enter new Username</label>
-                        <input wire:model="username" type="text" placeholder="Username"
+                        <input wire:model.live="username" type="text" placeholder="Username"
                             class="placeholder:text-heading-dark placeholder:font-medium bg-white px-3 py-1.5 rounded-xl outline-none border-1 border-white focus:border-blue-button hover:border-blue-button" />
                     </div>
                     <div class="flex flex-col gap-1">
@@ -292,12 +292,12 @@
                     </div>
                     <div class="flex flex-col gap-1">
                         <label class="text-paragraph">Enter new password</label>
-                        <input wire:model="password" type="password" placeholder="New Password"
+                        <input wire:model.live="password" type="password" placeholder="New Password"
                             class="placeholder:text-heading-dark placeholder:font-medium bg-white px-3 py-1.5 rounded-xl outline-none border-1 border-white focus:border-blue-button hover:border-blue-button" />
                     </div>
                     <div class="flex flex-col gap-1">
                         <label class="text-paragraph">Confirm Password</label>
-                        <input wire:model="password_confirmation" type="password" placeholder="Confirm Password"
+                        <input wire:model.live="password_confirmation" type="password" placeholder="Confirm Password"
                             class="placeholder:text-heading-dark placeholder:font-medium bg-white px-3 py-1.5 rounded-xl outline-none border-1 border-white focus:border-blue-button hover:border-blue-button" />
                     </div>
                 </div>
