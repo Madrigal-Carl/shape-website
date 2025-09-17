@@ -21,7 +21,6 @@ class StudentActivityFactory extends Factory
         return [
             'student_id' => null,
             'activity_lesson_id' => null,
-            'score' => $this->faker->numberBetween(0, 100),
         ];
     }
 }

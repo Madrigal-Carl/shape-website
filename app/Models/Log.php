@@ -12,6 +12,7 @@ class Log extends Model
     protected $fillable = [
         'student_activity_id',
         'attempt_number',
+        'score',
         'time_spent_seconds',
         'status',
     ];

@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('student_activity_id')->constrained()->onDelete('cascade');
             $table->unsignedInteger('attempt_number')->default(1);
             $table->unsignedInteger('time_spent_seconds');
+            $table->unsignedInteger('score')->nullable();
             $table->enum('status', ['in-progress', 'completed'])->default('in-progress');
             $table->timestamps();
         });

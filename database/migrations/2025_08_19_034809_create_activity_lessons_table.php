@@ -16,7 +16,6 @@ return new class extends Migration
             $table->foreignId('lesson_id')->constrained()->onDelete('cascade');
             $table->string('activity_lessonable_type');
             $table->unsignedBigInteger('activity_lessonable_id');
-            $table->unsignedInteger('score')->nullable();
             $table->timestamps();
             $table->index(
                 ['activity_lessonable_type', 'activity_lessonable_id'],

@@ -90,6 +90,7 @@ class GrantAwardsScheduler extends Command
         }
     }
 
+    //adjust the student in the lesson finisher award shouldnt have this award
     // Activity Ace: Top 3 students with most activities completed (current school year)
     protected function getActivityAceStudentIds($students)
     {
