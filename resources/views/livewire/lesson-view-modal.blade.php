@@ -2,14 +2,23 @@
     @if ($isOpen)
         <section class="bg-black/30 fixed w-dvw h-dvh p-10 top-0 left-0 z-50 backdrop-blur-xs flex justify-center gap-6">
             <!-- Lessson View Info-->
-            <div class="w-200 h-full Addlesson bg-card py-8 rounded-4xl relative flex">
-                <div
-                    class="Addlesson w-full h-full flex flex-col pr-8 pl-8 pb-18 gap-8 self-center-safe overflow-y-auto">
-                    <div class="flex items-center gap-2">
-                        <img src="{{ asset('images/lesson-icon.png') }}" class="h-8" alt="" />
-                        <h1 class=" text-2xl font-semibold text-heading-dark">{{ $lesson->title }}</h1>
-                    </div>
+            <div class="w-200 h-full Addlesson bg-card p-8 rounded-4xl relative flex">
+                <div class="Addlesson w-full h-full flex flex-col  gap-4 self-center-safe overflow-y-auto">
+                    <div class="w-full flex items-start justify-between">
+                        <div class="flex items-center gap-2">
+                            <img src="{{ asset('images/lesson-icon.png') }}" class="h-8" alt="" />
+                            <h1 class="text-3xl font-bold text-heading-dark">
+                                {{ $lesson->title }}
+                            </h1>
+                        </div>
 
+                        <div class="flex items-center gap-2">
+                            <button type="button" wire:click='closeModal'
+                                class="bg-white profile-button flex items-center p-2 rounded-full gap-2 shadow-2xl text-paragraph cursor-pointer hover:text-white hover:bg-blue-button hover:shadow-xl/35 hover:shadow-blue-button">
+                                <span class="material-symbols-rounded">close</span>
+                            </button>
+                        </div>
+                    </div>
 
                     <div class="grid grid-cols-3 gap-4">
                         <div
@@ -119,12 +128,6 @@
                             @endforeach
 
                         </div>
-                    </div>
-
-                    <div
-                        class="flex items-center gap-2 absolute w-full left-0 bottom-0 px-8 pb-8 pt-4  rounded-b-4xl bg-card">
-                        <button type="button" wire:click='closeModal'
-                            class=" bg-white py-1.5 px-3 w-full rounded-xl text-heading-dark font-medium cursor-pointer hover:bg-gray-300">Cancel</button>
                     </div>
                 </div>
             </div><!-- End of Lesson View Info-->

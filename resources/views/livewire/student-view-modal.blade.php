@@ -175,24 +175,25 @@
                         <table class="table-auto border-collapse">
                             <thead>
                                 <tr>
-                                    <th class="text-left font-semibold px-2 py-4">Lesson Name</th>
-                                    <th class="text-center font-semibold px-2 py-4">
+                                    <th class="text-left font-semibold pb-2 text-lg">Lesson Name</th>
+                                    <th class="text-center font-semibold pb-2 text-lg">
                                         No. of Videos
                                     </th>
-                                    <th class="text-center font-semibold px-2 py-4">
+                                    <th class="text-center font-semibold pb-2 text-lg">
                                         No. of Activities
                                     </th>
-                                    <th class="text-center font-semibold px-2 py-4">Status</th>
+                                    <th class="text-center font-semibold pb-2 text-lg">Status</th>
                                 </tr>
                             </thead>
 
                             <tbody>
                                 @forelse ($student->lessons->where('school_year', $school_year) as $lesson)
                                     <tr>
-                                        <td class="text-left px-2 py-4">{{ $lesson->title }}</td>
-                                        <td class="text-center px-2 py-4">{{ count($lesson->videos) }}</td>
-                                        <td class="text-center px-2 py-4">{{ count($lesson->activityLessons) }}</td>
-                                        <td class="text-center px-2 py-4">
+                                        <td class="text-left pt-2 text-paragraph">{{ $lesson->title }}</td>
+                                        <td class="text-center pt-2 text-paragraph">{{ count($lesson->videos) }}</td>
+                                        <td class="text-center pt-2 text-paragraph">
+                                            {{ count($lesson->activityLessons) }}</td>
+                                        <td class="text-center pt-2 text-paragraph">
                                             {{ $lesson->isCompletedByStudent($student->id) ? 'Completed' : 'In-Progress' }}
                                         </td>
                                     </tr>

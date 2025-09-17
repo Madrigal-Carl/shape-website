@@ -52,11 +52,11 @@
                 <div class="w-full flex items-center justify-between">
                     <div class="flex items-center gap-2">
                         <img src="{{ asset('images/activity-hub-icon.png') }}" class="h-8" alt="">
-                        <p class="font-bold text-3xl">Activity Hub</p>
+                        <p class="text-3xl font-bold text-heading-dark">Activity Hub</p>
                     </div>
 
                     <button type="button"
-                        class="profile-button flex items-center p-2 rounded-full gap-2 shadow-2xl text-paragraph cursor-pointer hover:text-white hover:bg-blue-button hover:shadow-xl/35 hover:shadow-blue-button"
+                        class="profile-button flex items-center p-2 rounded-full gap-2 shadow-2xl text-paragraph cursor-pointer bg-white hover:text-white hover:bg-blue-button hover:shadow-xl/35 hover:shadow-blue-button"
                         wire:click='closeModal'>
                         <span class="material-symbols-rounded ">close</span>
                     </button>

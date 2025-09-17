@@ -83,6 +83,7 @@ html {
 .active-nav {
   background-color: var(--color-blue-button);
   color: white;
+  border-color: var(--color-blue-button);
 }
 
 .large-icon{

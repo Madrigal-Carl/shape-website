@@ -31,12 +31,12 @@
                 {{-- Check if item has subcontent --}}
                 @if (isset($item['subcontent']))
                     <div
-                        class="ml-10 mt-1 flex flex-col gap-1 transition-all duration-200 ease-in-out
+                        class="ml-16 mt-2 flex flex-col gap-1 transition-all duration-200 ease-in-out
                         {{ $expanded === $item['name'] ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0 overflow-hidden' }}">
                         @foreach ($item['subcontent'] as $sub)
                             <a wire:click="setActiveSubContent('{{ $item['name'] }}', '{{ $sub['name'] }}')"
-                                class="cursor-pointer hover:bg-blue-500 hover:text-white flex items-center gap-2 px-4 py-2 rounded-lg text-sm
-                                    {{ $activeSubContent === $sub['name'] ? 'active:bg-blue-button active:text-white active-nav shadow-blue-button shadow-xl/35' : '' }}">
+                                class="cursor-pointer border-l-2 border-paragraph hover:border-blue-button hover:bg-blue-button hover:text-white flex items-center gap-2 px-4 py-2 hover:rounded-lg text-sm
+                                    {{ $activeSubContent === $sub['name'] ? 'active:bg-blue-button active:text-white active-nav border-l-2 border-blue-button rounded-lg shadow-blue-button shadow-xl/35' : '' }}">
                                 <span class="material-symbols-rounded text-sm">{{ $sub['icon'] }}</span>
                                 <p>{{ $sub['name'] }}</p>
                             </a>

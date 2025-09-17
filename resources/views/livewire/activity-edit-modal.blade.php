@@ -111,7 +111,7 @@
                 <!-- End Add lesson container -->
 
                 <div class="w-180 h-full Addlesson bg-card p-8 rounded-4xl relative">
-                    <div class="Addlesson w-full h-[100%] flex flex-col pb-12 gap-4 self-center-safe overflow-y-auto">
+                    <div class="Addlesson w-full h-[100%] flex flex-col pb-16 gap-4 self-center-safe overflow-y-auto">
                         <div class="flex items-center gap-2 sticky top-0 left-0 w-full bg-card pb-4">
                             <img src="{{ asset('images/activity-record-icon.png') }}" class="h-8" alt="" />
                             <h1 class="text-3xl font-bold text-heading-dark">
