@@ -22,8 +22,8 @@
         @foreach ($sideBarItems as $item)
             <div class="flex flex-col">
                 <a wire:click="setActiveSideBar('{{ $item['name'] }}')"
-                    class="cursor-pointer hover:bg-blue-button hover:text-white flex items-center gap-2 px-8 py-4 rounded-xl
-                        {{ $activeSideBar === $item['name'] && !$activeSubContent ? 'active:bg-blue-button active:text-white active-nav shadow-blue-button shadow-xl/35' : '' }}">
+                    class="cursor-pointer hover:bg-card hover:text-blue-button flex items-center gap-2 px-8 py-4 rounded-xl
+                        {{ $activeSideBar === $item['name'] && !$activeSubContent ? 'active:bg-blue-button active:text-white active-nav' : '' }}">
                     <span class="material-symbols-rounded">{{ $item['icon'] }}</span>
                     <p>{{ $item['name'] }}</p>
                 </a>
@@ -35,8 +35,8 @@
                         {{ $expanded === $item['name'] ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0 overflow-hidden' }}">
                         @foreach ($item['subcontent'] as $sub)
                             <a wire:click="setActiveSubContent('{{ $item['name'] }}', '{{ $sub['name'] }}')"
-                                class="cursor-pointer border-l-2 border-paragraph hover:border-blue-button hover:bg-blue-button hover:text-white flex items-center gap-2 px-4 py-2 hover:rounded-lg text-sm
-                                    {{ $activeSubContent === $sub['name'] ? 'active:bg-blue-button active:text-white active-nav border-l-2 border-blue-button rounded-lg shadow-blue-button shadow-xl/35' : '' }}">
+                                class="cursor-pointer border-l-2 border-paragraph hover:border-blue-button hover:bg-card hover:text-blue-button flex items-center gap-2 px-4 py-2 hover:rounded-lg text-sm
+                                    {{ $activeSubContent === $sub['name'] ? 'active:bg-blue-button active:text-white active-nav border-l-2 border-blue-button rounded-lg' : '' }}">
                                 <span class="material-symbols-rounded text-sm">{{ $sub['icon'] }}</span>
                                 <p>{{ $sub['name'] }}</p>
                             </a>
@@ -48,7 +48,7 @@
 
         {{-- Logout --}}
         <a wire:click="logoutConfirm"
-            class="cursor-pointer hover:bg-blue-button hover:text-white flex gap-2 active:bg-blue-button px-8 py-4 active:text-white rounded-xl">
+            class="cursor-pointer hover:bg-card hover:text-blue-button flex gap-2 active:bg-blue-button px-8 py-4 active:text-white rounded-xl">
             <span class="material-symbols-rounded">door_back</span>
             <p>Logout</p>
         </a>
