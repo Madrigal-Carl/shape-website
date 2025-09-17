@@ -23,7 +23,7 @@
         <!-- Buttons -->
         <div class="flex gap-4 self-start">
             <button
-                class="flex items-center bg-white py-3 px-5 rounded-full gap-2 shadow-2xl/15 text-paragraph cursor-pointer border-2 border-white hover:border-blue-button hover:text-white hover:bg-blue-button">
+                class="flex items-center bg-white py-3 px-5 rounded-full gap-2 text-paragraph cursor-pointer border-2 border-white hover:border-blue-button hover:text-white hover:bg-blue-button">
                 <span class="material-symbols-rounded">save</span>
                 <p class="">Export</p>
             </button>
@@ -88,8 +88,7 @@
                 </div>
             </div>
             <div class="grid grid-cols-1 grid-rows-2 gap-4">
-                <div
-                    class="bg-white p-6 h-48 text-heading-dark shadow-2xl/5 rounded-3xl flex flex-col justify-between gap-6">
+                <div class="bg-white p-6 h-48 text-heading-dark rounded-3xl flex flex-col justify-between gap-6">
                     <div class="flex justify-between">
                         <div>
                             <p class="text-sm leading-snug font-normal text-paragraph">
@@ -101,8 +100,7 @@
                     </div>
                     <h1 class="text-5xl font-bold text-lime">10</h1>
                 </div>
-                <div
-                    class="bg-white p-6 h-48 text-heading-dark shadow-2xl/5 rounded-3xl flex flex-col justify-between gap-6">
+                <div class="bg-white p-6 h-48 text-heading-dark rounded-3xl flex flex-col justify-between gap-6">
                     <div class="flex justify-between">
                         <div>
                             <p class="text-sm leading-snug font-normal text-paragraph">
@@ -123,7 +121,7 @@
     </div>
 
     <div class="grid grid-cols-2 grid-rows-4 gap-4">
-        <div class="col-span-1 row-span-2 h-full bg-white p-6 rounded-3xl flex flex-col gap-4 shadow-2xl/5">
+        <div class="col-span-1 row-span-2 h-full bg-white p-6 rounded-3xl flex flex-col gap-4">
             <h1 class="text-2xl font-semibold">Weekly Activities</h1>
             <div id="Barchart" class="w-full" wire:ignore x-data="{}" x-init="() => {
                 var options = {
@@ -159,7 +157,7 @@
             </div>
         </div>
 
-        <div class="col-span-1 row-span-2 h-full bg-white p-6 rounded-3xl flex flex-col gap-4 shadow-2xl/5">
+        <div class="col-span-1 row-span-2 h-full bg-white p-6 rounded-3xl flex flex-col gap-4">
             <h1 class="text-2xl font-semibold">Overall Learning Skills Progress</h1>
             <div id="Piechart" class="w-full" wire:ignore x-data="{}" x-init="() => {
                 var options = {
@@ -186,7 +184,7 @@
 
         </div>
 
-        <div class="col-span-2 row-span-2 h-full bg-white p-6 rounded-3xl flex flex-col gap-4 shadow-2xl/5">
+        <div class="col-span-2 row-span-2 h-full bg-white p-6 rounded-3xl flex flex-col gap-4">
             <h1 class="text-2xl font-semibold">Overall Time Spent on Activities</h1>
             <div id="Linechart" class="w-full" wire:ignore x-data="{}" x-init="() => {
                 var options = {

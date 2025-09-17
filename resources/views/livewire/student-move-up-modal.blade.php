@@ -47,7 +47,7 @@
                                 <div class="flex items-center gap-2 px-4 py-2 rounded-2xl bg-white w-full">
                                     <span class="material-symbols-rounded">person_search</span>
                                     <input type="text" placeholder="Search Student" wire:model.live="student_search"
-                                        class="w-full outline-none text-paragraph placeholder-paragraph" />
+                                        class="w-full outline-none text-heading-dark placeholder-heading-dark" />
                                 </div>
 
                                 {{-- Specialization List --}}

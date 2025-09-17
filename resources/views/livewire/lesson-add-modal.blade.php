@@ -88,7 +88,7 @@
                                 <div class="flex items-center gap-2 px-4 py-2 rounded-lg bg-white w-full">
                                     <span class="material-symbols-rounded">person_search</span>
                                     <input type="text" placeholder="Search Student" wire:model.live="student_search"
-                                        class="w-full outline-none text-paragraph placeholder-paragraph" />
+                                        class="w-full outline-none text-heading-dark placeholder-heading-dark" />
                                 </div>
 
 
@@ -154,7 +154,7 @@
                                             <span class="material-symbols-rounded">youtube_activity</span>
                                             <input type="text" placeholder="Paste YouTube Link"
                                                 wire:model="youtube_link"
-                                                class=" rounded-lg placeholder-paragraph outline-none w-full" />
+                                                class=" rounded-lg placeholder-heading-dark outline-none w-full" />
                                         </div>
                                         <button type="button" wire:click="addYoutubeVideo"
                                             class="bg-blue-button text-sm text-white px-3 py-2 rounded-lg w-full col-span-1 hover:bg-blue-700 cursor-pointer">
@@ -226,14 +226,14 @@
                         </div>
 
                         <div class="flex flex-col gap-3">
-                            <h2 class="font-semibold text-xl">Activities</h2>
+                            <h2 class="font-semibold text-xl">Gamified Activities</h2>
                             <div class="flex flex-col gap-2 bg-white p-4 rounded-xl">
                                 <button wire:click='openActivityHub' type="button"
-                                    class="bg-card flex items-center justify-baseline gap-2 py-2 px-4 w-full rounded-xl hover:bg-gray-300 cursor-pointer mb-2">
+                                    class="bg-card flex items-center justify-baseline gap-2 py-2 px-4 w-full rounded-xl hover:bg-gray-300 cursor-pointer">
 
                                     <div class="flex items-center gap-2 w-full">
                                         <span class="material-symbols-rounded">joystick</span>
-                                        <p class="text-paragraph">Choose Game</p>
+                                        <p class="text-heading-dark">Choose Game</p>
                                     </div>
                                     <span class="material-symbols-rounded">add</span>
                                 </button>
@@ -268,6 +268,95 @@
                                 </div>
                             </div>
                             <livewire:game-activity-hub targetComponent="lesson-add-modal" />
+                        </div>
+                        <div class="flex flex-col gap-3 h-fit mb-2">
+                            <h2 class="font-semibold text-xl">F2f Activities <span
+                                    class="text-paragraph font-normal text-sm">(optional)</span></h2>
+                            {{-- Specilize selected Student --}}
+                            <div class=" rounded-lg relative flex flex-col gap-2 h-fit">
+                                {{-- Header --}}
+                                <div class="flex items-center justify-between w-full">
+                                    <p class="text-paragraph">Select activity.</p>
+                                    <button type="button" wire:click="clearStudents"
+                                        class="flex items-center justify-center gap-1 px-3 py-2 rounded-lg text-paragraph hover:text-white cursor-pointer bg-white hover:bg-blue-button">
+                                        <p class="text-sm">Clear All</p>
+                                        <span class="material-symbols-rounded">clear_all</span>
+                                    </button>
+                                </div>
+
+                                {{-- Search --}}
+                                <div class="flex items-center gap-2 px-4 py-2 rounded-lg bg-white w-full">
+                                    <span class="material-symbols-rounded">quick_reference_all</span>
+                                    <input type="text" placeholder="Search Activity"
+                                        wire:model.live="student_search"
+                                        class="w-full outline-none text-heading-dark placeholder-heading-dark" />
+                                </div>
+
+
+
+                                {{-- Student List --}}
+                                <div class="h-full flex flex-col gap-1 bg-white rounded-lg p-2">
+                                    <div class="flex flex-col gap-1 h-48 overflow-y-scroll pr-2 rounded-lg">
+
+                                        <div
+                                            class="flex items-center gap-2 w-full p-2 hover:bg-card rounded-lg cursor-pointer">
+                                            <label class="container w-fit">
+                                                <input type="checkbox">
+                                                <div class="checkmark"></div>
+                                            </label>
+                                            <p class="w-full text-paragraph">Activity Name</p>
+                                        </div>
+                                        <div
+                                            class="flex items-center gap-2 w-full p-2 hover:bg-card rounded-lg cursor-pointer">
+                                            <label class="container w-fit">
+                                                <input type="checkbox">
+                                                <div class="checkmark"></div>
+                                            </label>
+                                            <p class="w-full text-paragraph">Activity Name</p>
+                                        </div>
+                                        <div
+                                            class="flex items-center gap-2 w-full p-2 hover:bg-card rounded-lg cursor-pointer">
+                                            <label class="container w-fit">
+                                                <input type="checkbox">
+                                                <div class="checkmark"></div>
+                                            </label>
+                                            <p class="w-full text-paragraph">Activity Name</p>
+                                        </div>
+                                        <div
+                                            class="flex items-center gap-2 w-full p-2 hover:bg-card rounded-lg cursor-pointer">
+                                            <label class="container w-fit">
+                                                <input type="checkbox">
+                                                <div class="checkmark"></div>
+                                            </label>
+                                            <p class="w-full text-paragraph">Activity Name</p>
+                                        </div>
+                                        <div
+                                            class="flex items-center gap-2 w-full p-2 hover:bg-card rounded-lg cursor-pointer">
+                                            <label class="container w-fit">
+                                                <input type="checkbox">
+                                                <div class="checkmark"></div>
+                                            </label>
+                                            <p class="w-full text-paragraph">Activity Name</p>
+                                        </div>
+                                        <div
+                                            class="flex items-center gap-2 w-full p-2 hover:bg-card rounded-lg cursor-pointer">
+                                            <label class="container w-fit">
+                                                <input type="checkbox">
+                                                <div class="checkmark"></div>
+                                            </label>
+                                            <p class="w-full text-paragraph">Activity Name</p>
+                                        </div>
+                                        <div
+                                            class="flex items-center gap-2 w-full p-2 hover:bg-card rounded-lg cursor-pointer">
+                                            <label class="container w-fit">
+                                                <input type="checkbox">
+                                                <div class="checkmark"></div>
+                                            </label>
+                                            <p class="w-full text-paragraph">Activity Name</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>{{-- End of Specilize selected Student --}}
                         </div>
                         <div
                             class="flex items-center gap-2 absolute w-full left-0 bottom-0 px-8 pb-8 pt-4 rounded-b-4xl bg-card">
