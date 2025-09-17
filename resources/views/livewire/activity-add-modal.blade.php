@@ -17,7 +17,7 @@
                         <div class="flex flex-col gap-3">
                             <h2 class="font-semibold text-xl ">Activity Information</h2>
                             <div class="flex flex-col gap-2">
-                                <input type="text" placeholder="Lesson Name" wire:model.live="lesson_name"
+                                <input type="text" placeholder="Activity Name" wire:model.live="activity_name"
                                     class="px-4 py-2 rounded-lg bg-white placeholder-paragraph outline-none w-full" />
 
                                 <div class="px-4 py-2 rounded-lg bg-white">

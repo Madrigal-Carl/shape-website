@@ -7,7 +7,7 @@ use Livewire\Attributes\On;
 
 class ActivityAddModal extends Component
 {
-    public $isOpen = false;
+    public $isOpen = true;
 
     #[On('openModal')]
     public function openModal()
