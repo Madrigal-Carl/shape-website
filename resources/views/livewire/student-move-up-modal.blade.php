@@ -28,9 +28,9 @@
 
                     </div>
 
-                    <div class="flex flex-col gap-3 h-full">
+                    <div class="flex flex-col gap-3 flex-1 min-h-0">
                         <h2 class="font-semibold text-2xl">Students</h2>
-                        <div class="flex flex-col gap-2 h-full mb-16">
+                        <div class="flex flex-col gap-2 flex-1 min-h-0">
                             {{-- Specialization checkbox --}}
                             <div class="rounded-lg flex flex-col h-full gap-2">
                                 {{-- Header --}}
@@ -44,15 +44,15 @@
                                 </div>
 
                                 {{-- Search --}}
-                                <div class="flex items-center gap-2 px-4 py-2 rounded-4xl bg-white w-full">
+                                <div class="flex items-center gap-2 px-4 py-2 rounded-2xl bg-white w-full">
                                     <span class="material-symbols-rounded">person_search</span>
                                     <input type="text" placeholder="Search Student" wire:model.live="student_search"
                                         class="w-full outline-none text-paragraph placeholder-paragraph" />
                                 </div>
 
                                 {{-- Specialization List --}}
-                                <div class="h-full flex flex-col gap-1 bg-white p-6 rounded-4xl">
-                                    <div class="flex flex-col gap-1 h-full overflow-y-scroll pr-2 rounded-lg">
+                                <div class="flex-1 min-h-0 flex flex-col gap-1 bg-white p-6 rounded-2xl">
+                                    <div class="flex flex-col gap-1 flex-1 min-h-0 overflow-y-scroll pr-2 rounded-lg">
 
                                         @forelse($students as $student)
                                             <div
@@ -70,7 +70,6 @@
                                                 No students found.
                                             </p>
                                         @endforelse
-                                        {{-- <p class="text-center text-sm text-gray-500 h-full flex justify-center items-center">No Specialization found.</p> --}}
 
                                     </div>
                                 </div>
@@ -78,8 +77,7 @@
                         </div>
                     </div>
                     <!-- buttons -->
-                    <div
-                        class="flex items-center gap-2 absolute w-full left-0 bottom-0 px-8 pb-8 pt-4 rounded-b-4xl bg-card">
+                    <div class="flex items-center gap-2 w-full rounded-b-4xl">
                         <button wire:click='closeModal' type="button"
                             class="bg-white py-1.5 px-3 w-full rounded-xl text-heading-dark font-medium hover:bg-gray-300 cursor-pointer">
                             Cancel

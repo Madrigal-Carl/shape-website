@@ -2,7 +2,7 @@
     @if ($isOpen)
         <section class="bg-black/30 fixed w-dvw h-dvh p-10 top-0 left-0 z-50 backdrop-blur-xs flex justify-center gap-6">
             <!-- Add lesson container -->
-            <form wire:submit='editLesson' class="flex justify-center gap-6">
+            <form wire:submit='editLesson' class="flex h-full justify-center gap-6">
                 <div class="w-180 h-full Addlesson bg-card p-8 rounded-4xl relative">
                     <!-- first form -->
                     <div class="Addlesson w-full h-[100%] flex flex-col gap-8 self-center-safe overflow-y-auto">
@@ -89,12 +89,12 @@
                             </div>
                         </div>
 
-                        <div class="flex flex-col gap-3">
+                        <div class="flex flex-col gap-3 flex-1 min-h-0">
                             <h2 class="font-semibold text-xl">Specialize Learning <span
                                     class="text-paragraph font-normal text-sm">(optional)</span></h2>
                             {{-- Specilize selected Student --}}
-                            <div class="rounded-lg relative flex flex-col gap-2 h-81">
-                                <div class="flex items-center justify-between w-full mb-2">
+                            <div class="rounded-lg relative flex flex-col gap-2 flex-1 min-h-0">
+                                <div class="flex items-center justify-between w-full">
                                     <p class="text-paragraph font-medium">Select Student:</p>
                                     <button type="button" wire:click="clearStudents"
                                         class="flex items-center justify-center gap-1 px-4 py-2 rounded-lg text-paragraph hover:text-white cursor-pointer bg-white hover:bg-blue-button">
@@ -110,8 +110,8 @@
                                 </div>
 
                                 {{-- Student List --}}
-                                <div class="h-full flex flex-col gap-1 bg-white p-2 rounded-lg">
-                                    <div class="flex flex-col gap-1 h-full overflow-y-scroll pr-2 rounded-lg">
+                                <div class="flex-1 min-h-0 flex flex-col gap-1 bg-white p-2 rounded-lg">
+                                    <div class="flex flex-col gap-1 flex-1 min-h-0 overflow-y-scroll pr-2 rounded-lg">
                                         @forelse($this->filteredStudents as $student)
                                             <div
                                                 class="flex items-center gap-2 w-full p-2 hover:bg-card rounded-lg cursor-pointer">
@@ -128,6 +128,7 @@
                                                 class="text-center text-sm text-gray-500 h-full flex justify-center items-center">
                                                 No students found.</p>
                                         @endforelse
+
                                     </div>
                                 </div>
                             </div>{{-- End of Specilize selected Student --}}
