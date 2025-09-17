@@ -11,7 +11,6 @@ class StudentActivity extends Model
     protected $fillable = [
         'student_id',
         'activity_lesson_id',
-        'score',
     ];
 
     public function logs()

@@ -9,6 +9,7 @@ class Admin extends Model
 {
     use HasFactory;
     protected $fillable = [
+        'path',
         'first_name',
         'middle_name',
         'last_name',

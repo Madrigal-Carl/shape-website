@@ -12,7 +12,6 @@ class ActivityLesson extends Model
     protected $fillable = [
         'activity_lessonable_id',
         'activity_lessonable_type',
-        'score',
     ];
 
     public function lesson()
