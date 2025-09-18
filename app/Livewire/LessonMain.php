@@ -19,11 +19,11 @@ class LessonMain extends Component
         $this->school_year = now()->schoolYear();
 
         $this->school_years = Auth::user()->accountable
-        ->lessons()
-        ->pluck('school_year')
-        ->unique()
-        ->sort()
-        ->values();
+            ->lessons()
+            ->pluck('school_year')
+            ->unique()
+            ->sort()
+            ->values();
     }
 
     public function openAddLessonModal()
@@ -47,20 +47,20 @@ class LessonMain extends Component
             'lessonSubjectStudents.curriculumSubject.subject',
             'lessonSubjectStudents.curriculumSubject.curriculum',
         ])
-        ->withCount([
-            'lessonSubjectStudents',
-            'videos',
-            'activityLessons',
-        ])
-        ->where('school_year', $this->school_year)
-        ->whereHas('lessonSubjectStudents.curriculumSubject.curriculum', function ($q) {
-            $q->where('instructor_id', Auth::user()->accountable->id);
-        })
-        ->when($this->search, function ($q) {
-            $q->where('title', 'like', '%' . $this->search . '%');
-        })
-        ->orderByDesc('created_at')
-        ->paginate(10);
+            ->withCount([
+                'lessonSubjectStudents',
+                'videos',
+                'activityLessons',
+            ])
+            ->where('school_year', $this->school_year)
+            ->whereHas('lessonSubjectStudents.curriculumSubject.curriculum', function ($q) {
+                $q->where('instructor_id', Auth::user()->accountable->id)->where('status', 'active');
+            })
+            ->when($this->search, function ($q) {
+                $q->where('title', 'like', '%' . $this->search . '%');
+            })
+            ->orderByDesc('created_at')
+            ->paginate(10);
 
         return view('livewire.lesson-main', compact('lessons'));
     }
