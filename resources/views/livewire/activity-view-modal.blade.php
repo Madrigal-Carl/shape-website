@@ -31,49 +31,46 @@
                                 </div>
                                 <span class="material-symbols-rounded icon">people</span>
                             </div>
-                            <h1 class="text-5xl font-bold">30</h1>
+                            <h1 class="text-5xl font-bold">{{ $activity->student_activities_count }}</h1>
                         </div>
 
                         <div class="bg-white p-6 rounded-3xl w-full flex flex-col justify-between col-span-2">
                             <div class="flex items-center w-auto gap-4">
                                 <h3 class="text-sm font-semibold w-40">Subject:</h3>
                                 <p class="text-sm w-full">
-                                    Mathematics
+                                    {{ ucwords($activity->curriculumSubject->subject->name) }}
                                 </p>
                             </div>
 
                             <div class="flex items-center w-auto gap-4">
                                 <h3 class="text-sm font-semibold w-40">Curriculum:</h3>
                                 <p class="text-sm w-full">
-                                    Test Curriculum
+                                    {{ ucwords($activity->curriculumSubject->curriculum->name) }}
                             </div>
 
                             <div class="flex items-center w-auto gap-4">
                                 <h3 class="text-sm font-semibold w-40">Grade level:</h3>
                                 <p class="text-sm w-full">
-                                    Kindergarten 2</p>
+                                    X</p>
                             </div>
 
                             <div class="flex items-center w-auto gap-4">
                                 <h3 class="text-sm font-semibold w-40">No. of Videos:</h3>
-                                <p class="text-sm w-full">2</p>
+                                <p class="text-sm w-full">X</p>
                             </div>
 
                             <div class="flex items-center w-auto gap-4">
                                 <h3 class="text-sm font-semibold w-40">No. of Activity:</h3>
-                                <p class="text-sm w-full">4</p>
+                                <p class="text-sm w-full">X</p>
                             </div>
                         </div>
-                        <div class="col-span-3 flex flex-col gap-2 bg-white p-6 rounded-2xl">
-                            <h1 class="text-lg font-semibold">Description</h1>
-                            <p class="text-sm text-paragraph text-justify">Lorem ipsum dolor sit amet, consectetur
-                                adipisicing elit. Consectetur quibusdam ipsum vitae recusandae perspiciatis nam ab
-                                nostrum
-                                iure rem doloribus.</p>
-                        </div>
+                        @if (!empty($activity->description))
+                            <div class="col-span-3 flex flex-col gap-2 bg-white p-6 rounded-2xl">
+                                <h1 class="text-lg font-semibold">Description</h1>
+                                <p class="text-sm text-paragraph text-justify">{{ $activity->description }}</p>
+                            </div>
+                        @endif
                     </div>
-
-
 
                     <div class="flex flex-col bg-white rounded-2xl p-6 gap-4 ">
                         <h1 class="text-2xl font-semibold text-heading-dark">Class Activity Record</h1>
@@ -92,20 +89,21 @@
                             </thead>
 
                             <tbody>
-                                <tr>
-                                    <td class="text-left pt-2 text-paragraph">Carl Madrigal</td>
-                                    <td class="text-center pt-2 text-paragraph">999</td>
-                                    <td class="text-center pt-2 text-paragraph">999</td>
-                                    <td class="text-center pt-2 text-paragraph">999</td>
-                                </tr>
-
-
-
-                                {{-- <tr>
+                                @forelse ($studentsData as $row)
+                                    <tr>
+                                        <td class="text-left pt-2 text-paragraph">{{ $row->student->full_name }}</td>
+                                        <td class="text-center pt-2 text-paragraph">{{ $row->max_attempt }}</td>
+                                        <td class="text-center pt-2 text-paragraph">
+                                            {{ number_format($row->total_time_minutes, 2) }} mins</td>
+                                        <td class="text-center pt-2 text-paragraph">{{ $row->max_score }}</td>
+                                    </tr>
+                                @empty
+                                    <tr>
                                         <td colspan="5" class="text-center py-4 text-gray-500">
                                             No lessons found.
                                         </td>
-                                    </tr> --}}
+                                    </tr>
+                                @endforelse
                             </tbody>
                         </table>
                     </div>

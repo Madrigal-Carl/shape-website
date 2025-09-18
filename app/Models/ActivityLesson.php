@@ -10,6 +10,7 @@ class ActivityLesson extends Model
     use HasFactory;
 
     protected $fillable = [
+        'lesson_id',
         'activity_lessonable_id',
         'activity_lessonable_type',
     ];

@@ -22,7 +22,12 @@ class GameActivity extends Model
 
     public function activityLesson()
     {
-        return $this->morphOne(ActivityLesson::class, 'activity_lessonable');
+        return $this->morphMany(ActivityLesson::class, 'activity_lessonable');
+    }
+
+    public function curriculumSubject()
+    {
+        return $this->belongsTo(CurriculumSubject::class);
     }
 
     public function gameImages()

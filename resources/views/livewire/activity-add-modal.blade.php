@@ -49,6 +49,22 @@
                                     </div>
                                 </div>
 
+                                <div class="flex items-center gap-2 w-full">
+                                    <div class="px-4 py-2 rounded-lg bg-white w-full">
+                                        <select name="" id="" wire:model.live="subject"
+                                            wire:key="{{ $curriculum }}" class="w-full outline-none text-paragraph">
+                                            <option value="" class="text-sm text-black" selected disabled>
+                                                Subject
+                                            </option>
+                                            @foreach ($subjects as $subject)
+                                                <option value="{{ $subject->id }}" class="text-sm text-paragraph">
+                                                    {{ ucwords($subject->name) }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+
                                 <textarea name="" id="" maxlength="200" placeholder="Description (Optional)"
                                     wire:model.live="description"
                                     class="px-3 py-2 rounded-lg bg-white placeholder-paragraph resize-none h-24 outline-none"></textarea>
@@ -133,18 +149,27 @@
                                                 <p class="text-lg font-semibold">
                                                     {{ $stud->fullname }}
                                                 </p>
-                                                <small class="leading-none text-paragraph text-start">
+                                                <small class="leading-none text-paragraph">
                                                     {{ ucwords($stud->disability_type) }}
                                                 </small>
                                             </div>
                                         </div>
-                                        <div class="w-45 flex items-center gap-2">
-                                            <p class="font-semibold">Attemp:</p>
-                                            <input type="number" name="" id=""
-                                                value="{{ count($attempts[$stud->id] ?? [['score' => '', 'time' => '']]) }}"
-                                                readonly
-                                                class="w-full outline-none bg-card px-2 py-1 text-blue-button font-semibold rounded-lg placeholder:text-blue-button"
-                                                placeholder="999">
+                                        <div class="flex items-center gap-6">
+                                            <div class="w-45 flex items-center gap-2">
+                                                <p class="font-semibold">Attemp:</p>
+                                                <input type="number" name="" id=""
+                                                    value="{{ count($attempts[$stud->id] ?? [['score' => '', 'time' => '']]) }}"
+                                                    readonly
+                                                    class="w-full outline-none bg-card px-2 py-1 text-blue-button font-semibold rounded-lg placeholder:text-blue-button"
+                                                    placeholder="999">
+                                            </div>
+                                            <div class="flex items-center gap-2">
+                                                <label class="container w-fit">
+                                                    <input type="checkbox"
+                                                        wire:model="completed.{{ $stud->id }}">
+                                                    <div class="checkmark"></div>
+                                                </label>
+                                            </div>
                                         </div>
                                     </button>
 
@@ -211,8 +236,6 @@
 
                         </div>
                     </div>
-
-
 
                     <div
                         class="flex items-center gap-2 absolute w-full left-0 bottom-0 px-8 pb-8 pt-4 rounded-b-4xl bg-card">

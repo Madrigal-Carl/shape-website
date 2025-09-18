@@ -31,7 +31,8 @@ class ActivityMain extends Component
 
     public function render()
     {
-        $activities = ClassActivity::withCount('studentActivities')
+        $activities = ClassActivity::with('curriculumSubject.curriculum', 'curriculumSubject.subject')
+            ->withCount('studentActivities')
             ->where('instructor_id', Auth::user()->accountable->id)
             ->whereHas('curriculumSubject.curriculum', function ($q) {
                 $q->where('status', 'active');

@@ -337,8 +337,8 @@ class Profile extends Component
         }
 
         $defaultImages = [
-            'default_profiles/default-male-student-pfp.png',
-            'default_profiles/default-female-student-pfp.png',
+            'default_profiles/default-male-teacher-pfp.png',
+            'default_profiles/default-female-teacher-pfp.png',
         ];
 
         $oldPath = $this->user->accountable->path;

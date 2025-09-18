@@ -29,6 +29,11 @@ class CurriculumSubject extends Model
         return $this->hasMany(LessonSubjectStudent::class);
     }
 
+    public function classActivity()
+    {
+        return $this->hasMany(ClassActivity::class);
+    }
+
     public function lessons()
     {
         return $this->hasManyThrough(

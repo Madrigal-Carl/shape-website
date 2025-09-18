@@ -2,17 +2,23 @@
 
 namespace App\Livewire;
 
+use App\Models\Student;
+use App\Models\Subject;
 use Livewire\Component;
 use App\Models\Curriculum;
 use Livewire\Attributes\On;
+use App\Models\ClassActivity;
+use App\Models\ActivityLesson;
+use App\Models\StudentActivity;
+use App\Models\CurriculumSubject;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 
 class ActivityAddModal extends Component
 {
-    public $grade_levels, $students, $curriculums, $selected_student = '';
-    public $isOpen = true, $activeStudentId = null, $attempts = [];
-    public $activity_name, $curriculum = '', $grade_level = '', $description;
+    public $subjects, $grade_levels, $students, $curriculums, $selected_student = '';
+    public $isOpen = false, $activeStudentId = null, $attempts = [], $completed = [];
+    public $activity_name, $curriculum = '', $subject = '', $grade_level = '', $description;
     public $selected_students = [];
     public $student_search = '';
 
@@ -61,7 +67,9 @@ class ActivityAddModal extends Component
     public function resetFields()
     {
         $this->activity_name = null;
+        $this->subject = '';
         $this->grade_level = '';
+        $this->subjects = collect();
         $this->selected_student = '';
         $this->selected_students = [];
         $this->students = collect();
@@ -78,14 +86,20 @@ class ActivityAddModal extends Component
             $this->validate([
                 'activity_name'        => 'required|min:5|max:100',
                 'grade_level'        => 'required',
+                'subject'            => 'required',
                 'curriculum'         => 'required',
             ], [
                 'lesson_name.required' => 'Lesson name is required.',
                 'lesson_name.min'      => 'Lesson name must be at least 5 characters.',
                 'lesson_name.max'      => 'Lesson name must not exceed 100 characters.',
                 'grade_level.required' => 'Grade & Section is required.',
+                'subject.required'     => 'Please select a subject.',
                 'curriculum.required'  => 'Please select a curriculum.',
             ]);
+            if ($this->students->isEmpty()) {
+                $this->dispatch('swal-toast', icon: 'error', title: 'Please assign at least one student to this activity.');
+                return false;
+            }
         } catch (ValidationException $e) {
             $message = $e->validator->errors()->first();
             $this->dispatch('swal-toast', icon: 'error', title: $message);
@@ -101,7 +115,50 @@ class ActivityAddModal extends Component
             return;
         }
 
-        $this->dispatch('swal-toast', icon: 'success', title: 'Lesson added successfully!');
+        $curriculumSubject = CurriculumSubject::where('curriculum_id', $this->curriculum)->where('subject_id', $this->subject)->first();
+
+        $activity = ClassActivity::create([
+            'instructor_id' => Auth::user()->accountable->id,
+            'curriculum_subject_id' => $curriculumSubject->id,
+            'name'        => $this->activity_name,
+            'description' => $this->description,
+        ]);
+
+        $activityLesson = ActivityLesson::create([
+            'activity_lessonable_id'   => $activity->id,
+            'activity_lessonable_type' => ClassActivity::class,
+        ]);
+
+        $studentsToAssign = empty($this->selected_students)
+            ? $this->students
+            : Student::whereIn('id', $this->selected_students)->get();
+
+        foreach ($studentsToAssign as $student) {
+            $studentActivity = StudentActivity::create([
+                'student_id' => $student->id,
+                'activity_lesson_id' => $activityLesson->id,
+            ]);
+
+            if (isset($this->attempts[$student->id])) {
+                $attempts = $this->attempts[$student->id] ?? [];
+                $lastIndex = count($attempts) - 1;
+
+                foreach ($attempts as $index => $attempt) {
+                    $studentActivity->logs()->create([
+                        'score'          => $attempt['score'] ?? 0,
+                        'time_spent_seconds'     => isset($attempt['time']) ? ($attempt['time'] * 60) : 0,
+                        'attempt_number' => $index + 1,
+                        'status'         => (
+                            $this->completed[$student->id] ?? true
+                        )
+                            ? ($index === $lastIndex ? 'completed' : 'in-progress')
+                            : 'in-progress',
+                    ]);
+                }
+            }
+        }
+
+        $this->dispatch('swal-toast', icon: 'success', title: 'Activity added successfully!');
         return $this->closeModal();
     }
 
@@ -116,6 +173,7 @@ class ActivityAddModal extends Component
             ->toArray();
         $this->students = collect();
         $this->curriculums = collect();
+        $this->subjects = collect();
     }
 
     public function updatedGradeLevel()
@@ -125,7 +183,10 @@ class ActivityAddModal extends Component
             $this->selected_students = [];
         }
         $this->curriculum = '';
+        $this->subject = '';
         $this->selected_student = '';
+        $this->selected_students = [];
+        $this->subjects = collect();
         $this->students = collect();
     }
 
@@ -134,7 +195,12 @@ class ActivityAddModal extends Component
         if (!empty($this->selected_students)) {
             $this->selected_students = [];
         }
+        $this->subject = '';
+        $this->subjects = Subject::whereHas('curriculumSubjects', function ($query) {
+            $query->where('curriculum_id', $this->curriculum);
+        })->get();
         $this->selected_student = '';
+        $this->selected_students = [];
         $this->students = Auth::user()->accountable->students()
             ->where('status', 'active')
             ->whereHas('enrollments', function ($query) {
@@ -157,8 +223,13 @@ class ActivityAddModal extends Component
             $this->activeStudentId = null;
         } else {
             $this->activeStudentId = $studentId;
+
             if (!isset($this->attempts[$studentId])) {
                 $this->attempts[$studentId] = [['score' => '0', 'time' => '0']];
+            }
+
+            if (!isset($this->completed[$studentId])) {
+                $this->completed[$studentId] = true;
             }
         }
     }

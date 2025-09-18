@@ -300,6 +300,7 @@ class LessonAddModal extends Component
         $this->curriculum = '';
         $this->subject = '';
         $this->selected_student = '';
+        $this->selected_students = [];
         $this->subjects = collect();
         $this->students = collect();
     }
@@ -311,6 +312,7 @@ class LessonAddModal extends Component
         }
         $this->subject = '';
         $this->selected_student = '';
+        $this->selected_students = [];
         $this->subjects = Subject::whereHas('curriculumSubjects', function ($query) {
             $query->where('curriculum_id', $this->curriculum);
         })->get();
