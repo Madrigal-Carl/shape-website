@@ -4,7 +4,9 @@ namespace App\Livewire;
 
 use Livewire\Component;
 use Livewire\WithPagination;
+use App\Models\ClassActivity;
 use Livewire\WithoutUrlPagination;
+use Illuminate\Support\Facades\Auth;
 
 class ActivityMain extends Component
 {
@@ -29,20 +31,20 @@ class ActivityMain extends Component
 
     public function render()
     {
-        // $curriculums = Curriculum::with('curriculumSubjects')
-        //     ->where('instructor_id', Auth::user()->accountable->id)
-        //     ->when($this->status !== 'all', function ($query) {
-        //         $query->where('status', $this->status);
-        //     })
-        //     ->when(!empty($this->search), function ($query) {
-        //         $query->where('name', 'like', '%' . $this->search . '%');
-        //     })
-        //     ->orderByDesc('created_at')
-        //     ->paginate(10);
+        $activities = ClassActivity::withCount('studentActivities')
+            ->where('instructor_id', Auth::user()->accountable->id)
+            ->whereHas('curriculumSubject.curriculum', function ($q) {
+                $q->where('status', 'active');
+            })
+            ->when(!empty($this->search), function ($query) {
+                $query->where('name', 'like', '%' . $this->search . '%');
+            })
+            ->orderByDesc('created_at')
+            ->paginate(10);
 
         return view(
             'livewire.activity-main',
-            // compact('curriculums')
+            compact('activities')
         );
     }
 }
