@@ -15,6 +15,7 @@ class ClassActivity extends Model
         'instructor_id',
         'name',
         'description',
+        'school_year',
     ];
 
     public function curriculumSubject()
@@ -50,5 +51,14 @@ class ClassActivity extends Model
             ->join('activity_lessons', 'student_activities.activity_lesson_id', '=', 'activity_lessons.id')
             ->where('activity_lessons.activity_lessonable_type', self::class)
             ->where('activity_lessons.activity_lessonable_id', $this->id);
+    }
+
+    protected static function booted()
+    {
+        static::creating(function ($model) {
+            if (empty($model->school_year)) {
+                $model->school_year = now()->schoolYear();
+            }
+        });
     }
 }

@@ -22,6 +22,7 @@ use App\Models\Instructor;
 use App\Models\GameActivity;
 use App\Models\StudentAward;
 use App\Models\ActivityImage;
+use App\Models\ClassActivity;
 use App\Models\ActivityLesson;
 use App\Models\Specialization;
 use App\Models\StudentActivity;
@@ -242,6 +243,66 @@ class DatabaseSeeder extends Seeder
                 });
             });
         });
+
+
+        // === Class Activity ===
+        $instructors = Instructor::all();
+
+        foreach ($instructors as $instructor) {
+            $activities = ClassActivity::factory()
+                ->count(10)
+                ->create([
+                    'instructor_id' => $instructor->id,
+                ]);
+
+            foreach ($activities as $activity) {
+                $activityLesson = ActivityLesson::create([
+                    'activity_lessonable_id'   => $activity->id,
+                    'activity_lessonable_type' => ClassActivity::class,
+                ]);
+
+                // Apply same filters as in ActivityEditModal
+                $studentsOfInstructor = Student::query()
+                    ->where('instructor_id', $instructor->id)
+                    ->where('status', 'active')
+                    ->whereHas('enrollments', function ($q) use ($activity) {
+                        $q->where('grade_level', $activity->curriculumSubject->curriculum->grade_level)
+                            ->where('school_year', now()->schoolYear());
+                    })
+                    ->whereIn(
+                        'disability_type',
+                        $activity->curriculumSubject->curriculum
+                            ->specializations()
+                            ->pluck('name')
+                    )
+                    ->get();
+
+                // Pick 3–6 filtered students
+                $students = $studentsOfInstructor->shuffle()->take(rand(3, 6));
+
+                foreach ($students as $student) {
+                    $studentActivity = StudentActivity::create([
+                        'student_id'         => $student->id,
+                        'activity_lesson_id' => $activityLesson->id,
+                    ]);
+
+                    $attempts = rand(1, 3);
+
+                    for ($i = 1; $i <= $attempts; $i++) {
+                        $isLast = $i === $attempts;
+
+                        $studentActivity->logs()->create([
+                            'score'              => fake()->numberBetween(60, 100),
+                            'time_spent_seconds' => fake()->numberBetween(300, 1800),
+                            'attempt_number'     => $i,
+                            'status'             => $isLast ? 'completed' : 'in-progress',
+                        ]);
+                    }
+                }
+            }
+        }
+
+
 
         // === Feeds ===
         $students->each(function ($student) {

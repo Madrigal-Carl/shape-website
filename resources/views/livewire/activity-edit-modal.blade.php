@@ -234,7 +234,6 @@
                                         here.</p>
                                 </div>
                             @endforelse
-
                         </div>
                     </div>
 

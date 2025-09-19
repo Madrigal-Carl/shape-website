@@ -51,7 +51,6 @@ class InstructorDashboardMain extends Component
     {
         $instructorId = Auth::user()->accountable->id;
 
-        // Students
         $studentsQuery = Student::where('instructor_id', $instructorId)
             ->whereHas('enrollments', function ($q) {
                 $q->where('school_year', $this->school_year);
@@ -62,19 +61,16 @@ class InstructorDashboardMain extends Component
         $this->hearingStudents = (clone $studentsQuery)->where('disability_type', 'hearing impairment')->count();
         $this->speechStudents  = (clone $studentsQuery)->where('disability_type', 'speech disorder')->count();
 
-        // Curriculums
         $this->totalCurriculums = Curriculum::where('instructor_id', $instructorId)
             ->where('status', 'active')
             ->count();
 
-        // Lessons
         $this->totalLessons = Lesson::where('school_year', $this->school_year)
             ->whereHas('lessonSubjectStudents.curriculumSubject.curriculum', function ($q) use ($instructorId) {
                 $q->where('instructor_id', $instructorId)->where('status', 'active');
             })
             ->count();
 
-        // Activities (Class + Game)
         $this->totalActivities = ActivityLesson::whereHas('lesson', function ($q) use ($instructorId) {
             $q->where('school_year', $this->school_year)
                 ->whereHas('lessonSubjectStudents.curriculumSubject.curriculum', function ($cq) use ($instructorId) {
@@ -82,7 +78,6 @@ class InstructorDashboardMain extends Component
                 });
         })->count();
 
-        // Awards (from students of this instructor in this school_year)
         $this->totalAwards = StudentAward::whereHas('student', function ($q) use ($instructorId) {
             $q->where('instructor_id', $instructorId);
         })
