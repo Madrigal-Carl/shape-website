@@ -1,5 +1,3 @@
-use App\Models\GameActivity;
-use App\Models\ClassActivity;
 <div>
     @if ($isOpen)
         <section class="bg-black/30 fixed w-dvw h-dvh p-10 top-0 left-0 z-50 backdrop-blur-xs flex justify-center gap-6">
@@ -116,8 +114,8 @@ use App\Models\ClassActivity;
                             @foreach ($lesson->activityLessons as $act)
                                 @php
                                     $activity = $act->activityLessonable; // ✅ use the correct morphTo relation
-                                    $isGame = $activity instanceof GameActivity;
-                                    $isClass = $activity instanceof ClassActivity;
+                                    $isGame = $activity instanceof \App\Models\GameActivity;
+                                    $isClass = $activity instanceof \App\Models\ClassActivity;
                                     $hasImage = $isGame && !empty($activity->path);
                                     $imagePath = $activity->path ?? asset('images/default-img-holder.png');
                                 @endphp
