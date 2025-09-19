@@ -1,3 +1,5 @@
+use App\Models\GameActivity;
+use App\Models\ClassActivity;
 <div>
     @if ($isOpen)
         <section class="bg-black/30 fixed w-dvw h-dvh p-10 top-0 left-0 z-50 backdrop-blur-xs flex justify-center gap-6">
@@ -112,20 +114,34 @@
                         <!-- Game container -->
                         <div class="w-full grid grid-cols-2 gap-2 items-center justify-center rounded-lg">
                             @foreach ($lesson->activityLessons as $act)
+                                @php
+                                    $activity = $act->activityLessonable; // ✅ use the correct morphTo relation
+                                    $isGame = $activity instanceof GameActivity;
+                                    $isClass = $activity instanceof ClassActivity;
+                                    $hasImage = $isGame && !empty($activity->path);
+                                    $imagePath = $activity->path ?? asset('images/default-img-holder.png');
+                                @endphp
+
                                 <div class="flex w-full justify-between bg-white p-2 rounded-lg col-span-1">
                                     <div class="flex gap-2">
-                                        <img src="{{ $act->activity->path }}" alt=""
+                                        <img src="{{ $imagePath }}" alt=""
                                             class="h-12 rounded-md aspect-square object-cover">
+
                                         <div>
-                                            <h1 class="font-medium">{{ $act->activity->name }}</h1>
-                                            <p class="text-sm text-paragraph truncate w-60">
-                                                {{ $act->activity->specializations->pluck('name')->map(fn($s) => ucwords($s))->join(', ') }}
-                                            </p>
+                                            <h1 class="font-medium">{{ $activity->name ?? '' }}</h1>
+
+                                            @if ($isGame && $hasImage)
+                                                @if ($activity->specializations && $activity->specializations->isNotEmpty())
+                                                    <p class="text-sm text-paragraph truncate w-60">
+                                                        {{ $activity->specializations->pluck('name')->map(fn($s) => ucwords($s))->join(', ') }}
+                                                    </p>
+                                                @endif
+                                            @endif
+                                            {{-- ClassActivity shows only the name, so nothing else --}}
                                         </div>
                                     </div>
                                 </div>
                             @endforeach
-
                         </div>
                     </div>
                 </div>

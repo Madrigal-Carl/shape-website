@@ -12,7 +12,9 @@ use App\Models\Curriculum;
 use Illuminate\Support\Str;
 use Livewire\Attributes\On;
 use App\Models\GameActivity;
+use App\Models\ClassActivity;
 use Livewire\WithFileUploads;
+use App\Models\ActivityLesson;
 use FFMpeg\Coordinate\TimeCode;
 use App\Models\CurriculumSubject;
 use App\Models\LessonSubjectStudent;
@@ -25,6 +27,8 @@ class LessonAddModal extends Component
     use WithFileUploads;
     public $subjects, $grade_levels, $students, $activities, $curriculums, $youtube_link, $selected_student = '';
     public $videos = [];
+    public $f2fActivities = [];
+    public $selected_f2f_activities = [];
     public $isOpen = false;
     public $lesson_name, $curriculum = '', $subject = '', $grade_level = '', $description;
     public $uploadedVideos = [], $selected_activities = [], $selected_students = [];
@@ -74,6 +78,8 @@ class LessonAddModal extends Component
         $this->videos = [];
         $this->uploadedVideos = [];
         $this->selected_activities = [];
+        $this->f2fActivities = [];
+        $this->selected_f2f_activities = [];
     }
 
 
@@ -180,11 +186,10 @@ class LessonAddModal extends Component
     {
         try {
             $this->validate([
-                'lesson_name'        => 'required|min:5|max:100',
-                'grade_level'        => 'required',
-                'curriculum'         => 'required',
-                'subject'            => 'required',
-                'selected_activities' => 'required',
+                'lesson_name' => 'required|min:5|max:100',
+                'grade_level' => 'required',
+                'curriculum'  => 'required',
+                'subject'     => 'required',
             ], [
                 'lesson_name.required' => 'Lesson name is required.',
                 'lesson_name.min'      => 'Lesson name must be at least 5 characters.',
@@ -192,7 +197,6 @@ class LessonAddModal extends Component
                 'grade_level.required' => 'Grade & Section is required.',
                 'curriculum.required'  => 'Please select a curriculum.',
                 'subject.required'     => 'Please select a subject.',
-                'selected_activities.required' => 'You must add at least one activity.',
             ]);
         } catch (ValidationException $e) {
             $message = $e->validator->errors()->first();
@@ -200,7 +204,11 @@ class LessonAddModal extends Component
             return false;
         }
 
-        // 2. Videos validation
+        if (empty($this->selected_activities) && empty($this->selected_f2f_activities)) {
+            $this->dispatch('swal-toast', icon: 'error', title: 'You must add at least one Game or Class activity.');
+            return false;
+        }
+
         if (empty($this->uploadedVideos)) {
             $this->dispatch('swal-toast', icon: 'error', title: 'Please upload at least one video or provide a YouTube link.');
             return false;
@@ -208,6 +216,7 @@ class LessonAddModal extends Component
 
         return true;
     }
+
 
     public function addLesson()
     {
@@ -258,6 +267,12 @@ class LessonAddModal extends Component
             ]);
         }
 
+        if (!empty($this->selected_f2f_activities)) {
+            ActivityLesson::whereIn('activity_lessonable_id', $this->selected_f2f_activities)
+                ->where('activity_lessonable_type', ClassActivity::class)
+                ->update(['lesson_id' => $lesson->id]);
+        }
+
         $this->dispatch('swal-toast', icon: 'success', title: 'Lesson added successfully!');
         return $this->closeModal();
     }
@@ -301,6 +316,8 @@ class LessonAddModal extends Component
         $this->subject = '';
         $this->selected_student = '';
         $this->selected_students = [];
+        $this->f2fActivities = [];
+        $this->selected_f2f_activities = [];
         $this->subjects = collect();
         $this->students = collect();
     }
@@ -313,6 +330,8 @@ class LessonAddModal extends Component
         $this->subject = '';
         $this->selected_student = '';
         $this->selected_students = [];
+        $this->f2fActivities = [];
+        $this->selected_f2f_activities = [];
         $this->subjects = Subject::whereHas('curriculumSubjects', function ($query) {
             $query->where('curriculum_id', $this->curriculum);
         })->get();
@@ -329,6 +348,39 @@ class LessonAddModal extends Component
                     ->pluck('name')
             )
             ->get();
+    }
+
+    public function updatedSubject()
+    {
+        if ($this->curriculum && $this->subject) {
+            $curriculumSubject = CurriculumSubject::where('curriculum_id', $this->curriculum)
+                ->where('subject_id', $this->subject)
+                ->first();
+
+            if ($curriculumSubject) {
+                $this->f2fActivities = ClassActivity::where('curriculum_subject_id', $curriculumSubject->id)
+                    ->where('instructor_id', Auth::user()->accountable->id)
+                    ->get();
+            } else {
+                $this->f2fActivities = collect();
+            }
+        }
+    }
+
+    public function toggleF2fActivity($activityId)
+    {
+        if (in_array($activityId, $this->selected_f2f_activities)) {
+            $this->selected_f2f_activities = array_values(
+                array_diff($this->selected_f2f_activities, [$activityId])
+            );
+        } else {
+            $this->selected_f2f_activities[] = $activityId;
+        }
+    }
+
+    public function clearF2fActivities()
+    {
+        $this->selected_f2f_activities = [];
     }
 
     public function render()

@@ -40,16 +40,15 @@
                                 </div>
                                 <div class="flex items-center gap-2 w-full">
                                     <div class="px-4 py-2 rounded-lg bg-white w-full">
-                                        <select name="" id="" wire:model.live="curriculum"
+                                        <select name="" id="" wire:model.live="curriculum_id"
                                             wire:key="{{ $grade_level }}" class="w-full outline-none text-paragraph">
                                             <option value="" class="text-sm text-black" disabled>
                                                 Curriculum
                                             </option>
                                             @foreach ($curriculums as $cur)
-                                                @if ($curriculum === $cur->name)
-                                                    <option value="{{ $curriculum_id }}" class="text-sm text-black"
-                                                        selected>
-                                                        {{ ucwords($curriculum) }}
+                                                @if ($curriculum_id === $cur->id)
+                                                    <option value="{{ $curriculum_id }}" class="text-sm text-black">
+                                                        {{ ucwords($cur->name) }}
                                                     </option>
                                                 @else
                                                     <option value="{{ $cur->id }}" class="text-sm text-paragraph">
@@ -63,15 +62,14 @@
                                 <div class="flex items-center gap-2 w-full">
                                     <div class="px-4 py-2 rounded-lg bg-white w-full">
                                         <select name="" id="" wire:model.live="subject_id"
-                                            wire:key="{{ $curriculum }}" class="w-full outline-none text-paragraph">
+                                            wire:key="{{ $curriculum_id }}" class="w-full outline-none text-paragraph">
                                             <option value="" class="text-sm text-black" disabled>
                                                 Grade & Section
                                             </option>
                                             @foreach ($subjects as $subj)
-                                                @if ($subject === $subj->name)
-                                                    <option value="{{ $subject_id }}" class="text-sm text-black"
-                                                        selected>
-                                                        {{ ucwords($subject) }}
+                                                @if ($subject_id === $subj->id)
+                                                    <option value="{{ $subject_id }}" class="text-sm text-black">
+                                                        {{ ucwords($subj->name) }}
                                                     </option>
                                                 @else
                                                     <option value="{{ $subj->id }}" class="text-sm text-paragraph">
@@ -311,63 +309,23 @@
                                 {{-- Student List --}}
                                 <div class="h-full flex flex-col gap-1 bg-white rounded-lg p-2">
                                     <div class="flex flex-col gap-1 h-48 overflow-y-scroll pr-2 rounded-lg">
-
-                                        <div
-                                            class="flex items-center gap-2 w-full p-2 hover:bg-card rounded-lg cursor-pointer">
-                                            <label class="container w-fit">
-                                                <input type="checkbox">
-                                                <div class="checkmark"></div>
-                                            </label>
-                                            <p class="w-full text-paragraph">Activity Name</p>
-                                        </div>
-                                        <div
-                                            class="flex items-center gap-2 w-full p-2 hover:bg-card rounded-lg cursor-pointer">
-                                            <label class="container w-fit">
-                                                <input type="checkbox">
-                                                <div class="checkmark"></div>
-                                            </label>
-                                            <p class="w-full text-paragraph">Activity Name</p>
-                                        </div>
-                                        <div
-                                            class="flex items-center gap-2 w-full p-2 hover:bg-card rounded-lg cursor-pointer">
-                                            <label class="container w-fit">
-                                                <input type="checkbox">
-                                                <div class="checkmark"></div>
-                                            </label>
-                                            <p class="w-full text-paragraph">Activity Name</p>
-                                        </div>
-                                        <div
-                                            class="flex items-center gap-2 w-full p-2 hover:bg-card rounded-lg cursor-pointer">
-                                            <label class="container w-fit">
-                                                <input type="checkbox">
-                                                <div class="checkmark"></div>
-                                            </label>
-                                            <p class="w-full text-paragraph">Activity Name</p>
-                                        </div>
-                                        <div
-                                            class="flex items-center gap-2 w-full p-2 hover:bg-card rounded-lg cursor-pointer">
-                                            <label class="container w-fit">
-                                                <input type="checkbox">
-                                                <div class="checkmark"></div>
-                                            </label>
-                                            <p class="w-full text-paragraph">Activity Name</p>
-                                        </div>
-                                        <div
-                                            class="flex items-center gap-2 w-full p-2 hover:bg-card rounded-lg cursor-pointer">
-                                            <label class="container w-fit">
-                                                <input type="checkbox">
-                                                <div class="checkmark"></div>
-                                            </label>
-                                            <p class="w-full text-paragraph">Activity Name</p>
-                                        </div>
-                                        <div
-                                            class="flex items-center gap-2 w-full p-2 hover:bg-card rounded-lg cursor-pointer">
-                                            <label class="container w-fit">
-                                                <input type="checkbox">
-                                                <div class="checkmark"></div>
-                                            </label>
-                                            <p class="w-full text-paragraph">Activity Name</p>
-                                        </div>
+                                        @forelse ($f2fActivities  as $activity)
+                                            <div
+                                                class="flex items-center gap-2 w-full p-2 hover:bg-card rounded-lg cursor-pointer">
+                                                <label class="container w-fit">
+                                                    <input type="checkbox"
+                                                        wire:click="toggleF2fActivity({{ $activity->id }})"
+                                                        @checked(in_array($activity->id, $selected_f2f_activities))>
+                                                    <div class="checkmark"></div>
+                                                </label>
+                                                <p class="w-full text-paragraph">{{ $activity->name }}</p>
+                                            </div>
+                                        @empty
+                                            <p
+                                                class="text-center text-sm text-gray-500 h-full flex justify-center items-center">
+                                                No activities found.
+                                            </p>
+                                        @endforelse
                                     </div>
                                 </div>
                             </div>{{-- End of Specilize selected Student --}}

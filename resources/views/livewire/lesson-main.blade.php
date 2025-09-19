@@ -103,7 +103,7 @@
                                     Assigned
                                 </th>
                                 <th class="px-4 pb-3 text-center font-semibold">Videos</th>
-                                <th class="px-4 pb-3 text-center font-semibold">Activies</th>
+                                <th class="px-4 pb-3 text-center font-semibold">Activities</th>
                                 <th class="px-4 pb-3 text-center font-semibold">Actions</th>
                             </tr>
                         </thead>

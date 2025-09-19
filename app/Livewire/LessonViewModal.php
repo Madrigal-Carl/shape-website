@@ -18,7 +18,18 @@ class LessonViewModal extends Component
         $this->lesson_id = $id;
         $this->isOpen = true;
 
-        $this->lesson = Lesson::with('videos', 'activityLessons.activity.specializations', 'students', 'lessonSubjectStudents.curriculum', 'lessonSubjectStudents.subject')->find($id);
+        $this->lesson = Lesson::with([
+            'videos',
+            'students',
+            'lessonSubjectStudents.curriculum',
+            'lessonSubjectStudents.subject',
+            'activityLessons.activityLessonable' => function ($morphTo) {
+                $morphTo->morphWith([
+                    \App\Models\GameActivity::class => ['specializations'],
+                    \App\Models\ClassActivity::class => ['curriculumSubject'],
+                ]);
+            }
+        ])->find($id);
     }
 
     public function closeModal()

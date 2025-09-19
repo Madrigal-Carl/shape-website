@@ -11,6 +11,7 @@ use App\Models\Curriculum;
 use Illuminate\Support\Str;
 use Livewire\Attributes\On;
 use App\Models\GameActivity;
+use App\Models\ClassActivity;
 use Livewire\WithFileUploads;
 use FFMpeg\Coordinate\TimeCode;
 use App\Models\CurriculumSubject;
@@ -23,9 +24,11 @@ class LessonEditModal extends Component
     use WithFileUploads;
     public $subjects, $grade_levels, $students, $activities, $curriculums, $youtube_link, $selected_student = '', $curriculum_id, $subject_id;
     public $videos = [];
+    public $f2fActivities = [];
+    public $selected_f2f_activities = [];
     public $lesson_id = null;
     public $isOpen = false;
-    public $lesson_name, $curriculum = '', $subject = '', $grade_level = '', $description;
+    public $lesson_name, $grade_level = '', $description;
     public $uploadedVideos = [], $selected_activities = [], $selected_students = [];
     public $original = [];
     public $student_search = '';
@@ -69,9 +72,7 @@ class LessonEditModal extends Component
         $lesson = Lesson::with('students', 'videos', 'lessonSubjectStudents.curriculumSubject.curriculum', 'lessonSubjectStudents.curriculumSubject.subject')->find($id);
         $this->lesson_name = $lesson->title;
         $this->grade_level = $lesson->lessonSubjectStudents->first()->curriculumSubject->curriculum->grade_level;
-        $this->curriculum = $lesson->lessonSubjectStudents->first()->curriculumSubject->curriculum->name;
         $this->curriculum_id = $lesson->lessonSubjectStudents->first()->curriculumSubject->curriculum->id;
-        $this->subject = $lesson->lessonSubjectStudents->first()->curriculumSubject->subject->name;
         $this->subject_id = $lesson->lessonSubjectStudents->first()->curriculumSubject->subject->id;
         $this->selected_students = $lesson->students->pluck('id')->toArray();
         $this->description = $lesson->description;
@@ -98,25 +99,47 @@ class LessonEditModal extends Component
             ];
         })->toArray();
 
-        $this->selected_activities = $lesson->activityLessons->map(function ($al) {
-            $activity = $al->activityLessonable;
-            return (object) [
-                'id'              => $activity->id,
-                'name'            => $activity->name,
-                'path'            => $activity->path,
-                'specializations' => collect($activity->specializations ?? [])->pluck('name')->toArray(),
-            ];
-        })->toArray();
+        $this->selected_activities = $lesson->activityLessons()
+            ->where('activity_lessonable_type', GameActivity::class)
+            ->get()
+            ->map(function ($al) {
+                $activity = $al->activityLessonable;
+                return (object) [
+                    'id'              => $activity->id,
+                    'name'            => $activity->name,
+                    'path'            => $activity->path,
+                    'specializations' => collect($activity->specializations ?? [])->pluck('name')->toArray(),
+                ];
+            })
+            ->toArray();
+
+        $this->selected_f2f_activities = $lesson->activityLessons()
+            ->where('activity_lessonable_type', ClassActivity::class)
+            ->pluck('activity_lessonable_id')
+            ->toArray();
+
+        if ($this->curriculum_id && $this->subject_id) {
+            $curriculumSubject = CurriculumSubject::where('curriculum_id', $this->curriculum_id)
+                ->where('subject_id', $this->subject_id)
+                ->first();
+
+            if ($curriculumSubject) {
+                $this->f2fActivities = ClassActivity::where('curriculum_subject_id', $curriculumSubject->id)
+                    ->where('instructor_id', Auth::user()->accountable->id)
+                    ->get();
+            }
+        }
 
         $this->original = [
             'lesson_name'   => $this->lesson_name,
             'description'   => $this->description,
             'grade_level'   => $this->grade_level,
-            'curriculum'    => $this->curriculum,
-            'subject'       => $this->subject,
+            'curriculum'    => $this->curriculum_id,
+            'subject'       => $this->subject_id,
             'students'      => $this->selected_students,
             'videos'        => $this->uploadedVideos,
             'activities'    => $this->selected_activities,
+            'f2f_activities' => $this->selected_f2f_activities,
         ];
     }
 
@@ -253,7 +276,6 @@ class LessonEditModal extends Component
                 'grade_level'        => 'required',
                 'curriculum_id'      => 'required',
                 'subject_id'         => 'required',
-                'selected_activities' => 'required',
             ], [
                 'lesson_name.required' => 'Lesson name is required.',
                 'lesson_name.min'      => 'Lesson name must be at least 5 characters.',
@@ -261,11 +283,15 @@ class LessonEditModal extends Component
                 'grade_level.required' => 'Grade & Section is required.',
                 'curriculum_id.required' => 'Please select a curriculum.',
                 'subject_id.required'  => 'Please select a subject.',
-                'selected_activities.required' => 'You must add at least one activity.',
             ]);
         } catch (ValidationException $e) {
             $message = $e->validator->errors()->first();
             $this->dispatch('swal-toast', icon: 'error', title: $message);
+            return false;
+        }
+
+        if (empty($this->selected_activities) && empty($this->selected_f2f_activities)) {
+            $this->dispatch('swal-toast', icon: 'error', title: 'You must add at least one Game or Class activity.');
             return false;
         }
 
@@ -287,11 +313,12 @@ class LessonEditModal extends Component
             'lesson_name'   => $this->lesson_name,
             'description'   => $this->description,
             'grade_level'   => $this->grade_level,
-            'curriculum'    => $this->curriculum,
-            'subject'       => $this->subject,
+            'curriculum'    => $this->curriculum_id,
+            'subject'       => $this->subject_id,
             'students'      => $this->selected_students,
             'videos'        => $this->uploadedVideos,
             'activities'    => $this->selected_activities,
+            'f2f_activities' => $this->selected_f2f_activities,
         ];
 
         if ($current == $this->original) {
@@ -342,6 +369,13 @@ class LessonEditModal extends Component
             ]);
         }
 
+        foreach ($this->selected_f2f_activities as $activityId) {
+            $lesson->activityLessons()->create([
+                'activity_lessonable_id'   => $activityId,
+                'activity_lessonable_type' => ClassActivity::class,
+            ]);
+        }
+
         $this->dispatch('swal-toast', icon: 'success', title: 'Lesson updated successfully!');
         $this->closeModal();
     }
@@ -352,10 +386,12 @@ class LessonEditModal extends Component
         if (!empty($this->selected_students)) {
             $this->selected_students = [];
         }
-        $this->curriculum = '';
-        $this->subject = '';
+        $this->curriculum_id = '';
+        $this->subject_id = '';
         $this->selected_student = '';
         $this->selected_students = [];
+        $this->f2fActivities = [];
+        $this->selected_f2f_activities = [];
         $this->subjects = collect();
         $this->students = collect();
     }
@@ -365,9 +401,11 @@ class LessonEditModal extends Component
         if (!empty($this->selected_students)) {
             $this->selected_students = [];
         }
-        $this->subject = '';
+        $this->subject_id = '';
         $this->selected_student = '';
         $this->selected_students = [];
+        $this->f2fActivities = [];
+        $this->selected_f2f_activities = [];
         $this->subjects = Subject::whereHas('curriculumSubjects', function ($query) {
             $query->where('curriculum_id', $this->curriculum_id);
         })->get();
@@ -379,11 +417,44 @@ class LessonEditModal extends Component
             })
             ->whereIn(
                 'disability_type',
-                Curriculum::find($this->curriculum)
+                Curriculum::find($this->curriculum_id)
                     ->specializations()
                     ->pluck('name')
             )
             ->get();
+    }
+
+    public function toggleF2fActivity($activityId)
+    {
+        if (in_array($activityId, $this->selected_f2f_activities)) {
+            $this->selected_f2f_activities = array_values(
+                array_diff($this->selected_f2f_activities, [$activityId])
+            );
+        } else {
+            $this->selected_f2f_activities[] = $activityId;
+        }
+    }
+
+    public function clearF2fActivities()
+    {
+        $this->selected_f2f_activities = [];
+    }
+
+    public function updatedSubjectId()
+    {
+        if ($this->curriculum_id && $this->subject_id) {
+            $curriculumSubject = CurriculumSubject::where('curriculum_id', $this->curriculum_id)
+                ->where('subject_id', $this->subject_id)
+                ->first();
+
+            if ($curriculumSubject) {
+                $this->f2fActivities = ClassActivity::where('curriculum_subject_id', $curriculumSubject->id)
+                    ->where('instructor_id', Auth::user()->accountable->id)
+                    ->get();
+            } else {
+                $this->f2fActivities = collect();
+            }
+        }
     }
 
     public function render()
