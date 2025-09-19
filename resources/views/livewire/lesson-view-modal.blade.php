@@ -104,16 +104,14 @@
                         </div>
                     </div>
 
-
                     <!-- Games -->
                     <div class="flex flex-col gap-3">
                         <h2 class="font-medium text-lg">Games & Activities</h2>
 
-                        <!-- Game container -->
                         <div class="w-full grid grid-cols-2 gap-2 items-center justify-center rounded-lg">
                             @foreach ($lesson->activityLessons as $act)
                                 @php
-                                    $activity = $act->activityLessonable; // ✅ use the correct morphTo relation
+                                    $activity = $act->activityLessonable;
                                     $isGame = $activity instanceof \App\Models\GameActivity;
                                     $isClass = $activity instanceof \App\Models\ClassActivity;
                                     $hasImage = $isGame && !empty($activity->path);
