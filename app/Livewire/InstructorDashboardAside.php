@@ -11,10 +11,20 @@ class InstructorDashboardAside extends Component
 
     public function mount()
     {
-        $this->feeds = Feed::whereIn('group', ['student', 'award', 'curriculum', 'lesson'])
-            ->latest()
-            ->take(12)
-            ->get();
+        $groups = ['student', 'award', 'curriculum', 'lesson'];
+
+        $feeds = collect();
+
+        foreach ($groups as $group) {
+            $feeds = $feeds->merge(
+                Feed::where('group', $group)
+                    ->latest()
+                    ->take(3)
+                    ->get()
+            );
+        }
+
+        $this->feeds = $feeds->sortByDesc('created_at')->values();
     }
 
     public function render()
