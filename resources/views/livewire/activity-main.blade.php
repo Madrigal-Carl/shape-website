@@ -82,7 +82,7 @@
                                     Curriculum
                                 </th>
                                 <th class="px-4 pb-3 text-center font-semibold">
-                                    Grade Level
+                                    Date Created
                                 </th>
                                 <th class="px-4 pb-3 text-center font-semibold">
                                     Subject

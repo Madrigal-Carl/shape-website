@@ -26,15 +26,15 @@
                             class="bg-gradient-to-tr h-48 col-span-1 from-blue-button to-[#00EEFF] p-6 text-white rounded-3xl flex flex-col justify-between gap-6">
                             <div class="flex justify-between">
                                 <div>
-                                    <p class="text-xs leading-snug font-normal">No. of Students</p>
-                                    <h1 class="text-lg font-semibold leading-6">Assigned</h1>
+                                    <p class=" leading-snug font-normal">No. of Students</p>
+                                    <h1 class="text-2xl font-semibold leading-6">Assigned</h1>
                                 </div>
                                 <span class="material-symbols-rounded icon">people</span>
                             </div>
                             <h1 class="text-5xl font-bold">{{ $activity->student_activities_count }}</h1>
                         </div>
 
-                        <div class="bg-white p-6 rounded-3xl w-full flex flex-col justify-between col-span-2">
+                        <div class="bg-white p-6 rounded-3xl w-full flex flex-col justify-start gap-4 col-span-2">
                             <div class="flex items-center w-auto gap-4">
                                 <h3 class="text-sm font-semibold w-40">Subject:</h3>
                                 <p class="text-sm w-full">
@@ -48,21 +48,7 @@
                                     {{ ucwords($activity->curriculumSubject->curriculum->name) }}
                             </div>
 
-                            <div class="flex items-center w-auto gap-4">
-                                <h3 class="text-sm font-semibold w-40">Grade level:</h3>
-                                <p class="text-sm w-full">
-                                    X</p>
-                            </div>
 
-                            <div class="flex items-center w-auto gap-4">
-                                <h3 class="text-sm font-semibold w-40">No. of Videos:</h3>
-                                <p class="text-sm w-full">X</p>
-                            </div>
-
-                            <div class="flex items-center w-auto gap-4">
-                                <h3 class="text-sm font-semibold w-40">No. of Activity:</h3>
-                                <p class="text-sm w-full">X</p>
-                            </div>
                         </div>
                         @if (!empty($activity->description))
                             <div class="col-span-3 flex flex-col gap-2 bg-white p-6 rounded-2xl">
@@ -79,12 +65,12 @@
                                 <tr>
                                     <th class="text-left font-semibold pb-2 text-lg">Student Name</th>
                                     <th class="text-center font-semibold pb-2 text-lg">
-                                        Attempt
+                                        Total Attempt
                                     </th>
                                     <th class="text-center font-semibold pb-2 text-lg">
-                                        Time
+                                        Total Time
                                     </th>
-                                    <th class="text-center font-semibold pb-2 text-lg">Score</th>
+                                    <th class="text-center font-semibold pb-2 text-lg">Max Score</th>
                                 </tr>
                             </thead>
 

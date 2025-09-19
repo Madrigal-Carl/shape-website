@@ -25,8 +25,8 @@
                             class="bg-gradient-to-tr h-48 col-span-1 from-blue-button to-[#00EEFF] p-6 text-white rounded-3xl flex flex-col justify-between gap-6">
                             <div class="flex justify-between">
                                 <div>
-                                    <p class="text-xs leading-snug font-normal">No. of Students</p>
-                                    <h1 class="text-lg font-semibold leading-6">Assigned</h1>
+                                    <p class="leading-snug font-normal">No. of Students</p>
+                                    <h1 class="text-2xl font-semibold leading-6">Assigned</h1>
                                 </div>
                                 <span class="material-symbols-rounded icon">people</span>
                             </div>
