@@ -24,6 +24,11 @@
         <div class="flex gap-4 self-start">
             <button
                 class="flex items-center bg-white py-3 px-5 rounded-full gap-2 text-paragraph cursor-pointer border-2 border-white hover:border-blue-button hover:text-white hover:bg-blue-button">
+                <span class="material-symbols-rounded">calendar_month</span>
+                <p class="">Set Quarters</p>
+            </button>
+            <button
+                class="flex items-center bg-white py-3 px-5 rounded-full gap-2 text-paragraph cursor-pointer border-2 border-white hover:border-blue-button hover:text-white hover:bg-blue-button">
                 <span class="material-symbols-rounded">save</span>
                 <p class="">Export</p>
             </button>
