@@ -99,6 +99,9 @@ class Student extends Model
             ->whereHas('lesson', function ($q) use ($schoolYear) {
                 $q->where('school_year', $schoolYear);
             })
+            ->whereHas('curriculum', function ($q) {
+                $q->where('status', 'active');
+            })
             ->count();
     }
 
@@ -109,6 +112,9 @@ class Student extends Model
         return $this->lessonSubjectStudents()
             ->whereHas('lesson', function ($q) use ($schoolYear) {
                 $q->where('school_year', $schoolYear);
+            })
+            ->whereHas('curriculum', function ($q) {
+                $q->where('status', 'active');
             })
             ->get()
             ->filter(function ($lss) {
@@ -125,6 +131,9 @@ class Student extends Model
             ->whereHas('lesson', function ($q) use ($schoolYear) {
                 $q->where('school_year', $schoolYear);
             })
+            ->whereHas('curriculum', function ($q) {
+                $q->where('status', 'active');
+            })
             ->get()
             ->sum(function ($lss) {
                 return $lss->lesson->activityLessons->count();
@@ -138,6 +147,9 @@ class Student extends Model
         return $this->lessonSubjectStudents()
             ->whereHas('lesson', function ($q) use ($schoolYear) {
                 $q->where('school_year', $schoolYear);
+            })
+            ->whereHas('curriculum', function ($q) {
+                $q->where('status', 'active');
             })
             ->get()
             ->sum(function ($lss) {

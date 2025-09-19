@@ -29,7 +29,11 @@ class LessonViewModal extends Component
                     \App\Models\ClassActivity::class => ['curriculumSubject'],
                 ]);
             }
-        ])->find($id);
+        ])
+            ->whereHas('lessonSubjectStudents.curriculum', function ($query) {
+                $query->where('status', 'active'); // assuming curriculum has `status`
+            })
+            ->find($id);
     }
 
     public function closeModal()
