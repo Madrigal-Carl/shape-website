@@ -31,7 +31,7 @@ class StudentFactory extends Factory
             'lrn' => $this->faker->unique()->numerify('############'),
             'disability_type' => $this->faker->randomElement(['autism spectrum disorder', 'speech disorder', 'hearing impairment']),
             'support_need' => $this->faker->sentence(),
-            'status' => $this->faker->randomElement(['active', 'inactive', 'graduated', 'dropped', 'transferred']),
+            'status' => 'active',
         ];
     }
 }

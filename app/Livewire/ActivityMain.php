@@ -12,6 +12,7 @@ class ActivityMain extends Component
 {
     use WithPagination, WithoutUrlPagination;
     public $search = '';
+    public $school_year, $school_years, $grade_levels;
     public $listeners = ["refresh" => '$refresh'];
 
     public function openAddActivityModal()
@@ -29,11 +30,26 @@ class ActivityMain extends Component
         $this->dispatch('openModal', id: $id)->to('activity-view-modal');
     }
 
+
+    public function mount()
+    {
+        $this->school_year = now()->schoolYear();
+
+        $this->school_years = ClassActivity::where('instructor_id', Auth::user()->accountable->id)
+            ->get()
+            ->pluck('school_year')
+            ->flatten()
+            ->unique()
+            ->sort()
+            ->values();
+    }
+
     public function render()
     {
         $activities = ClassActivity::with('curriculumSubject.curriculum', 'curriculumSubject.subject')
             ->withCount('studentActivities')
             ->where('instructor_id', Auth::user()->accountable->id)
+            ->where('school_year', $this->school_year)
             ->whereHas('curriculumSubject.curriculum', function ($q) {
                 $q->where('status', 'active');
             })
