@@ -137,10 +137,11 @@
 
                             {{-- Per Student container --}}
                             @forelse ($studentsToRender as $stud)
-                                <div class="flex flex-col gap-4 items-center bg-white rounded-2xl p-4">
+                                <div
+                                    class="flex flex-col gap-4 items-center bg-white rounded-3xl hover:bg-gray-300  cursor-pointer">
                                     {{-- Student profile --}}
                                     <button wire:click="toggleStudentAccordion({{ $stud->id }})"
-                                        class="cursor-pointer flex gap-2 items-start justify-between bg-white w-full hover:bg-gray-100 transition-all duration-200">
+                                        class="flex gap-2 items-start justify-between w-full transition-all p-4  duration-200">
                                         <div class="flex gap-2 items-center w-full">
                                             <img src="{{ asset('storage/' . $stud->path) }}"
                                                 class="w-12 h-12 aspect-square object-cover rounded-full"
@@ -174,7 +175,8 @@
                                     </button>
 
                                     @if ($activeStudentId === $stud->id)
-                                        <div class="flex w-full flex-col gap-2 pt-4 border-t-1 border-gray-300">
+                                        <div
+                                            class="flex w-full bg-white rounded-b-3xl flex-col gap-2 p-4 border-t-1 border-gray-300">
 
                                             {{-- Heading --}}
                                             <div class="grid grid-cols-2 w-full">
@@ -198,7 +200,7 @@
                                                             <input type="number"
                                                                 wire:model="attempts.{{ $stud->id }}.{{ $index }}.time"
                                                                 class="w-full outline-none text-heading-dark"
-                                                                placeholder="Enter time spent">
+                                                                placeholder="Enter time spent (mins)">
                                                         </div>
                                                     </div>
                                                 @endforeach

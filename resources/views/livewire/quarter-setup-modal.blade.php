@@ -1,9 +1,158 @@
 <div>
     @if ($isOpen)
-        <section class="bg-black/30 fixed w-dvw h-dvh p-10 top-0 left-0 z-50 backdrop-blur-xs flex justify-center gap-6">
-            <div class="w-200 h-full Addlesson bg-card p-8 rounded-4xl relative flex">
+        <section
+            class="bg-black/30 fixed w-dvw h-dvh top-0 left-0 z-50 backdrop-blur-xs flex justify-center items-center overflow-y-auto p-10">
+            <!-- first form -->
+            <div class="bg-card p-8 rounded-4xl w-220 flex flex-col gap-8">
+                <div class="flex items-center gap-2">
+                    <img src="{{ asset('images/calendar.png') }}" class="h-8" alt="" />
+                    <h1 class="text-3xl font-bold text-heading-dark">
+                        Set Quarters
+                    </h1>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    {{-- First Quarter --}}
+                    <div class="flex items-center w-full gap-4 bg-white p-4 rounded-3xl ">
+                        <div
+                            class="flex flex-col items-center justify-center rounded-2xl p-4 aspect-square  h-42 text-white bg-gradient-to-tr from-blue-button to-[#00EEFF] shadow-blue-button shadow-xl/35">
+                            <h1 class="text-6xl font-bold ">
+                                1st</h1>
+                            <p class="text-lg">Quarter</p>
+                        </div>
 
+                        {{-- inputs --}}
+                        <div class="w-full flex flex-col gap-2">
+                            {{-- Start --}}
+                            <div class="w-full">
+                                <label for="" class="font-semibold text-lg">Start</label>
+                                <input type="text"
+                                    class="px-4 py-2 rounded-lg bg-card placeholder-paragraph outline-none w-full text-paragraph"
+                                    onfocus="this.type='date'" onblur="if(!this.value) this.type='text'" />
+                            </div>
+
+                            {{-- End --}}
+                            <div>
+                                <label for="" class="font-semibold text-lg">End</label>
+                                <input type="text"
+                                    class="px-4 py-2 rounded-lg bg-card placeholder-paragraph outline-none w-full text-paragraph"
+                                    onfocus="this.type='date'" onblur="if(!this.value) this.type='text'" />
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    {{-- Second Quarter --}}
+                    <div class="flex items-center w-full gap-4 bg-white p-4 rounded-3xl ">
+                        <div
+                            class="flex flex-col items-center justify-center rounded-2xl p-4 aspect-square  h-42 text-white bg-gradient-to-tr from-lime to-[#00ff80] shadow-lime shadow-xl/35">
+                            <h1 class="text-6xl font-bold ">
+                                2nd</h1>
+                            <p class="text-lg">Quarter</p>
+                        </div>
+
+                        {{-- inputs --}}
+                        <div class="w-full flex flex-col gap-2">
+                            {{-- Start --}}
+                            <div class="w-full">
+                                <label for="" class="font-semibold text-lg">Start</label>
+                                <input type="text"
+                                    class="px-4 py-2 rounded-lg bg-card placeholder-paragraph outline-none w-full text-paragraph"
+                                    onfocus="this.type='date'" onblur="if(!this.value) this.type='text'" />
+                            </div>
+
+                            {{-- End --}}
+                            <div>
+                                <label for="" class="font-semibold text-lg">End</label>
+                                <input type="text"
+                                    class="px-4 py-2 rounded-lg bg-card placeholder-paragraph outline-none w-full text-paragraph"
+                                    onfocus="this.type='date'" onblur="if(!this.value) this.type='text'" />
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    {{-- Third Quarters --}}
+                    <div class="flex items-center w-full gap-4 bg-white p-4 rounded-3xl ">
+                        <div
+                            class="flex flex-col items-center justify-center rounded-2xl p-4 aspect-square  h-42 text-white bg-gradient-to-tr from-yellowOrange to-[#FFEA00] shadow-yellowOrange shadow-xl/35">
+                            <h1 class="text-6xl font-bold ">
+                                3rd</h1>
+                            <p class="text-lg">Quarter</p>
+                        </div>
+
+                        {{-- inputs --}}
+                        <div class="w-full flex flex-col gap-2">
+                            {{-- Start --}}
+                            <div class="w-full">
+                                <label for="" class="font-semibold text-lg">Start</label>
+                                <input type="text"
+                                    class="px-4 py-2 rounded-lg bg-card placeholder-paragraph outline-none w-full text-paragraph"
+                                    onfocus="this.type='date'" onblur="if(!this.value) this.type='text'" />
+                            </div>
+
+                            {{-- End --}}
+                            <div>
+                                <label for="" class="font-semibold text-lg">End</label>
+                                <input type="text"
+                                    class="px-4 py-2 rounded-lg bg-card placeholder-paragraph outline-none w-full text-paragraph"
+                                    onfocus="this.type='date'" onblur="if(!this.value) this.type='text'" />
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    {{-- fourth Quarters --}}
+                    <div class="flex items-center w-full gap-4 bg-white p-4 rounded-3xl ">
+                        <div
+                            class="flex flex-col items-center justify-center rounded-2xl p-4 aspect-square  h-42 text-white bg-gradient-to-tr from-danger to-[#ff00aa] shadow-danger shadow-xl/35">
+                            <h1 class="text-6xl font-bold ">
+                                4th</h1>
+                            <p class="text-lg">Quarter</p>
+                        </div>
+
+                        {{-- inputs --}}
+                        <div class="w-full flex flex-col gap-2">
+                            {{-- Start --}}
+                            <div class="w-full">
+                                <label for="" class="font-semibold text-lg">Start</label>
+                                <input type="text"
+                                    class="px-4 py-2 rounded-lg bg-card placeholder-paragraph outline-none w-full text-paragraph"
+                                    onfocus="this.type='date'" onblur="if(!this.value) this.type='text'" />
+                            </div>
+
+                            {{-- End --}}
+                            <div>
+                                <label for="" class="font-semibold text-lg">End</label>
+                                <input type="text"
+                                    class="px-4 py-2 rounded-lg bg-card placeholder-paragraph outline-none w-full text-paragraph"
+                                    onfocus="this.type='date'" onblur="if(!this.value) this.type='text'" />
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+
+
+
+                <!-- buttons -->
+                <div class="flex items-center gap-2">
+                    <button type="button"
+                        class="bg-white py-1.5 px-4 w-full rounded-xl text-heading-dark font-medium hover:bg-gray-300 cursor-pointer"
+                        wire:click="closeModal" type="button">
+                        Cancel
+                    </button>
+                    <button type="button"
+                        class="bg-blue-button py-1.5 px-4 w-full rounded-xl text-white font-medium hover:bg-blue-700 cursor-pointer"
+                        wire:click="nextStep">
+                        Save
+                    </button>
+                </div>
             </div>
-        </section>
+            <!-- End of first form -->
     @endif
 </div>
