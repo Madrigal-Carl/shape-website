@@ -4,27 +4,36 @@ namespace App\Livewire;
 
 use App\Models\Student;
 use Livewire\Component;
+use App\Models\SchoolYear;
 use Livewire\Attributes\On;
 use PhpOffice\PhpWord\PhpWord;
 use PhpOffice\PhpWord\IOFactory;
-use PhpOffice\PhpWord\SimpleType\JcTable;
 use Illuminate\Support\Facades\Response;
+use PhpOffice\PhpWord\SimpleType\JcTable;
 
 class StudentViewModal extends Component
 {
     public $isOpen = false;
     public $student_id = null;
     public $school_year = null;
-    public $student;
+    public $student, $quarter;
 
     #[On('openModal')]
     public function openModal($id, $school_year)
     {
         $this->student_id = $id;
         $this->school_year = $school_year;
+        $this->quarter = now()->schoolYear()->currentQuarter();
         $this->isOpen = true;
 
-        $this->student = Student::with('guardian', 'permanentAddress', 'currentAddress', 'lessons')->find($id);
+        $this->student = Student::with([
+            'guardian',
+            'permanentAddress',
+            'currentAddress',
+            'lessons.schoolYear',
+            'lessons.videos',
+            'lessons.activityLessons'
+        ])->find($id);
     }
 
     public function exportDocx()
@@ -127,6 +136,16 @@ class StudentViewModal extends Component
 
     public function render()
     {
-        return view('livewire.student-view-modal');
+        $filteredLessons = collect();
+
+        if ($this->student) {
+            $schoolYearModel = SchoolYear::find($this->school_year);
+
+            $filteredLessons = $this->student->lessons
+                ->filter(fn($lesson) => $lesson->school_year_id == $this->school_year
+                    && $lesson->isInQuarter($schoolYearModel, (int) $this->quarter));
+        }
+
+        return view('livewire.student-view-modal', compact('filteredLessons'));
     }
 }

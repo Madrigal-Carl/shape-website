@@ -15,11 +15,28 @@
 
                     <!-- Action Buttons -->
                     <div class="flex items-center gap-2">
-                        <button
+                        {{-- <button
                             class="profile-button flex items-center bg-white py-2 px-5 rounded-full gap-2 text-paragraph cursor-pointer hover:text-white hover:bg-blue-button">
                             <span class="material-symbols-rounded">save</span>
                             <p class="text-sm">Export Form</p>
-                        </button>
+                        </button> --}}
+                        <div
+                            class="flex items-center bg-white py-3 px-5 rounded-full border-2 border-white hover:border-blue-button text-paragraph hover:bg-blue-button hover:text-white cursor-pointer">
+                            <select name="" id="" class="w-max outline-none" wire:model.live="quarter">
+                                <option value="1" class=" text-heading-dark">
+                                    1st Quarter
+                                </option>
+                                <option value="2" class=" text-heading-dark">
+                                    2nd Quarter
+                                </option>
+                                <option value="3" class=" text-heading-dark">
+                                    3rd Quarter
+                                </option>
+                                <option value="4" class=" text-heading-dark">
+                                    4th Quarter
+                                </option>
+                            </select>
+                        </div>
 
                         <button wire:click="exportDocx"
                             class="profile-button flex items-center bg-white py-2 px-5 rounded-full gap-2 text-paragraph cursor-pointer hover:text-white hover:bg-blue-button">
@@ -93,7 +110,8 @@
                                 </div>
                                 <span class="material-symbols-rounded icon">book_ribbon</span>
                             </div>
-                            <h1 class="text-5xl font-bold">{{ $student->completedLessonsCount($school_year) }}</h1>
+                            <h1 class="text-5xl font-bold">{{ $student->completedLessonsCount($school_year, $quarter) }}
+                            </h1>
                         </div>
 
                         <div
@@ -105,7 +123,8 @@
                                 </div>
                                 <span class="material-symbols-rounded icon">stadia_controller</span>
                             </div>
-                            <h1 class="text-5xl font-bold">{{ $student->completedActivitiesCount($school_year) }}</h1>
+                            <h1 class="text-5xl font-bold">
+                                {{ $student->completedActivitiesCount($school_year, $quarter) }}</h1>
                         </div>
 
                         {{-- <div
@@ -181,12 +200,12 @@
                             </thead>
 
                             <tbody>
-                                @forelse ($student->lessons->where('school_year', $school_year) as $lesson)
+                                @forelse ($filteredLessons as $lesson)
                                     <tr>
                                         <td class="text-left pt-2 text-paragraph">{{ $lesson->title }}</td>
-                                        <td class="text-center pt-2 text-paragraph">{{ count($lesson->videos) }}</td>
+                                        <td class="text-center pt-2 text-paragraph">{{ $lesson->videos->count() }}</td>
                                         <td class="text-center pt-2 text-paragraph">
-                                            {{ count($lesson->activityLessons) }}</td>
+                                            {{ $lesson->activityLessons->count() }}</td>
                                         <td class="text-center pt-2 text-paragraph">
                                             {{ $lesson->isCompletedByStudent($student->id) ? 'Completed' : 'In-Progress' }}
                                         </td>
@@ -194,7 +213,7 @@
                                 @empty
                                     <tr>
                                         <td colspan="5" class="text-center py-4 text-gray-500">
-                                            No lessons found.
+                                            No lessons found for this quarter.
                                         </td>
                                     </tr>
                                 @endforelse

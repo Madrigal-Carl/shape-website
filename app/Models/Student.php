@@ -91,25 +91,12 @@ class Student extends Model
             ->count();
     }
 
-    public function totalLessonsCount($schoolYearId = null)
+    public function totalLessonsCount($schoolYearId = null, $quarter = null)
     {
         $schoolYearId = $schoolYearId ?? now()->schoolYear()?->id;
+        $schoolYear   = SchoolYear::find($schoolYearId);
 
-        return $this->lessonSubjectStudents()
-            ->whereHas('lesson', function ($q) use ($schoolYearId) {
-                $q->where('school_year_id', $schoolYearId);
-            })
-            ->whereHas('curriculum', function ($q) {
-                $q->where('status', 'active');
-            })
-            ->count();
-    }
-
-    public function completedLessonsCount($schoolYearId = null)
-    {
-        $schoolYearId = $schoolYearId ?? now()->schoolYear()?->id;
-
-        return $this->lessonSubjectStudents()
+        $lessons = $this->lessonSubjectStudents()
             ->whereHas('lesson', function ($q) use ($schoolYearId) {
                 $q->where('school_year_id', $schoolYearId);
             })
@@ -117,17 +104,21 @@ class Student extends Model
                 $q->where('status', 'active');
             })
             ->get()
-            ->filter(function ($lss) {
-                return $lss->lesson->isCompletedByStudent($this->id);
-            })
-            ->count();
+            ->map(fn($lss) => $lss->lesson);
+
+        if ($quarter && $schoolYear) {
+            $lessons = $lessons->filter(fn($lesson) => $lesson->isInQuarter($schoolYear, $quarter));
+        }
+
+        return $lessons->count();
     }
 
-    public function totalActivitiesCount($schoolYearId = null)
+    public function completedLessonsCount($schoolYearId = null, $quarter = null)
     {
         $schoolYearId = $schoolYearId ?? now()->schoolYear()?->id;
+        $schoolYear   = SchoolYear::find($schoolYearId);
 
-        return $this->lessonSubjectStudents()
+        $lessons = $this->lessonSubjectStudents()
             ->whereHas('lesson', function ($q) use ($schoolYearId) {
                 $q->where('school_year_id', $schoolYearId);
             })
@@ -135,16 +126,21 @@ class Student extends Model
                 $q->where('status', 'active');
             })
             ->get()
-            ->sum(function ($lss) {
-                return $lss->lesson->activityLessons->count();
-            });
+            ->map(fn($lss) => $lss->lesson);
+
+        if ($quarter && $schoolYear) {
+            $lessons = $lessons->filter(fn($lesson) => $lesson->isInQuarter($schoolYear, $quarter));
+        }
+
+        return $lessons->filter(fn($lesson) => $lesson->isCompletedByStudent($this->id))->count();
     }
 
-    public function completedActivitiesCount($schoolYearId = null)
+    public function totalActivitiesCount($schoolYearId = null, $quarter = null)
     {
         $schoolYearId = $schoolYearId ?? now()->schoolYear()?->id;
+        $schoolYear   = SchoolYear::find($schoolYearId);
 
-        return $this->lessonSubjectStudents()
+        $lessons = $this->lessonSubjectStudents()
             ->whereHas('lesson', function ($q) use ($schoolYearId) {
                 $q->where('school_year_id', $schoolYearId);
             })
@@ -152,21 +148,49 @@ class Student extends Model
                 $q->where('status', 'active');
             })
             ->get()
-            ->sum(function ($lss) {
-                return $lss->lesson->activityLessons->filter(function ($activityLesson) {
-                    $studentActivity = $activityLesson->studentActivities()
-                        ->where('student_id', $this->id)
-                        ->first();
+            ->map(fn($lss) => $lss->lesson);
 
-                    if (!$studentActivity) return false;
+        if ($quarter && $schoolYear) {
+            $lessons = $lessons->filter(fn($lesson) => $lesson->isInQuarter($schoolYear, $quarter));
+        }
 
-                    $log = $studentActivity->logs()
-                        ->latest('attempt_number')
-                        ->first();
+        return $lessons->sum(fn($lesson) => $lesson->activityLessons->count());
+    }
 
-                    return $log && $log->status === 'completed';
-                })->count();
-            });
+    public function completedActivitiesCount($schoolYearId = null, $quarter = null)
+    {
+        $schoolYearId = $schoolYearId ?? now()->schoolYear()?->id;
+        $schoolYear   = SchoolYear::find($schoolYearId);
+
+        $lessons = $this->lessonSubjectStudents()
+            ->whereHas('lesson', function ($q) use ($schoolYearId) {
+                $q->where('school_year_id', $schoolYearId);
+            })
+            ->whereHas('curriculum', function ($q) {
+                $q->where('status', 'active');
+            })
+            ->get()
+            ->map(fn($lss) => $lss->lesson);
+
+        if ($quarter && $schoolYear) {
+            $lessons = $lessons->filter(fn($lesson) => $lesson->isInQuarter($schoolYear, $quarter));
+        }
+
+        return $lessons->sum(function ($lesson) {
+            return $lesson->activityLessons->filter(function ($activityLesson) {
+                $studentActivity = $activityLesson->studentActivities()
+                    ->where('student_id', $this->id)
+                    ->first();
+
+                if (!$studentActivity) return false;
+
+                $log = $studentActivity->logs()
+                    ->latest('attempt_number')
+                    ->first();
+
+                return $log && $log->status === 'completed';
+            })->count();
+        });
     }
 
     public function studentAwards()
