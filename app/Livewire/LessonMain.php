@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Models\Lesson;
 use Livewire\Component;
+use App\Models\SchoolYear;
 use Livewire\WithPagination;
 use Livewire\WithoutUrlPagination;
 use Illuminate\Support\Facades\Auth;
@@ -12,7 +13,7 @@ class LessonMain extends Component
 {
     use WithPagination, WithoutUrlPagination;
     public $search = '';
-    public $school_year, $school_years;
+    public $school_year, $school_years, $quarter;
     public $listeners = ['refresh' => '$refresh'];
     public function mount()
     {
@@ -26,6 +27,8 @@ class LessonMain extends Component
             ->unique('id')
             ->sortBy('name')
             ->values();
+
+        $this->quarter = now()->schoolYear()->currentQuarter();
     }
 
     public function openAddLessonModal()
@@ -45,6 +48,8 @@ class LessonMain extends Component
 
     public function render()
     {
+        $schoolYear = SchoolYear::find($this->school_year);
+
         $lessons = Lesson::with([
             'lessonSubjectStudents.curriculumSubject.subject',
             'lessonSubjectStudents.curriculumSubject.curriculum',
@@ -57,6 +62,22 @@ class LessonMain extends Component
             ->where('school_year_id', $this->school_year)
             ->whereHas('lessonSubjectStudents.curriculumSubject.curriculum', function ($q) {
                 $q->where('instructor_id', Auth::user()->accountable->id)->where('status', 'active');
+            })
+            ->when($this->quarter, function ($q) use ($schoolYear) {
+                switch ($this->quarter) {
+                    case 1:
+                        $q->whereBetween('created_at', [$schoolYear->first_quarter_start, $schoolYear->first_quarter_end]);
+                        break;
+                    case 2:
+                        $q->whereBetween('created_at', [$schoolYear->second_quarter_start, $schoolYear->second_quarter_end]);
+                        break;
+                    case 3:
+                        $q->whereBetween('created_at', [$schoolYear->third_quarter_start, $schoolYear->third_quarter_end]);
+                        break;
+                    case 4:
+                        $q->whereBetween('created_at', [$schoolYear->fourth_quarter_start, $schoolYear->fourth_quarter_end]);
+                        break;
+                }
             })
             ->when($this->search, function ($q) {
                 $q->where('title', 'like', '%' . $this->search . '%');

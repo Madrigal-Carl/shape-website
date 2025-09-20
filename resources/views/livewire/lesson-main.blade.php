@@ -68,12 +68,31 @@
             <livewire:lesson-add-modal />
             <livewire:lesson-edit-modal />
             <livewire:lesson-view-modal />
-            <div class="flex gap-4">
+            <div class="flex items-center gap-4 self-start">
                 <div
-                    class="flex gap-2 items-center bg-white py-3 px-5 rounded-full text-paragraph border-2 border-white hover:border-blue-button cursor-pointer">
-                    <span class="material-symbols-rounded">search</span>
-                    <input type="text" class="outline-none w-20 focus:w-60 placeholder-paragraph"
-                        wire:model.live="search" placeholder="Search">
+                    class="flex items-center bg-white py-3 px-5 rounded-full border-2 border-white hover:border-blue-button text-paragraph hover:bg-blue-button hover:text-white cursor-pointer">
+                    <select name="" id="" class="w-max outline-none" wire:model.live="quarter">
+                        <option value="1" class=" text-heading-dark">
+                            1st Quarter
+                        </option>
+                        <option value="2" class=" text-heading-dark">
+                            2nd Quarter
+                        </option>
+                        <option value="3" class=" text-heading-dark">
+                            3rd Quarter
+                        </option>
+                        <option value="4" class=" text-heading-dark">
+                            4th Quarter
+                        </option>
+                    </select>
+                </div>
+                <div class="flex gap-4">
+                    <div
+                        class="flex gap-2 items-center bg-white py-3 px-5 rounded-full text-paragraph border-2 border-white hover:border-blue-button cursor-pointer">
+                        <span class="material-symbols-rounded">search</span>
+                        <input type="text" class="outline-none w-20 focus:w-60 placeholder-paragraph"
+                            wire:model.live="search" placeholder="Search">
+                    </div>
                 </div>
             </div>
         </div>

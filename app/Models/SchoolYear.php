@@ -27,6 +27,25 @@ class SchoolYear extends Model
         return now()->between($this->first_quarter_start, $this->fourth_quarter_end);
     }
 
+    public function currentQuarter()
+    {
+        $today = now();
+        if ($today->between($this->first_quarter_start, $this->first_quarter_end)) {
+            return 1;
+        }
+        if ($today->between($this->second_quarter_start, $this->second_quarter_end)) {
+            return 2;
+        }
+        if ($today->between($this->third_quarter_start, $this->third_quarter_end)) {
+            return 3;
+        }
+        if ($today->between($this->fourth_quarter_start, $this->fourth_quarter_end)) {
+            return 4;
+        }
+
+        return null;
+    }
+
     public function hasEnded()
     {
         return now()->greaterThan(Carbon::parse($this->fourth_quarter_end));
