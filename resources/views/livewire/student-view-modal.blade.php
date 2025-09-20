@@ -21,17 +21,11 @@
                             <p class="text-sm">Export Form</p>
                         </button>
 
-                        <button
+                        <button wire:click="exportDocx"
                             class="profile-button flex items-center bg-white py-2 px-5 rounded-full gap-2 text-paragraph cursor-pointer hover:text-white hover:bg-blue-button">
                             <span class="material-symbols-rounded">docs</span>
                             <p class="text-sm">Generate Reports</p>
                         </button>
-
-                        {{-- <button
-                            class="profile-button flex items-center bg-white py-2 px-5 rounded-full gap-2 text-paragraph cursor-pointer hover:text-white hover:bg-blue-button hover:scale-105">
-                            <span class="material-symbols-rounded">calendar_month</span>
-                            <p class="text-sm">Select Date</p>
-                        </button> --}}
 
                         <button type="button" wire:click='closeModal'
                             class="bg-white profile-button flex items-center p-2 rounded-full gap-2 text-paragraph cursor-pointer hover:text-white hover:bg-blue-button">
