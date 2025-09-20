@@ -25,7 +25,7 @@
                             {{-- Start --}}
                             <div class="w-full">
                                 <label for="" class="font-semibold text-lg">Start</label>
-                                <input type="text"
+                                <input type="text" wire:model.live="first_quarter_start"
                                     class="px-4 py-2 rounded-lg bg-card placeholder-paragraph outline-none w-full text-paragraph"
                                     onfocus="this.type='date'" onblur="if(!this.value) this.type='text'" />
                             </div>
@@ -33,14 +33,12 @@
                             {{-- End --}}
                             <div>
                                 <label for="" class="font-semibold text-lg">End</label>
-                                <input type="text"
+                                <input type="text" wire:model.live="first_quarter_end"
                                     class="px-4 py-2 rounded-lg bg-card placeholder-paragraph outline-none w-full text-paragraph"
                                     onfocus="this.type='date'" onblur="if(!this.value) this.type='text'" />
                             </div>
                         </div>
                     </div>
-
-
 
                     {{-- Second Quarter --}}
                     <div class="flex items-center w-full gap-4 bg-white p-4 rounded-3xl ">
@@ -56,7 +54,7 @@
                             {{-- Start --}}
                             <div class="w-full">
                                 <label for="" class="font-semibold text-lg">Start</label>
-                                <input type="text"
+                                <input type="text" wire:model.live="second_quarter_start"
                                     class="px-4 py-2 rounded-lg bg-card placeholder-paragraph outline-none w-full text-paragraph"
                                     onfocus="this.type='date'" onblur="if(!this.value) this.type='text'" />
                             </div>
@@ -64,7 +62,7 @@
                             {{-- End --}}
                             <div>
                                 <label for="" class="font-semibold text-lg">End</label>
-                                <input type="text"
+                                <input type="text" wire:model.live="second_quarter_end"
                                     class="px-4 py-2 rounded-lg bg-card placeholder-paragraph outline-none w-full text-paragraph"
                                     onfocus="this.type='date'" onblur="if(!this.value) this.type='text'" />
                             </div>
@@ -87,7 +85,7 @@
                             {{-- Start --}}
                             <div class="w-full">
                                 <label for="" class="font-semibold text-lg">Start</label>
-                                <input type="text"
+                                <input type="text" wire:model.live="third_quarter_start"
                                     class="px-4 py-2 rounded-lg bg-card placeholder-paragraph outline-none w-full text-paragraph"
                                     onfocus="this.type='date'" onblur="if(!this.value) this.type='text'" />
                             </div>
@@ -95,7 +93,7 @@
                             {{-- End --}}
                             <div>
                                 <label for="" class="font-semibold text-lg">End</label>
-                                <input type="text"
+                                <input type="text" wire:model.live="third_quarter_end"
                                     class="px-4 py-2 rounded-lg bg-card placeholder-paragraph outline-none w-full text-paragraph"
                                     onfocus="this.type='date'" onblur="if(!this.value) this.type='text'" />
                             </div>
@@ -118,7 +116,7 @@
                             {{-- Start --}}
                             <div class="w-full">
                                 <label for="" class="font-semibold text-lg">Start</label>
-                                <input type="text"
+                                <input type="text" wire:model.live="fourth_quarter_start"
                                     class="px-4 py-2 rounded-lg bg-card placeholder-paragraph outline-none w-full text-paragraph"
                                     onfocus="this.type='date'" onblur="if(!this.value) this.type='text'" />
                             </div>
@@ -126,7 +124,7 @@
                             {{-- End --}}
                             <div>
                                 <label for="" class="font-semibold text-lg">End</label>
-                                <input type="text"
+                                <input type="text" wire:model.live.live="fourth_quarter_end"
                                     class="px-4 py-2 rounded-lg bg-card placeholder-paragraph outline-none w-full text-paragraph"
                                     onfocus="this.type='date'" onblur="if(!this.value) this.type='text'" />
                             </div>
@@ -148,7 +146,7 @@
                     </button>
                     <button type="button"
                         class="bg-blue-button py-1.5 px-4 w-full rounded-xl text-white font-medium hover:bg-blue-700 cursor-pointer"
-                        wire:click="nextStep">
+                        wire:click="saveQuarters">
                         Save
                     </button>
                 </div>

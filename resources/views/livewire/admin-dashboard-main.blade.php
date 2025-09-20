@@ -120,7 +120,7 @@
             </div>
         </div>
     </div>
-    <livewire:quarter-setup-modal />
+    <livewire:quarter-setup-modal :is-open="$shouldOpenModal" />
     <div class="grid grid-cols-2 grid-rows-4 gap-4">
         <div class="col-span-1 row-span-2 h-full bg-white p-6 rounded-3xl flex flex-col gap-4">
             <h1 class="text-2xl font-semibold">Weekly Activities</h1>

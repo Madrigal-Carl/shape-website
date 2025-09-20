@@ -26,6 +26,12 @@ class SchoolYear extends Model
     {
         return now()->between($this->first_quarter_start, $this->fourth_quarter_end);
     }
+
+    public function hasEnded()
+    {
+        return now()->greaterThan(Carbon::parse($this->fourth_quarter_end));
+    }
+
     protected static function booted()
     {
         static::creating(function ($model) {
