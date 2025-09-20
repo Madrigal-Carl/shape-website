@@ -151,7 +151,7 @@
                 <!-- buttons -->
                 <div class="flex items-center gap-2">
                     <button type="button"
-                        class="bg-white py-1.5 px-4 w-full rounded-xl text-heading-dark font-medium hover:bg-gray-300 cursor-pointer"
+                        class="bg-white py-1.5 px-4 w-full rounded-xl text-heading-dark font-medium hover:bg-gray-100 cursor-pointer"
                         wire:click="closeModal" type="button">
                         Cancel
                     </button>

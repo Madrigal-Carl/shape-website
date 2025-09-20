@@ -10,53 +10,19 @@
 
         <!-- System Notifications -->
         <div class="flex flex-col gap-2 px-3 overflow-y-auto">
-            <div class="gap-2 w-full bg-card p-3 rounded-lg">
+            <div class="flex flex-col gap-2 w-full bg-card p-3 rounded-lg">
                 <!-- System Details -->
-                <h2 class="leading-tight font-semibold text-md">
+                <h2 class="leading-tight font-semibold text-lg">
                     Lesson Created Successfully!
                 </h2>
-                <p class="text-xs leading-tight text-paragraph">just now</p>
+                <p class="">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Et veritatis totam optio
+                    quas sed ipsum
+                    maiores! Ratione voluptate quidem delectus.</p>
+                <p class="text-sm leading-tight text-paragraph">just now</p>
             </div>
 
-            <div class="gap-2 w-full bg-card p-3 rounded-lg">
-                <!-- System Details -->
-                <h2 class="leading-tight font-semibold text-md">
-                    Lesson Created Successfully!
-                </h2>
-                <p class="text-xs leading-tight text-paragraph">just now</p>
-            </div>
 
-            <div class="gap-2 w-full bg-card p-3 rounded-lg">
-                <!-- System Details -->
-                <h2 class="leading-tight font-semibold text-md">
-                    Lesson Created Successfully!
-                </h2>
-                <p class="text-xs leading-tight text-paragraph">just now</p>
-            </div>
 
-            <div class="gap-2 w-full bg-card p-3 rounded-lg">
-                <!-- System Details -->
-                <h2 class="leading-tight font-semibold text-md">
-                    Lesson Created Successfully!
-                </h2>
-                <p class="text-xs leading-tight text-paragraph">just now</p>
-            </div>
-
-            <div class="gap-2 w-full bg-card p-3 rounded-lg">
-                <!-- System Details -->
-                <h2 class="leading-tight font-semibold text-md">
-                    Lesson Created Successfully!
-                </h2>
-                <p class="text-xs leading-tight text-paragraph">just now</p>
-            </div>
-
-            <div class="gap-2 w-full bg-card p-3 rounded-lg">
-                <!-- System Details -->
-                <h2 class="leading-tight font-semibold text-md">
-                    Lesson Created Successfully!
-                </h2>
-                <p class="text-xs leading-tight text-paragraph">just now</p>
-            </div>
         </div>
     </div>
 </aside>
