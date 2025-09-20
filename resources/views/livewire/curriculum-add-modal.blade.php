@@ -44,7 +44,7 @@
                             </button>
 
                             @if ($showSpecializationDropdown)
-                                <div class="rounded-lg bg-white h-fit mt-2">
+                                <div class="rounded-lg bg-white h-fit">
                                     <div class="p-4 rounded-lg bg-white relative flex flex-col gap-2 h-full">
                                         <div class="flex items-center justify-between w-full">
                                             <p class="text-paragraph">Specialization</p>
@@ -90,7 +90,7 @@
                             </button>
 
                             @if ($showSubjectDropdown)
-                                <div class="rounded-lg bg-white h-fit mt-2">
+                                <div class="rounded-lg bg-white h-fit">
                                     <div class="p-4 rounded-lg bg-white relative flex flex-col gap-2 h-full">
                                         <div class="flex items-center justify-between w-full">
                                             <p class="text-paragraph">Subjects</p>

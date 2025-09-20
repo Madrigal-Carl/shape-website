@@ -1,12 +1,12 @@
 <div>
     @if ($step > 0)
         <section id="teacherFormPopup"
-            class="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex justify-center items-center overflow-y-auto p-4 gap-6">
+            class="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex justify-center items-center overflow-y-auto p-4 gap-6">
             <!-- Form 1 -->
             @if ($step === 1)
                 <div class="bg-card p-8 rounded-4xl w-180 flex flex-col gap-8">
                     <div class="flex items-center gap-2">
-                        <img src="{{ asset('images/form.png') }}" alt="" />
+                        <img src="{{ asset('images/form-icon.png') }}" class="h-8" alt="" />
                         <h1 class="text-3xl font-bold text-heading-dark">
                             Edit Teacher's Form
                         </h1>
@@ -131,7 +131,7 @@
             @if ($step === 2)
                 <div class="bg-card p-8 rounded-4xl w-180 flex flex-col gap-8">
                     <div class="flex items-center gap-2">
-                        <img src="{{ asset('images/form.png') }}" alt="" />
+                        <img src="{{ asset('images/form-icon.png') }}" class="h-8" alt="" />
                         <h1 class="text-3xl font-bold text-heading-dark">
                             Edit Teacher's Form
                         </h1>
@@ -234,7 +234,7 @@
                 <div class="bg-card p-8 rounded-4xl w-150 flex flex-col gap-8">
                     <div class="flex w-full items-center-safe justify-between">
                         <div class="flex items-center gap-2">
-                            <img src="{{ asset('images/form.png') }}" alt="" />
+                            <img src="{{ asset('images/account.png') }}" class="h-8" alt="" />
                             <h1 class="text-3xl font-bold text-heading-dark">
                                 Edit Teacher's Account
                             </h1>

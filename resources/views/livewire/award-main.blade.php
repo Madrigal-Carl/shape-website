@@ -68,13 +68,13 @@
         <div class="w-full grid grid-cols-3 gap-4">
             @foreach ($awards as $award)
                 <div
-                    class="max-w-100 h-110 flex flex-col justify-between gap-8 items-center bg-[radial-gradient(circle_at_center,_#93CEF5,_#006FDF)] p-4 rounded-3xl ">
+                    class="max-w-100 h-109.5 flex flex-col justify-between gap-8 items-center bg-[radial-gradient(circle_at_center,_#93CEF5,_#006FDF)] p-4 rounded-3xl ">
                     <div class="flex flex-col items-center gap-2 pt-8">
                         <img src="{{ asset('images/Awards_icons/medal.png') }}" alt="" class="h-48 mb-4">
                         <p class="font-bold text-3xl text-white w-full text-center">{{ $award->name }}</p>
                         <div class="flex items-center w-full justify-center gap-4 text-white/80">
-                            <p class="text-sm">Total Awardees:</p>
-                            <p class="text-sm">{{ $award->awardees_count }}</p>
+                            <p class="text-base">Total Awardees:</p>
+                            <p class="text-base">{{ $award->awardees_count }}</p>
                         </div>
                     </div>
 

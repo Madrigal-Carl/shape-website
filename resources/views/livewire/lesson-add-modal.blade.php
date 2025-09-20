@@ -1,6 +1,6 @@
 <div>
     @if ($isOpen)
-        <section class="bg-black/30 fixed w-dvw h-dvh p-10 top-0 left-0 z-50 backdrop-blur-xs flex justify-center gap-6">
+        <section class="bg-black/40 fixed w-dvw h-dvh p-10 top-0 left-0 z-50 backdrop-blur-xs flex justify-center gap-6">
             <!-- Add lesson container -->
             <form wire:submit='addLesson' class="flex h-full justify-center gap-6">
                 <div class="w-180 h-full Addlesson bg-card p-8 rounded-4xl relative">

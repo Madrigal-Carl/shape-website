@@ -1,33 +1,48 @@
-<div class="font-poppins text-heading-dark w-dvw h-dvh bg-cover bg-no-repeat flex items-center justify-center"
-    style="background-image: url('{{ asset('images/login-bg.png') }}')">
+<div class="font-poppins text-heading-dark w-dvw h-dvh bg-cover bg-center bg-no-repeat flex items-center justify-center"
+    style="background-image: url('{{ asset('images/login-backdrop.png') }}')">
     <!-- Login -->
     <form wire:submit='login'
-        class="w-96 flex flex-col gap-10 bg-[#ffffff8a] p-10 rounded-3xl backdrop-blur-xl shadow-inner shadow-white">
+        class="w-96 flex flex-col gap-6 bg-[#e7e7e7a1] p-8 rounded-4xl backdrop-blur-xl shadow-2xl/60 shadow-gray-800 border-2 border-white/40">
         <!-- logo -->
-        <div class="flex flex-col items-center gap-2 mt-8">
-            <img class="w-40" src="{{ asset('images/Shape-logo-w-text.png') }}" alt="" />
-            <h1 class="font-normal text-xl">Login</h1>
+
+        <div class="flex items-center justify-between gap-2 mb-8">
+            <h1 class="font-semibold italic">Welcome</h1>
+            <p class=" font-light">to shape</p>
+            {{-- <img class="w-30" src="{{ asset('images/Shape-logo-w-text.png') }}" alt="" /> --}}
+        </div>
+
+        <div class="flex items-center justify-between">
+            <h1 class="font-normal text-[32px]">Log in</h1>
+            <span class="material-symbols-rounded scale-180 animate-pulse">
+                arrow_forward
+            </span>
         </div>
 
         <!-- Inputs -->
         <div class="flex flex-col gap-4">
-            <div class="flex flex-col gap-1">
-                <label for="">Username</label>
+            <div
+                class="flex items-center gap-1 text-sm bg-white/30 p-1.5 rounded-full outline-none border-2 border-white/0 hover:border-white/60 hover:shadow-xl focus:border-blue-button ">
+                <span class="material-symbols-rounded bg-white/80 p-2 rounded-full">
+                    alternate_email
+                </span>
                 <input wire:model="username"
-                    class="text-sm bg-white py-1.5 px-3 rounded-xl outline-none border-2 border-white focus:border-blue-button hover:border-blue-button"
-                    type="text" placeholder="Enter your username" />
+                    class="text-base w-full h-full p-2 pl-4 rounded-full outline-none placeholder:text-heading-dark"
+                    type="text" placeholder="username" />
             </div>
-            <div class="flex flex-col gap-1">
-                <label for="">Password</label>
+            <div
+                class="flex items-center gap-1 text-sm bg-white/30 p-1.5 rounded-full outline-none border-2 border-white/0 hover:border-white/60 hover:shadow-xl focus:border-blue-button">
+                <span class="material-symbols-rounded bg-white/80 p-2 rounded-full stroke">
+                    key
+                </span>
                 <input wire:model="password"
-                    class="text-sm bg-white py-1.5 px-3 rounded-xl outline-none border-2 border-white focus:border-blue-button hover:border-blue-button"
-                    type="password" placeholder="Enter your password" />
+                    class="text-base w-full h-full p-2 pl-4 rounded-full outline-none placeholder:text-heading-dark"
+                    type="password" placeholder="password" />
             </div>
         </div>
 
         <!-- Login Button -->
         <button type="submit"
-            class="py-1.5 px-3 rounded-xl text-white font-semibold bg-blue-button hover:bg-blue-700 cursor-pointer">
+            class=" p-3 rounded-full font-semibold bg-white/80 hover:text-white hover:bg-blue-button cursor-pointer hover:bg-gradient-to-tr  from-blue-button to-[#00EEFF] shadow-blue-button  hover:shadow-xl/25 ">
             Login
         </button>
     </form>

@@ -1,7 +1,7 @@
 <div>
     @if ($step > 0)
         <section
-            class="bg-black/30 fixed w-dvw h-dvh top-0 left-0 z-50 backdrop-blur-xs flex justify-center items-center overflow-y-auto p-10">
+            class="bg-black/40 fixed w-dvw h-dvh top-0 left-0 z-50 backdrop-blur-xs flex justify-center items-center overflow-y-auto p-10">
             <!-- first form -->
             @if ($step === 1)
                 <div class="bg-card p-8 rounded-4xl w-180 flex flex-col gap-8">

@@ -46,7 +46,7 @@
     {{-- End Image game Preview page --}}
     @if ($isOpen)
         <section
-            class="bg-black/30 fixed w-dvw h-dvh p-10 top-0 left-0 z-30 backdrop-blur-xs flex justify-center items-center gap-6">
+            class="bg-black/40 fixed w-dvw h-dvh p-10 top-0 left-0 z-30 backdrop-blur-xs flex justify-center items-center gap-6">
             <div class="flex flex-col w-[50%] h-full gap-8 bg-card shadow-2xl rounded-4xl p-8">
 
                 <div class="w-full flex items-center justify-between">
