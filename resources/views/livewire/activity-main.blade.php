@@ -14,7 +14,7 @@
                     <select class="w-full outline-none text-heading-dark font-medium text-lg"
                         wire:model.live='school_year'>
                         @php
-                            $currentYear = now()->schoolYear();
+                            $currentYear = now()->schoolYear()?->name;
                             $years = collect($school_years);
 
                             if (!$years->contains($currentYear)) {
@@ -22,11 +22,9 @@
                             }
                         @endphp
 
-                        @foreach ($years as $sy)
-                            <option value="{{ $sy }}"
-                                class="text-sm {{ $sy == $currentYear ? 'text-black' : 'text-paragraph' }}"
-                                {{ $sy == $currentYear ? 'selected' : '' }}>
-                                S.Y {{ $sy }}
+                        @foreach ($school_years as $sy)
+                            <option value="{{ $sy->id }}">
+                                S.Y {{ $sy->name }}
                             </option>
                         @endforeach
 
@@ -116,8 +114,9 @@
                                             {{ ucwords($activity->curriculumSubject->curriculum->name) }}
                                         </p>
                                     </td>
+
                                     <td class="px-4 py-3 text-center text-paragraph">
-                                        X
+                                        {{ $activity->created_at->format('M d, Y') }}
                                     </td>
                                     <td class="px-4 py-3 text-center text-paragraph flex flex-col items-center">
                                         <p class="w-fit truncate">
@@ -126,12 +125,14 @@
                                     </td>
                                     <td class="px-4 py-3 text-center text-paragraph">
                                         {{ $activity->student_activities_count }}</td>
-
                                     <td class="px-4 py-3 text-center text-paragraph">
                                         <div class="flex justify-center items-center gap-1 text-white">
                                             <button wire:click='openEditActivityModal({{ $activity->id }})'
-                                                class="px-2 py-1 flex gap-2 items-center rounded-lg min-w-[50px] justify-center relative bg-danger cursor-pointer hover:scale-110
-                                                ">
+                                                class="px-2 py-1 flex gap-2 items-center rounded-lg min-w-[50px] justify-center relative
+                                                {{ $activity->school_year_id === now()->schoolYear()->id
+                                                    ? 'bg-danger cursor-pointer hover:scale-110'
+                                                    : 'bg-gray-400 cursor-not-allowed' }}"
+                                                {{ $activity->school_year_id !== now()->schoolYear()->id ? 'disabled' : '' }}>
 
                                                 <!-- Text (hidden when loading) -->
                                                 <small class="transition-opacity duration-150"

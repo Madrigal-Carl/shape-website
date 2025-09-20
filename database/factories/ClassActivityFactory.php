@@ -24,11 +24,11 @@ class ClassActivityFactory extends Factory
         $instructor = Instructor::inRandomOrder()->first() ?? Instructor::factory()->create();
 
         return [
+            'school_year_id' => null,
             'curriculum_subject_id' => $curriculumSubject->id,
             'instructor_id'         => $instructor->id,
             'name'                  => $this->faker->sentence(3), // e.g. "Math Quiz 1"
             'description'           => $this->faker->paragraph(),
-            'school_year'           => now()->schoolYear(),
         ];
     }
 }

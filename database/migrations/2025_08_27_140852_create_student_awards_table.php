@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('student_awards', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('school_year_id')->constrained()->onDelete('cascade');
             $table->foreignId('student_id')->constrained()->onDelete('cascade');
             $table->foreignId('award_id')->constrained()->onDelete('cascade');
-            $table->string('school_year');
             $table->timestamps();
-            $table->unique(['student_id', 'award_id', 'school_year']);
+            $table->unique(['student_id', 'award_id', 'school_year_id']);
         });
     }
 

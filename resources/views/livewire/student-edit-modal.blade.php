@@ -200,11 +200,13 @@
                             </div>
                             <div class="px-4 py-2 rounded-lg bg-white w-full">
                                 <select name="" id="" class="w-full outline-none text-paragraph"
-                                    wire:change="$set('permanent_municipal', $event.target.value)">
+                                    wire:model.live="permanent_municipal">
+                                    <option value='' class="text-sm text-black" disabled>
+                                        Municipal
+                                    </option>
                                     @foreach ($municipalities as $municipality)
                                         @if ($permanent_municipal === $municipality)
-                                            <option value="{{ $permanent_municipal }}" class="text-sm text-black"
-                                                selected>
+                                            <option value="{{ $permanent_municipal }}" class="text-sm text-black">
                                                 {{ ucwords($permanent_municipal) }}
                                             </option>
                                         @else
@@ -216,11 +218,13 @@
                             </div>
                             <div class="px-4 py-2 rounded-lg bg-white w-full">
                                 <select name="" id="" class="w-full outline-none text-paragraph"
-                                    wire:change="$set('permanent_barangay', $event.target.value)">
+                                    wire:key="{{ $permanent_municipal }}" wire:model.live="permanent_barangay">
+                                    <option value="" class="text-sm text-black" disabled>
+                                        Barangay
+                                    </option>
                                     @foreach ($permanent_barangays as $pbarangay)
                                         @if ($permanent_barangay === $pbarangay)
-                                            <option value="{{ $permanent_barangay }}" class="text-sm text-black"
-                                                selected>
+                                            <option value="{{ $permanent_barangay }}" class="text-sm text-black">
                                                 {{ ucwords($permanent_barangay) }}
                                             </option>
                                         @else
@@ -244,7 +248,10 @@
                             </div>
                             <div class="px-4 py-2 rounded-lg bg-white w-full">
                                 <select name="" id="" class="w-full outline-none text-paragraph"
-                                    wire:change="$set('current_municipal', $event.target.value)">
+                                    wire:model.live="current_municipal">
+                                    <option value='' class="text-sm text-black" disabled>
+                                        Municipal
+                                    </option>
                                     @foreach ($municipalities as $municipality)
                                         @if ($current_municipal === $municipality)
                                             <option value="{{ $current_municipal }}" class="text-sm text-black"
@@ -260,7 +267,10 @@
                             </div>
                             <div class="px-4 py-2 rounded-lg bg-white w-full">
                                 <select name="" id="" class="w-full outline-none text-paragraph"
-                                    wire:change="$set('current_barangay', $event.target.value)">
+                                    wire:key="{{ $current_municipal }}" wire:model.live="current_barangay">
+                                    <option value="" class="text-sm text-black" disabled>
+                                        Barangay
+                                    </option>
                                     @foreach ($current_barangays as $cbarangay)
                                         @if ($current_barangay === $cbarangay)
                                             <option value="{{ $current_barangay }}" class="text-sm text-black"

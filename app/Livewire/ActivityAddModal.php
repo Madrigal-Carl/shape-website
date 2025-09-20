@@ -115,6 +115,11 @@ class ActivityAddModal extends Component
             return;
         }
 
+        $schoolYear = now()->schoolYear();
+        if (!$schoolYear || $schoolYear->hasEnded()) {
+            return $this->dispatch('swal-toast', icon: 'error', title: 'You cannot add an activity. The current school year has already ended.');
+        }
+
         $curriculumSubject = CurriculumSubject::where('curriculum_id', $this->curriculum)->where('subject_id', $this->subject)->first();
 
         $activity = ClassActivity::create([
@@ -205,7 +210,7 @@ class ActivityAddModal extends Component
             ->where('status', 'active')
             ->whereHas('enrollments', function ($query) {
                 $query->where('grade_level', $this->grade_level)
-                    ->where('school_year', now()->schoolYear());
+                    ->where('school_year_id', now()->schoolYear()->id);
             })
             ->whereIn(
                 'disability_type',

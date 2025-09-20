@@ -155,8 +155,8 @@
                             </div>
                             <div class="px-4 py-2 rounded-lg bg-white w-full">
                                 <select name="" id="" class="w-full outline-none text-paragraph"
-                                    wire:change="$set('permanent_municipal', $event.target.value)">
-                                    <option value='pending' class="text-sm text-black" selected disabled>
+                                    wire:model.live="permanent_municipal">
+                                    <option value='' class="text-sm text-black" selected disabled>
                                         Municipal
                                     </option>
                                     @foreach ($municipalities as $municipality)
@@ -167,8 +167,8 @@
                             </div>
                             <div class="px-4 py-2 rounded-lg bg-white w-full">
                                 <select name="" id="" class="w-full outline-none text-paragraph"
-                                    wire:change="$set('permanent_barangay', $event.target.value)">
-                                    <option class="text-sm text-black" selected disabled>
+                                    wire:key="{{ $permanent_municipal }}" wire:model.live="permanent_barangay">
+                                    <option value="" class="text-sm text-black" disabled>
                                         Barangay
                                     </option>
                                     @foreach ($permanent_barangays as $pbarangay)
@@ -191,8 +191,8 @@
                             </div>
                             <div class="px-4 py-2 rounded-lg bg-white w-full">
                                 <select name="" id="" class="w-full outline-none text-paragraph"
-                                    wire:change="$set('current_municipal', $event.target.value)">
-                                    <option value='pending' class="text-sm text-black" selected disabled>
+                                    wire:model.live="current_municipal">
+                                    <option value='' class="text-sm text-black" disabled>
                                         Municipal
                                     </option>
                                     @foreach ($municipalities as $municipality)
@@ -203,8 +203,8 @@
                             </div>
                             <div class="px-4 py-2 rounded-lg bg-white w-full">
                                 <select name="" id="" class="w-full outline-none text-paragraph"
-                                    wire:change="$set('current_barangay', $event.target.value)">
-                                    <option class="text-sm text-black" selected disabled>
+                                    wire:key="{{ $current_municipal }}" wire:model.live="current_barangay">
+                                    <option value="" class="text-sm text-black" disabled>
                                         Barangay
                                     </option>
                                     @foreach ($current_barangays as $cbarangay)

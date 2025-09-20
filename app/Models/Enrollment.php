@@ -17,11 +17,16 @@ class Enrollment extends Model
         return $this->belongsTo(Student::class);
     }
 
+    public function schoolYear()
+    {
+        return $this->belongsTo(SchoolYear::class);
+    }
+
     protected static function booted()
     {
         static::creating(function ($model) {
-            if (empty($model->school_year)) {
-                $model->school_year = now()->schoolYear();
+            if (empty($model->school_year_id)) {
+                $model->school_year_id = now()->schoolYear()?->id;
             }
         });
     }

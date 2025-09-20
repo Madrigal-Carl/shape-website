@@ -33,14 +33,14 @@ class ActivityMain extends Component
 
     public function mount()
     {
-        $this->school_year = now()->schoolYear();
+        $this->school_year = now()->schoolYear()->id;
 
         $this->school_years = ClassActivity::where('instructor_id', Auth::user()->accountable->id)
+            ->with('schoolYear')
             ->get()
-            ->pluck('school_year')
-            ->flatten()
-            ->unique()
-            ->sort()
+            ->pluck('schoolYear')
+            ->unique('id')
+            ->sortBy('name')
             ->values();
     }
 
@@ -49,7 +49,7 @@ class ActivityMain extends Component
         $activities = ClassActivity::with('curriculumSubject.curriculum', 'curriculumSubject.subject')
             ->withCount('studentActivities')
             ->where('instructor_id', Auth::user()->accountable->id)
-            ->where('school_year', $this->school_year)
+            ->where('school_year_id', $this->school_year)
             ->whereHas('curriculumSubject.curriculum', function ($q) {
                 $q->where('status', 'active');
             })

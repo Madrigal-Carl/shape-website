@@ -53,7 +53,7 @@ class ActivityEditModal extends Component
             ->where('status', 'active')
             ->whereHas('enrollments', function ($query) {
                 $query->where('grade_level', $this->grade_level)
-                    ->where('school_year', now()->schoolYear());
+                    ->where('school_year_id', now()->schoolYear()->id);
             })
             ->whereIn(
                 'disability_type',
@@ -283,7 +283,7 @@ class ActivityEditModal extends Component
             ->where('status', 'active')
             ->whereHas('enrollments', function ($query) {
                 $query->where('grade_level', $this->grade_level)
-                    ->where('school_year', now()->schoolYear());
+                    ->where('school_year_id', now()->schoolYear()->id);
             })
             ->whereIn(
                 'disability_type',

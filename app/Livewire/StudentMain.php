@@ -20,15 +20,15 @@ class StudentMain extends Component
 
     public function mount()
     {
-        $this->school_year = now()->schoolYear();
+        $this->school_year = now()->schoolYear()->id;
 
         $this->school_years = Student::where('instructor_id', Auth::user()->accountable->id)
-            ->with('enrollments')
+            ->with('enrollments.schoolYear')
             ->get()
-            ->pluck('enrollments.*.school_year')
+            ->pluck('enrollments.*.schoolYear')
             ->flatten()
             ->unique()
-            ->sort()
+            ->sortBy('name')
             ->values();
     }
 
@@ -57,7 +57,7 @@ class StudentMain extends Component
         $students = Auth::user()->accountable
             ->students()
             ->whereHas('enrollments', function ($q) {
-                $q->where('school_year', $this->school_year);
+                $q->where('school_year_id', $this->school_year);
                 if ($this->grade_level && $this->grade_level !== 'all') {
                     $q->where('grade_level', $this->grade_level);
                 }
@@ -76,6 +76,7 @@ class StudentMain extends Component
             ->paginate(10);
 
         $this->grade_levels = Enrollment::whereIn('student_id', Auth::user()->accountable->students->pluck('id'))
+            ->where('school_year_id', $this->school_year)
             ->pluck('grade_level')
             ->unique()
             ->sort()

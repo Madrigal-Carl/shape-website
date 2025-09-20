@@ -15,7 +15,6 @@ class ClassActivity extends Model
         'instructor_id',
         'name',
         'description',
-        'school_year',
     ];
 
     public function curriculumSubject()
@@ -45,19 +44,24 @@ class ClassActivity extends Model
         return $this->belongsToMany(
             Student::class,
             'student_activities',
-            'activity_lesson_id', // foreign key on student_activities
-            'student_id'          // foreign key on students
+            'activity_lesson_id',
+            'student_id'
         )
             ->join('activity_lessons', 'student_activities.activity_lesson_id', '=', 'activity_lessons.id')
             ->where('activity_lessons.activity_lessonable_type', self::class)
             ->where('activity_lessons.activity_lessonable_id', $this->id);
     }
 
+    public function schoolYear()
+    {
+        return $this->belongsTo(SchoolYear::class);
+    }
+
     protected static function booted()
     {
         static::creating(function ($model) {
-            if (empty($model->school_year)) {
-                $model->school_year = now()->schoolYear();
+            if (empty($model->school_year_id)) {
+                $model->school_year_id = now()->schoolYear()?->id;
             }
         });
     }

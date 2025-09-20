@@ -62,11 +62,34 @@ class Lesson extends Model
         return true;
     }
 
+    public function isInQuarter(SchoolYear $schoolYear, int $quarter): bool
+    {
+        $date = $this->created_at;
+
+        switch ($quarter) {
+            case 1:
+                return $date->between($schoolYear->first_quarter_start, $schoolYear->first_quarter_end);
+            case 2:
+                return $date->between($schoolYear->second_quarter_start, $schoolYear->second_quarter_end);
+            case 3:
+                return $date->between($schoolYear->third_quarter_start, $schoolYear->third_quarter_end);
+            case 4:
+                return $date->between($schoolYear->fourth_quarter_start, $schoolYear->fourth_quarter_end);
+            default:
+                return false;
+        }
+    }
+
+    public function schoolYear()
+    {
+        return $this->belongsTo(SchoolYear::class);
+    }
+
     protected static function booted()
     {
         static::creating(function ($model) {
-            if (empty($model->school_year)) {
-                $model->school_year = now()->schoolYear();
+            if (empty($model->school_year_id)) {
+                $model->school_year_id = now()->schoolYear()?->id;
             }
         });
     }

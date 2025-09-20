@@ -2,14 +2,15 @@
 
 namespace App\Livewire;
 
+use App\Models\Account;
 use App\Models\Student;
 use Livewire\Component;
 use Livewire\Attributes\On;
 use Livewire\WithFileUploads;
 use App\Models\Specialization;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class StudentEditModal extends Component
 {
@@ -18,7 +19,7 @@ class StudentEditModal extends Component
     public $step = 0, $isOpen = false, $student_id = null;
     public $photo, $currentPhoto, $lrn, $status = '', $first_name, $middle_name, $last_name, $birthdate, $sex, $grade_level, $disability, $description;
     public $province = "marinduque";
-    public $permanent_barangay, $permanent_municipal, $current_barangay, $current_municipal;
+    public $permanent_barangay = '', $permanent_municipal = '', $current_barangay = '', $current_municipal = '';
     public $guardian_first_name, $guardian_middle_name, $guardian_last_name, $guardian_email, $guardian_phone;
     public $account_username, $account_password, $default_password;
     public $account_username_changed = false;
@@ -43,7 +44,7 @@ class StudentEditModal extends Component
         $this->status        = $student->status;
         $this->currentPhoto = $student->path;
         $this->lrn         = $student->lrn;
-        $this->grade_level = $student->isEnrolledIn(now()->schoolYear())->grade_level;
+        $this->grade_level = $student->isEnrolledIn(now()->schoolYear()->id)->grade_level;
         $this->disability  = $student->disability_type;
         $this->description = $student->support_need;
         $this->account_username = $student->account->username;
@@ -127,7 +128,16 @@ class StudentEditModal extends Component
         $lastName  = strtolower(trim($student->last_name));
         $firstName = strtolower(trim($student->first_name));
 
-        $this->account_username = "{$lastName}{$firstName}";
+        $baseUsername = "{$lastName}{$firstName}";
+        $username = $baseUsername;
+
+        $count = 1;
+        while (Account::where('username', $username)->exists()) {
+            $username = $baseUsername . $count;
+            $count++;
+        }
+
+        $this->account_username = $username;
         $this->account_password = "{$birthdate}-{$lastName}";
 
         $this->account_username_changed = false;
@@ -142,7 +152,7 @@ class StudentEditModal extends Component
             if ($this->step === 1) {
                 $this->validate([
                     'photo'       => 'nullable|image|max:5120',
-                    'lrn'         => 'required|digits:12',
+                    'lrn' => "required|digits:12|unique:students,lrn," . $this->student_id,
                     'status'  => 'required',
                     'first_name'  => 'required',
                     'middle_name' => 'required',
@@ -157,6 +167,7 @@ class StudentEditModal extends Component
                     'photo.max'               => 'The photo size must not exceed 5MB.',
                     'lrn.required'            => 'The LRN field is required.',
                     'lrn.digits'              => 'The LRN must be exactly 12 digits.',
+                    'lrn.unique'      => 'The LRN already existed.',
                     'status.required'            => 'The status is required.',
                     'first_name.required'     => 'The first name is required.',
                     'middle_name.required'    => 'The middle name is required.',
@@ -201,17 +212,17 @@ class StudentEditModal extends Component
             }
 
             if ($this->step === 3) {
-                $this->validate([
-                    'account_username' => 'required|min:5|max:18',
-                    'account_password' => 'nullable|min:5|max:18|regex:/^[a-zA-Z0-9]+$/',
-                ], [
-                    'account_username.required' => 'Username is required.',
-                    'account_username.min'      => 'Username must be at least 5 characters.',
-                    'account_username.max'      => 'Username must not be more than 18 characters.',
-                    'account_password.min'      => 'Password must be at least 5 characters.',
-                    'account_password.max'      => 'Password must not be more than 18 characters.',
-                    'account_password.regex'    => 'Password must contain only letters and numbers (no special characters).',
-                ]);
+                // $this->validate([
+                //     'account_username' => 'required|min:5|max:18',
+                //     'account_password' => 'nullable|min:5|max:18|regex:/^[a-zA-Z0-9]+$/',
+                // ], [
+                //     'account_username.required' => 'Username is required.',
+                //     'account_username.min'      => 'Username must be at least 5 characters.',
+                //     'account_username.max'      => 'Username must not be more than 18 characters.',
+                //     'account_password.min'      => 'Password must be at least 5 characters.',
+                //     'account_password.max'      => 'Password must not be more than 18 characters.',
+                //     'account_password.regex'    => 'Password must contain only letters and numbers (no special characters).',
+                // ]);
             }
         } catch (\Illuminate\Validation\ValidationException $e) {
             $message = $e->validator->errors()->first();
@@ -288,7 +299,7 @@ class StudentEditModal extends Component
             'support_need' => $this->description,
         ]);
 
-        $student->isEnrolledIn(now()->schoolYear())->update([
+        $student->isEnrolledIn(now()->schoolYear()->id)->update([
             'grade_level' => $this->grade_level,
         ]);
         $student->guardian->update([
@@ -320,13 +331,13 @@ class StudentEditModal extends Component
     public function updatedPermanentMunicipal($value)
     {
         $this->permanent_barangays = $this->barangayData[$value] ?? [];
-        $this->permanent_barangay = null;
+        $this->permanent_barangay = '';
     }
 
     public function updatedCurrentMunicipal($value)
     {
         $this->current_barangays = $this->barangayData[$value] ?? [];
-        $this->current_barangay = null;
+        $this->current_barangay = '';
     }
 
     public function render()

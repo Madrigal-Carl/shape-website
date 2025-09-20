@@ -15,12 +15,13 @@ class AwardMain extends Component
 
     public function mount()
     {
-        $this->school_year = now()->schoolYear();
-        $this->school_years = StudentAward::select('school_year')
-            ->distinct()
-            ->orderBy('school_year')
-            ->pluck('school_year')
-            ->toArray();
+        $this->school_year = now()->schoolYear()->id;
+        $this->school_years = StudentAward::with('schoolYear')
+            ->get()
+            ->pluck('schoolYear')
+            ->unique('id')
+            ->sortBy('name')
+            ->values();
 
         $this->grade_levels = Enrollment::whereIn('student_id', Auth::user()->accountable->students->pluck('id'))
             ->pluck('grade_level')
@@ -28,6 +29,7 @@ class AwardMain extends Component
             ->sort()
             ->values();
     }
+
 
     public function openViewAwardModal($id)
     {
@@ -39,11 +41,11 @@ class AwardMain extends Component
         $this->awards = Award::withCount([
             'students as awardees_count' => function ($query) {
                 $query->where('instructor_id', Auth::user()->accountable->id)
-                    ->where('student_awards.school_year', $this->school_year)
+                    ->where('student_awards.school_year_id', $this->school_year)
                     ->when($this->grade_level && $this->grade_level !== 'all', function ($q) {
                         $q->whereHas('enrollments', function ($enrollmentQuery) {
                             $enrollmentQuery->where('grade_level', $this->grade_level)
-                                ->where('school_year', $this->school_year);
+                                ->where('school_year_id', $this->school_year);
                         });
                     });
             }

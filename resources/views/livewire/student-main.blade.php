@@ -14,7 +14,7 @@
                     <select class="w-full outline-none text-heading-dark font-medium text-lg"
                         wire:model.live='school_year'>
                         @php
-                            $currentYear = now()->schoolYear();
+                            $currentYear = now()->schoolYear()?->name;
                             $years = collect($school_years);
 
                             if (!$years->contains($currentYear)) {
@@ -22,11 +22,9 @@
                             }
                         @endphp
 
-                        @foreach ($years as $sy)
-                            <option value="{{ $sy }}"
-                                class="text-sm {{ $sy == $currentYear ? 'text-black' : 'text-paragraph' }}"
-                                {{ $sy == $currentYear ? 'selected' : '' }}>
-                                S.Y {{ $sy }}
+                        @foreach ($school_years as $sy)
+                            <option value="{{ $sy->id }}" {{ $sy->id == $school_year ? 'selected' : '' }}>
+                                S.Y {{ $sy->name }}
                             </option>
                         @endforeach
 
@@ -220,11 +218,11 @@
                                     <td class="px-4 py-3 text-center">
                                         <div class="flex justify-center items-center gap-1 text-white">
                                             <button wire:click='openEditStudentModal({{ $student->id }})'
-                                                class="px-2 py-1 flex gap-2 items-center rounded-lg min-w-[50px] justify-center relative transition
-                                                {{ optional($student->isEnrolledIn($school_year))->school_year === now()->schoolYear()
-                                                    ? 'bg-danger cursor-pointer hover:scale-110'
+                                                class="bg-danger cursor-pointer hover:scale-110 px-2 py-1 flex gap-2 items-center rounded-lg min-w-[50px] justify-center relative transition
+                                                {{ optional($student->isEnrolledIn($school_year))->school_year_id === now()->schoolYear()->id
+                                                    ? ''
                                                     : 'bg-gray-400 cursor-not-allowed' }}"
-                                                {{ optional($student->isEnrolledIn($school_year))->school_year !== now()->schoolYear() ? 'disabled' : '' }}>
+                                                {{ optional($student->isEnrolledIn($school_year))->school_year_id !== now()->schoolYear()->id ? 'disabled' : '' }}>
 
                                                 <!-- Text (hidden when loading) -->
                                                 <small class="transition-opacity duration-150"

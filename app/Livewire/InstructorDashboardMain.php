@@ -27,16 +27,16 @@ class InstructorDashboardMain extends Component
     public function mount()
     {
         $instructorId = Auth::user()->accountable->id;
-        $this->school_year = now()->schoolYear();
+        $this->school_year = now()->schoolYear()->id;
 
         // collect school years from enrollments
-        $this->school_years = Student::where('instructor_id', $instructorId)
-            ->with('enrollments')
+        $this->school_years = Student::where('instructor_id', Auth::user()->accountable->id)
+            ->with('enrollments.schoolYear')
             ->get()
-            ->pluck('enrollments.*.school_year')
+            ->pluck('enrollments.*.schoolYear')
             ->flatten()
             ->unique()
-            ->sort()
+            ->sortBy('name')
             ->values();
 
         $this->loadStats();
@@ -53,7 +53,7 @@ class InstructorDashboardMain extends Component
 
         $studentsQuery = Student::where('instructor_id', $instructorId)
             ->whereHas('enrollments', function ($q) {
-                $q->where('school_year', $this->school_year);
+                $q->where('school_year_id', $this->school_year);
             });
 
         $this->totalStudents   = $studentsQuery->count();
@@ -65,14 +65,14 @@ class InstructorDashboardMain extends Component
             ->where('status', 'active')
             ->count();
 
-        $this->totalLessons = Lesson::where('school_year', $this->school_year)
+        $this->totalLessons = Lesson::where('school_year_id', $this->school_year)
             ->whereHas('lessonSubjectStudents.curriculumSubject.curriculum', function ($q) use ($instructorId) {
                 $q->where('instructor_id', $instructorId)->where('status', 'active');
             })
             ->count();
 
         $this->totalActivities = ActivityLesson::whereHas('lesson', function ($q) use ($instructorId) {
-            $q->where('school_year', $this->school_year)
+            $q->where('school_year_id', $this->school_year)
                 ->whereHas('lessonSubjectStudents.curriculumSubject.curriculum', function ($cq) use ($instructorId) {
                     $cq->where('instructor_id', $instructorId)->where('status', 'active');
                 });
@@ -81,7 +81,7 @@ class InstructorDashboardMain extends Component
         $this->totalAwards = StudentAward::whereHas('student', function ($q) use ($instructorId) {
             $q->where('instructor_id', $instructorId);
         })
-            ->where('school_year', $this->school_year)
+            ->where('school_year_id', $this->school_year)
             ->count();
     }
 

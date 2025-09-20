@@ -14,7 +14,7 @@
                     <select class="w-full outline-none text-heading-dark font-medium text-lg"
                         wire:model.live='school_year'>
                         @php
-                            $currentYear = now()->schoolYear();
+                            $currentYear = now()->schoolYear()?->name;
                             $years = collect($school_years);
 
                             if (!$years->contains($currentYear)) {
@@ -22,11 +22,9 @@
                             }
                         @endphp
 
-                        @foreach ($years as $sy)
-                            <option value="{{ $sy }}"
-                                class="text-sm {{ $sy == $currentYear ? 'text-black' : 'text-paragraph' }}"
-                                {{ $sy == $currentYear ? 'selected' : '' }}>
-                                S.Y {{ $sy }}
+                        @foreach ($school_years as $sy)
+                            <option value="{{ $sy->id }}">
+                                S.Y {{ $sy->name }}
                             </option>
                         @endforeach
 
@@ -135,10 +133,10 @@
                                         <div class="flex justify-center items-center gap-1 text-white">
                                             <button wire:click='openEditLessonModal({{ $lesson->id }})'
                                                 class="px-2 py-1 flex gap-2 items-center rounded-lg min-w-[50px] justify-center relative
-                                                {{ $lesson->school_year === now()->schoolYear()
+                                                {{ $lesson->school_year_id === now()->schoolYear()->id
                                                     ? 'bg-danger cursor-pointer hover:scale-110'
                                                     : 'bg-gray-400 cursor-not-allowed' }}"
-                                                {{ $lesson->school_year !== now()->schoolYear() ? 'disabled' : '' }}>
+                                                {{ $lesson->school_year_id !== now()->schoolYear()->id ? 'disabled' : '' }}>
 
                                                 <!-- Text (hidden when loading) -->
                                                 <small class="transition-opacity duration-150"

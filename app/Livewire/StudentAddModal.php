@@ -2,9 +2,12 @@
 
 namespace App\Livewire;
 
+use Carbon\Carbon;
 use App\Models\Feed;
+use App\Models\Account;
 use App\Models\Student;
 use Livewire\Component;
+use App\Models\SchoolYear;
 use Livewire\Attributes\On;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\Auth;
@@ -18,19 +21,29 @@ class StudentAddModal extends Component
     public $barangayData = [], $municipalities = [], $permanent_barangays = [], $current_barangays = [];
     public $photo, $lrn, $first_name, $middle_name, $last_name, $birthdate, $sex, $grade_level, $disability, $description;
     public $province = "marinduque";
-    public $permanent_barangay, $permanent_municipal, $current_barangay, $current_municipal, $guardian_first_name, $guardian_middle_name, $guardian_last_name, $guardian_email, $guardian_phone;
+    public $permanent_barangay = '', $permanent_municipal = '', $current_barangay = '', $current_municipal = '', $guardian_first_name, $guardian_middle_name, $guardian_last_name, $guardian_email, $guardian_phone;
     public $account_username, $account_password = '';
 
 
     public function generateAccount()
     {
         $birthdate = str_replace('-', '', $this->birthdate);
-        $lastName = strtolower(trim($this->last_name));
+        $lastName  = strtolower(trim($this->last_name));
         $firstName = strtolower(trim($this->first_name));
 
-        $this->account_username = "{$lastName}{$firstName}";
+        $baseUsername = "{$lastName}{$firstName}";
+        $username = $baseUsername;
+
+        $count = 1;
+        while (Account::where('username', $username)->exists()) {
+            $username = $baseUsername . $count;
+            $count++;
+        }
+
+        $this->account_username = $username;
         $this->account_password = "{$birthdate}-{$lastName}";
     }
+
 
 
     #[On('openModal')]
@@ -62,7 +75,7 @@ class StudentAddModal extends Component
             try {
                 $this->validate([
                     'photo' => 'nullable|image|max:5120',
-                    'lrn' => 'required|digits:12',
+                    'lrn' => 'required|digits:12|unique:students,lrn',
                     'first_name' => 'required',
                     'middle_name' => 'required',
                     'last_name' => 'required',
@@ -76,6 +89,7 @@ class StudentAddModal extends Component
                     'photo.max'              => 'The photo size must not exceed 5MB.',
                     'lrn.required'           => 'The LRN field is required.',
                     'lrn.digits'             => 'The LRN must be exactly 12 digits.',
+                    'lrn.unique'      => 'The LRN already existed.',
                     'first_name.required'    => 'The first name is required.',
                     'middle_name.required'   => 'The middle name is required.',
                     'last_name.required'     => 'The last name is required.',
@@ -161,9 +175,40 @@ class StudentAddModal extends Component
         $this->reset();
     }
 
+    public function canRegisterStudent()
+    {
+        $today = Carbon::today();
+
+        $latestSY = SchoolYear::latest('first_quarter_start')->first();
+
+        if (!$latestSY) {
+            return false;
+        }
+
+        $syStart  = Carbon::parse($latestSY->first_quarter_start);
+        $syEnd    = Carbon::parse($latestSY->fourth_quarter_end);
+        $firstQEnd = Carbon::parse($latestSY->first_quarter_end);
+
+        if ($today->greaterThan($syEnd)) {
+            return true;
+        }
+
+        if ($today->between($syStart, $firstQEnd)) {
+            return true;
+        }
+
+        return false;
+    }
+
+
+
     public function addStudent()
     {
         $this->validateStep();
+
+        if (!$this->canRegisterStudent()) {
+            return $this->dispatch('swal-toast', icon: 'error', title: 'Enrollment period is closed.');
+        }
 
         $path = null;
         if ($this->photo) {
@@ -240,13 +285,13 @@ class StudentAddModal extends Component
     public function updatedPermanentMunicipal($value)
     {
         $this->permanent_barangays = $this->barangayData[$value] ?? [];
-        $this->permanent_barangay = null;
+        $this->permanent_barangay = '';
     }
 
     public function updatedCurrentMunicipal($value)
     {
         $this->current_barangays = $this->barangayData[$value] ?? [];
-        $this->current_barangay = null;
+        $this->current_barangay = '';
     }
 
     public function render()

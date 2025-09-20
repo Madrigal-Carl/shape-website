@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Carbon\Carbon;
 use App\Models\Log;
 use App\Models\Feed;
 use App\Models\Admin;
@@ -19,6 +20,7 @@ use App\Models\GameImage;
 use App\Models\Curriculum;
 use App\Models\Enrollment;
 use App\Models\Instructor;
+use App\Models\SchoolYear;
 use App\Models\GameActivity;
 use App\Models\StudentAward;
 use App\Models\ActivityImage;
@@ -37,6 +39,30 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        // === School Year ===
+        $first_quarter_start = Carbon::now()->startOfDay();
+        $first_quarter_end   = $first_quarter_start->copy()->addDays(6);
+
+        $second_quarter_start = $first_quarter_end->copy()->addDay();
+        $second_quarter_end   = $second_quarter_start->copy()->addDays(6);
+
+        $third_quarter_start  = $second_quarter_end->copy()->addDay();
+        $third_quarter_end    = $third_quarter_start->copy()->addDays(6);
+
+        $fourth_quarter_start = $third_quarter_end->copy()->addDay();
+        $fourth_quarter_end   = $fourth_quarter_start->copy()->addDays(6);
+
+        SchoolYear::create([
+            'first_quarter_start'  => $first_quarter_start,
+            'first_quarter_end'    => $first_quarter_end,
+            'second_quarter_start' => $second_quarter_start,
+            'second_quarter_end'   => $second_quarter_end,
+            'third_quarter_start'  => $third_quarter_start,
+            'third_quarter_end'    => $third_quarter_end,
+            'fourth_quarter_start' => $fourth_quarter_start,
+            'fourth_quarter_end'   => $fourth_quarter_end,
+        ]);
+
         // === Awards ===
         $awards = [
             ['name' => 'Activity Ace', 'description' => 'Recognizes the student who completes the highest number of activities overall.'],
@@ -70,9 +96,7 @@ class DatabaseSeeder extends Seeder
 
         // === Instructors (3 total, including test account) ===
         $instructorTest = Instructor::factory()->create();
-        $instructorTest->specializations()->attach(
-            $specializations->random(rand(1, 2))->pluck('id')->toArray()
-        );
+
         Account::factory()->instructor($instructorTest)->create([
             'username' => 'instructor',
             'password' => 'instructor',
@@ -267,7 +291,7 @@ class DatabaseSeeder extends Seeder
                     ->where('status', 'active')
                     ->whereHas('enrollments', function ($q) use ($activity) {
                         $q->where('grade_level', $activity->curriculumSubject->curriculum->grade_level)
-                            ->where('school_year', now()->schoolYear());
+                            ->where('school_year_id', now()->schoolYear()?->id);
                     })
                     ->whereIn(
                         'disability_type',

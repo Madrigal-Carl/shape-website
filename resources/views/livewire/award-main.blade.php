@@ -14,7 +14,7 @@
                     <select class="w-full outline-none text-heading-dark font-medium text-lg"
                         wire:model.live='school_year'>
                         @php
-                            $currentYear = now()->schoolYear();
+                            $currentYear = now()->schoolYear()?->name;
                             $years = collect($school_years);
 
                             if (!$years->contains($currentYear)) {
@@ -22,11 +22,9 @@
                             }
                         @endphp
 
-                        @foreach ($years as $sy)
-                            <option value="{{ $sy }}"
-                                class="text-sm {{ $sy == $currentYear ? 'text-black' : 'text-paragraph' }}"
-                                {{ $sy == $currentYear ? 'selected' : '' }}>
-                                S.Y {{ $sy }}
+                        @foreach ($school_years as $sy)
+                            <option value="{{ $sy->id }}">
+                                S.Y {{ $sy->name }}
                             </option>
                         @endforeach
 

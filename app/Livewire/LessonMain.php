@@ -16,13 +16,15 @@ class LessonMain extends Component
     public $listeners = ['refresh' => '$refresh'];
     public function mount()
     {
-        $this->school_year = now()->schoolYear();
+        $this->school_year = now()->schoolYear()->id;
 
         $this->school_years = Auth::user()->accountable
             ->lessons()
-            ->pluck('school_year')
-            ->unique()
-            ->sort()
+            ->with('schoolYear')
+            ->get()
+            ->pluck('schoolYear')
+            ->unique('id')
+            ->sortBy('name')
             ->values();
     }
 
@@ -52,7 +54,7 @@ class LessonMain extends Component
                 'videos',
                 'activityLessons',
             ])
-            ->where('school_year', $this->school_year)
+            ->where('school_year_id', $this->school_year)
             ->whereHas('lessonSubjectStudents.curriculumSubject.curriculum', function ($q) {
                 $q->where('instructor_id', Auth::user()->accountable->id)->where('status', 'active');
             })

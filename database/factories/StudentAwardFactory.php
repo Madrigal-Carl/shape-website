@@ -21,6 +21,7 @@ class StudentAwardFactory extends Factory
         return [
             'student_id' => null,
             'award_id' => null,
+            'school_year_id' => null,
         ];
     }
 }

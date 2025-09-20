@@ -49,7 +49,7 @@ class StudentMoveUpModal extends Component
         if ($this->grade_level && $this->grade_level !== 'all') {
             $query->whereHas('enrollments', function ($q) {
                 $q->where('grade_level', $this->grade_level)
-                    ->where('school_year', now()->schoolYear());
+                    ->where('school_year_id', now()->schoolYear()->id);
             });
         }
 
@@ -64,7 +64,7 @@ class StudentMoveUpModal extends Component
         }
         $query->orderBy('first_name');
         return $query->with(['enrollments' => function ($q) {
-            $q->where('school_year', now()->schoolYear());
+            $q->where('school_year_id', now()->schoolYear()->id);
         }])->get();
     }
 
@@ -89,7 +89,7 @@ class StudentMoveUpModal extends Component
             $student = Student::find($studentId);
 
             $currentEnrollment = $student->enrollments()
-                ->where('school_year', now()->schoolYear())
+                ->where('school_year_id', now()->schoolYear()->id)
                 ->first();
 
             if ($currentEnrollment) {
@@ -110,12 +110,12 @@ class StudentMoveUpModal extends Component
                 $nextLevel = $this->gradeLevels[$currentIndex + 1];
 
                 if (!Enrollment::where('student_id', $student->id)
-                    ->where('school_year', now()->schoolYear())
+                    ->where('school_year_id', now()->schoolYear()->id)
                     ->exists()) {
                     Enrollment::create([
                         'student_id' => $student->id,
                         'grade_level' => $nextLevel,
-                        'school_year' => now()->schoolYear(),
+                        'school_year_id'  => now()->schoolYear()->id,
                     ]);
                     $movedUp++;
                 } else {

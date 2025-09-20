@@ -32,6 +32,26 @@ class SchoolYear extends Model
         return now()->greaterThan(Carbon::parse($this->fourth_quarter_end));
     }
 
+    public function classActivities()
+    {
+        return $this->hasMany(ClassActivity::class);
+    }
+
+    public function enrollments()
+    {
+        return $this->hasMany(Enrollment::class);
+    }
+
+    public function lessons()
+    {
+        return $this->hasMany(Lesson::class);
+    }
+
+    public function studentAwards()
+    {
+        return $this->hasMany(StudentAward::class);
+    }
+
     protected static function booted()
     {
         static::creating(function ($model) {

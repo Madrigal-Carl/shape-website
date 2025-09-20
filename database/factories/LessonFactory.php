@@ -20,6 +20,7 @@ class LessonFactory extends Factory
     public function definition(): array
     {
         return [
+            'school_year_id' => null,
             'title' => $this->faker->unique()->sentence(2),
             'description' => $this->faker->paragraph,
         ];

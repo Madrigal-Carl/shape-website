@@ -53,10 +53,10 @@ class Student extends Model
         return $this->hasMany(Enrollment::class);
     }
 
-    public function isEnrolledIn($schoolYear)
+    public function isEnrolledIn($schoolYearId)
     {
         return $this->enrollments()
-            ->where('school_year', $schoolYear)
+            ->where('school_year_id', $schoolYearId)
             ->first();
     }
 
@@ -82,22 +82,22 @@ class Student extends Model
         );
     }
 
-    public function totalAwardsCount($schoolYear = null)
+    public function totalAwardsCount($schoolYearId = null)
     {
-        $schoolYear = $schoolYear ?? now()->schoolYear();
+        $schoolYearId = $schoolYearId ?? now()->schoolYear()?->id;
 
         return $this->studentAwards()
-            ->where('school_year', $schoolYear)
+            ->where('school_year_id', $schoolYearId)
             ->count();
     }
 
-    public function totalLessonsCount($schoolYear = null)
+    public function totalLessonsCount($schoolYearId = null)
     {
-        $schoolYear = $schoolYear ?? now()->schoolYear();
+        $schoolYearId = $schoolYearId ?? now()->schoolYear()?->id;
 
         return $this->lessonSubjectStudents()
-            ->whereHas('lesson', function ($q) use ($schoolYear) {
-                $q->where('school_year', $schoolYear);
+            ->whereHas('lesson', function ($q) use ($schoolYearId) {
+                $q->where('school_year_id', $schoolYearId);
             })
             ->whereHas('curriculum', function ($q) {
                 $q->where('status', 'active');
@@ -105,13 +105,13 @@ class Student extends Model
             ->count();
     }
 
-    public function completedLessonsCount($schoolYear = null)
+    public function completedLessonsCount($schoolYearId = null)
     {
-        $schoolYear = $schoolYear ?? now()->schoolYear();
+        $schoolYearId = $schoolYearId ?? now()->schoolYear()?->id;
 
         return $this->lessonSubjectStudents()
-            ->whereHas('lesson', function ($q) use ($schoolYear) {
-                $q->where('school_year', $schoolYear);
+            ->whereHas('lesson', function ($q) use ($schoolYearId) {
+                $q->where('school_year_id', $schoolYearId);
             })
             ->whereHas('curriculum', function ($q) {
                 $q->where('status', 'active');
@@ -123,13 +123,13 @@ class Student extends Model
             ->count();
     }
 
-    public function totalActivitiesCount($schoolYear = null)
+    public function totalActivitiesCount($schoolYearId = null)
     {
-        $schoolYear = $schoolYear ?? now()->schoolYear();
+        $schoolYearId = $schoolYearId ?? now()->schoolYear()?->id;
 
         return $this->lessonSubjectStudents()
-            ->whereHas('lesson', function ($q) use ($schoolYear) {
-                $q->where('school_year', $schoolYear);
+            ->whereHas('lesson', function ($q) use ($schoolYearId) {
+                $q->where('school_year_id', $schoolYearId);
             })
             ->whereHas('curriculum', function ($q) {
                 $q->where('status', 'active');
@@ -140,13 +140,13 @@ class Student extends Model
             });
     }
 
-    public function completedActivitiesCount($schoolYear = null)
+    public function completedActivitiesCount($schoolYearId = null)
     {
-        $schoolYear = $schoolYear ?? now()->schoolYear();
+        $schoolYearId = $schoolYearId ?? now()->schoolYear()?->id;
 
         return $this->lessonSubjectStudents()
-            ->whereHas('lesson', function ($q) use ($schoolYear) {
-                $q->where('school_year', $schoolYear);
+            ->whereHas('lesson', function ($q) use ($schoolYearId) {
+                $q->where('school_year_id', $schoolYearId);
             })
             ->whereHas('curriculum', function ($q) {
                 $q->where('status', 'active');

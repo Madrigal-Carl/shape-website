@@ -1,8 +1,10 @@
 <?php
 
 namespace App\Providers;
-use Illuminate\Support\Carbon;
 
+use App\Models\SchoolYear;
+
+use Illuminate\Support\Carbon;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -21,13 +23,18 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Carbon::macro('schoolYear', function () {
-        /** @var \Illuminate\Support\Carbon $this */
-        $year = $this->year;
-        $month = $this->month;
+            /** @var \Illuminate\Support\Carbon $this */
 
-        return $month >= 6
-            ? $year . '-' . ($year + 1)
-            : ($year - 1) . '-' . $year;
-    });
+            $current = SchoolYear::where('first_quarter_start', '<=', $this)
+                ->where('fourth_quarter_end', '>=', $this)
+                ->first();
+
+            if ($current) {
+                return $current;
+            }
+
+            // fallback: get the latest school year by fourth_quarter_end
+            return SchoolYear::orderBy('fourth_quarter_end', 'desc')->first();
+        });
     }
 }

@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('enrollments', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('school_year_id')->constrained()->onDelete('cascade');
             $table->foreignId('student_id')->constrained()->onDelete('cascade');
             $table->enum('grade_level', ['kindergarten 1', 'kindergarten 2', 'kindergarten 3']);
-            $table->string('school_year');
             $table->timestamps();
         });
     }
