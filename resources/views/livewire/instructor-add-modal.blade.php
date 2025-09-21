@@ -1,14 +1,16 @@
 <div>
     @if ($step > 0)
         <section id="teacherFormPopup"
-            class="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex justify-center items-center overflow-y-auto p-4 gap-6">
+            class="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex justify-center items-center p-10 gap-6">
             <!-- Form 1 -->
             @if ($step === 1)
-                <div class="bg-card p-8 rounded-4xl w-180 flex flex-col gap-8">
-                    <div class="flex items-center gap-2">
+                <div
+                    class="w-180 max-h-full flex flex-col bg-card p-8 rounded-4xl relative gap-8 overflow-y-auto Addlesson">
+                    <div class="flex
+                    items-center gap-2">
                         <img src="{{ asset('images/form-icon.png') }}" class="h-8" alt="" />
                         <h1 class="text-3xl font-bold text-heading-dark">
-                            Teacher's Form
+                            Instructor's Form
                         </h1>
                     </div>
 
@@ -38,7 +40,8 @@
                                     :style="'width: ' + progress + '%'"></div>
                             </div>
                             <p class="text-xs text-blue-600 mt-1 text-center">Uploading... <span
-                                    x-text="progress"></span>%</p>
+                                    x-text="progress"></span>%
+                            </p>
                         </div>
                     </div>
 
@@ -76,54 +79,84 @@
                                 </select>
                             </div>
 
-                            {{-- <div class="px-4 py-2 rounded-lg bg-white">
-                                <select name="" id="" class="w-full outline-none text-paragraph"
-                                    wire:change="$set('grade_level', $event.target.value)">
-                                    <option class="text-sm text-black" selected disabled>
-                                        Grade Level
-                                    </option>
-                                    <option value="kindergarten 1" class="text-sm text-paragraph">
-                                        Kindergarten 1
-                                    </option>
-                                    <option value="kindergarten 2" class="text-sm text-paragraph">
-                                        Kindergarten 2
-                                    </option>
-                                    <option value="kindergarten 3" class="text-sm text-paragraph">
-                                        Kindergarten 3
-                                    </option>
-                                </select>
-                            </div> --}}
+                            <button
+                                class="cursor-pointer pl-4 pr-2 py-2 rounded-lg bg-white text-paragraph w-full text-left hover:bg-gray-300 flex items-center justify-between"
+                                type="button" <p>Select Specialization</p>
+                                <span class="material-symbols-rounded text-paragraph">
+                                    keyboard_arrow_up
+                                </span>
+                                {{-- <span class="material-symbols-rounded text-paragraph">
+                                    keyboard_arrow_down
+                                </span> --}}
+                            </button>
 
-                            <div class="px-4 py-2 rounded-lg bg-white">
-                                <select name="" id="" class="w-full outline-none text-paragraph"
-                                    wire:change="$set('disability', $event.target.value)">
-                                    <option class="text-sm text-black" selected disabled>
-                                        specialization
-                                    </option>
-                                    <option class="text-sm text-paragraph">
-                                        Hearing Impaired
-                                    </option>
-                                </select>
+                            <div class="rounded-lg bg-white h-fit">
+                                <div class="p-4 rounded-lg bg-white relative flex flex-col gap-2 h-full">
+                                    <div class="flex items-center justify-between w-full">
+                                        <p class="text-paragraph">Specialization</p>
+                                        <button type="button" wire:click="clearSpecializations"
+                                            class="flex items-center justify-center gap-1 px-3 py-1 rounded-lg text-paragraph border-1 border-gray-300 hover:border-blue-button hover:text-white cursor-pointer bg-white hover:bg-blue-button">
+                                            <p class="text-sm">Clear Selected</p>
+                                            <span class="material-symbols-rounded">clear_all</span>
+                                        </button>
+                                    </div>
+                                    <div class="h-fit flex flex-col gap-1 bg-white rounded-lg">
+                                        <div class="flex flex-col gap-1 h-full overflow-y-scroll pr-2 rounded-lg">
+                                            <div
+                                                class="flex items-center gap-2 w-full p-2 hover:bg-card rounded-lg cursor-pointer">
+                                                <label class="container w-fit">
+                                                    <input type="checkbox" wire:model="selectedSpecializations">
+                                                    <div class="checkmark"></div>
+                                                </label>
+                                                <p class="w-full text-paragraph">
+                                                    Autism</p>
+                                            </div>
+                                            <div
+                                                class="flex items-center gap-2 w-full p-2 hover:bg-card rounded-lg cursor-pointer">
+                                                <label class="container w-fit">
+                                                    <input type="checkbox" wire:model="selectedSpecializations">
+                                                    <div class="checkmark"></div>
+                                                </label>
+                                                <p class="w-full text-paragraph">
+                                                    Hearing</p>
+                                            </div>
+                                            <div
+                                                class="flex items-center gap-2 w-full p-2 hover:bg-card rounded-lg cursor-pointer">
+                                                <label class="container w-fit">
+                                                    <input type="checkbox" wire:model="selectedSpecializations">
+                                                    <div class="checkmark"></div>
+                                                </label>
+                                                <p class="w-full text-paragraph">
+                                                    Speech</p>
+                                            </div>
+
+                                            {{-- <p
+                                                class="text-center text-sm text-gray-500 h-full flex justify-center items-center">
+                                                No Specialization found.</p> --}}
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
                             {{-- <textarea name="" id="" maxlength="200" placeholder="Description (Optional)"
                                 wire:model.live='description'
                                 class="px-4 py-2 rounded-lg bg-white placeholder-paragraph resize-none h-24 outline-none"></textarea> --}}
                         </div>
+                        <!-- buttons -->
+                        <div class="flex items-center gap-2">
+                            <button type="button"
+                                class="bg-white py-1.5 px-4 w-full rounded-xl text-heading-dark font-medium hover:bg-gray-300 cursor-pointer"
+                                wire:click="closeModal" type="button">
+                                Cancel
+                            </button>
+                            <button type="button"
+                                class="bg-blue-button py-1.5 px-4 w-full rounded-xl text-white font-medium hover:bg-blue-700 cursor-pointer"
+                                wire:click="nextStep">
+                                Next
+                            </button>
+                        </div>
                     </div>
-                    <!-- buttons -->
-                    <div class="flex items-center gap-2">
-                        <button type="button"
-                            class="bg-white py-1.5 px-4 w-full rounded-xl text-heading-dark font-medium hover:bg-gray-300 cursor-pointer"
-                            wire:click="closeModal" type="button">
-                            Cancel
-                        </button>
-                        <button type="button"
-                            class="bg-blue-button py-1.5 px-4 w-full rounded-xl text-white font-medium hover:bg-blue-700 cursor-pointer"
-                            wire:click="nextStep">
-                            Next
-                        </button>
-                    </div>
+
                 </div>
             @endif
 
@@ -133,7 +166,7 @@
                     <div class="flex items-center gap-2">
                         <img src="{{ asset('images/form-icon.png') }}" class="h-8" alt="" />
                         <h1 class="text-3xl font-bold text-heading-dark">
-                            Teacher's Form
+                            Instructor's Form
                         </h1>
                     </div>
 
@@ -235,12 +268,12 @@
                     <div class="flex items-center gap-2">
                         <img src="{{ asset('images/account.png') }}" class="h-8" alt="" />
                         <h1 class="text-3xl font-bold text-heading-dark">
-                            Create Student Account
+                            Create Instructor's Account
                         </h1>
                     </div>
 
                     <div class="flex flex-col gap-3">
-                        <h2 class="font-semibold text-xl">Teacher's Account</h2>
+                        <h2 class="font-semibold text-xl">Instructor's Account</h2>
                         <div class="flex flex-col gap-2">
                             <input type="text" name="" id="" placeholder="Username"
                                 wire:model.live='account_username' disabled
