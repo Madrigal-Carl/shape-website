@@ -53,6 +53,7 @@ class DatabaseSeeder extends Seeder
         $fourth_quarter_end   = $fourth_quarter_start->copy()->addDays(6);
 
         SchoolYear::create([
+            'name' => $first_quarter_start->format('Y') . "-" . $fourth_quarter_end->format('Y'),
             'first_quarter_start'  => $first_quarter_start,
             'first_quarter_end'    => $first_quarter_end,
             'second_quarter_start' => $second_quarter_start,

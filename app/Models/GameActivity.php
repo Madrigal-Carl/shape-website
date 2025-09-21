@@ -10,6 +10,7 @@ class GameActivity extends Model
     use HasFactory;
 
     protected $fillable = [
+        'max_score',
         'name',
         'path',
         'description',

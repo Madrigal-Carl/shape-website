@@ -22,9 +22,9 @@ class LogFactory extends Factory
     {
         return [
             'student_activity_id' => null,
-            'attempt_number' => $this->faker->numberBetween(1, 5),
+            'attempt_number' => $this->faker->numberBetween(1, 3),
             'time_spent_seconds' => $this->faker->numberBetween(60, 120),
-            'score' => $this->faker->numberBetween(0, 100),
+            'score' => $this->faker->numberBetween(20, 50),
             'status' => $this->faker->randomElement(['in-progress', 'completed']),
         ];
     }
