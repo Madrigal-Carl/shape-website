@@ -123,7 +123,11 @@ class QuarterSetupModal extends Component
 
     protected function getData()
     {
+        $startYear = Carbon::parse($this->first_quarter_start)->year;
+        $endYear   = Carbon::parse($this->fourth_quarter_end)->year;
+
         return [
+            'name'                 => "$startYear-$endYear",
             'first_quarter_start'  => $this->first_quarter_start,
             'first_quarter_end'    => $this->first_quarter_end,
             'second_quarter_start' => $this->second_quarter_start,

@@ -70,21 +70,4 @@ class SchoolYear extends Model
     {
         return $this->hasMany(StudentAward::class);
     }
-
-    protected static function booted()
-    {
-        static::creating(function ($model) {
-            $startYear = Carbon::parse($model->first_quarter_start)->year;
-            $endYear   = Carbon::parse($model->fourth_quarter_end)->year;
-
-            $model->name = $startYear . '-' . $endYear;
-        });
-
-        static::updating(function ($model) {
-            $startYear = Carbon::parse($model->first_quarter_start)->year;
-            $endYear   = Carbon::parse($model->fourth_quarter_end)->year;
-
-            $model->name = $startYear . '-' . $endYear;
-        });
-    }
 }

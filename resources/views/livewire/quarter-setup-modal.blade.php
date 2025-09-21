@@ -13,11 +13,14 @@
                         </h1>
                     </div>
                     <div class="flex items-center gap-2 bg-white px-4 py-2 rounded-lg">
-                        <span class="material-symbols-rounded">
-                            today
-                        </span>
-                        <p class="font-semibold">S.Y 2025-2026</p>
+                        <span class="material-symbols-rounded">today</span>
+                        <p class="font-semibold">
+                            S.Y {{ $first_quarter_start ? \Carbon\Carbon::parse($first_quarter_start)->year : '----' }}
+                            -
+                            {{ $fourth_quarter_end ? \Carbon\Carbon::parse($fourth_quarter_end)->year : '----' }}
+                        </p>
                     </div>
+
 
                 </div>
 
