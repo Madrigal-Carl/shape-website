@@ -31,20 +31,49 @@ class ActivityMain extends Component
         $this->dispatch('openModal', id: $id)->to('activity-view-modal');
     }
 
-
     public function mount()
     {
         $this->school_year = now()->schoolYear()->id;
 
-        $this->school_years = ClassActivity::where('instructor_id', Auth::user()->accountable->id)
-            ->with('schoolYear')
-            ->get()
-            ->pluck('schoolYear')
-            ->unique('id')
-            ->sortBy('name')
-            ->values();
+        $this->school_years = SchoolYear::orderBy('name')->get();
 
         $this->quarter = now()->schoolYear()->currentQuarter();
+    }
+
+    public function isEditable($activtiy)
+    {
+        $schoolYear = now()->schoolYear();
+
+        if (!$schoolYear) {
+            return false;
+        }
+
+        $currentYear = $schoolYear->id;
+        $currentQuarter = $schoolYear->currentQuarter();
+
+        if (!$currentQuarter) {
+            return false;
+        }
+
+        // Map quarter number to column names
+        $map = [
+            1 => ['first_quarter_start', 'first_quarter_end'],
+            2 => ['second_quarter_start', 'second_quarter_end'],
+            3 => ['third_quarter_start', 'third_quarter_end'],
+            4 => ['fourth_quarter_start', 'fourth_quarter_end'],
+        ];
+
+        [$startAttr, $endAttr] = $map[$currentQuarter];
+
+        $start = $schoolYear->$startAttr;
+        $end   = $schoolYear->$endAttr;
+
+        if (!$start || !$end) {
+            return false;
+        }
+
+        return $activtiy->school_year_id === $currentYear
+            && $activtiy->created_at->between($start, $end);
     }
 
     public function render()
@@ -62,7 +91,7 @@ class ActivityMain extends Component
                 $query->where('name', 'like', '%' . $this->search . '%');
             })
             ->when($this->quarter, function ($query) use ($schoolYear) {
-                switch ($this->quarter) {
+                switch ((int) $this->quarter) {
                     case 1:
                         $query->whereBetween('created_at', [
                             $schoolYear->first_quarter_start,

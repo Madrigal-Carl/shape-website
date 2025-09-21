@@ -5,6 +5,7 @@ namespace App\Livewire;
 use App\Models\Student;
 use Livewire\Component;
 use App\Models\Enrollment;
+use App\Models\SchoolYear;
 use Livewire\WithPagination;
 use Livewire\WithoutUrlPagination;
 use Illuminate\Support\Facades\Auth;
@@ -22,14 +23,7 @@ class StudentMain extends Component
     {
         $this->school_year = now()->schoolYear()->id;
 
-        $this->school_years = Student::where('instructor_id', Auth::user()->accountable->id)
-            ->with('enrollments.schoolYear')
-            ->get()
-            ->pluck('enrollments.*.schoolYear')
-            ->flatten()
-            ->unique()
-            ->sortBy('name')
-            ->values();
+        $this->school_years = SchoolYear::orderBy('name')->get();
     }
 
     public function openAddStudentModal()

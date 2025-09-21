@@ -2,13 +2,14 @@
 
 namespace App\Livewire;
 
-use App\Models\Student;
 use App\Models\Lesson;
-use App\Models\ActivityLesson;
-use App\Models\Curriculum;
-use App\Models\StudentAward;
-use Illuminate\Support\Facades\Auth;
+use App\Models\Student;
 use Livewire\Component;
+use App\Models\Curriculum;
+use App\Models\SchoolYear;
+use App\Models\StudentAward;
+use App\Models\ActivityLesson;
+use Illuminate\Support\Facades\Auth;
 
 class InstructorDashboardMain extends Component
 {
@@ -30,14 +31,7 @@ class InstructorDashboardMain extends Component
         $this->school_year = now()->schoolYear()->id;
 
         // collect school years from enrollments
-        $this->school_years = Student::where('instructor_id', Auth::user()->accountable->id)
-            ->with('enrollments.schoolYear')
-            ->get()
-            ->pluck('enrollments.*.schoolYear')
-            ->flatten()
-            ->unique()
-            ->sortBy('name')
-            ->values();
+        $this->school_years = SchoolYear::orderBy('name')->get();
 
         $this->loadStats();
     }

@@ -5,6 +5,7 @@ namespace App\Livewire;
 use App\Models\Award;
 use Livewire\Component;
 use App\Models\Enrollment;
+use App\Models\SchoolYear;
 use App\Models\StudentAward;
 use Illuminate\Support\Facades\Auth;
 
@@ -16,12 +17,7 @@ class AwardMain extends Component
     public function mount()
     {
         $this->school_year = now()->schoolYear()->id;
-        $this->school_years = StudentAward::with('schoolYear')
-            ->get()
-            ->pluck('schoolYear')
-            ->unique('id')
-            ->sortBy('name')
-            ->values();
+        $this->school_years = SchoolYear::orderBy('name')->get();
 
         $this->grade_levels = Enrollment::whereIn('student_id', Auth::user()->accountable->students->pluck('id'))
             ->pluck('grade_level')

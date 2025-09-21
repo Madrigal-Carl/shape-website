@@ -19,14 +19,7 @@ class LessonMain extends Component
     {
         $this->school_year = now()->schoolYear()->id;
 
-        $this->school_years = Auth::user()->accountable
-            ->lessons()
-            ->with('schoolYear')
-            ->get()
-            ->pluck('schoolYear')
-            ->unique('id')
-            ->sortBy('name')
-            ->values();
+        $this->school_years = SchoolYear::orderBy('name')->get();
 
         $this->quarter = now()->schoolYear()->currentQuarter();
     }
@@ -44,6 +37,42 @@ class LessonMain extends Component
     public function openViewLessonModal($id)
     {
         $this->dispatch('openModal', id: $id)->to('lesson-view-modal');
+    }
+
+    public function isEditable($lesson)
+    {
+        $schoolYear = now()->schoolYear();
+
+        if (!$schoolYear) {
+            return false;
+        }
+
+        $currentYear = $schoolYear->id;
+        $currentQuarter = $schoolYear->currentQuarter();
+
+        if (!$currentQuarter) {
+            return false;
+        }
+
+        // Map quarter number to column names
+        $map = [
+            1 => ['first_quarter_start', 'first_quarter_end'],
+            2 => ['second_quarter_start', 'second_quarter_end'],
+            3 => ['third_quarter_start', 'third_quarter_end'],
+            4 => ['fourth_quarter_start', 'fourth_quarter_end'],
+        ];
+
+        [$startAttr, $endAttr] = $map[$currentQuarter];
+
+        $start = $schoolYear->$startAttr;
+        $end   = $schoolYear->$endAttr;
+
+        if (!$start || !$end) {
+            return false;
+        }
+
+        return $lesson->school_year_id === $currentYear
+            && $lesson->created_at->between($start, $end);
     }
 
     public function render()
@@ -64,7 +93,7 @@ class LessonMain extends Component
                 $q->where('instructor_id', Auth::user()->accountable->id)->where('status', 'active');
             })
             ->when($this->quarter, function ($q) use ($schoolYear) {
-                switch ($this->quarter) {
+                switch ((int) $this->quarter) {
                     case 1:
                         $q->whereBetween('created_at', [$schoolYear->first_quarter_start, $schoolYear->first_quarter_end]);
                         break;

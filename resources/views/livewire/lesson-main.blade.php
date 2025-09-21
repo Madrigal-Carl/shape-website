@@ -152,10 +152,8 @@
                                         <div class="flex justify-center items-center gap-1 text-white">
                                             <button wire:click='openEditLessonModal({{ $lesson->id }})'
                                                 class="px-2 py-1 flex gap-2 items-center rounded-lg min-w-[50px] justify-center relative
-                                                {{ $lesson->school_year_id === now()->schoolYear()->id
-                                                    ? 'bg-danger cursor-pointer hover:scale-110'
-                                                    : 'bg-gray-400 cursor-not-allowed' }}"
-                                                {{ $lesson->school_year_id !== now()->schoolYear()->id ? 'disabled' : '' }}>
+                                                {{ $this->isEditable($lesson) ? 'bg-danger cursor-pointer hover:scale-110' : 'bg-gray-400 cursor-not-allowed' }}"
+                                                {{ $this->isEditable($lesson) ? '' : 'disabled' }}>
 
                                                 <!-- Text (hidden when loading) -->
                                                 <small class="transition-opacity duration-150"
