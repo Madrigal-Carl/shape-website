@@ -104,136 +104,140 @@
             </div>
         </div>
 
+        @if (!($user->accountable instanceof \App\Models\Admin))
+            <div class="w-full border-1 border-card p-4 rounded-[12px] flex flex-col gap-4">
+                <div class="flex w-full items-start justify-between">
+                    <div class="flex items-center gap-2">
+                        <img src="{{ asset('images/address.png') }}" class="h-6" alt="">
+                        <h1 class="text-2xl font-semibold">Address</h1>
+                    </div>
 
-        <div class="w-full border-1 border-card p-4 rounded-[12px] flex flex-col gap-4">
-            <div class="flex w-full items-start justify-between">
-                <div class="flex items-center gap-2">
-                    <img src="{{ asset('images/address.png') }}" class="h-6" alt="">
-                    <h1 class="text-2xl font-semibold">Address</h1>
-                </div>
-
-                <div class="flex gap-2 items-center">
-                    <button wire:click="toggleEditAddress"
-                        class="w-fit flex items-center border-1 border-gray-300 gap-1 px-4 py-2 bg-white rounded-2xl cursor-pointer hover:text-white hover:border-blue-button hover:bg-blue-button">
-                        <span class="material-symbols-rounded">
-                            {{ $isEditingAddress ? 'cancel' : 'edit' }}
-                        </span>
-                        <p>{{ $isEditingAddress ? 'Cancel' : 'Edit' }}</p>
-                    </button>
-
-                    @if ($isEditingAddress)
-                        <button wire:click="saveAddress"
+                    <div class="flex gap-2 items-center">
+                        <button wire:click="toggleEditAddress"
                             class="w-fit flex items-center border-1 border-gray-300 gap-1 px-4 py-2 bg-white rounded-2xl cursor-pointer hover:text-white hover:border-blue-button hover:bg-blue-button">
-                            <span class="material-symbols-rounded">save</span>
-                            <p>Save</p>
+                            <span class="material-symbols-rounded">
+                                {{ $isEditingAddress ? 'cancel' : 'edit' }}
+                            </span>
+                            <p>{{ $isEditingAddress ? 'Cancel' : 'Edit' }}</p>
                         </button>
-                    @endif
-                </div>
-            </div>
 
-            <!-- Permanent Address -->
-            <div class="flex flex-col gap-2">
-                <h2 class="font-semibold text-lg">Permanent Address</h2>
-                <div class="grid grid-cols-3 gap-4">
-                    <!-- Province -->
-                    <div class="flex flex-col gap-1">
-                        <label class="text-paragraph">Province</label>
-                        <div
-                            class="w-full bg-card px-3 py-1.5 rounded-xl outline-none border-1 border-white focus:border-blue-button hover:border-blue-button">
-                            <select disabled class="w-full outline-none text-heading-dark font-medium">
-                                <option selected>Marinduque</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <!-- Municipality -->
-                    <div class="flex flex-col gap-1">
-                        <label class="text-paragraph">Municipality</label>
-                        <div
-                            class="w-full bg-card px-3 py-1.5 rounded-xl outline-none border-1 border-white focus:border-blue-button hover:border-blue-button">
-                            <select wire:model.live="permanent_municipality" {{ $isEditingAddress ? '' : 'disabled' }}
-                                class="w-full outline-none text-heading-dark font-medium">
-                                <option value="">-- Select Municipality --</option>
-                                @foreach ($municipalities as $municipal)
-                                    <option value="{{ $municipal }}"
-                                        {{ $permanent_municipality === $municipal ? 'selected' : '' }}>
-                                        {{ ucwords($municipal) }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-
-                    <!-- Barangay -->
-                    <div class="flex flex-col gap-1">
-                        <label class="text-paragraph">Barangay</label>
-                        <div
-                            class="w-full bg-card px-3 py-1.5 rounded-xl outline-none border-1 border-white focus:border-blue-button hover:border-blue-button">
-                            <select wire:model.live="permanent_barangay"
-                                wire:key="permanent-{{ $permanent_municipality }}"
-                                {{ $isEditingAddress ? '' : 'disabled' }}
-                                {{ empty($permanent_barangays) ? 'disabled' : '' }}
-                                class="w-full outline-none text-heading-dark font-medium">
-                                <option value="">-- Select Barangay --</option>
-                                @foreach ($permanent_barangays as $barangay)
-                                    <option value="{{ $barangay }}">{{ ucwords($barangay) }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-
-            <!-- Current Address -->
-            <div class="flex flex-col gap-2 mt-2">
-                <h2 class="font-semibold text-lg">Current Address</h2>
-                <div class="grid grid-cols-3 gap-4">
-                    <!-- Province -->
-                    <div class="flex flex-col gap-1">
-                        <label class="text-paragraph">Province</label>
-                        <div
-                            class="w-full bg-card px-3 py-1.5 rounded-xl outline-none border-1 border-white focus:border-blue-button hover:border-blue-button">
-                            <select disabled class="w-full outline-none text-heading-dark font-medium">
-                                <option selected>Marinduque</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <!-- Municipality -->
-                    <div class="flex flex-col gap-1">
-                        <label class="text-paragraph">Municipality</label>
-                        <div
-                            class="w-full bg-card px-3 py-1.5 rounded-xl outline-none border-1 border-white focus:border-blue-button hover:border-blue-button">
-                            <select wire:model.live="current_municipality" {{ $isEditingAddress ? '' : 'disabled' }}
-                                class="w-full outline-none text-heading-dark font-medium">
-                                <option value="">-- Select Municipality --</option>
-                                @foreach ($municipalities as $municipal)
-                                    <option value="{{ $municipal }}">{{ ucwords($municipal) }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-
-                    <!-- Barangay -->
-                    <div class="flex flex-col gap-1">
-                        <label class="text-paragraph">Barangay</label>
-                        <div
-                            class="w-full bg-card px-3 py-1.5 rounded-xl outline-none border-1 border-white focus:border-blue-button hover:border-blue-button">
-                            <select wire:model.live="current_barangay" wire:key="current-{{ $current_municipality }}"
-                                {{ $isEditingAddress ? '' : 'disabled' }}
-                                {{ empty($current_barangays) ? 'disabled' : '' }}
-                                class="w-full outline-none text-heading-dark font-medium">
-                                <option value="">-- Select Barangay --</option>
-                                @foreach ($current_barangays as $barangay)
-                                    <option value="{{ $barangay }}">{{ ucwords($barangay) }}</option>
-                                @endforeach
-                            </select>
-                        </div>
+                        @if ($isEditingAddress)
+                            <button wire:click="saveAddress"
+                                class="w-fit flex items-center border-1 border-gray-300 gap-1 px-4 py-2 bg-white rounded-2xl cursor-pointer hover:text-white hover:border-blue-button hover:bg-blue-button">
+                                <span class="material-symbols-rounded">save</span>
+                                <p>Save</p>
+                            </button>
+                        @endif
                     </div>
                 </div>
+
+                <!-- Permanent Address -->
+                <div class="flex flex-col gap-2">
+                    <h2 class="font-semibold text-lg">Permanent Address</h2>
+                    <div class="grid grid-cols-3 gap-4">
+                        <!-- Province -->
+                        <div class="flex flex-col gap-1">
+                            <label class="text-paragraph">Province</label>
+                            <div
+                                class="w-full bg-card px-3 py-1.5 rounded-xl outline-none border-1 border-white focus:border-blue-button hover:border-blue-button">
+                                <select disabled class="w-full outline-none text-heading-dark font-medium">
+                                    <option selected>Marinduque</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Municipality -->
+                        <div class="flex flex-col gap-1">
+                            <label class="text-paragraph">Municipality</label>
+                            <div
+                                class="w-full bg-card px-3 py-1.5 rounded-xl outline-none border-1 border-white focus:border-blue-button hover:border-blue-button">
+                                <select wire:model.live="permanent_municipality"
+                                    {{ $isEditingAddress ? '' : 'disabled' }}
+                                    class="w-full outline-none text-heading-dark font-medium">
+                                    <option value="">-- Select Municipality --</option>
+                                    @foreach ($municipalities as $municipal)
+                                        <option value="{{ $municipal }}"
+                                            {{ $permanent_municipality === $municipal ? 'selected' : '' }}>
+                                            {{ ucwords($municipal) }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Barangay -->
+                        <div class="flex flex-col gap-1">
+                            <label class="text-paragraph">Barangay</label>
+                            <div
+                                class="w-full bg-card px-3 py-1.5 rounded-xl outline-none border-1 border-white focus:border-blue-button hover:border-blue-button">
+                                <select wire:model.live="permanent_barangay"
+                                    wire:key="permanent-{{ $permanent_municipality }}"
+                                    {{ $isEditingAddress ? '' : 'disabled' }}
+                                    {{ empty($permanent_barangays) ? 'disabled' : '' }}
+                                    class="w-full outline-none text-heading-dark font-medium">
+                                    <option value="">-- Select Barangay --</option>
+                                    @foreach ($permanent_barangays as $barangay)
+                                        <option value="{{ $barangay }}">{{ ucwords($barangay) }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Current Address -->
+                <div class="flex flex-col gap-2 mt-2">
+                    <h2 class="font-semibold text-lg">Current Address</h2>
+                    <div class="grid grid-cols-3 gap-4">
+                        <!-- Province -->
+                        <div class="flex flex-col gap-1">
+                            <label class="text-paragraph">Province</label>
+                            <div
+                                class="w-full bg-card px-3 py-1.5 rounded-xl outline-none border-1 border-white focus:border-blue-button hover:border-blue-button">
+                                <select disabled class="w-full outline-none text-heading-dark font-medium">
+                                    <option selected>Marinduque</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Municipality -->
+                        <div class="flex flex-col gap-1">
+                            <label class="text-paragraph">Municipality</label>
+                            <div
+                                class="w-full bg-card px-3 py-1.5 rounded-xl outline-none border-1 border-white focus:border-blue-button hover:border-blue-button">
+                                <select wire:model.live="current_municipality"
+                                    {{ $isEditingAddress ? '' : 'disabled' }}
+                                    class="w-full outline-none text-heading-dark font-medium">
+                                    <option value="">-- Select Municipality --</option>
+                                    @foreach ($municipalities as $municipal)
+                                        <option value="{{ $municipal }}">{{ ucwords($municipal) }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Barangay -->
+                        <div class="flex flex-col gap-1">
+                            <label class="text-paragraph">Barangay</label>
+                            <div
+                                class="w-full bg-card px-3 py-1.5 rounded-xl outline-none border-1 border-white focus:border-blue-button hover:border-blue-button">
+                                <select wire:model.live="current_barangay"
+                                    wire:key="current-{{ $current_municipality }}"
+                                    {{ $isEditingAddress ? '' : 'disabled' }}
+                                    {{ empty($current_barangays) ? 'disabled' : '' }}
+                                    class="w-full outline-none text-heading-dark font-medium">
+                                    <option value="">-- Select Barangay --</option>
+                                    @foreach ($current_barangays as $barangay)
+                                        <option value="{{ $barangay }}">{{ ucwords($barangay) }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
+        @endif
 
         <div class="w-full bg-card p-4 rounded-[12px] flex flex-col gap-4">
             <div class="flex w-full items-start justify-between">

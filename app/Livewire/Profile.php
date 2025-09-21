@@ -49,8 +49,9 @@ class Profile extends Component
     {
         $this->user = Auth::user()->load([
             'accountable',
-            'accountable.permanentAddress',
-            'accountable.currentAddress',
+            // Don't eager load address relationships for Admin
+            // 'accountable.permanentAddress',
+            // 'accountable.currentAddress',
         ]);
 
         // Names
@@ -291,8 +292,13 @@ class Profile extends Component
         $this->municipalities = array_keys($this->barangayData);
 
         // Addresses
-        $permanent = $this->user->accountable->permanentAddress;
-        $current   = $this->user->accountable->currentAddress;
+        if ($this->user->accountable instanceof \App\Models\Admin) {
+            $permanent = '';
+            $current = '';
+        } else {
+            $permanent = $this->user->accountable->permanentAddress;
+            $current   = $this->user->accountable->currentAddress;
+        }
 
         if ($permanent) {
             $this->permanent_municipality = $permanent->municipality;
