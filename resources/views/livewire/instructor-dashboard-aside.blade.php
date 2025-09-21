@@ -12,20 +12,20 @@
         <div class="flex flex-col gap-2 px-3 overflow-y-auto">
             @forelse ($feeds as $feed)
                 <div class="flex gap-2 w-full bg-card p-3 rounded-lg">
-                    <div class="flex flex-col">
-                        <h2 class="leading-tight font-semibold text-md">
+                    <div class="flex flex-col gap-2">
+                        <h2 class="leading-tight font-semibold text-lg line-clamp-2">
                             {{ $feed->title }}
                         </h2>
-                        <p class="text-xs leading-tight text-paragraph">
+                        <p class="text-base leading-tight line-clamp-3">
                             {{ $feed->message }}
                         </p>
-                        <span class="text-[10px] text-gray-500 mt-1">
+                        <span class="text-sm text-paragraph mt-1">
                             {{ $feed->created_at->diffForHumans() }}
                         </span>
                     </div>
                 </div>
             @empty
-                <p class="text-sm text-gray-500 italic">No recent activity.</p>
+                <p class="text-sm text-paragraph italic">No recent activity.</p>
             @endforelse
         </div>
     </div>

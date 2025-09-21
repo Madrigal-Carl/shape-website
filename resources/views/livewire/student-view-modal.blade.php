@@ -1,7 +1,7 @@
 <div>
     @if ($isOpen)
         <section
-            class="bg-black/30 fixed w-dvw h-dvh top-0 left-0 z-50 backdrop-blur-xs flex justify-center overflow-y-auto p-10">
+            class="bg-black/40 fixed w-dvw h-dvh top-0 left-0 z-50 backdrop-blur-xs flex justify-center overflow-y-auto p-10">
             <!-- Third form -->
             <div class="bg-card p-8 rounded-4xl w-280 flex flex-col gap-12 self-center-safe">
                 <div class="flex items-center justify-between gap-2">
@@ -21,7 +21,7 @@
                             <p class="text-sm">Export Form</p>
                         </button> --}}
                         <div
-                            class="flex items-center bg-white py-3 px-5 rounded-full border-2 border-white hover:border-blue-button text-paragraph hover:bg-blue-button hover:text-white cursor-pointer">
+                            class="flex items-center bg-white py-2 px-5 rounded-full text-paragraph hover:bg-blue-button hover:text-white cursor-pointer">
                             <select name="" id="" class="w-max outline-none" wire:model.live="quarter">
                                 <option value="1" class=" text-heading-dark">
                                     1st Quarter

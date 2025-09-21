@@ -1,7 +1,7 @@
 <div>
     @if ($isOpen)
         <div
-            class="bg-black/30 fixed w-dvw h-dvh top-0 left-0 z-50 backdrop-blur-xs flex justify-center items-center p-10">
+            class="bg-black/40 fixed w-dvw h-dvh top-0 left-0 z-50 backdrop-blur-xs flex justify-center items-center p-10">
             <div class="w-180 h-full flex flex-col bg-card p-8 rounded-4xl relative gap-8 ">
                 <form wire:submit='moveUp' class="w-full h-full flex flex-col gap-8 overflow-auto Addlesson">
                     <div class=" w-full flex items-center justify-between gap-4">

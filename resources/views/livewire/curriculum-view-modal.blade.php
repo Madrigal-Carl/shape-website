@@ -1,7 +1,7 @@
 <div>
     @if ($isOpen)
         <div
-            class="bg-black/30 fixed w-dvw h-dvh top-0 p-10 left-0 z-50 backdrop-blur-xs flex justify-center items-center">
+            class="bg-black/40 fixed w-dvw h-dvh top-0 p-10 left-0 z-50 backdrop-blur-xs flex justify-center items-center">
             <div class="bg-card p-8 rounded-3xl w-200 h-full flex flex-col gap-8 overflow-y-auto Addlesson">
                 <div class="bg-card w-full h-full flex flex-col gap-4 overflow-y-auto Addlesson">
                     <div class="w-full flex items-center justify-between">

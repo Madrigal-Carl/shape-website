@@ -11,10 +11,10 @@
             @forelse ($feeds as $feed)
                 <div class="flex flex-col gap-2 w-full bg-card p-3 rounded-lg">
                     <!-- System Details -->
-                    <h2 class="leading-tight font-medium text-md">
+                    <h2 class="leading-tight font-medium text-md line-clamp-3">
                         {{ $feed->message }}
                     </h2>
-                    <p class="text-xs leading-tight text-paragraph">
+                    <p class="text-sm leading-tight text-paragraph">
                         {{ \Carbon\Carbon::parse($feed->created_at)->diffForHumans() }}</p>
                 </div>
             @empty
