@@ -335,12 +335,6 @@ class InstructorEditModal extends Component
             ]
         );
 
-        Feed::create([
-            'group' => 'instructor',
-            'title' => 'Instructor Updated',
-            'message' => "'{$instructor->full_name}' has been updated.",
-        ]);
-
         $this->dispatch('swal-toast', icon: 'success', title: 'Instructor updated successfully!');
         $this->closeModal();
     }
