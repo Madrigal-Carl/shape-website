@@ -10,19 +10,19 @@
 
         <!-- System Notifications -->
         <div class="flex flex-col gap-2 px-3 overflow-y-auto">
-            <div class="flex flex-col gap-2 w-full bg-card p-3 rounded-lg">
-                <!-- System Details -->
-                <h2 class="leading-tight font-semibold text-lg">
-                    Lesson Created Successfully!
-                </h2>
-                <p class="">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Et veritatis totam optio
-                    quas sed ipsum
-                    maiores! Ratione voluptate quidem delectus.</p>
-                <p class="text-sm leading-tight text-paragraph">just now</p>
-            </div>
-
-
-
+            @forelse ($feeds as $feed)
+                <div class="flex flex-col gap-2 w-full bg-card p-3 rounded-lg">
+                    <h2 class="leading-tight font-medium text-md line-clamp-3">
+                        {{ $feed->message }}
+                    </h2>
+                    <p class="text-sm leading-tight text-paragraph">
+                        {{ \Carbon\Carbon::parse($feed->created_at)->diffForHumans() }}</p>
+                </div>
+            @empty
+                <div class="h-full w-full text-center">
+                    <p>Empty</p>
+                </div>
+            @endforelse
         </div>
     </div>
 </aside>

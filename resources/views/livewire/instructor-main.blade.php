@@ -104,17 +104,32 @@
                                     </td>
                                     <td class="px-4 py-3 text-center">
                                         <div class="flex justify-center items-center">
-                                            @if ($instructor->status === 'active')
-                                                <div
-                                                    class="gap-2 bg-[#D2FBD0] px-2 py-1 rounded-full flex items-center w-fit">
-                                                    <small class="text-[#0D5F07]">Active</small>
-                                                </div>
-                                            @else
-                                                <div
-                                                    class="gap-2 bg-[#FBD0D0] px-2 py-1 rounded-full flex items-center w-fit">
-                                                    <small class="text-[#5F0707]">Inactive</small>
-                                                </div>
-                                            @endif
+                                            @php
+                                                $statusStyles = [
+                                                    'active' => ['bg' => 'bg-[#D2FBD0]', 'text' => 'text-[#0D5F07]'],
+                                                    'inactive' => ['bg' => 'bg-[#F7F7F7]', 'text' => 'text-[#3B3B3B]'],
+                                                    'resigned' => ['bg' => 'bg-[#D0E8FF]', 'text' => 'text-[#004A9F]'],
+                                                    'retired' => [
+                                                        'bg' => 'bg-[#F0E5C0]',
+                                                        'text' => 'text-[#7F5900]',
+                                                    ],
+                                                    'terminated' => [
+                                                        'bg' => 'bg-[#fce4e4]',
+                                                        'text' => 'text-[#af0000]',
+                                                    ],
+                                                ];
+
+                                                $style = $statusStyles[strtolower($instructor->status)] ?? [
+                                                    'bg' => 'bg-gray-200',
+                                                    'text' => 'text-gray-600',
+                                                ];
+                                            @endphp
+
+                                            <div
+                                                class="gap-2 {{ $style['bg'] }} px-3 py-1 rounded-lg flex items-center w-fit">
+                                                <small
+                                                    class="{{ $style['text'] }}">{{ ucwords($instructor->status) }}</small>
+                                            </div>
                                         </div>
                                     </td>
                                     <td class="px-4 py-3 text-center">

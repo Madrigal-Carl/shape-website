@@ -58,7 +58,7 @@
                     <div class="flex flex-col justify-between">
                         <h1 class="font-medium text-xl leading-4">{{ $student->full_name }}
                         </h1>
-                        <p class="text-sm text-paragraph">ID: <span>{{ $student->id }}</span></p>
+                        <p class="text-sm text-paragraph">LRN: <span>{{ $student->lrn }}</span></p>
                         <div class="w-fit">
                             @php
                                 $statusStyles = [

@@ -13,22 +13,6 @@
                                     Teacher's Info.
                                 </h1>
                             </div>
-
-                            <!-- Action Buttons -->
-                            <div class="flex items-center gap-2">
-                                <button
-                                    class="z-20 profile-button flex items-center bg-white py-2 px-5 rounded-full gap-2 text-paragraph cursor-pointer hover:text-white hover:bg-blue-button">
-                                    <span class="material-symbols-rounded">save</span>
-                                    <p class="text-sm">Export Form</p>
-                                </button>
-
-                                <button
-                                    class="z-20 profile-button flex items-center bg-white py-2 px-5 rounded-full gap-2 text-paragraph cursor-pointer hover:text-white hover:bg-blue-button">
-                                    <span class="material-symbols-rounded">docs</span>
-                                    <p class="text-sm">Generate Reports</p>
-                                </button>
-
-                            </div>
                         </div>
 
                         <!-- Profile pic and info -->
@@ -42,8 +26,33 @@
                                     <span>{{ $instructor->license_number }}</span>
                                 </p>
                                 <div class="w-fit">
-                                    <div class="gap-2 bg-[#D2FBD0]  px-3 py-1 rounded-lg flex items-center w-fit">
-                                        <small class="text-[#0D5F07]">{{ ucwords($instructor->status) }}</small>
+                                    <div class="flex justify-center items-center">
+                                        @php
+                                            $statusStyles = [
+                                                'active' => ['bg' => 'bg-[#D2FBD0]', 'text' => 'text-[#0D5F07]'],
+                                                'inactive' => ['bg' => 'bg-[#F7F7F7]', 'text' => 'text-[#3B3B3B]'],
+                                                'resigned' => ['bg' => 'bg-[#D0E8FF]', 'text' => 'text-[#004A9F]'],
+                                                'retired' => [
+                                                    'bg' => 'bg-[#F0E5C0]',
+                                                    'text' => 'text-[#7F5900]',
+                                                ],
+                                                'terminated' => [
+                                                    'bg' => 'bg-[#fce4e4]',
+                                                    'text' => 'text-[#af0000]',
+                                                ],
+                                            ];
+
+                                            $style = $statusStyles[strtolower($instructor->status)] ?? [
+                                                'bg' => 'bg-gray-200',
+                                                'text' => 'text-gray-600',
+                                            ];
+                                        @endphp
+
+                                        <div
+                                            class="gap-2 {{ $style['bg'] }} px-3 py-1 rounded-lg flex items-center w-fit">
+                                            <small
+                                                class="{{ $style['text'] }}">{{ ucwords($instructor->status) }}</small>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
