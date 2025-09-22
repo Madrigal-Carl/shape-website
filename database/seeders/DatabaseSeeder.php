@@ -161,11 +161,16 @@ class DatabaseSeeder extends Seeder
         });
 
         // === Students (20 per instructor) ===
-        $students = $instructors->map(function ($instructor) use ($specializations) {
-            return Student::factory()->count(20)->create([
-                'instructor_id' => $instructor->id,
-            ]);
-        })->flatten();
+        $instructors = Instructor::take(3)->get();
+        $students = collect();
+
+        foreach ($instructors as $instructor) {
+            $students = $students->merge(
+                Student::factory()->count(20)->create([
+                    'instructor_id' => $instructor->id,
+                ])
+            );
+        }
 
         $students->each(function ($student) {
             Account::factory()->student($student)->create([

@@ -66,4 +66,9 @@ class Instructor extends Model
     {
         return $this->hasMany(Student::class);
     }
+
+    public function admin()
+    {
+        return $this->belongsTo(Admin::class);
+    }
 }

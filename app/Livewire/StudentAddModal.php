@@ -79,7 +79,7 @@ class StudentAddModal extends Component
                     'first_name' => 'required',
                     'middle_name' => 'required',
                     'last_name' => 'required',
-                    'birthdate' => 'required|before_or_equal:today',
+                    'birthdate' => 'required|before_or_equal:-5 years',
                     'sex' => 'required',
                     'grade_level' => 'required',
                     'disability' => 'required',
@@ -94,7 +94,7 @@ class StudentAddModal extends Component
                     'middle_name.required'   => 'The middle name is required.',
                     'last_name.required'     => 'The last name is required.',
                     'birthdate.required'     => 'The birthdate is required.',
-                    'birthdate.before_or_equal' => 'The birthdate must not advance on the present date.',
+                    'birthdate.before_or_equal' => 'The student must be at least 5 years old.',
                     'sex.required'           => 'Please select a sex.',
                     'grade_level.required'   => 'The grade level is required.',
                     'disability.required'    => 'Please specify the disability.',
@@ -144,28 +144,6 @@ class StudentAddModal extends Component
             }
             return true;
         }
-
-        if ($this->step === 3) {
-            // try {
-            //     $this->validate([
-            //         'account_username' => 'required|min:5|max:18',
-            //         'account_password' => 'required|min:5|max:18|regex:/^[a-zA-Z0-9]+$/',
-            //     ], [
-            //         'account_username.required'    => 'Username is required.',
-            //         'account_username.min'      => 'Username must be at least 5 characters.',
-            //         'account_username.max'      => 'Username must not be more than 18 characters.',
-            //         'account_password.required' => 'Password is required.',
-            //         'account_password.min'      => 'Password must be at least 5 characters.',
-            //         'account_password.max'      => 'Password must not be more than 18 characters.',
-            //         'account_password.regex'    => 'Password must contain only letters and numbers (no special characters).',
-            //     ]);
-            // } catch (ValidationException $e) {
-            //     $message = $e->validator->errors()->first();
-            //     $this->dispatch('swal-toast', icon: 'error', title: $message);
-            //     return false;
-            // }
-            return true;
-        }
     }
 
     public function closeModal()
@@ -199,8 +177,6 @@ class StudentAddModal extends Component
 
         return false;
     }
-
-
 
     public function addStudent()
     {

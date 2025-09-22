@@ -6,8 +6,7 @@
             @if ($step === 1)
                 <div
                     class="w-180 max-h-full flex flex-col bg-card p-8 rounded-4xl relative gap-8 overflow-y-auto Addlesson">
-                    <div class="flex
-                    items-center gap-2">
+                    <div class="flex items-center gap-2">
                         <img src="{{ asset('images/form-icon.png') }}" class="h-8" alt="" />
                         <h1 class="text-3xl font-bold text-heading-dark">
                             Edit Instructor's Form
@@ -16,10 +15,16 @@
 
                     <div class="flex flex-col items-center gap-4">
                         <div>
-                            <img src="{{ asset('images/default_profiles/default-male-teacher-pfp.png') }}"
-                                class="w-25 h-25 rounded-full object-cover bg-white p-2 shadow-2xl" />
-                            {{-- <img src="https://placehold.co/100x100"
-                                    class="w-25 h-25 rounded-full object-cover bg-white p-2 shadow-2xl" /> --}}
+                            @if ($photo instanceof \Illuminate\Http\UploadedFile)
+                                <img src="{{ $photo->temporaryUrl() }}"
+                                    class="w-25 h-25 rounded-full object-cover bg-white p-2 shadow-2xl" />
+                            @elseif ($currentPhoto)
+                                <img src="{{ Storage::url($currentPhoto) }}"
+                                    class="w-25 h-25 rounded-full object-cover bg-white p-2 shadow-2xl" />
+                            @else
+                                <img src="https://placehold.co/100x100"
+                                    class="w-25 h-25 rounded-full object-cover bg-white p-2 shadow-2xl" />
+                            @endif
                         </div>
                         <label for="photo-upload"
                             class="flex items-center text-white gap-2 px-4 py-2 bg-blue-button rounded-full cursor-pointer hover:bg-blue-700">
@@ -34,7 +39,6 @@
                             x-on:livewire-upload-finish.window="progress = 0"
                             x-on:livewire-upload-error.window="progress = 0" wire:loading wire:target="photo"
                             class="mt-2 w-28 flex-col items-center">
-
                             <div class="bg-gray-200 h-2 rounded-full overflow-hidden">
                                 <div class="bg-blue-500 h-2 transition-all duration-300"
                                     :style="'width: ' + progress + '%'"></div>
@@ -48,7 +52,8 @@
                     <div class="flex flex-col gap-3">
                         <h2 class="font-semibold text-xl">Teacher's Information</h2>
                         <div class="flex flex-col gap-2">
-                            <input type="text" placeholder="Licence Number" wire:model.live='lrn' maxlength="12"
+                            <input type="text" placeholder="License Number" wire:model.live='license_number'
+                                maxlength="7"
                                 class="px-4 py-2 rounded-lg bg-white placeholder-paragraph outline-none w-full" />
 
                             <div class="flex items-center gap-2 w-full">
@@ -65,9 +70,8 @@
                                 onfocus="this.type='date'" onblur="if(!this.value) this.type='text'" />
 
                             <div class="px-4 py-2 rounded-lg bg-white">
-                                <select name="" id="" class="w-full outline-none text-paragraph"
-                                    wire:change="$set('sex', $event.target.value)">
-                                    <option class="text-sm text-black" selected disabled>
+                                <select class="w-full outline-none text-paragraph" wire:model.live="sex">
+                                    <option value="" class="text-sm text-black" selected disabled>
                                         Sex
                                     </option>
                                     <option value="male" class="text-sm text-paragraph">
@@ -81,72 +85,57 @@
 
                             <button
                                 class="cursor-pointer pl-4 pr-2 py-2 rounded-lg bg-white text-paragraph w-full text-left hover:bg-gray-300 flex items-center justify-between"
-                                type="button" <p>Select Specialization</p>
+                                type="button" wire:click="$toggle('showSpecializations')">
+                                <p>Select Specialization</p>
                                 <span class="material-symbols-rounded text-paragraph">
-                                    keyboard_arrow_up
+                                    {{ $showSpecializations ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}
                                 </span>
-                                {{-- <span class="material-symbols-rounded text-paragraph">
-                                    keyboard_arrow_down
-                                </span> --}}
                             </button>
+                            {{-- Specialization Toggle --}}
 
-                            <div class="rounded-lg bg-white h-fit">
-                                <div class="p-4 rounded-lg bg-white relative flex flex-col gap-2 h-full">
-                                    <div class="flex items-center justify-between w-full">
-                                        <p class="text-paragraph">Specialization</p>
-                                        <button type="button" wire:click="clearSpecializations"
-                                            class="flex items-center justify-center gap-1 px-3 py-1 rounded-lg text-paragraph border-1 border-gray-300 hover:border-blue-button hover:text-white cursor-pointer bg-white hover:bg-blue-button">
-                                            <p class="text-sm">Clear Selected</p>
-                                            <span class="material-symbols-rounded">clear_all</span>
-                                        </button>
-                                    </div>
-                                    <div class="h-fit flex flex-col gap-1 bg-white rounded-lg">
-                                        <div class="flex flex-col gap-1 h-full overflow-y-scroll pr-2 rounded-lg">
-                                            <div
-                                                class="flex items-center gap-2 w-full p-2 hover:bg-card rounded-lg cursor-pointer">
-                                                <label class="container w-fit">
-                                                    <input type="checkbox" wire:model="selectedSpecializations">
-                                                    <div class="checkmark"></div>
-                                                </label>
-                                                <p class="w-full text-paragraph">
-                                                    Autism</p>
+                            @if ($showSpecializations)
+                                <div class="rounded-lg bg-white h-fit">
+                                    <div class="p-4 rounded-lg bg-white relative flex flex-col gap-2 h-full">
+                                        <div class="flex items-center justify-between w-full">
+                                            <p class="text-paragraph">Specialization</p>
+                                            <button type="button" wire:click="clearSpecializations"
+                                                class="flex items-center justify-center gap-1 px-3 py-1 rounded-lg text-paragraph border-1 border-gray-300 hover:border-blue-button hover:text-white cursor-pointer bg-white hover:bg-blue-button">
+                                                <p class="text-sm">Clear Selected</p>
+                                                <span class="material-symbols-rounded">clear_all</span>
+                                            </button>
+                                        </div>
+                                        <div class="h-fit flex flex-col gap-1 bg-white rounded-lg">
+                                            <div class="flex flex-col gap-1 h-full overflow-y-scroll pr-2 rounded-lg"
+                                                style="max-height: 120px;">
+                                                @forelse($specializations as $spec)
+                                                    <div
+                                                        class="flex items-center gap-2 w-full p-2 hover:bg-card rounded-lg cursor-pointer">
+                                                        <label class="container w-fit">
+                                                            <input type="checkbox" wire:model="selectedSpecializations"
+                                                                value="{{ $spec->id }}">
+                                                            <div class="checkmark"></div>
+                                                        </label>
+                                                        <p class="w-full text-paragraph">
+                                                            {{ ucwords($spec->name) }}
+                                                        </p>
+                                                    </div>
+                                                @empty
+                                                    <p
+                                                        class="text-center text-sm text-gray-500 h-full flex justify-center items-center">
+                                                        No Specialization found.
+                                                    </p>
+                                                @endforelse
                                             </div>
-                                            <div
-                                                class="flex items-center gap-2 w-full p-2 hover:bg-card rounded-lg cursor-pointer">
-                                                <label class="container w-fit">
-                                                    <input type="checkbox" wire:model="selectedSpecializations">
-                                                    <div class="checkmark"></div>
-                                                </label>
-                                                <p class="w-full text-paragraph">
-                                                    Hearing</p>
-                                            </div>
-                                            <div
-                                                class="flex items-center gap-2 w-full p-2 hover:bg-card rounded-lg cursor-pointer">
-                                                <label class="container w-fit">
-                                                    <input type="checkbox" wire:model="selectedSpecializations">
-                                                    <div class="checkmark"></div>
-                                                </label>
-                                                <p class="w-full text-paragraph">
-                                                    Speech</p>
-                                            </div>
-
-                                            {{-- <p
-                                                class="text-center text-sm text-gray-500 h-full flex justify-center items-center">
-                                                No Specialization found.</p> --}}
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-
-                            {{-- <textarea name="" id="" maxlength="200" placeholder="Description (Optional)"
-                                wire:model.live='description'
-                                class="px-4 py-2 rounded-lg bg-white placeholder-paragraph resize-none h-24 outline-none"></textarea> --}}
+                            @endif
                         </div>
                         <!-- buttons -->
                         <div class="flex items-center gap-2">
                             <button type="button"
                                 class="bg-white py-1.5 px-4 w-full rounded-xl text-heading-dark font-medium hover:bg-gray-300 cursor-pointer"
-                                wire:click="closeModal" type="button">
+                                wire:click="closeModal">
                                 Cancel
                             </button>
                             <button type="button"
@@ -156,7 +145,6 @@
                             </button>
                         </div>
                     </div>
-
                 </div>
             @endif
 
@@ -166,7 +154,7 @@
                     <div class="flex items-center gap-2">
                         <img src="{{ asset('images/form-icon.png') }}" class="h-8" alt="" />
                         <h1 class="text-3xl font-bold text-heading-dark">
-                            Edit Instructor's Form
+                            Instructor's Form
                         </h1>
                     </div>
 
@@ -174,32 +162,36 @@
                         <h2 class="font-semibold text-xl">Permanent Address</h2>
                         <div class="flex items-center gap-2 w-full">
                             <div class="px-4 py-2 rounded-lg bg-white w-full">
-                                <select name="" id="" class="w-full outline-none text-paragraph">
-                                    <option value="marinduque" class="text-sm text-black" selected disabled>
+                                <select class="w-full outline-none text-paragraph" disabled>
+                                    <option value="marinduque" class="text-sm text-black" selected>
                                         Marinduque
                                     </option>
                                 </select>
                             </div>
                             <div class="px-4 py-2 rounded-lg bg-white w-full">
-                                <select name="" id="" class="w-full outline-none text-paragraph"
-                                    wire:change="$set('permanent_municipal', $event.target.value)">
-                                    <option value='pending' class="text-sm text-black" selected disabled>
+                                <select class="w-full outline-none text-paragraph"
+                                    wire:model.live="permanent_municipal">
+                                    <option value="" class="text-sm text-black" selected disabled>
                                         Municipal
                                     </option>
-                                    <option class="text-sm text-paragraph">
-                                        Boac
-                                    </option>
+                                    @foreach ($municipalities as $municipal)
+                                        <option value="{{ $municipal }}" class="text-sm text-paragraph">
+                                            {{ ucfirst($municipal) }}
+                                        </option>
+                                    @endforeach
                                 </select>
                             </div>
                             <div class="px-4 py-2 rounded-lg bg-white w-full">
-                                <select name="" id="" class="w-full outline-none text-paragraph"
-                                    wire:change="$set('permanent_barangay', $event.target.value)">
-                                    <option class="text-sm text-black" selected disabled>
+                                <select class="w-full outline-none text-paragraph"
+                                    wire:model.live="permanent_barangay">
+                                    <option value="" class="text-sm text-black" selected disabled>
                                         Barangay
                                     </option>
-                                    <option class="text-sm text-paragraph">
-                                        Balimbing
-                                    </option>
+                                    @foreach ($permanent_barangays as $barangay)
+                                        <option value="{{ $barangay }}" class="text-sm text-paragraph">
+                                            {{ ucfirst($barangay) }}
+                                        </option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
@@ -208,38 +200,39 @@
                         <h2 class="font-semibold text-xl">Current Address</h2>
                         <div class="flex items-center gap-2 w-full">
                             <div class="px-4 py-2 rounded-lg bg-white w-full">
-                                <select name="" id="" class="w-full outline-none text-paragraph">
-                                    <option value="marinduque" class="text-sm text-black" selected disabled>
+                                <select class="w-full outline-none text-paragraph" disabled>
+                                    <option value="marinduque" class="text-sm text-black" selected>
                                         Marinduque
                                     </option>
                                 </select>
                             </div>
                             <div class="px-4 py-2 rounded-lg bg-white w-full">
-                                <select name="" id="" class="w-full outline-none text-paragraph"
-                                    wire:change="$set('permanent_municipal', $event.target.value)">
-                                    <option value='pending' class="text-sm text-black" selected disabled>
+                                <select class="w-full outline-none text-paragraph"
+                                    wire:model.live="current_municipal">
+                                    <option value="" class="text-sm text-black" selected disabled>
                                         Municipal
                                     </option>
-                                    <option class="text-sm text-paragraph">
-                                        Boac
-                                    </option>
+                                    @foreach ($municipalities as $municipal)
+                                        <option value="{{ $municipal }}" class="text-sm text-paragraph">
+                                            {{ ucfirst($municipal) }}
+                                        </option>
+                                    @endforeach
                                 </select>
                             </div>
                             <div class="px-4 py-2 rounded-lg bg-white w-full">
-                                <select name="" id="" class="w-full outline-none text-paragraph"
-                                    wire:change="$set('permanent_barangay', $event.target.value)">
-                                    <option class="text-sm text-black" selected disabled>
+                                <select class="w-full outline-none text-paragraph" wire:model.live="current_barangay">
+                                    <option value="" class="text-sm text-black" selected disabled>
                                         Barangay
                                     </option>
-                                    <option class="text-sm text-paragraph">
-                                        Balimbing
-                                    </option>
+                                    @foreach ($current_barangays as $barangay)
+                                        <option value="{{ $barangay }}" class="text-sm text-paragraph">
+                                            {{ ucfirst($barangay) }}
+                                        </option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
                     </div>
-
-
 
                     <!-- buttons -->
                     <div class="flex items-center gap-2">
@@ -265,21 +258,30 @@
             <!-- Third form -->
             @if ($step === 3)
                 <div class="bg-card p-8 rounded-4xl w-150 flex flex-col gap-8">
-                    <div class="flex items-center gap-2">
-                        <img src="{{ asset('images/account.png') }}" class="h-8" alt="" />
-                        <h1 class="text-3xl font-bold text-heading-dark">
-                            Edit Instructor's Account
-                        </h1>
+                    <div class="flex w-full items-center-safe justify-between">
+                        <div class="flex items-center gap-2">
+                            <img src="{{ asset('images/account.png') }}" class="h-8" alt="" />
+                            <h1 class="text-2xl font-bold text-heading-dark">
+                                Instructor's Account
+                            </h1>
+                        </div>
+                        <button wire:click="resetAccount"
+                            class="flex items-center-safe gap-2 text-sm bg-white py-1.5 px-3 rounded-xl hover:bg-danger hover:text-white cursor-pointer">
+                            <span class="material-symbols-rounded">
+                                settings_backup_restore
+                            </span>
+                            <p>Reset to Default</p>
+                        </button>
                     </div>
 
                     <div class="flex flex-col gap-3">
                         <h2 class="font-semibold text-xl">Instructor's Account</h2>
                         <div class="flex flex-col gap-2">
                             <input type="text" name="" id="" placeholder="Username"
-                                wire:model.live='account_username' disabled
+                                value="{{ $account_username_changed ? '**********' : $account_username }}" disabled
                                 class="px-4 py-2 rounded-lg bg-white placeholder-paragraph outline-none w-full" />
                             <input type="text" name="" id="" placeholder="Password"
-                                wire:model.live='account_password' disabled
+                                value="{{ $account_password_changed ? '**********' : $default_password }}" disabled
                                 class="px-4 py-2 rounded-lg bg-white placeholder-paragraph outline-none w-full" />
                         </div>
                     </div>
@@ -298,7 +300,7 @@
                         </button>
                         <button type="button"
                             class="bg-blue-button py-1.5 px-3 w-full rounded-xl text-white font-medium hover:bg-blue-700 cursor-pointer"
-                            wire:click="addStudent">
+                            wire:click="editInstructor">
                             Register
                         </button>
                     </div>

@@ -157,7 +157,7 @@ class StudentEditModal extends Component
                     'first_name'  => 'required',
                     'middle_name' => 'required',
                     'last_name'   => 'required',
-                    'birthdate'   => 'required|date|before_or_equal:today',
+                    'birthdate'   => 'required|date|before_or_equal:-5 years',
                     'sex'         => 'required',
                     'grade_level' => 'required',
                     'disability'  => 'required',
@@ -174,7 +174,7 @@ class StudentEditModal extends Component
                     'last_name.required'      => 'The last name is required.',
                     'birthdate.required'      => 'The birthdate is required.',
                     'birthdate.date'          => 'The birthdate must be a valid date.',
-                    'birthdate.before_or_equal' => 'The birthdate cannot be in the future.',
+                    'birthdate.before_or_equal' => 'The student must be at least 5 years old.',
                     'sex.required'            => 'Please select a sex.',
                     'grade_level.required'    => 'The grade level is required.',
                     'disability.required'     => 'Please specify the disability.',
@@ -209,20 +209,6 @@ class StudentEditModal extends Component
                     'guardian_phone.digits'        => 'The guardian phone must be exactly 10 digits.',
                     'guardian_phone.unique'        => 'The guardian phone already exists.',
                 ]);
-            }
-
-            if ($this->step === 3) {
-                // $this->validate([
-                //     'account_username' => 'required|min:5|max:18',
-                //     'account_password' => 'nullable|min:5|max:18|regex:/^[a-zA-Z0-9]+$/',
-                // ], [
-                //     'account_username.required' => 'Username is required.',
-                //     'account_username.min'      => 'Username must be at least 5 characters.',
-                //     'account_username.max'      => 'Username must not be more than 18 characters.',
-                //     'account_password.min'      => 'Password must be at least 5 characters.',
-                //     'account_password.max'      => 'Password must not be more than 18 characters.',
-                //     'account_password.regex'    => 'Password must contain only letters and numbers (no special characters).',
-                // ]);
             }
         } catch (\Illuminate\Validation\ValidationException $e) {
             $message = $e->validator->errors()->first();

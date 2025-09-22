@@ -25,4 +25,9 @@ class Admin extends Model
     {
         return $this->morphOne(Account::class, 'accountable');
     }
+
+    public function instructors()
+    {
+        return $this->hasMany(Instructor::class);
+    }
 }
