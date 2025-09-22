@@ -21,6 +21,7 @@ class Profile extends Component
     public $middle_name;
     public $last_name;
     public $isEditing = false;
+    public $original_name = [];
 
     // Address
     public $province = 'Marinduque';
@@ -29,6 +30,7 @@ class Profile extends Component
     public $current_municipality;
     public $current_barangay;
     public $isEditingAddress = false;
+    public $original_address = [];
 
     // Options
     public $municipalities = [];
@@ -58,6 +60,11 @@ class Profile extends Component
         $this->first_name  = $this->user->accountable->first_name;
         $this->middle_name = $this->user->accountable->middle_name;
         $this->last_name   = $this->user->accountable->last_name;
+        $this->original_name = [
+            'first_name' => $this->first_name,
+            'middle_name' => $this->middle_name,
+            'last_name' => $this->last_name,
+        ];
 
         $this->barangayData = [
             "boac" => [
@@ -311,6 +318,12 @@ class Profile extends Component
             $this->current_barangays    = $this->barangayData[$this->current_municipality] ?? [];
             $this->current_barangay     = $current->barangay;
         }
+        $this->original_address = [
+            'permanent_municipality' => $this->permanent_municipality,
+            'permanent_barangay' => $this->permanent_barangay,
+            'current_municipality' => $this->current_municipality,
+            'current_barangay' => $this->current_barangay,
+        ];
 
         // Account check
         $birthdate = str_replace('-', '', $this->user->accountable->birth_date ?? '');
@@ -410,11 +423,19 @@ class Profile extends Component
             return $this->dispatch('swal-toast', icon: 'error', title: $message);
         }
 
-        $this->user->accountable->update([
-            'first_name'  => $this->first_name,
+        $current = [
+            'first_name' => $this->first_name,
             'middle_name' => $this->middle_name,
-            'last_name'   => $this->last_name,
-        ]);
+            'last_name' => $this->last_name,
+        ];
+
+        if ($current == $this->original_name) {
+            $this->isEditing = false;
+            $this->dispatch('swal-toast', icon: 'info', title: 'No changes have been made.');
+            return;
+        }
+
+        $this->user->accountable->update($current);
 
         $this->user->refresh();
         $this->isEditing = false;
@@ -476,6 +497,19 @@ class Profile extends Component
             return $this->dispatch('swal-toast', icon: 'error', title: $message);
         }
 
+        $current = [
+            'permanent_municipality' => $this->permanent_municipality,
+            'permanent_barangay' => $this->permanent_barangay,
+            'current_municipality' => $this->current_municipality,
+            'current_barangay' => $this->current_barangay,
+        ];
+
+        if ($current == $this->original_address) {
+            $this->isEditingAddress = false;
+            $this->dispatch('swal-toast', icon: 'info', title: 'No changes have been made.');
+            return;
+        }
+
         $this->user->accountable->permanentAddress()->update(
             [
                 'province' => $this->province,
@@ -514,15 +548,15 @@ class Profile extends Component
         try {
             $this->validate([
                 'username' => 'required|max:255|unique:accounts,username,' . $this->user->id,
-                'old_password' => 'nullable|min:8',
-                'password' => 'nullable|min:8|confirmed',
+                'old_password' => 'nullable|min:5',
+                'password' => 'nullable|min:5|confirmed',
             ], [
                 'username.required' => 'The username is required.',
                 'username.unique'   => 'This username is already taken.',
                 'username.max'      => 'The username may not be greater than 255 characters.',
                 // 'old_password.required' => 'The old password is required.',
-                'old_password.min'      => 'The old password must be at least 8 characters.',
-                'password.min'       => 'The new password must be at least 8 characters.',
+                'old_password.min'      => 'The old password must be at least 5 characters.',
+                'password.min'       => 'The new password must be at least 5 characters.',
                 'password.confirmed' => 'The password confirmation does not match.',
             ]);
         } catch (ValidationException $e) {
