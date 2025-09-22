@@ -10,11 +10,22 @@
                 </h1>
                 <p class="text-lg text-paragraph leading-4">Here is your summary today</p>
                 <div class="w-max px-2 py-1 mt-4 rounded-lg border-1 border-gray-300 hover:border-blue-button">
-                    <select class="w-full outline-none text-heading-dark font-medium text-lg">
-                        <option class="text-sm text-black" selected disabled>
-                            S.Y 2025-2026
-                        </option>
+                    <select class="w-full outline-none text-heading-dark font-medium text-lg"
+                        wire:model.live='school_year'>
+                        @php
+                            $currentYear = now()->schoolYear()?->name;
+                            $years = collect($school_years);
 
+                            if (!$years->contains($currentYear)) {
+                                $years->push($currentYear);
+                            }
+                        @endphp
+
+                        @foreach ($school_years as $sy)
+                            <option value="{{ $sy->id }}" {{ $sy->id == $school_year ? 'selected' : '' }}>
+                                S.Y {{ $sy->name }}
+                            </option>
+                        @endforeach
                     </select>
                 </div>
             </div>
