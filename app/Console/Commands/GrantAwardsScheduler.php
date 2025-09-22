@@ -51,6 +51,11 @@ class GrantAwardsScheduler extends Command
             if ($this->isSubjectSpecialist($student)) $awards[] = 'Subject Specialist';
             if (in_array($student->id, $speedLearnerIds)) $awards[] = 'Speed Learner';
 
+            // Remove Activity Ace if student is a Lesson Finisher
+            if (in_array('Lesson Finisher', $awards)) {
+                $awards = array_diff($awards, ['Activity Ace']);
+            }
+
             foreach (['Activity Ace', 'Lesson Finisher', 'Resilient Learner', 'Progress Pioneer', 'Subject Specialist', 'Speed Learner'] as $awardName) {
                 $this->grantOrRevokeAward($student, $awardName, in_array($awardName, $awards));
             }
@@ -90,7 +95,7 @@ class GrantAwardsScheduler extends Command
         }
     }
 
-    // adjust the student in the lesson finisher award shouldnt have this award
+    // note: adjust the student in the lesson finisher award shouldnt have this award
     // Activity Ace: Top 3 students with most activities completed (current school year)
     protected function getActivityAceStudentIds($students)
     {
@@ -113,8 +118,6 @@ class GrantAwardsScheduler extends Command
         $completed = $student->completedLessonsCount($schoolYear);
         return $total > 0 && $completed == $total;
     }
-
-    // include even if the log is only 1
     // Resilient Learner: Top 3 students with most attempts before completing any activity, must have completed at least 50% of lessons (current school year)
     protected function getResilientLearnerStudentIds($students)
     {
@@ -149,7 +152,6 @@ class GrantAwardsScheduler extends Command
         return $attempts->filter(fn($count) => $count >= $minTop && $count > 0)->keys()->toArray();
     }
 
-    // include even if the log is only 1
     // Progress Pioneer: Top 3 students with greatest average improvement (current school year)
     protected function getProgressPioneerStudentIds($students)
     {
