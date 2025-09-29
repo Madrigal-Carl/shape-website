@@ -5,6 +5,7 @@ namespace App\Livewire;
 use App\Models\Feed;
 use App\Models\Account;
 use Livewire\Component;
+use App\Models\GradeLevel;
 use App\Models\Instructor;
 use Livewire\Attributes\On;
 use Livewire\WithFileUploads;
@@ -22,7 +23,9 @@ class InstructorAddModal extends Component
     public $photo;
     public $license_number, $first_name, $middle_name, $last_name, $birthdate, $sex = '';
     public $showSpecializations = false;
+    public $showGradeLevels = false;
     public $selectedSpecializations = [];
+    public $selectedGradeLevels = [];
 
     // Address
     public $province = 'marinduque';
@@ -33,27 +36,12 @@ class InstructorAddModal extends Component
     // Account
     public $account_username, $account_password;
 
-    // For rendering specializations
-    public $specializations;
+    public $specializations, $gradeLevels;
 
     #[On('openModal')]
     public function openModal()
     {
         $this->step = 1;
-    }
-
-    public function mount()
-    {
-        $this->barangayData = [
-            "boac" => ["agot", "agumaymayan", "amoingon", "apitong", "balagasan", "balaring", "balimbing", "balogo", "bamban", "bangbangalon", "bantad", "bayuti", "binunga", "boi", "boton", "buliasnin", "bunganay", "caganhao", "canat", "catubugan", "cawit", "daig", "daypay", "duyay", "hinapulan", "ihatub", "isok i", "isok ii poblacion", "laylay", "lupac", "mahinhin", "tumapon"],
-            "buenavista" => ["yook"],
-            "gasan" => ["barangay iii (poblacion)"],
-            "mogpog" => ["villa mendez"],
-            "santa cruz" => ["taytay"],
-            "torrijos" => ["tigwi"],
-        ];
-        $this->municipalities = array_keys($this->barangayData);
-        $this->specializations = Specialization::all();
     }
 
     public function nextStep()
@@ -84,6 +72,11 @@ class InstructorAddModal extends Component
     public function clearSpecializations()
     {
         $this->selectedSpecializations = [];
+    }
+
+    public function clearGradeLevels()
+    {
+        $this->selectedGradeLevels = [];
     }
 
     public function updatedPermanentMunicipal($value)
@@ -130,6 +123,7 @@ class InstructorAddModal extends Component
                     'birthdate' => 'required|before_or_equal:-20 years',
                     'sex' => 'required|in:male,female',
                     'selectedSpecializations' => 'required|array|min:1',
+                    'selectedGradeLevels' => 'required|array|min:1',
                 ], [
                     'photo.image'            => 'The photo must be an image file.',
                     'photo.max'              => 'The photo size must not exceed 5MB.',
@@ -143,6 +137,8 @@ class InstructorAddModal extends Component
                     'sex.required'           => 'Please select a sex.',
                     'selectedSpecializations.required' => 'Please select at least one specialization.',
                     'selectedSpecializations.min' => 'Please select at least one specialization.',
+                    'selectedGradeLevels.required' => 'Please select at least one grade level.',
+                    'selectedGradeLevels.min' => 'Please select at least one grade level.',
                 ]);
             } catch (ValidationException $e) {
                 $message = $e->validator->errors()->first();
@@ -210,6 +206,9 @@ class InstructorAddModal extends Component
 
         // Attach Specializations
         $instructor->specializations()->sync($this->selectedSpecializations);
+
+        // Attach Grade Levels
+        $instructor->gradeLevels()->sync($this->selectedGradeLevels);
 
         // Addresses
         $instructor->addresses()->create([
@@ -474,6 +473,10 @@ class InstructorAddModal extends Component
             ],
 
         ];
+
+        $this->municipalities = array_keys($this->barangayData);
+        $this->specializations = Specialization::all();
+        $this->gradeLevels = GradeLevel::all();
         return view('livewire.instructor-add-modal');
     }
 }

@@ -82,6 +82,54 @@
 
                             <button
                                 class="cursor-pointer pl-4 pr-2 py-2 rounded-lg bg-white text-paragraph w-full text-left hover:bg-gray-300 flex items-center justify-between"
+                                type="button" wire:click="$toggle('showGradeLevels')">
+                                <p>Select Grade Levels</p>
+                                <span class="material-symbols-rounded text-paragraph">
+                                    {{ $showGradeLevels ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}
+                                </span>
+                            </button>
+                            {{-- Grade Levels Toggle --}}
+
+                            @if ($showGradeLevels)
+                                <div class="rounded-lg bg-white h-fit">
+                                    <div class="p-4 rounded-lg bg-white relative flex flex-col gap-2 h-full">
+                                        <div class="flex items-center justify-between w-full">
+                                            <p class="text-paragraph">Grade Levels</p>
+                                            <button type="button" wire:click="clearGradeLevels"
+                                                class="flex items-center justify-center gap-1 px-3 py-1 rounded-lg text-paragraph border-1 border-gray-300 hover:border-blue-button hover:text-white cursor-pointer bg-white hover:bg-blue-button">
+                                                <p class="text-sm">Clear Selected</p>
+                                                <span class="material-symbols-rounded">clear_all</span>
+                                            </button>
+                                        </div>
+                                        <div class="h-fit flex flex-col gap-1 bg-white rounded-lg">
+                                            <div class="flex flex-col gap-1 h-full overflow-y-scroll pr-2 rounded-lg"
+                                                style="max-height: 120px;">
+                                                @forelse($gradeLevels as $level)
+                                                    <div
+                                                        class="flex items-center gap-2 w-full p-2 hover:bg-card rounded-lg cursor-pointer">
+                                                        <label class="container w-fit">
+                                                            <input type="checkbox" wire:model="selectedGradeLevels"
+                                                                value="{{ $level->id }}">
+                                                            <div class="checkmark"></div>
+                                                        </label>
+                                                        <p class="w-full text-paragraph">
+                                                            {{ ucwords($level->name) }}
+                                                        </p>
+                                                    </div>
+                                                @empty
+                                                    <p
+                                                        class="text-center text-sm text-gray-500 h-full flex justify-center items-center">
+                                                        No Grade Level found.
+                                                    </p>
+                                                @endforelse
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
+
+                            <button
+                                class="cursor-pointer pl-4 pr-2 py-2 rounded-lg bg-white text-paragraph w-full text-left hover:bg-gray-300 flex items-center justify-between"
                                 type="button" wire:click="$toggle('showSpecializations')">
                                 <p>Select Specialization</p>
                                 <span class="material-symbols-rounded text-paragraph">
@@ -108,7 +156,8 @@
                                                     <div
                                                         class="flex items-center gap-2 w-full p-2 hover:bg-card rounded-lg cursor-pointer">
                                                         <label class="container w-fit">
-                                                            <input type="checkbox" wire:model="selectedSpecializations"
+                                                            <input type="checkbox"
+                                                                wire:model="selectedSpecializations"
                                                                 value="{{ $spec->id }}">
                                                             <div class="checkmark"></div>
                                                         </label>

@@ -83,7 +83,7 @@
                                     Specialization
                                 </th>
                                 <th class="px-4 pb-3 text-center font-semibold w-40">
-                                    Student Counts
+                                    Students
                                 </th>
                                 <th class="px-4 pb-3 text-center font-semibold">Status</th>
                                 <th class="px-4 pb-3 text-center font-semibold">Actions</th>
@@ -97,10 +97,10 @@
                                         {{ $instructor->getFullNameAttribute() }}
                                     </td>
                                     <td class="px-4 py-3 text-center">
-                                        {{ $instructor->specializations->pluck('name')->map(fn($name) => ucwords($name))->implode(', ') }}
+                                        {{ $instructor->specializations->pluck('name')->map(fn($name) => ucwords(strtok($name, ' ')))->implode(', ') }}
                                     </td>
                                     <td class="px-4 py-3 text-center">
-                                        {{ $instructor->students->count() }} Students
+                                        {{ $instructor->students->count() }}
                                     </td>
                                     <td class="px-4 py-3 text-center">
                                         <div class="flex justify-center items-center">

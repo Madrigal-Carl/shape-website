@@ -2,8 +2,8 @@
 
 namespace App\Livewire;
 
-use App\Models\Feed;
 use Livewire\Component;
+use App\Models\GradeLevel;
 use App\Models\Instructor;
 use Livewire\Attributes\On;
 use Livewire\WithFileUploads;
@@ -22,7 +22,9 @@ class InstructorEditModal extends Component
     public $photo, $currentPhoto;
     public $license_number, $first_name, $middle_name, $last_name, $birthdate, $sex = '';
     public $showSpecializations = false;
+    public $showGradeLevels = false;
     public $selectedSpecializations = [];
+    public $selectedGradeLevels = [];
 
     // Address
     public $province = 'marinduque';
@@ -36,8 +38,7 @@ class InstructorEditModal extends Component
     public $account_password_changed = false;
     public $default_password;
 
-    // For rendering specializations
-    public $specializations;
+    public $specializations, $gradeLevels;
 
     // For edit
     public $instructor_id;
@@ -60,6 +61,7 @@ class InstructorEditModal extends Component
         $this->sex = $instructor->sex;
 
         $this->selectedSpecializations = $instructor->specializations->pluck('id')->toArray();
+        $this->selectedGradeLevels = $instructor->gradeLevels->pluck('id')->toArray();
 
         // Addresses
         $permanent = $instructor->permanentAddress;
@@ -94,25 +96,12 @@ class InstructorEditModal extends Component
             'sex' => $this->sex,
             'currentPhoto' => $this->currentPhoto,
             'selectedSpecializations' => $this->selectedSpecializations,
+            'selectedGradeLevels' => $this->selectedGradeLevels,
             'permanent_municipal' => $this->permanent_municipal,
             'permanent_barangay' => $this->permanent_barangay,
             'current_municipal' => $this->current_municipal,
             'current_barangay' => $this->current_barangay,
         ];
-    }
-
-    public function mount()
-    {
-        $this->barangayData = [
-            "boac" => ["agot", "agumaymayan", "amoingon", "apitong", "balagasan", "balaring", "balimbing", "balogo", "bamban", "bangbangalon", "bantad", "bayuti", "binunga", "boi", "boton", "buliasnin", "bunganay", "caganhao", "canat", "catubugan", "cawit", "daig", "daypay", "duyay", "hinapulan", "ihatub", "isok i", "isok ii poblacion", "laylay", "lupac", "mahinhin", "tumapon"],
-            "buenavista" => ["yook"],
-            "gasan" => ["barangay iii (poblacion)"],
-            "mogpog" => ["villa mendez"],
-            "santa cruz" => ["taytay"],
-            "torrijos" => ["tigwi"],
-        ];
-        $this->municipalities = array_keys($this->barangayData);
-        $this->specializations = Specialization::all();
     }
 
     public function nextStep()
@@ -143,6 +132,11 @@ class InstructorEditModal extends Component
     public function clearSpecializations()
     {
         $this->selectedSpecializations = [];
+    }
+
+    public function clearGradeLevels()
+    {
+        $this->selectedGradeLevels = [];
     }
 
     public function updatedPermanentMunicipal($value)
@@ -210,6 +204,7 @@ class InstructorEditModal extends Component
                     'birthdate' => 'required|before_or_equal:-20 years',
                     'sex' => 'required|in:male,female',
                     'selectedSpecializations' => 'required|array|min:1',
+                    'selectedGradeLevels' => 'required|array|min:1',
                 ], [
                     'photo.image'            => 'The photo must be an image file.',
                     'photo.max'              => 'The photo size must not exceed 5MB.',
@@ -223,6 +218,7 @@ class InstructorEditModal extends Component
                     'sex.required'           => 'Please select a sex.',
                     'selectedSpecializations.required' => 'Please select at least one specialization.',
                     'selectedSpecializations.min' => 'Please select at least one specialization.',
+                    'selectedGradeLevels.min' => 'Please select at least one grade level.',
                 ]);
             } catch (ValidationException $e) {
                 $message = $e->validator->errors()->first();
@@ -273,6 +269,7 @@ class InstructorEditModal extends Component
             'sex' => $this->sex,
             'currentPhoto' => $this->currentPhoto,
             'selectedSpecializations' => $this->selectedSpecializations,
+            'selectedGradeLevels' => $this->selectedGradeLevels,
             'permanent_municipal' => $this->permanent_municipal,
             'permanent_barangay' => $this->permanent_barangay,
             'current_municipal' => $this->current_municipal,
@@ -323,8 +320,8 @@ class InstructorEditModal extends Component
         $instructor->sex = $this->sex;
         $instructor->save();
 
-        // Update specializations
         $instructor->specializations()->sync($this->selectedSpecializations);
+        $instructor->gradeLevels()->sync($this->selectedGradeLevels);
 
         // Update addresses
         $instructor->addresses()->updateOrCreate(
@@ -583,6 +580,7 @@ class InstructorEditModal extends Component
         ];
         $this->municipalities = array_keys($this->barangayData);
         $this->specializations = Specialization::all();
+        $this->gradeLevels = GradeLevel::all();
         return view('livewire.instructor-edit-modal');
     }
 }
