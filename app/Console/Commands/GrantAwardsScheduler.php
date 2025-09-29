@@ -31,10 +31,16 @@ class GrantAwardsScheduler extends Command
     {
         $this->info('Checking awards...');
 
-        $students = Student::with([
-            'lessonSubjectStudents.lesson.activityLessons.studentActivities.logs',
-            'lessonSubjectStudents.curriculumSubject.subject',
-        ])->get();
+        $currentSchoolYear = now()->schoolYear();
+
+        $students = Student::whereHas('enrollments', function ($q) use ($currentSchoolYear) {
+            $q->where('school_year_id', $currentSchoolYear);
+        })
+            ->with([
+                'lessonSubjectStudents.lesson.activityLessons.studentActivities.logs',
+                'lessonSubjectStudents.curriculumSubject.subject',
+            ])
+            ->get();
 
         $activityAceIds = $this->getActivityAceStudentIds($students);
         $resilientLearnerIds = $this->getResilientLearnerStudentIds($students);
@@ -95,7 +101,6 @@ class GrantAwardsScheduler extends Command
         }
     }
 
-    // note: adjust the student in the lesson finisher award shouldnt have this award
     // Activity Ace: Top 3 students with most activities completed (current school year)
     protected function getActivityAceStudentIds($students)
     {
@@ -118,6 +123,7 @@ class GrantAwardsScheduler extends Command
         $completed = $student->completedLessonsCount($schoolYear);
         return $total > 0 && $completed == $total;
     }
+
     // Resilient Learner: Top 3 students with most attempts before completing any activity, must have completed at least 50% of lessons (current school year)
     protected function getResilientLearnerStudentIds($students)
     {
