@@ -58,28 +58,23 @@
 
                                     @php
                                         $statuses = [
-                                            'active' => 'Active',
-                                            'inactive' => 'Inactive',
-                                            'graduated' => 'Graduated',
-                                            'transferred' => 'Transferred',
-                                            'dropped' => 'Dropped',
+                                            'Active' => 'active',
+                                            'Inactive' => 'inactive',
+                                            'Transferred' => 'transferred',
+                                            'Dropped' => 'dropped',
                                         ];
 
                                         $classes = [
-                                            'active' => 'text-lime',
-                                            'inactive' => 'text-paragraph',
-                                            'graduated' => 'text-blue-button',
-                                            'transferred' => 'text-yellowOrange',
-                                            'dropped' => 'text-danger',
+                                            'Active' => 'text-lime',
+                                            'Inactive' => 'text-paragraph',
+                                            'Transferred' => 'text-yellowOrange',
+                                            'Dropped' => 'text-danger',
                                         ];
                                     @endphp
-                                    <select class="w-max outline-none "
-                                        wire:change="$set('status', $event.target.value)">
-
+                                    <select class="w-max outline-none " wire:model.live="status">
                                         @foreach ($statuses as $value => $label)
-                                            <option value="{{ $value }}" class="{{ $classes[$value] }}"
-                                                {{ $status === $value ? 'selected' : '' }}>
-                                                {{ $label }}
+                                            <option value="{{ $label }}" class="{{ $classes[$value] }}">
+                                                {{ $value }}
                                             </option>
                                         @endforeach
 

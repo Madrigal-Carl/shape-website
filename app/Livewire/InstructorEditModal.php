@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Models\Account;
 use Livewire\Component;
 use App\Models\GradeLevel;
 use App\Models\Instructor;
@@ -20,7 +21,7 @@ class InstructorEditModal extends Component
 
     // Instructor Info
     public $photo, $currentPhoto;
-    public $license_number, $first_name, $middle_name, $last_name, $birthdate, $sex = '';
+    public $license_number, $status = '', $first_name, $middle_name, $last_name, $birthdate, $sex = '';
     public $showSpecializations = false;
     public $showGradeLevels = false;
     public $selectedSpecializations = [];
@@ -59,6 +60,7 @@ class InstructorEditModal extends Component
         $this->birthdate = $instructor->birth_date;
         $this->currentPhoto = $instructor->path;
         $this->sex = $instructor->sex;
+        $this->status = $instructor->status;
 
         $this->selectedSpecializations = $instructor->specializations->pluck('id')->toArray();
         $this->selectedGradeLevels = $instructor->gradeLevels->pluck('id')->toArray();
@@ -95,6 +97,7 @@ class InstructorEditModal extends Component
             'birthdate' => $this->birthdate,
             'sex' => $this->sex,
             'currentPhoto' => $this->currentPhoto,
+            'status' => $this->status,
             'selectedSpecializations' => $this->selectedSpecializations,
             'selectedGradeLevels' => $this->selectedGradeLevels,
             'permanent_municipal' => $this->permanent_municipal,
@@ -161,7 +164,7 @@ class InstructorEditModal extends Component
         $username = $baseUsername;
 
         $count = 1;
-        while (\App\Models\Account::where('username', $username)->where('accountable_id', '!=', $this->instructor_id)->exists()) {
+        while (Account::where('username', $username)->where('accountable_id', '!=', $this->instructor_id)->exists()) {
             $username = $baseUsername . $count;
             $count++;
         }
@@ -198,6 +201,7 @@ class InstructorEditModal extends Component
                 $this->validate([
                     'photo' => 'nullable|image|max:5120',
                     'license_number' => 'required|digits:7|unique:instructors,license_number,' . $this->instructor_id,
+                    'status'  => 'required',
                     'first_name' => 'required',
                     'middle_name' => 'required',
                     'last_name' => 'required',
@@ -210,6 +214,7 @@ class InstructorEditModal extends Component
                     'photo.max'              => 'The photo size must not exceed 5MB.',
                     'license_number.required' => 'The license number is required.',
                     'license_number.unique'   => 'The license number already exists.',
+                    'status.required'            => 'The status is required.',
                     'first_name.required'    => 'The first name is required.',
                     'middle_name.required'   => 'The middle name is required.',
                     'last_name.required'     => 'The last name is required.',
@@ -262,6 +267,7 @@ class InstructorEditModal extends Component
         // Check if anything has changed
         $current = [
             'license_number' => $this->license_number,
+            'status' => $this->status,
             'first_name' => $this->first_name,
             'middle_name' => $this->middle_name,
             'last_name' => $this->last_name,
@@ -313,6 +319,7 @@ class InstructorEditModal extends Component
 
         // Update instructor info
         $instructor->license_number = $this->license_number;
+        $instructor->status = $this->status;
         $instructor->first_name = $this->first_name;
         $instructor->middle_name = $this->middle_name;
         $instructor->last_name = $this->last_name;

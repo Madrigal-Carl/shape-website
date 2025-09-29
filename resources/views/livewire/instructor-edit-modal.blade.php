@@ -52,9 +52,40 @@
                     <div class="flex flex-col gap-3">
                         <h2 class="font-semibold text-xl">Teacher's Information</h2>
                         <div class="flex flex-col gap-2">
-                            <input type="text" placeholder="License Number" wire:model.live='license_number'
-                                maxlength="7"
-                                class="px-4 py-2 rounded-lg bg-white placeholder-paragraph outline-none w-full" />
+                            <div class="flex items-center gap-2 w-full">
+                                <input type="text" placeholder="License Number" wire:model.live='license_number'
+                                    maxlength="7"
+                                    class="px-4 py-2 rounded-lg bg-white placeholder-paragraph outline-none w-full" />
+
+                                <div class="px-4 py-2 rounded-lg bg-white">
+
+                                    @php
+                                        $statuses = [
+                                            'Active' => 'active',
+                                            'Inactive' => 'inactive',
+                                            'Resigned' => 'resigned',
+                                            'Retired' => 'retired',
+                                            'Terminated' => 'terminated',
+                                        ];
+
+                                        $classes = [
+                                            'Active' => 'text-lime',
+                                            'Inactive' => 'text-paragraph',
+                                            'Resigned' => 'text-blue-button',
+                                            'Retired' => 'text-yellowOrange',
+                                            'Terminated' => 'text-danger',
+                                        ];
+                                    @endphp
+                                    <select class="w-max outline-none " wire:model.live="status">
+                                        @foreach ($statuses as $value => $label)
+                                            <option value="{{ $label }}" class="{{ $classes[$value] }}">
+                                                {{ $value }}
+                                            </option>
+                                        @endforeach
+
+                                    </select>
+                                </div>
+                            </div>
 
                             <div class="flex items-center gap-2 w-full">
                                 <input type="text" placeholder="First name" wire:model.live='first_name'
