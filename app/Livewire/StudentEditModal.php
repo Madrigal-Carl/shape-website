@@ -228,7 +228,12 @@ class StudentEditModal extends Component
         $student = Student::with('guardian', 'addresses', 'account')->findOrFail($this->student_id);
 
         if ($this->photo instanceof UploadedFile) {
-            if ($student->path && Storage::disk('public')->exists($student->path)) {
+            if (
+                $this->photo instanceof UploadedFile &&
+                $student->path &&
+                Storage::disk('public')->exists($student->path) &&
+                strpos($student->path, 'default_profiles/') !== 0
+            ) {
                 Storage::disk('public')->delete($student->path);
             }
 

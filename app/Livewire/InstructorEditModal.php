@@ -3,12 +3,13 @@
 namespace App\Livewire;
 
 use App\Models\Feed;
-use App\Models\Instructor;
 use Livewire\Component;
+use App\Models\Instructor;
 use Livewire\Attributes\On;
 use Livewire\WithFileUploads;
 use App\Models\Specialization;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 
 class InstructorEditModal extends Component
@@ -295,13 +296,23 @@ class InstructorEditModal extends Component
 
         // Photo upload
         if ($this->photo) {
+            if (
+                $instructor->path &&
+                Storage::disk('public')->exists($instructor->path) &&
+                !str_starts_with($instructor->path, 'default_profiles/')
+            ) {
+                Storage::disk('public')->delete($instructor->path);
+            }
+
             $instructorName = preg_replace('/\s+/', '', "{$this->last_name}_{$this->first_name}_{$this->middle_name}");
             $extension   = $this->photo->getClientOriginalExtension();
-            $customName  = "{$instructorName}_Profile.{$extension}";
+            $customName  = "{$instructorName}_Profile_" . time() . ".{$extension}";
+
             $path = $this->photo->storeAs('instructors', $customName, 'public');
             $instructor->path = $path;
             $this->currentPhoto = $path;
         }
+
 
         // Update instructor info
         $instructor->license_number = $this->license_number;

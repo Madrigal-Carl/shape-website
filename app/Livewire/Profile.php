@@ -355,18 +355,12 @@ class Profile extends Component
             return $this->dispatch('swal-toast', icon: 'error', title: $message);
         }
 
-        $defaultImages = [
-            'default_profiles/default-male-teacher-pfp.png',
-            'default_profiles/default-female-teacher-pfp.png',
-        ];
-
         $oldPath = $this->user->accountable->path;
 
-        // Delete old photo only if it's not one of the default images
         if (
             $oldPath &&
             Storage::disk('public')->exists($oldPath) &&
-            !in_array($oldPath, $defaultImages)
+            !str_starts_with($oldPath, 'default_profiles/')
         ) {
             Storage::disk('public')->delete($oldPath);
         }
