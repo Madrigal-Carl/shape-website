@@ -194,6 +194,17 @@ class Student extends Model
         });
     }
 
+    public function enrollmentStatus($schoolYearId = null)
+    {
+        $schoolYearId = $schoolYearId ?? now()->schoolYear()?->id;
+
+        $enrollment = $this->enrollments()
+            ->where('school_year_id', $schoolYearId)
+            ->first();
+
+        return $enrollment?->status;
+    }
+
     public function studentAwards()
     {
         return $this->hasMany(StudentAward::class);

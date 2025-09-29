@@ -22,73 +22,58 @@ class InstructorViewModal extends Component
     {
         $this->instructor_id = $id;
         $this->isOpen = true;
-
-        $this->instructor = Instructor::with([
-            'specializations',
-            'permanentAddress',
-            'currentAddress',
-            'curriculums.curriculumSubjects.lessons',
-        ])
-            ->withCount([
-                'curriculums as curriculums_count' => function ($q) {
-                    $q->where('status', 'active');
-                }
-            ])
-            ->findOrFail($id);
     }
 
     public function closeModal()
     {
         $this->isOpen = false;
-        $this->instructor_id = null;
-        $this->instructor = null;
-    }
-
-    public function mount()
-    {
-        $this->school_year = now()->schoolYear()->id;
-
-        $this->school_years = SchoolYear::orderBy('name')->get();
-    }
-
-    public function getStudentsProperty()
-    {
-        if (!$this->instructor) {
-            return collect();
-        }
-
-        return $this->instructor->students()
-            ->when($this->school_year, function ($q) {
-                $q->whereHas(
-                    'enrollments',
-                    fn($sub) =>
-                    $sub->where('school_year_id', $this->school_year)
-                );
-            })
-            ->when($this->grade_level && $this->grade_level !== 'all', function ($q) {
-                $q->whereHas(
-                    'enrollments',
-                    fn($sub) =>
-                    $sub->where('grade_level', $this->grade_level)
-                );
-            })
-            ->orderBy('first_name')
-            ->paginate(10);
+        $this->reset();
     }
 
     public function render()
     {
-        // ... grade_levels logic ...
-        if ($this->instructor) {
-            $this->grade_levels = Enrollment::whereHas('student', function ($q) {
-                $q->where('instructor_id', $this->instructor_id);
-            })
-                ->where('school_year_id', $this->school_year)
-                ->pluck('grade_level')
-                ->unique()
-                ->sort()
-                ->values();
+        $this->school_year = now()->schoolYear()->id;
+        $this->school_years = SchoolYear::orderBy('name')->get();
+
+        if ($this->instructor_id) {
+            $this->instructor = Instructor::with([
+                'specializations',
+                'permanentAddress',
+                'currentAddress',
+                'curriculums.curriculumSubjects.lessons',
+            ])
+                ->withCount([
+                    'curriculums as curriculums_count' => fn($q) => $q->where('status', 'active')
+                ])
+                ->find($this->instructor_id);
         }
-        return view('livewire.instructor-view-modal');
+
+        $this->grade_levels = Enrollment::whereHas('student', fn($q) => $q->where('instructor_id', $this->instructor_id))
+            ->where('school_year_id', $this->school_year)
+            ->with('gradeLevel')
+            ->get()
+            ->pluck('gradeLevel')
+            ->unique('id')
+            ->sortBy('name')
+            ->values();
+
+
+        $students = collect();
+        if ($this->instructor) {
+            $students = $this->instructor->students()
+                ->with(['enrollments' => fn($q) => $q->where('school_year_id', $this->school_year)])
+                ->when(
+                    $this->school_year,
+                    fn($q) => $q->whereHas('enrollments', fn($sub) => $sub->where('school_year_id', $this->school_year))
+                )
+                ->when(
+                    $this->grade_level && $this->grade_level !== 'all',
+                    fn($q) => $q->whereHas('enrollments', fn($sub) => $sub->where('grade_level_id', $this->grade_level))
+                )
+                ->orderBy('first_name')
+                ->paginate(10);
+        }
+
+        return view('livewire.instructor-view-modal', compact('students'));
     }
 }

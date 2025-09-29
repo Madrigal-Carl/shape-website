@@ -13,6 +13,29 @@
                                     Teacher's Info.
                                 </h1>
                             </div>
+
+
+                            <div
+                                class="profile-button flex items-center bg-white py-2 px-5 rounded-full gap-2 text-paragraph cursor-pointer hover:text-white hover:bg-blue-button">
+                                <select class="w-40 outline-none" wire:model.live='school_year'>
+                                    @php
+                                        $currentYear = now()->schoolYear()?->name;
+                                        $years = collect($school_years);
+
+                                        if (!$years->contains($currentYear)) {
+                                            $years->push($currentYear);
+                                        }
+                                    @endphp
+
+                                    @foreach ($school_years as $sy)
+                                        <option value="{{ $sy->id }}"
+                                            {{ $sy->id == $school_year ? 'selected' : '' }}>
+                                            S.Y {{ $sy->name }}
+                                        </option>
+                                    @endforeach
+
+                                </select>
+                            </div>
                         </div>
 
                         <!-- Profile pic and info -->
@@ -169,32 +192,10 @@
                                                 All
                                             </option>
                                             @foreach ($grade_levels as $grade)
-                                                <option value="{{ $grade }}" class=" text-heading-dark">
-                                                    {{ ucwords($grade) }}
+                                                <option value="{{ $grade->id }}" class=" text-heading-dark">
+                                                    {{ ucwords($grade->name) }}
                                                 </option>
                                             @endforeach
-                                        </select>
-                                    </div>
-
-                                    <div
-                                        class="profile-button flex items-center bg-white py-2 px-5 rounded-full gap-2 text-paragraph cursor-pointer hover:text-white hover:bg-blue-button">
-                                        <select class="w-40 outline-none" wire:model.live='school_year'>
-                                            @php
-                                                $currentYear = now()->schoolYear()?->name;
-                                                $years = collect($school_years);
-
-                                                if (!$years->contains($currentYear)) {
-                                                    $years->push($currentYear);
-                                                }
-                                            @endphp
-
-                                            @foreach ($school_years as $sy)
-                                                <option value="{{ $sy->id }}"
-                                                    {{ $sy->id == $school_year ? 'selected' : '' }}>
-                                                    S.Y {{ $sy->name }}
-                                                </option>
-                                            @endforeach
-
                                         </select>
                                     </div>
 
@@ -226,10 +227,10 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @forelse ($this->students as $student)
+                                                @forelse ($students as $student)
                                                     <tr>
                                                         <td class="px-4 py-3 text-center text-paragraph">
-                                                            01</td>
+                                                            {{ $student->id }}</td>
                                                         <td class="px-4 py-3 text-center text-paragraph align-middle">
                                                             <p class="truncate w-40">
                                                                 {{ $student->full_name }}</p>
@@ -249,7 +250,7 @@
                                                                 <div
                                                                     class="gap-2 bg-[#D2FBD0] px-2 py-1 rounded-full flex items-center w-fit">
                                                                     <small
-                                                                        class="text-[#0D5F07]">{{ ucwords($student->status) }}</small>
+                                                                        class="text-[#0D5F07]">{{ ucwords($student->enrollmentStatus()) }}</small>
                                                                 </div>
                                                             </div>
                                                         </td>
@@ -266,19 +267,19 @@
                                     </div>
                                 </div>
                             </div>
-                            @if ($this->students->lastPage() > 1)
+                            @if ($students->lastPage() > 1)
                                 <div
                                     class="rounded-full bg-white gap-1 p-2 w-fit self-center-safe flex items-center text-sm">
                                     <button
-                                        class="cursor-pointer py-1 flex items-center px-3 {{ $this->students->onFirstPage() ? 'hidden' : '' }}"
-                                        @if (!$this->students->onFirstPage()) wire:click="gotoPage({{ $this->students->currentPage() - 1 }})" @endif>
+                                        class="cursor-pointer py-1 flex items-center px-3 {{ $students->onFirstPage() ? 'hidden' : '' }}"
+                                        @if (!$students->onFirstPage()) wire:click="gotoPage({{ $students->currentPage() - 1 }})" @endif>
                                         <span class="material-symbols-outlined">
                                             chevron_left
                                         </span>
                                     </button>
 
-                                    @foreach ($this->students->getUrlRange(1, $this->students->lastPage()) as $page => $url)
-                                        @if ($page == $this->students->currentPage())
+                                    @foreach ($students->getUrlRange(1, $students->lastPage()) as $page => $url)
+                                        @if ($page == $students->currentPage())
                                             <button
                                                 class=" bg-blue-button text-white py-1 px-4 rounded-full cursor-pointer">{{ $page }}</button>
                                         @else
@@ -288,8 +289,8 @@
                                     @endforeach
 
                                     <button
-                                        class="cursor-pointer py-1 flex items-center px-3 {{ $this->students->hasMorePages() ? '' : 'hidden' }}"
-                                        @if ($this->students->hasMorePages()) wire:click="gotoPage({{ $this->students->currentPage() + 1 }})" @endif>
+                                        class="cursor-pointer py-1 flex items-center px-3 {{ $students->hasMorePages() ? '' : 'hidden' }}"
+                                        @if ($students->hasMorePages()) wire:click="gotoPage({{ $students->currentPage() + 1 }})" @endif>
                                         <span class="material-symbols-outlined">
                                             chevron_right
                                         </span>

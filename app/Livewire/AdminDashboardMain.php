@@ -25,6 +25,7 @@ class AdminDashboardMain extends Component
     {
         $this->dispatch('openModal')->to('quarter-setup-modal');
     }
+
     public function render()
     {
         $latest = SchoolYear::latest('fourth_quarter_end')->first();
@@ -33,11 +34,11 @@ class AdminDashboardMain extends Component
             $this->shouldOpenModal = true;
         }
 
-        // Students: Exclude graduated, transferred, dropped
-        $studentQuery = Student::whereNotIn('status', ['graduated', 'transferred', 'dropped'])
-            ->whereHas('enrollments', function ($q) {
-                $q->where('school_year_id', $this->school_year);
-            });
+        // Students: Exclude transferred, dropped
+        $studentQuery = Student::whereHas('enrollments', function ($q) {
+            $q->where('school_year_id', $this->school_year)
+                ->whereNotIn('status', ['transferred', 'dropped']);
+        });
 
         $totalStudents = $studentQuery->count();
         $autismCount = (clone $studentQuery)->where('disability_type', 'autism')->count();
