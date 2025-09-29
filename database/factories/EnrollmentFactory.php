@@ -22,8 +22,8 @@ class EnrollmentFactory extends Factory
     {
         return [
             'school_year_id' => null,
-            'student_id' => Student::factory(),
-            'grade_level' => $this->faker->randomElement(['kindergarten 1', 'kindergarten 2', 'kindergarten 3']),
+            'student_id' => null,
+            'grade_level_id' => null,
         ];
     }
 }

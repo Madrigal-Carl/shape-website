@@ -11,10 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('enrollments', function (Blueprint $table) {
+        Schema::create('grade_level_instructor', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('school_year_id')->constrained()->onDelete('cascade');
-            $table->foreignId('student_id')->constrained()->onDelete('cascade');
+            $table->foreignId('instructor_id')->constrained()->onDelete('cascade');
             $table->foreignId('grade_level_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
@@ -25,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('enrollments');
+        Schema::dropIfExists('grade_level_instructor');
     }
 };

@@ -25,7 +25,7 @@ class FeedFactory extends Factory
             'notifiable_id' => $student,
             'group' => $student
                 ? $this->faker->randomElement(['student', 'award'])
-                : $this->faker->randomElement(['curriculum', 'lesson']),
+                : $this->faker->randomElement(['curriculum', 'lesson', 'instructor']),
             'title' => implode(' ', $this->faker->words(4)),
             'message' => $this->faker->paragraph,
         ];

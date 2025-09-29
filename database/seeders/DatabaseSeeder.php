@@ -19,6 +19,7 @@ use App\Models\Guardian;
 use App\Models\GameImage;
 use App\Models\Curriculum;
 use App\Models\Enrollment;
+use App\Models\GradeLevel;
 use App\Models\Instructor;
 use App\Models\SchoolYear;
 use App\Models\GameActivity;
@@ -63,6 +64,23 @@ class DatabaseSeeder extends Seeder
             'fourth_quarter_start' => $fourth_quarter_start,
             'fourth_quarter_end'   => $fourth_quarter_end,
         ]);
+
+        // === Grade Levels ===
+        $levels = [
+            'Kindergarten 1',
+            'Kindergarten 2',
+            'Kindergarten 3',
+            'Grade 1',
+            'Grade 2',
+            'Grade 3',
+            'Grade 4',
+            'Grade 5',
+            'Grade 6',
+        ];
+
+        foreach ($levels as $level) {
+            GradeLevel::firstOrCreate(['name' => $level]);
+        }
 
         // === Awards ===
         $awards = [
@@ -131,6 +149,9 @@ class DatabaseSeeder extends Seeder
                 'type' => 'current',
             ]);
 
+            $gradeLevels = GradeLevel::inRandomOrder()->take(rand(1, 3))->pluck('id');
+            $instructor->gradeLevels()->attach($gradeLevels);
+
             // Extra instructor accounts
             if ($instructor->id !== $instructorTest->id) {
                 Account::factory()->instructor($instructor)->create([
@@ -142,7 +163,10 @@ class DatabaseSeeder extends Seeder
 
         // === Curriculums for each instructor ===
         $curriculums = $instructors->map(function ($instructor) {
-            return Curriculum::factory()->count(12)->create(['instructor_id' => $instructor->id]);
+            return Curriculum::factory()->count(12)->create([
+                'instructor_id'   => $instructor->id,
+                'grade_level_id'  => $instructor->gradeLevels()->inRandomOrder()->first()->id,
+            ]);
         })->flatten();
 
         Subject::factory()->allSubjects();
@@ -178,7 +202,10 @@ class DatabaseSeeder extends Seeder
                 'password' => 'password123',
             ]);
             Guardian::factory()->create(['student_id' => $student->id]);
-            Enrollment::factory()->create(['student_id' => $student->id]);
+            Enrollment::factory()->create([
+                'student_id' => $student->id,
+                'grade_level_id' => GradeLevel::inRandomOrder()->first()->id,
+            ]);
             Address::factory()->student()->create([
                 'owner_id' => $student->id,
                 'owner_type' => Student::class,
@@ -237,12 +264,12 @@ class DatabaseSeeder extends Seeder
 
                 // ✅ Get only the students that match grade_level + specialization
                 $eligibleStudents = $instructor->students->filter(function ($student) use ($curriculum) {
-                    $studentGradeLevel = $student->enrollments->first()?->grade_level;
+                    $studentGradeLevel = $student->enrollments->first()?->grade_level_id;
                     $studentDisability = $student->disability_type;
 
                     $curriculumSpecializations = $curriculum->specializations->pluck('name')->toArray();
 
-                    return $studentGradeLevel === $curriculum->grade_level &&
+                    return $studentGradeLevel === $curriculum->grade_level_id &&
                         in_array($studentDisability, $curriculumSpecializations);
                 });
 
@@ -296,7 +323,7 @@ class DatabaseSeeder extends Seeder
                     ->where('instructor_id', $instructor->id)
                     ->where('status', 'active')
                     ->whereHas('enrollments', function ($q) use ($activity) {
-                        $q->where('grade_level', $activity->curriculumSubject->curriculum->grade_level)
+                        $q->where('grade_level_id', $activity->curriculumSubject->curriculum->grade_level_id)
                             ->where('school_year_id', now()->schoolYear()?->id);
                     })
                     ->whereIn(

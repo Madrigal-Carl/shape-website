@@ -10,7 +10,7 @@ class Enrollment extends Model
     use HasFactory;
     protected $fillable = [
         'student_id',
-        'grade_level',
+        'grade_level_id',
     ];
     public function student()
     {
@@ -20,6 +20,11 @@ class Enrollment extends Model
     public function schoolYear()
     {
         return $this->belongsTo(SchoolYear::class);
+    }
+
+    public function gradeLevel()
+    {
+        return $this->belongsTo(GradeLevel::class);
     }
 
     protected static function booted()

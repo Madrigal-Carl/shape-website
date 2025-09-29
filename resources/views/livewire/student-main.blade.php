@@ -42,7 +42,7 @@
                 <div class="flex items-center gap-2" wire:loading.class="invisible"
                     wire:target="openMoveUpStudentModal">
                     <span class="material-symbols-rounded">upgrade</span>
-                    <p class="">Move Up</p>
+                    <p class="">Re-enroll Student</p>
                 </div>
 
                 <div wire:loading wire:target="openMoveUpStudentModal" role="status"

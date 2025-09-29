@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('curricula', function (Blueprint $table) {
             $table->id();
             $table->foreignId('instructor_id')->constrained()->onDelete('cascade');
+            $table->foreignId('grade_level_id')->constrained()->onDelete('cascade');
             $table->string('name');
-            $table->string('grade_level');
             $table->text('description')->nullable();
             $table->enum('status', ['active', 'inactive'])->default('inactive');
             $table->timestamps();

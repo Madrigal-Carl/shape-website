@@ -10,8 +10,8 @@ class Curriculum extends Model
     use HasFactory;
     protected $fillable = [
         'instructor_id',
+        'grade_level_id',
         'name',
-        'grade_level',
         'description',
         'status',
     ];
@@ -29,5 +29,10 @@ class Curriculum extends Model
     public function curriculumSubjects()
     {
         return $this->hasMany(CurriculumSubject::class);
+    }
+
+    public function gradeLevel()
+    {
+        return $this->belongsTo(GradeLevel::class);
     }
 }

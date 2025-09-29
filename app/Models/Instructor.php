@@ -40,6 +40,11 @@ class Instructor extends Model
         return $this->morphToMany(Specialization::class, 'specializable');
     }
 
+    public function gradeLevels()
+    {
+        return $this->belongsToMany(GradeLevel::class, 'grade_level_instructor');
+    }
+
     public function lessons()
     {
         return Lesson::whereHas('lessonSubjectStudents.curriculumSubject.curriculum', function ($query) {

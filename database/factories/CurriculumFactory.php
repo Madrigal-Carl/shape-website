@@ -20,9 +20,9 @@ class CurriculumFactory extends Factory
     public function definition(): array
     {
         return [
-            'instructor_id' => Instructor::factory(),
+            'instructor_id' => null,
             'name' => $this->faker->sentence(3),
-            'grade_level' => 'kindergarten ' . $this->faker->numberBetween(1, 3),
+            'grade_level_id' => null,
             'description' => $this->faker->paragraph,
             'status' => 'inactive',
         ];
