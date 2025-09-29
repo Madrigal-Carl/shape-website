@@ -21,7 +21,6 @@ class StudentFactory extends Factory
     public function definition(): array
     {
         return [
-            'instructor_id' => null,
             'path' => $this->faker->randomElement(['default_profiles/default-male-student-pfp.png', 'default_profiles/default-female-student-pfp.png']),
             'first_name' => $this->faker->firstName,
             'middle_name' => $this->faker->firstName,
@@ -31,7 +30,6 @@ class StudentFactory extends Factory
             'lrn' => $this->faker->unique()->numerify('############'),
             'disability_type' => $this->faker->randomElement(['autism spectrum disorder', 'speech disorder', 'hearing impairment']),
             'support_need' => $this->faker->sentence(),
-            'status' => 'active',
         ];
     }
 }

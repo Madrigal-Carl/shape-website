@@ -9,7 +9,6 @@ class Student extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'instructor_id',
         'path',
         'first_name',
         'middle_name',
@@ -19,7 +18,6 @@ class Student extends Model
         'lrn',
         'disability_type',
         'support_need',
-        'status',
     ];
 
     protected $casts = [

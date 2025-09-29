@@ -9,8 +9,10 @@ class Enrollment extends Model
 {
     use HasFactory;
     protected $fillable = [
+        'instructor_id',
         'student_id',
         'grade_level_id',
+        'status',
     ];
     public function student()
     {

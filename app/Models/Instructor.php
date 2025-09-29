@@ -69,7 +69,22 @@ class Instructor extends Model
 
     public function students()
     {
-        return $this->hasMany(Student::class);
+        return $this->belongsToMany(
+            Student::class,
+            'enrollments',
+            'instructor_id',
+            'student_id'
+        )->with('enrollments');
+    }
+
+
+    public function eligibleStudents(Curriculum $curriculum)
+    {
+        return $this->students()
+            ->whereHas('enrollments', function ($q) use ($curriculum) {
+                $q->where('grade_level_id', $curriculum->grade_level_id);
+            })
+            ->whereIn('disability_type', $curriculum->specializations->pluck('name'));
     }
 
     public function admin()

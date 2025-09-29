@@ -21,9 +21,11 @@ class EnrollmentFactory extends Factory
     public function definition(): array
     {
         return [
+            'instructor_id' => null,
             'school_year_id' => null,
             'student_id' => null,
             'grade_level_id' => null,
+            'status' => 'active',
         ];
     }
 }

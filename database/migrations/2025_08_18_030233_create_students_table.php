@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('students', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('instructor_id')->nullable()->constrained()->onDelete('set null');
             $table->string('lrn')->unique();
             $table->string('path')->nullable();
             $table->string('first_name');
@@ -21,9 +20,8 @@ return new class extends Migration
             $table->string('last_name');
             $table->enum('sex', ['male', 'female'])->nullable();
             $table->date('birth_date');
-            $table->enum('disability_type',['autism spectrum disorder', 'speech disorder', 'hearing impairment']);
+            $table->enum('disability_type', ['autism spectrum disorder', 'speech disorder', 'hearing impairment']);
             $table->text('support_need')->nullable();
-            $table->enum('status', ['active', 'inactive', 'graduated', 'dropped', 'transferred'])->default('active');
             $table->timestamps();
         });
     }

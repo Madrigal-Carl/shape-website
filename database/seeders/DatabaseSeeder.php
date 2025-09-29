@@ -190,9 +190,7 @@ class DatabaseSeeder extends Seeder
 
         foreach ($instructors as $instructor) {
             $students = $students->merge(
-                Student::factory()->count(20)->create([
-                    'instructor_id' => $instructor->id,
-                ])
+                Student::factory()->count(20)->create()
             );
         }
 
@@ -203,6 +201,7 @@ class DatabaseSeeder extends Seeder
             ]);
             Guardian::factory()->create(['student_id' => $student->id]);
             Enrollment::factory()->create([
+                'instructor_id' => Instructor::inRandomOrder()->first()->id,
                 'student_id' => $student->id,
                 'grade_level_id' => GradeLevel::inRandomOrder()->first()->id,
             ]);
@@ -263,15 +262,7 @@ class DatabaseSeeder extends Seeder
                 $curriculumSubjects = $curriculum->curriculumSubjects;
 
                 // ✅ Get only the students that match grade_level + specialization
-                $eligibleStudents = $instructor->students->filter(function ($student) use ($curriculum) {
-                    $studentGradeLevel = $student->enrollments->first()?->grade_level_id;
-                    $studentDisability = $student->disability_type;
-
-                    $curriculumSpecializations = $curriculum->specializations->pluck('name')->toArray();
-
-                    return $studentGradeLevel === $curriculum->grade_level_id &&
-                        in_array($studentDisability, $curriculumSpecializations);
-                });
+                $eligibleStudents = $instructor->eligibleStudents($curriculum)->get();
 
                 // ✅ Assign 2 lessons per curriculum
                 $curriculumLessons = $lessons->random(2);
@@ -319,23 +310,8 @@ class DatabaseSeeder extends Seeder
                 ]);
 
                 // Apply same filters as in ActivityEditModal
-                $studentsOfInstructor = Student::query()
-                    ->where('instructor_id', $instructor->id)
-                    ->where('status', 'active')
-                    ->whereHas('enrollments', function ($q) use ($activity) {
-                        $q->where('grade_level_id', $activity->curriculumSubject->curriculum->grade_level_id)
-                            ->where('school_year_id', now()->schoolYear()?->id);
-                    })
-                    ->whereIn(
-                        'disability_type',
-                        $activity->curriculumSubject->curriculum
-                            ->specializations()
-                            ->pluck('name')
-                    )
-                    ->get();
-
-                // Pick 3–6 filtered students
-                $students = $studentsOfInstructor->shuffle()->take(rand(3, 6));
+                $eligibleStudents = $instructor->eligibleStudents($activity->curriculumSubject->curriculum)->get();
+                $students = $eligibleStudents->shuffle()->take(rand(3, 6));
 
                 foreach ($students as $student) {
                     $studentActivity = StudentActivity::create([
