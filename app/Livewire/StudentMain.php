@@ -14,7 +14,7 @@ class StudentMain extends Component
 {
     use WithPagination, WithoutUrlPagination;
     public $search = '';
-    public $grade_level = 'all';
+    public $grade_level = '';
     public $status = 'all';
     public $listeners = ["refresh" => '$refresh'];
     public $school_year, $school_years, $grade_levels;
@@ -33,7 +33,7 @@ class StudentMain extends Component
 
     public function openMoveUpStudentModal()
     {
-        $this->dispatch('openModal')->to('student-move-up-modal');
+        $this->dispatch('openModal')->to('student-add-old-modal');
     }
 
     public function openEditStudentModal($id)
@@ -53,7 +53,7 @@ class StudentMain extends Component
             ->whereHas('enrollments', function ($q) {
                 $q->where('school_year_id', $this->school_year);
                 if ($this->grade_level && $this->grade_level !== 'all') {
-                    $q->where('grade_level', $this->grade_level);
+                    $q->where('grade_level_id', $this->grade_level);
                 }
             })
             ->when($this->search, function ($query) {
@@ -71,10 +71,13 @@ class StudentMain extends Component
 
         $this->grade_levels = Enrollment::whereIn('student_id', Auth::user()->accountable->students->pluck('id'))
             ->where('school_year_id', $this->school_year)
-            ->pluck('grade_level')
-            ->unique()
-            ->sort()
+            ->with('gradeLevel')
+            ->get()
+            ->pluck('gradeLevel')
+            ->unique('id')
+            ->sortBy('name')
             ->values();
+
         return view('livewire.student-main', compact('students'));
     }
 }

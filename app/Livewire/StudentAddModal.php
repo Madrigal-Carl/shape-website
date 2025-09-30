@@ -17,9 +17,9 @@ class StudentAddModal extends Component
 {
     use WithFileUploads;
     public $step = 0;
-    public $grade_levels = [], $specializations;
+    public $grade_levels, $specializations;
     public $barangayData = [], $municipalities = [], $permanent_barangays = [], $current_barangays = [];
-    public $photo, $lrn, $first_name, $middle_name, $last_name, $birthdate, $sex, $grade_level, $disability, $description;
+    public $photo, $lrn, $first_name, $middle_name, $last_name, $birthdate, $sex, $grade_level = '', $disability = '', $description;
     public $province = "marinduque";
     public $permanent_barangay = '', $permanent_municipal = '', $current_barangay = '', $current_municipal = '', $guardian_first_name, $guardian_middle_name, $guardian_last_name, $guardian_email, $guardian_phone;
     public $account_username, $account_password = '';
@@ -202,7 +202,6 @@ class StudentAddModal extends Component
         }
 
         $student = Student::create([
-            'instructor_id' => Auth::user()->accountable->id,
             'path'          => $path,
             'first_name'    => $this->first_name,
             'middle_name'   => $this->middle_name,
@@ -216,7 +215,8 @@ class StudentAddModal extends Component
         ]);
 
         $student->enrollments()->create([
-            'grade_level'   => $this->grade_level,
+            'instructor_id' => Auth::user()->accountable->id,
+            'grade_level_id'   => $this->grade_level,
         ]);
 
         $student->guardian()->create([
@@ -503,6 +503,7 @@ class StudentAddModal extends Component
         ];
         $this->municipalities = array_keys($this->barangayData);
         $this->specializations = Auth::user()->accountable->specializations;
+        $this->grade_levels = Auth::user()->accountable->gradeLevels;
         return view('livewire.student-add-modal');
     }
 }

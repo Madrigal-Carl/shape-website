@@ -115,22 +115,13 @@
                             </div>
 
                             <div class="px-4 py-2 rounded-lg bg-white">
-                                <select name="" id="" class="w-full outline-none text-paragraph"
-                                    wire:change="$set('grade_level', $event.target.value)">
-                                    @for ($i = 1; $i <= 3; $i++)
-                                        @php
-                                            $grade = "kindergarten $i";
-                                        @endphp
-                                        @if ($grade === $grade_level)
-                                            <option value="{{ $grade_level }}" class="text-sm text-black" selected>
-                                                {{ ucwords($grade_level) }}
-                                            </option>
-                                        @else
-                                            <option value="{{ $grade }}" class="text-sm text-paragraph">
-                                                Kindergarten {{ $i }}
-                                            </option>
-                                        @endif
-                                    @endfor
+                                <select wire:model.live="grade_level" class="w-full outline-none text-paragraph">
+                                    @foreach ($grade_levels as $grade)
+                                        <option value="{{ $grade->id }}"
+                                            class="text-sm {{ $grade->id === $grade_level ? 'text-black' : 'text-paragraph' }}">
+                                            {{ $grade->name }}
+                                        </option>
+                                    @endforeach
                                 </select>
                             </div>
 

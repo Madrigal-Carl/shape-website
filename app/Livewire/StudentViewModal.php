@@ -53,8 +53,20 @@ class StudentViewModal extends Component
             $schoolYearModel = SchoolYear::find($this->school_year);
 
             $filteredLessons = $this->student->lessons
-                ->filter(fn($lesson) => $lesson->school_year_id == $this->school_year
-                    && $lesson->isInQuarter($schoolYearModel, (int) $this->quarter));
+                ->filter(function ($lesson) use ($schoolYearModel) {
+                    if ($lesson->school_year_id != $this->school_year) {
+                        return false;
+                    }
+                    if (!$lesson->isInQuarter($schoolYearModel, (int) $this->quarter)) {
+                        return false;
+                    }
+                    $hasActiveCurriculum = $lesson->lessonSubjectStudents
+                        ->where('student_id', $this->student->id)
+                        ->filter(fn($lss) => $lss->curriculum?->status === 'active')
+                        ->isNotEmpty();
+
+                    return $hasActiveCurriculum;
+                });
         }
 
         return view('livewire.student-view-modal', compact('filteredLessons'));

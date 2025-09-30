@@ -8,19 +8,12 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Student;
 use App\Models\Enrollment;
 
-class StudentMoveUpModal extends Component
+class StudentAddOldModal extends Component
 {
     public $isOpen = false;
-    public $grade_level = '';
+    public $grade_level = '', $grade_levels;
     public $student_search = '';
     public $selectedStudents = [];
-    protected $gradeLevels = [
-        'kindergarten 1',
-        'kindergarten 2',
-        'kindergarten 3',
-        'grade 1',
-        'grade 2',
-    ];
 
 
     #[On('openModal')]
@@ -48,7 +41,7 @@ class StudentMoveUpModal extends Component
         // Filter by grade level
         if ($this->grade_level && $this->grade_level !== 'all') {
             $query->whereHas('enrollments', function ($q) {
-                $q->where('grade_level', $this->grade_level)
+                $q->where('grade_level_id', $this->grade_level)
                     ->where('school_year_id', now()->schoolYear()->id);
             });
         }
@@ -68,21 +61,9 @@ class StudentMoveUpModal extends Component
         }])->get();
     }
 
-    public function getGradeLevelOptionsProperty()
+    public function addOldStudents()
     {
-        return Enrollment::whereIn(
-            'student_id',
-            Auth::user()->accountable->students->pluck('id')
-        )
-            ->pluck('grade_level')
-            ->unique()
-            ->sort()
-            ->values();
-    }
-
-    public function moveUp()
-    {
-        $movedUp = 0;
+        $registered = 0;
         $skipped = 0;
 
         foreach ($this->selectedStudents as $studentId) {
@@ -103,24 +84,22 @@ class StudentMoveUpModal extends Component
                 continue;
             }
 
-            $currentLevel = strtolower(trim($latestEnrollment->grade_level));
-            $currentIndex = array_search($currentLevel, $this->gradeLevels, true);
+            $currentLevelId = $latestEnrollment->grade_level_id;
+            $gradeLevelIds = $this->grade_levels->pluck('id')->toArray();
+            $currentIndex = array_search($currentLevelId, $gradeLevelIds);
 
-            if ($currentIndex !== false && $currentIndex < count($this->gradeLevels) - 1) {
-                $nextLevel = $this->gradeLevels[$currentIndex + 1];
+            if ($currentIndex !== false && $currentIndex < count($gradeLevelIds) - 1) {
+                $nextLevelId = $gradeLevelIds[$currentIndex + 1];
 
-                if (!Enrollment::where('student_id', $student->id)
-                    ->where('school_year_id', now()->schoolYear()->id)
-                    ->exists()) {
-                    Enrollment::create([
-                        'student_id' => $student->id,
-                        'grade_level' => $nextLevel,
-                        'school_year_id'  => now()->schoolYear()->id,
-                    ]);
-                    $movedUp++;
-                } else {
-                    $skipped++;
-                }
+                // Create enrollment for the next school year
+                Enrollment::create([
+                    'instructor_id' => Auth::user()->accountable->id,
+                    'student_id' => $student->id,
+                    'grade_level_id' => $nextLevelId,
+                    'school_year_id' => now()->schoolYear()->id,
+                ]);
+
+                $registered++;
             } else {
                 $skipped++;
             }
@@ -128,24 +107,24 @@ class StudentMoveUpModal extends Component
 
         $this->closeModal();
 
-        if ($movedUp && $skipped) {
-            $message = "{$movedUp} student(s) moved up successfully. {$skipped} student(s) could not be moved up.";
-        } elseif ($movedUp) {
-            $message = "{$movedUp} student(s) moved up successfully.";
+        if ($registered && $skipped) {
+            $message = "{$registered} student(s) registered successfully. {$skipped} student(s) could not be registered.";
+        } elseif ($registered) {
+            $message = "{$registered} student(s) registered successfully.";
         } elseif ($skipped) {
-            $message = "No students were moved up. {$skipped} student(s) could not be moved up.";
+            $message = "No students were registered. {$skipped} student(s) could not be registered.";
         } else {
             $message = "No students selected.";
         }
 
-        $this->dispatch('swal-toast', icon: $movedUp ? 'success' : 'info', title: $message);
+        $this->dispatch('swal-toast', icon: $registered ? 'success' : 'info', title: $message);
     }
 
     public function render()
     {
-        return view('livewire.student-move-up-modal', [
+        $this->grade_levels = Auth::user()->accountable->gradeLevels;
+        return view('livewire.student-add-old-modal', [
             'students' => $this->filteredStudents,
-            'gradeLevelOptions' => $this->gradeLevelOptions,
         ]);
     }
 }

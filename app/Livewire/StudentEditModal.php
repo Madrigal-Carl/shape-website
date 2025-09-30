@@ -9,6 +9,7 @@ use Livewire\Attributes\On;
 use Livewire\WithFileUploads;
 use App\Models\Specialization;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 
@@ -17,14 +18,14 @@ class StudentEditModal extends Component
     use WithFileUploads;
 
     public $step = 0, $isOpen = false, $student_id = null;
-    public $photo, $currentPhoto, $lrn, $status = '', $first_name, $middle_name, $last_name, $birthdate, $sex, $grade_level, $disability, $description;
+    public $photo, $currentPhoto, $lrn, $status = '', $first_name, $middle_name, $last_name, $birthdate, $sex, $grade_level = '', $disability, $description;
     public $province = "marinduque";
     public $permanent_barangay = '', $permanent_municipal = '', $current_barangay = '', $current_municipal = '';
     public $guardian_first_name, $guardian_middle_name, $guardian_last_name, $guardian_email, $guardian_phone;
     public $account_username, $account_password, $default_password;
     public $account_username_changed = false;
     public $account_password_changed = false;
-    public $grade_levels = [], $specializations = [], $barangayData = [], $municipalities = [], $permanent_barangays = [], $current_barangays = [];
+    public $grade_levels, $specializations, $barangayData = [], $municipalities = [], $permanent_barangays = [], $current_barangays = [];
     public $original = [];
 
     #[On('openModal')]
@@ -41,10 +42,10 @@ class StudentEditModal extends Component
         $this->last_name  = $student->last_name;
         $this->birthdate  = $student->birth_date;
         $this->sex        = $student->sex;
-        $this->status        = $student->status;
+        $this->status        = $student->isEnrolledIn(now()->schoolYear()->id)->status;
         $this->currentPhoto = $student->path;
         $this->lrn         = $student->lrn;
-        $this->grade_level = $student->isEnrolledIn(now()->schoolYear()->id)->grade_level;
+        $this->grade_level = $student->isEnrolledIn(now()->schoolYear()->id)->grade_level_id;
         $this->disability  = $student->disability_type;
         $this->description = $student->support_need;
         $this->account_username = $student->account->username;
@@ -284,15 +285,16 @@ class StudentEditModal extends Component
             'last_name'  => $this->last_name,
             'birth_date' => $this->birthdate,
             'sex'        => $this->sex,
-            'status'        => $this->status,
             'lrn' => $this->lrn,
             'disability_type' => $this->disability,
             'support_need' => $this->description,
         ]);
 
         $student->isEnrolledIn(now()->schoolYear()->id)->update([
-            'grade_level' => $this->grade_level,
+            'grade_level_id' => $this->grade_level,
+            'status'        => $this->status,
         ]);
+
         $student->guardian->update([
             'first_name' => $this->guardian_first_name,
             'middle_name' => $this->guardian_middle_name,
@@ -563,7 +565,8 @@ class StudentEditModal extends Component
 
         ];
         $this->municipalities = array_keys($this->barangayData);
-        $this->specializations = Specialization::all();
+        $this->specializations = Auth::user()->accountable->specializations;
+        $this->grade_levels = Auth::user()->accountable->gradeLevels;
         return view('livewire.student-edit-modal');
     }
 }

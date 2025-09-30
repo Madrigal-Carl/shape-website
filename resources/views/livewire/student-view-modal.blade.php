@@ -72,14 +72,15 @@
                                     'dropped' => ['bg' => 'bg-[#fce4e4]', 'text' => 'text-[#af0000]'],
                                 ];
 
-                                $style = $statusStyles[strtolower($student->status)] ?? [
+                                $style = $statusStyles[strtolower($student->enrollmentStatus($school_year))] ?? [
                                     'bg' => 'bg-gray-200',
                                     'text' => 'text-gray-600',
                                 ];
                             @endphp
 
                             <div class="gap-2 {{ $style['bg'] }} px-3 py-1 rounded-lg flex items-center w-fit">
-                                <small class="{{ $style['text'] }}">{{ ucwords($student->status) }}</small>
+                                <small
+                                    class="{{ $style['text'] }}">{{ ucwords($student->enrollmentStatus($school_year)) }}</small>
                             </div>
                         </div>
                     </div>
@@ -126,17 +127,6 @@
                             <h1 class="text-5xl font-bold">
                                 {{ $student->completedActivitiesCount($school_year, $quarter) }}</h1>
                         </div>
-
-                        {{-- <div
-                            class="bg-gradient-to-tr from-danger to-[#ff00aa] shadow-danger shadow-2xl/45 p-6 text-white rounded-3xl flex flex-col justify-between gap-6">
-                            <div>
-                                <p class="text-sm leading-snug font-normal">Competed</p>
-                                <h1 class="text-2xl font-semibold leading-6 max-w-50">
-                                    QUIZZES
-                                </h1>
-                            </div>
-                            <h1 class="text-5xl font-bold">0</h1>
-                        </div> --}}
                     </div>
                 </div>
 
@@ -172,7 +162,7 @@
                                     {{ ucwords($student->permanentAddress->municipality) }},
                                     {{ ucwords($student->permanentAddress->province) }}</p>
                                 <p class="text-paragraph">
-                                    {{ ucwords($student->isEnrolledIn($school_year)->grade_level) }}</p>
+                                    {{ ucwords($student->isEnrolledIn($school_year)->gradeLevel->name) }}</p>
                                 <p class="text-paragraph">{{ ucwords($student->disability_type) }}</p>
                                 <p class="text-paragraph">{{ $student->guardian->fullname }}</p>
                                 <p class="text-paragraph">{{ ucwords($student->guardian->phone_number) }}</p>

@@ -3,12 +3,12 @@
         <div
             class="bg-black/40 fixed w-dvw h-dvh top-0 left-0 z-50 backdrop-blur-xs flex justify-center items-center p-10">
             <div class="w-180 h-full flex flex-col bg-card p-8 rounded-4xl relative gap-8 ">
-                <form wire:submit='moveUp' class="w-full h-full flex flex-col gap-8 overflow-auto Addlesson">
+                <form wire:submit='addOldStudents' class="w-full h-full flex flex-col gap-8 overflow-auto Addlesson">
                     <div class=" w-full flex items-center justify-between gap-4">
                         <div class="flex items-center gap-2">
                             <img src="{{ asset('images/move-up-icon.png') }}" alt="" class="h-8" />
                             <h1 class="text-3xl font-bold text-heading-dark">
-                                Move Up Student
+                                Add Old Student
                             </h1>
                         </div>
 
@@ -18,9 +18,9 @@
                                 <select class="w-max outline-none" wire:model.live="grade_level">
                                     <option value="" class=" text-heading-dark" disabled>Grade Level</option>
                                     <option value="all" class=" text-heading-dark">All</option>
-                                    @foreach ($gradeLevelOptions as $level)
-                                        <option value="{{ $level }}" class=" text-heading-dark">
-                                            {{ ucwords($level) }}</option>
+                                    @foreach ($grade_levels as $level)
+                                        <option value="{{ $level->id }}" class=" text-heading-dark">
+                                            {{ ucwords($level->name) }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -35,7 +35,7 @@
                             <div class="rounded-lg flex flex-col h-full gap-2">
                                 {{-- Header --}}
                                 <div class="flex items-center justify-between w-full mb-2">
-                                    <p class="text-paragraph">Select Students you want to move up.</p>
+                                    <p class="text-paragraph">Select Students you want to register.</p>
                                     <button type="button" wire:click="clearStudents"
                                         class="flex items-center justify-center gap-1 px-3 py-1 rounded-lg text-paragraph hover:text-white cursor-pointer bg-white hover:bg-blue-button">
                                         <p class="text-sm">Clear Selected</p>

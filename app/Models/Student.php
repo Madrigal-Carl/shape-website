@@ -20,9 +20,6 @@ class Student extends Model
         'support_need',
     ];
 
-    protected $casts = [
-        'birth_date' => 'date',
-    ];
     public function getFullNameAttribute()
     {
         $middleInitial = $this->middle_name ? strtoupper(substr($this->middle_name, 0, 1)) . '.' : '';

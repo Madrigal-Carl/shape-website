@@ -42,7 +42,7 @@
                 <div class="flex items-center gap-2" wire:loading.class="invisible"
                     wire:target="openMoveUpStudentModal">
                     <span class="material-symbols-rounded">upgrade</span>
-                    <p class="">Re-enroll Student</p>
+                    <p class="">Add Old Student</p>
                 </div>
 
                 <div wire:loading wire:target="openMoveUpStudentModal" role="status"
@@ -67,7 +67,7 @@
 
                 <div class="flex items-center gap-2" wire:loading.class="invisible" wire:target="openAddStudentModal">
                     <span class="material-symbols-rounded">add</span>
-                    <p class="">Add Student</p>
+                    <p class="">Add New Student</p>
                 </div>
 
                 <div wire:loading wire:target="openAddStudentModal" role="status"
@@ -91,11 +91,10 @@
     <div class="mt-12 flex flex-col gap-4 min-h-[20%]">
         <div class="side flex items-center justify-between gap-2 mb-2">
             <h1 class="text-4xl font-bold">Student List</h1>
-
             <livewire:student-add-modal />
             <livewire:student-edit-modal />
             <livewire:student-view-modal />
-            <livewire:student-move-up-modal />
+            <livewire:student-add-old-modal />
             <div class="flex items-center gap-4 self-start">
                 <div
                     class="flex items-center bg-white py-3 px-5 rounded-full border-2 border-white hover:border-blue-button text-paragraph hover:bg-blue-button hover:text-white cursor-pointer">
@@ -107,8 +106,8 @@
                             All
                         </option>
                         @foreach ($grade_levels as $grade)
-                            <option value="{{ $grade }}" class=" text-heading-dark">
-                                {{ ucwords($grade) }}
+                            <option value="{{ $grade->id }}" class=" text-heading-dark">
+                                {{ ucwords($grade->name) }}
                             </option>
                         @endforeach
                     </select>
@@ -202,7 +201,9 @@
                                                     'dropped' => ['bg' => 'bg-[#fce4e4]', 'text' => 'text-[#af0000]'],
                                                 ];
 
-                                                $style = $statusStyles[strtolower($student->status)] ?? [
+                                                $style = $statusStyles[
+                                                    strtolower($student->enrollmentStatus($school_year))
+                                                ] ?? [
                                                     'bg' => 'bg-gray-200',
                                                     'text' => 'text-gray-600',
                                                 ];
@@ -211,7 +212,7 @@
                                             <div
                                                 class="gap-2 {{ $style['bg'] }} px-2 py-1 rounded-full flex items-center w-fit">
                                                 <small
-                                                    class="{{ $style['text'] }}">{{ ucwords($student->status) }}</small>
+                                                    class="{{ $style['text'] }}">{{ ucwords($student->enrollmentStatus($school_year)) }}</small>
                                             </div>
                                         </div>
                                     </td>

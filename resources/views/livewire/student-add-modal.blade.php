@@ -81,25 +81,21 @@
 
                             <div class="px-4 py-2 rounded-lg bg-white">
                                 <select name="" id="" class="w-full outline-none text-paragraph"
-                                    wire:change="$set('grade_level', $event.target.value)">
-                                    <option class="text-sm text-black" selected disabled>
+                                    wire:model.live="grade_level">
+                                    <option value="" class="text-sm text-black" selected disabled>
                                         Grade Level
                                     </option>
-                                    <option value="kindergarten 1" class="text-sm text-paragraph">
-                                        Kindergarten 1
-                                    </option>
-                                    <option value="kindergarten 2" class="text-sm text-paragraph">
-                                        Kindergarten 2
-                                    </option>
-                                    <option value="kindergarten 3" class="text-sm text-paragraph">
-                                        Kindergarten 3
-                                    </option>
+                                    @foreach ($grade_levels as $level)
+                                        <option value="{{ $level->id }}" class="text-sm text-paragraph">
+                                            {{ ucwords($level->name) }}
+                                        </option>
+                                    @endforeach
                                 </select>
                             </div>
 
                             <div class="px-4 py-2 rounded-lg bg-white">
                                 <select name="" id="" class="w-full outline-none text-paragraph"
-                                    wire:change="$set('disability', $event.target.value)">
+                                    wire:model.live="disability">
                                     <option class="text-sm text-black" selected disabled>
                                         Disability
                                     </option>
