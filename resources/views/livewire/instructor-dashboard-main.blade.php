@@ -104,7 +104,7 @@
                 <div class="flex justify-between">
                     <div>
                         <p class="text-sm leading-snug font-normal text-paragraph">
-                            Total No. of
+                            Total No. of Active
                         </p>
                         <h1 class="text-2xl font-semibold leading-6">CURRICULUM</h1>
                     </div>
@@ -117,7 +117,7 @@
                 <div class="flex justify-between">
                     <div>
                         <p class="text-sm leading-snug font-normal text-paragraph">
-                            Total No. of
+                            Total No. of Active
                         </p>
                         <h1 class="text-2xl font-semibold leading-6">LESSONS</h1>
                     </div>
@@ -130,7 +130,7 @@
                 <div class="flex justify-between">
                     <div>
                         <p class="text-sm leading-snug font-normal text-paragraph">
-                            Total No. of
+                            Total No. of Active
                         </p>
                         <h1 class="text-2xl font-semibold leading-6">ACTIVITIES</h1>
                     </div>
@@ -143,7 +143,7 @@
                 <div class="flex justify-between">
                     <div>
                         <p class="text-sm leading-snug font-normal text-paragraph">
-                            Total No. of
+                            Total No. of Attained
                         </p>
                         <h1 class="text-2xl font-semibold leading-6">AWARDS</h1>
                     </div>

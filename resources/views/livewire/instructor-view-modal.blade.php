@@ -101,7 +101,7 @@
                                     class="bg-gradient-to-tr h-48 from-lime to-[#00ff80] p-6 text-white rounded-3xl flex flex-col justify-between gap-6">
                                     <div class="flex justify-between w-full">
                                         <div>
-                                            <p class="text-xs leading-snug font-normal">No. of created</p>
+                                            <p class="text-xs leading-snug font-normal">No. of Active</p>
                                             <h1 class="text-lg font-semibold leading-6">LESSONS</h1>
                                         </div>
                                         <span class="material-symbols-rounded icon">book_ribbon</span>
@@ -115,7 +115,7 @@
                                     class="bg-gradient-to-tr h-48 from-yellowOrange to-[#FFEA00] p-6 text-white rounded-3xl flex flex-col justify-between gap-6">
                                     <div class="flex justify-between w-full">
                                         <div>
-                                            <p class="text-xs leading-snug font-normal">No. of created</p>
+                                            <p class="text-xs leading-snug font-normal">No. of Active</p>
                                             <h1 class="text-lg font-semibold leading-6">Curriculum</h1>
                                         </div>
                                         <span class="material-symbols-rounded icon">video_library</span>

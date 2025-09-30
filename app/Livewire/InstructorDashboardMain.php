@@ -45,10 +45,11 @@ class InstructorDashboardMain extends Component
     {
         $instructorId = Auth::user()->accountable->id;
 
-        $studentsQuery = Student::where('instructor_id', $instructorId)
-            ->whereHas('enrollments', function ($q) {
-                $q->where('school_year_id', $this->school_year);
-            });
+        $studentsQuery = Student::whereHas('enrollments', function ($q) use ($instructorId) {
+            $q->where('instructor_id', $instructorId)
+                ->where('school_year_id', $this->school_year)
+                ->whereNotIn('status', ['transferred', 'dropped']);
+        });
 
         $this->totalStudents   = $studentsQuery->count();
         $this->autismStudents  = (clone $studentsQuery)->where('disability_type', 'autism spectrum disorder')->count();
@@ -72,11 +73,10 @@ class InstructorDashboardMain extends Component
                 });
         })->count();
 
-        $this->totalAwards = StudentAward::whereHas('student', function ($q) use ($instructorId) {
-            $q->where('instructor_id', $instructorId);
-        })
-            ->where('school_year_id', $this->school_year)
-            ->count();
+        $this->totalAwards = StudentAward::whereHas('student.enrollments', function ($q) use ($instructorId) {
+            $q->where('instructor_id', $instructorId)
+                ->where('school_year_id', $this->school_year);
+        })->count();
     }
 
     public function render()

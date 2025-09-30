@@ -108,7 +108,7 @@
                     <div class="flex justify-between">
                         <div>
                             <p class="text-sm leading-snug font-normal text-paragraph">
-                                Total No. of
+                                Total No. of Active
                             </p>
                             <h1 class="text-2xl font-semibold leading-6">INSTRUCTORS</h1>
                         </div>
@@ -120,7 +120,7 @@
                     <div class="flex justify-between">
                         <div>
                             <p class="text-sm leading-snug font-normal text-paragraph">
-                                Total No. of
+                                Total No. of Active
                             </p>
                             <h1 class="text-2xl font-semibold leading-6">CURRICULUM</h1>
                         </div>
