@@ -31,7 +31,12 @@ class StudentMain extends Component
         $this->dispatch('openModal')->to('student-add-modal');
     }
 
-    public function openMoveUpStudentModal()
+    public function openAdvanceStudentModal()
+    {
+        $this->dispatch('openModal')->to('student-advance-modal');
+    }
+
+    public function openAddOldStudentModal()
     {
         $this->dispatch('openModal')->to('student-add-old-modal');
     }

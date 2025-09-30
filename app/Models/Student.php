@@ -58,6 +58,21 @@ class Student extends Model
             ->first();
     }
 
+    public function fourthQuarterHasEnded($schoolYearId = null)
+    {
+        $schoolYearId = $schoolYearId ?? now()->schoolYear()?->id;
+
+        $enrollment = $this->enrollments()
+            ->where('school_year_id', $schoolYearId)
+            ->first();
+
+        if (!$enrollment || !$enrollment->schoolYear) {
+            return false; // not enrolled or school year missing
+        }
+
+        return $enrollment->schoolYear->hasEnded();
+    }
+
     public function guardian()
     {
         return $this->hasOne(Guardian::class);

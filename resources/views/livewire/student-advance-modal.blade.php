@@ -3,12 +3,12 @@
         <div
             class="bg-black/40 fixed w-dvw h-dvh top-0 left-0 z-50 backdrop-blur-xs flex justify-center items-center p-10">
             <div class="w-180 h-full flex flex-col bg-card p-8 rounded-4xl relative gap-8 ">
-                <form wire:submit='addOldStudents' class="w-full h-full flex flex-col gap-8 overflow-auto Addlesson">
+                <form wire:submit='advanceStudents' class="w-full h-full flex flex-col gap-8 overflow-auto Addlesson">
                     <div class=" w-full flex items-center justify-between gap-4">
                         <div class="flex items-center gap-2">
                             <img src="{{ asset('images/move-up-icon.png') }}" alt="" class="h-8" />
                             <h1 class="text-3xl font-bold text-heading-dark">
-                                Add Old Student
+                                Advance Students
                             </h1>
                         </div>
 
@@ -31,11 +31,9 @@
                     <div class="flex flex-col gap-3 flex-1 min-h-0">
                         <h2 class="font-semibold text-2xl">Students</h2>
                         <div class="flex flex-col gap-2 flex-1 min-h-0">
-                            {{-- Specialization checkbox --}}
                             <div class="rounded-lg flex flex-col h-full gap-2">
-                                {{-- Header --}}
                                 <div class="flex items-center justify-between w-full mb-2">
-                                    <p class="text-paragraph">Select Students you want to register.</p>
+                                    <p class="text-paragraph">Select Students you want to move up.</p>
                                     <button type="button" wire:click="clearStudents"
                                         class="flex items-center justify-center gap-1 px-3 py-1 rounded-lg text-paragraph hover:text-white cursor-pointer bg-white hover:bg-blue-button">
                                         <p class="text-sm">Clear Selected</p>
@@ -43,14 +41,12 @@
                                     </button>
                                 </div>
 
-                                {{-- Search --}}
                                 <div class="flex items-center gap-2 px-4 py-2 rounded-2xl bg-white w-full">
                                     <span class="material-symbols-rounded">person_search</span>
                                     <input type="text" placeholder="Search Student" wire:model.live="student_search"
                                         class="w-full outline-none text-heading-dark placeholder-heading-dark" />
                                 </div>
 
-                                {{-- Specialization List --}}
                                 <div class="flex-1 min-h-0 flex flex-col gap-1 bg-white p-6 rounded-2xl">
                                     <div class="flex flex-col gap-1 flex-1 min-h-0 overflow-y-scroll pr-2 rounded-lg">
 
@@ -73,10 +69,10 @@
 
                                     </div>
                                 </div>
-                            </div>{{-- End of Specialization checkbox --}}
+                            </div>
                         </div>
                     </div>
-                    <!-- buttons -->
+
                     <div class="flex items-center gap-2 w-full rounded-b-4xl">
                         <button wire:click='closeModal' type="button"
                             class="bg-white py-1.5 px-3 w-full rounded-xl text-heading-dark font-medium hover:bg-gray-300 cursor-pointer">
@@ -84,7 +80,7 @@
                         </button>
                         <button type="submit"
                             class="bg-blue-button py-1.5 px-3 w-full rounded-xl text-white font-medium cursor-pointer hover:bg-blue-700">
-                            Register
+                            Move Up
                         </button>
                     </div>
                 </form>

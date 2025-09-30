@@ -2,11 +2,13 @@
 
 namespace App\Livewire;
 
+use Carbon\Carbon;
+use App\Models\Student;
 use Livewire\Component;
+use App\Models\Enrollment;
+use App\Models\SchoolYear;
 use Livewire\Attributes\On;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Student;
-use App\Models\Enrollment;
 
 class StudentAddOldModal extends Component
 {
@@ -36,7 +38,11 @@ class StudentAddOldModal extends Component
 
     public function getFilteredStudentsProperty()
     {
-        $query = Auth::user()->accountable->students();
+        $query = Auth::user()->accountable->students()
+            ->whereHas('enrollments', function ($q) {
+                $q->where('school_year_id', now()->schoolYear()->id)
+                    ->where('status', 'qualified');
+            });
 
         // Filter by grade level
         if ($this->grade_level && $this->grade_level !== 'all') {
@@ -65,6 +71,10 @@ class StudentAddOldModal extends Component
     {
         $registered = 0;
         $skipped = 0;
+
+        if (!$this->canRegisterStudent()) {
+            return $this->dispatch('swal-toast', icon: 'error', title: 'Enrollment period is closed.');
+        }
 
         foreach ($this->selectedStudents as $studentId) {
             $student = Student::find($studentId);
@@ -118,6 +128,31 @@ class StudentAddOldModal extends Component
         }
 
         $this->dispatch('swal-toast', icon: $registered ? 'success' : 'info', title: $message);
+    }
+
+    public function canRegisterStudent()
+    {
+        $today = Carbon::today();
+
+        $latestSY = SchoolYear::latest('first_quarter_start')->first();
+
+        if (!$latestSY) {
+            return false;
+        }
+
+        $syStart  = Carbon::parse($latestSY->first_quarter_start);
+        $syEnd    = Carbon::parse($latestSY->fourth_quarter_end);
+        $firstQEnd = Carbon::parse($latestSY->first_quarter_end);
+
+        if ($today->greaterThan($syEnd)) {
+            return true;
+        }
+
+        if ($today->between($syStart, $firstQEnd)) {
+            return true;
+        }
+
+        return false;
     }
 
     public function render()
