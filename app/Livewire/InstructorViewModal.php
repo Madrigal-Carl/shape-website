@@ -37,6 +37,7 @@ class InstructorViewModal extends Component
 
         if ($this->instructor_id) {
             $this->instructor = Instructor::with([
+                'gradeLevels',
                 'specializations',
                 'permanentAddress',
                 'currentAddress',

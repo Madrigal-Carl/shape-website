@@ -138,6 +138,7 @@
                                         <p class="font-medium">Birthday:</p>
                                         <p class="font-medium">Current Address:</p>
                                         <p class="font-medium">Permanent Address:</p>
+                                        <p class="font-medium">Grade Level:</p>
                                         <p class="font-medium">Specialization:</p>
                                     </div>
 
@@ -156,6 +157,9 @@
                                             {{ ucwords($instructor->permanentAddress->municipality) }},
                                             {{ ucwords($instructor->permanentAddress->province) }}</p>
                                         <p class="text-paragraph">Super Handsome</p>
+                                        <p class="text-paragraph">
+                                            {{ $instructor->gradeLevels->pluck('name')->map(fn($name) => ucwords($name))->implode(', ') }}
+                                        </p>
                                         <p class="text-paragraph">
                                             {{ $instructor->specializations->pluck('name')->map(fn($name) => ucwords($name))->implode(', ') }}
                                         </p>

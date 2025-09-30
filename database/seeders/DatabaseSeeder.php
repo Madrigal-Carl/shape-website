@@ -200,16 +200,19 @@ class DatabaseSeeder extends Seeder
             );
         }
 
-        $students->each(function ($student) {
+        $students->each(function ($student) use ($instructors) {
+            $instructor = $instructors->random();
+            $gradeLevelId = $instructor->gradeLevels->random()->id;
+
             Account::factory()->student($student)->create([
                 'username' => strtolower($student->first_name . $student->id),
                 'password' => 'password123',
             ]);
             Guardian::factory()->create(['student_id' => $student->id]);
             Enrollment::factory()->create([
-                'instructor_id' => Instructor::inRandomOrder()->first()->id,
-                'student_id' => $student->id,
-                'grade_level_id' => GradeLevel::inRandomOrder()->first()->id,
+                'instructor_id' => $instructor->id,
+                'student_id'    => $student->id,
+                'grade_level_id' => $gradeLevelId,
             ]);
             Address::factory()->student()->create([
                 'owner_id' => $student->id,
