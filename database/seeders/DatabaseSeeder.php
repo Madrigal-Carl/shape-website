@@ -163,11 +163,17 @@ class DatabaseSeeder extends Seeder
 
         // === Curriculums for each instructor ===
         $curriculums = $instructors->map(function ($instructor) {
-            return Curriculum::factory()->count(12)->create([
-                'instructor_id'   => $instructor->id,
-                'grade_level_id'  => $instructor->gradeLevels()->inRandomOrder()->first()->id,
-            ]);
+            $gradeLevelIds = $instructor->gradeLevels->pluck('id')->toArray();
+
+            return Curriculum::factory()->count(12)->make()->map(function ($curriculum) use ($instructor, $gradeLevelIds) {
+                $curriculum->instructor_id = $instructor->id;
+                $curriculum->grade_level_id = $gradeLevelIds[array_rand($gradeLevelIds)];
+                $curriculum->save();
+
+                return $curriculum;
+            });
         })->flatten();
+
 
         Subject::factory()->allSubjects();
         $subjectIds = Subject::pluck('id')->toArray();
