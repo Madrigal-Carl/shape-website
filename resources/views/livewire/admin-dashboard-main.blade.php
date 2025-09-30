@@ -60,7 +60,7 @@
                         </div>
                         <span class="material-symbols-rounded icon">people</span>
                     </div>
-                    <h1 class="text-5xl font-bold">24</h1>
+                    <h1 class="text-5xl font-bold">{{ $totalStudents }}</h1>
                 </div>
 
                 <div
@@ -72,7 +72,7 @@
                         </div>
                         <span class="material-symbols-rounded icon">sentiment_very_satisfied</span>
                     </div>
-                    <h1 class="text-5xl font-bold">14</h1>
+                    <h1 class="text-5xl font-bold">{{ $autismCount }}</h1>
                 </div>
 
                 <div
@@ -86,7 +86,7 @@
                         </div>
                         <span class="material-symbols-rounded icon">hearing_disabled</span>
                     </div>
-                    <h1 class="text-5xl font-bold">6</h1>
+                    <h1 class="text-5xl font-bold">{{ $hearingCount }}</h1>
                 </div>
 
                 <div
@@ -100,7 +100,7 @@
                         </div>
                         <span class="material-symbols-rounded icon">graphic_eq</span>
                     </div>
-                    <h1 class="text-5xl font-bold">5</h1>
+                    <h1 class="text-5xl font-bold">{{ $speechCount }}</h1>
                 </div>
             </div>
             <div class="grid grid-cols-1 grid-rows-2 gap-4">
@@ -114,7 +114,7 @@
                         </div>
                         <img src="{{ asset('images/student-feed.png') }}" class="h-6" alt="">
                     </div>
-                    <h1 class="text-5xl font-bold text-lime">10</h1>
+                    <h1 class="text-5xl font-bold text-lime">{{ $instructorCount }}</h1>
                 </div>
                 <div class="bg-white p-6 h-48 text-heading-dark rounded-3xl flex flex-col justify-between gap-6">
                     <div class="flex justify-between">
@@ -126,7 +126,7 @@
                         </div>
                         <img src="{{ asset('images/curriculum-icon.png') }}" class="h-6" alt="">
                     </div>
-                    <h1 class="text-5xl font-bold text-blue-button">2</h1>
+                    <h1 class="text-5xl font-bold text-blue-button">{{ $curriculumCount }}</h1>
                 </div>
             </div>
         </div>
