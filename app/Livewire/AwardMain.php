@@ -18,12 +18,6 @@ class AwardMain extends Component
     {
         $this->school_year = now()->schoolYear()->id;
         $this->school_years = SchoolYear::orderBy('name')->get();
-
-        $this->grade_levels = Enrollment::whereIn('student_id', Auth::user()->accountable->students->pluck('id'))
-            ->pluck('grade_level')
-            ->unique()
-            ->sort()
-            ->values();
     }
 
 
@@ -36,16 +30,26 @@ class AwardMain extends Component
     {
         $this->awards = Award::withCount([
             'students as awardees_count' => function ($query) {
-                $query->where('instructor_id', Auth::user()->accountable->id)
-                    ->where('student_awards.school_year_id', $this->school_year)
-                    ->when($this->grade_level && $this->grade_level !== 'all', function ($q) {
-                        $q->whereHas('enrollments', function ($enrollmentQuery) {
-                            $enrollmentQuery->where('grade_level', $this->grade_level)
-                                ->where('school_year_id', $this->school_year);
-                        });
+                $query->where('student_awards.school_year_id', $this->school_year)
+                    ->whereHas('enrollments', function ($enrollmentQuery) {
+                        $enrollmentQuery->where('instructor_id', Auth::user()->accountable->id)
+                            ->where('school_year_id', $this->school_year)
+                            ->when($this->grade_level && $this->grade_level !== 'all', function ($q) {
+                                $q->where('grade_level_id', $this->grade_level);
+                            });
                     });
             }
         ])->get();
+
+
+        $this->grade_levels = Enrollment::whereIn('student_id', Auth::user()->accountable->students->pluck('id'))
+            ->where('school_year_id', $this->school_year)
+            ->with('gradeLevel')
+            ->get()
+            ->pluck('gradeLevel')
+            ->unique('id')
+            ->sortBy('name')
+            ->values();
         return view('livewire.award-main');
     }
 }

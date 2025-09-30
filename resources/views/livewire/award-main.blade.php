@@ -54,8 +54,8 @@
                             All
                         </option>
                         @foreach ($grade_levels as $grade)
-                            <option value="{{ $grade }}" class=" text-heading-dark">
-                                {{ ucwords($grade) }}
+                            <option value="{{ $grade->id }}" class=" text-heading-dark">
+                                {{ ucwords($grade->name) }}
                             </option>
                         @endforeach
                     </select>
