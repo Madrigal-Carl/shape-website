@@ -108,7 +108,7 @@
                                         <p class="w-30 truncate">{{ ucwords($curriculum->name) }}</p>
                                     </td>
                                     <td class="px-4 py-3 text-center text-paragraph">
-                                        {{ ucwords($curriculum->grade_level) }}</td>
+                                        {{ ucwords($curriculum->gradeLevel->name) }}</td>
                                     <td class="px-4 py-3 text-center text-paragraph">
                                         {{ count($curriculum->curriculumSubjects) }}
                                     </td>

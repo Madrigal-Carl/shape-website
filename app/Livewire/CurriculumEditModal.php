@@ -15,13 +15,9 @@ class CurriculumEditModal extends Component
     public $isOpen = false, $curriculum_id = null, $specializations, $grade_levels;
     public $showSpecializationDropdown = false;
     public $showSubjectDropdown = false;
-    public $subjects, $edit_name, $edit_grade_level, $edit_specialization, $edit_description, $edit_subject;
+    public $subjects, $edit_name, $edit_grade_level = '', $edit_specialization, $edit_description, $edit_subject;
     public $selectedSpecializations = [], $selectedSubjects = [], $original = [];
 
-    public function mount()
-    {
-        $this->subjects = Subject::orderBy('name')->get();
-    }
 
     #[On('openModal')]
     public function openModal($id)
@@ -32,7 +28,7 @@ class CurriculumEditModal extends Component
         $curriculum = Curriculum::with('specializations', 'curriculumSubjects.subject')->find($this->curriculum_id);
 
         $this->edit_name = $curriculum->name;
-        $this->edit_grade_level = $curriculum->grade_level;
+        $this->edit_grade_level = $curriculum->grade_level_id;
         $this->edit_description = $curriculum->description;
         $this->selectedSpecializations = $curriculum->specializations->pluck('id')->toArray();
 
@@ -54,34 +50,14 @@ class CurriculumEditModal extends Component
         $this->isOpen = false;
     }
 
-    public function updatedEditSpecialization($value)
+    public function clearSpecializations()
     {
-        if ($value && !in_array($value, $this->selectedSpecializations)) {
-            $this->selectedSpecializations[] = $value;
-        }
-
-        $this->edit_specialization = '';
+        $this->selectedSpecializations = [];
     }
 
-    public function removeSpecialization($index)
+    public function clearSubjects()
     {
-        unset($this->selectedSpecializations[$index]);
-        $this->selectedSpecializations = array_values($this->selectedSpecializations);
-    }
-
-    public function updatedEditSubject($value)
-    {
-        if ($value && !in_array($value, $this->selectedSubjects)) {
-            $this->selectedSubjects[] = $value;
-        }
-
-        $this->edit_subject = '';
-    }
-
-    public function removeSubject($index)
-    {
-        unset($this->selectedSubjects[$index]);
-        $this->selectedSubjects = array_values($this->selectedSubjects);
+        $this->selectedSubjects = [];
     }
 
     public function editCurriculum()
@@ -152,7 +128,9 @@ class CurriculumEditModal extends Component
 
     public function render()
     {
+        $this->subjects = Subject::orderBy('name')->get();
         $this->specializations = Auth::user()->accountable->specializations;
+        $this->grade_levels = Auth::user()->accountable->gradeLevels;
         return view('livewire.curriculum-edit-modal');
     }
 }

@@ -17,20 +17,15 @@
                             <input type="text" placeholder="Name" wire:model.live="add_name"
                                 class="px-4 py-2 rounded-lg bg-white placeholder-paragraph outline-none" />
                             <div class="px-3 py-2 rounded-lg bg-white">
-                                <select wire:change="$set('add_grade_level', $event.target.value)"
-                                    class="w-full outline-none text-paragraph">
-                                    <option class="text-sm text-black" selected disabled>
+                                <select wire:model.live="add_grade_level" class="w-full outline-none text-paragraph">
+                                    <option value="" class="text-sm text-black" selected disabled>
                                         Grade Level
                                     </option>
-                                    <option value="kindergarten 1" class="text-sm text-paragraph">
-                                        Kindergarten 1
-                                    </option>
-                                    <option value="kindergarten 2" class="text-sm text-paragraph">
-                                        Kindergarten 2
-                                    </option>
-                                    <option value="kindergarten 3" class="text-sm text-paragraph">
-                                        Kindergarten 3
-                                    </option>
+                                    @foreach ($grade_levels as $level)
+                                        <option value="{{ $level->id }}" class="text-sm text-paragraph">
+                                            {{ ucwords($level->name) }}
+                                        </option>
+                                    @endforeach
                                 </select>
                             </div>
 

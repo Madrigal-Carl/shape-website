@@ -44,7 +44,7 @@ class CurriculumMain extends Component
 
     public function render()
     {
-        $curriculums = Curriculum::with('curriculumSubjects')
+        $curriculums = Curriculum::with('curriculumSubjects', 'gradeLevel')
             ->where('instructor_id', Auth::user()->accountable->id)
             ->when($this->status !== 'all', function ($query) {
                 $query->where('status', $this->status);

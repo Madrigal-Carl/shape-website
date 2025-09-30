@@ -18,22 +18,13 @@
                                 class="px-4 py-2 rounded-lg bg-white placeholder-paragraph outline-none" />
 
                             <div class="px-3 py-2 rounded-lg bg-white">
-                                <select wire:change="$set('edit_grade_level', $event.target.value)"
-                                    class="w-full outline-none text-paragraph">
-                                    @for ($i = 1; $i <= 3; $i++)
-                                        @php
-                                            $grade = "kindergarten $i";
-                                        @endphp
-                                        @if ($grade === $edit_grade_level)
-                                            <option value="{{ $edit_grade_level }}" class="text-sm text-black" selected>
-                                                {{ ucwords($edit_grade_level) }}
-                                            </option>
-                                        @else
-                                            <option value="{{ $grade }}" class="text-sm text-paragraph">
-                                                Kindergarten {{ $i }}
-                                            </option>
-                                        @endif
-                                    @endfor
+                                <select wire:model.live="edit_grade_level" class="w-full outline-none text-paragraph">
+                                    @foreach ($grade_levels as $grade)
+                                        <option value="{{ $grade->id }}"
+                                            class="text-sm {{ $grade->id === $edit_grade_level ? 'text-black' : 'text-paragraph' }}">
+                                            {{ $grade->name }}
+                                        </option>
+                                    @endforeach
                                 </select>
                             </div>
 
@@ -51,7 +42,7 @@
                                     <div class="p-4 rounded-lg bg-white relative flex flex-col gap-2 h-full">
                                         <div class="flex items-center justify-between w-full">
                                             <p class="text-paragraph">Specialization</p>
-                                            <button type="button" wire:click="$set('selectedSpecializations', [])"
+                                            <button type="button" wire:click="clearSpecializations"
                                                 class="flex items-center justify-center gap-1 px-3 py-1 rounded-lg text-paragraph border-1 border-gray-300 hover:border-blue-button hover:text-white cursor-pointer bg-white hover:bg-blue-button">
                                                 <p class="text-sm">Clear Selected</p>
                                                 <span class="material-symbols-rounded">clear_all</span>
@@ -96,7 +87,7 @@
                                     <div class="p-4 rounded-lg bg-white relative flex flex-col gap-2 h-full">
                                         <div class="flex items-center justify-between w-full mb-2">
                                             <p class="text-paragraph">Subjects</p>
-                                            <button type="button" wire:click="$set('selectedSubjects', [])"
+                                            <button type="button" wire:click="clearSubjects"
                                                 class="flex items-center justify-center gap-1 px-3 py-1 rounded-lg text-paragraph border-1 border-gray-300 hover:border-blue-button hover:text-white cursor-pointer bg-white hover:bg-blue-button">
                                                 <p class="text-sm">Clear Selected</p>
                                                 <span class="material-symbols-rounded">clear_all</span>

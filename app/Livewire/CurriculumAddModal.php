@@ -19,7 +19,7 @@ class CurriculumAddModal extends Component
     public $showSubjectDropdown = false;
     public $specializations;
 
-    public $add_name, $add_grade_level, $add_specialization, $add_description, $add_subject, $subjects, $grade_levels;
+    public $add_name, $add_grade_level = '', $add_specialization, $add_description, $add_subject, $subjects, $grade_levels;
 
     public $selectedSpecializations = [], $selectedSubjects = [];
 
@@ -31,23 +31,10 @@ class CurriculumAddModal extends Component
 
     public function closeModal()
     {
-        $this->resetFields();
+        $this->reset();
         $this->dispatch('refresh')->to('curriculum-main');
         $this->dispatch('refresh')->to('curriculum-aside');
         $this->isOpen = false;
-    }
-
-    public function resetFields()
-    {
-        $this->reset([
-            'add_name',
-            'add_grade_level',
-            'add_specialization',
-            'selectedSpecializations',
-            'add_description',
-            'add_subject',
-            'selectedSubjects',
-        ]);
     }
 
     public function openSpecializationModal()
@@ -96,7 +83,7 @@ class CurriculumAddModal extends Component
         $curriculum = Curriculum::create([
             'instructor_id' => Auth::user()->accountable->id,
             'name' => $this->add_name,
-            'grade_level' => $this->add_grade_level,
+            'grade_level_id' => $this->add_grade_level,
             'description' => $this->add_description ?? '',
         ]);
 
@@ -120,14 +107,11 @@ class CurriculumAddModal extends Component
         return $this->closeModal();
     }
 
-    public function mount()
+    public function render()
     {
         $this->subjects = Subject::orderBy('name')->get();
         $this->specializations = Auth::user()->accountable->specializations;
-    }
-
-    public function render()
-    {
+        $this->grade_levels = Auth::user()->accountable->gradeLevels;
         return view('livewire.curriculum-add-modal');
     }
 }

@@ -44,7 +44,7 @@
 
                             <div class="flex items-center w-auto gap-4">
                                 <h3 class="text-sm font-semibold w-40">Grade Level:</h3>
-                                <p class="text-sm w-full">{{ ucwords($curriculum->grade_level) }}</p>
+                                <p class="text-sm w-full">{{ ucwords($curriculum->gradeLevel->name) }}</p>
                             </div>
 
                             {{-- <div class="flex items-center w-auto gap-4">
