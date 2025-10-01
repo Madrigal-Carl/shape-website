@@ -111,7 +111,7 @@ class CurriculumAddModal extends Component
     {
         $this->subjects = Subject::orderBy('name')->get();
         $this->specializations = Auth::user()->accountable->specializations;
-        $this->grade_levels = Auth::user()->accountable->gradeLevels;
+        $this->grade_levels = Auth::user()->accountable->gradeLevels->sortBy('id')->values();
         return view('livewire.curriculum-add-modal');
     }
 }

@@ -25,16 +25,11 @@
                                         <option value="" class="text-sm text-black" disabled>
                                             Grade Level
                                         </option>
-                                        @foreach ($grade_levels as $grade_lvl)
-                                            @if ($grade_level === $grade_lvl)
-                                                <option value="{{ $grade_level }}" class="text-sm text-black" selected>
-                                                    {{ ucwords($grade_level) }}
-                                                </option>
-                                            @else
-                                                <option value="{{ $grade_lvl }}" class="text-sm text-paragraph">
-                                                    {{ ucwords($grade_lvl) }}
-                                                </option>
-                                            @endif
+                                        @foreach ($grade_levels as $grade)
+                                            <option value="{{ $grade->id }}"
+                                                class="text-sm {{ $grade->id === $grade_level ? 'text-black' : 'text-paragraph' }}">
+                                                {{ $grade->name }}
+                                            </option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -88,17 +83,12 @@
                         </div>
 
                         <div class="flex flex-col gap-3 flex-1 min-h-0">
-                            <h2 class="font-semibold text-xl">Specialize Learning <span
-                                    class="text-paragraph font-normal text-sm">(optional)</span></h2>
+                            <h2 class="font-semibold text-xl">List Students</h2>
                             {{-- Specilize selected Student --}}
                             <div class="rounded-lg relative flex flex-col gap-2 flex-1 min-h-0">
                                 <div class="flex items-center justify-between w-full">
-                                    <p class="text-paragraph">Select Student for specialize learning.</p>
-                                    <button type="button" wire:click="clearStudents"
-                                        class="flex items-center justify-center gap-1 px-4 py-2 rounded-lg text-paragraph hover:text-white cursor-pointer bg-white hover:bg-blue-button">
-                                        <p class="text-sm">Clear All</p>
-                                        <span class="material-symbols-rounded">clear_all</span>
-                                    </button>
+                                    <p class="text-paragraph">Students that will be assigned with the newly created
+                                        lesson.</p>
                                 </div>
                                 {{-- Search --}}
                                 <div class="flex items-center gap-2 px-4 py-2 rounded-lg bg-white w-full">
@@ -114,9 +104,7 @@
                                             <div
                                                 class="flex items-center gap-2 w-full p-2 hover:bg-card rounded-lg cursor-pointer">
                                                 <label class="container w-fit">
-                                                    <input type="checkbox"
-                                                        wire:click="toggleStudent({{ $student->id }})"
-                                                        @checked(in_array($student->id, $selected_students))>
+                                                    <input type="checkbox" checked disabled>
                                                     <div class="checkmark"></div>
                                                 </label>
                                                 <p class="w-full text-paragraph">{{ $student->full_name }}</p>

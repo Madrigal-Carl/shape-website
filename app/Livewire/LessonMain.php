@@ -14,6 +14,7 @@ class LessonMain extends Component
     use WithPagination, WithoutUrlPagination;
     public $search = '';
     public $school_year, $school_years, $quarter;
+    public $grade_level = '', $grade_levels;
     public $listeners = ['refresh' => '$refresh'];
     public function mount()
     {
@@ -81,7 +82,7 @@ class LessonMain extends Component
 
         $lessons = Lesson::with([
             'lessonSubjectStudents.curriculumSubject.subject',
-            'lessonSubjectStudents.curriculumSubject.curriculum',
+            'lessonSubjectStudents.curriculumSubject.curriculum.gradeLevel',
         ])
             ->withCount([
                 'lessonSubjectStudents',
@@ -90,7 +91,10 @@ class LessonMain extends Component
             ])
             ->where('school_year_id', $this->school_year)
             ->whereHas('lessonSubjectStudents.curriculumSubject.curriculum', function ($q) {
-                $q->where('instructor_id', Auth::user()->accountable->id)->where('status', 'active');
+                $q->where('instructor_id', Auth::user()->accountable->id)->where('status', 'active')
+                    ->when($this->grade_level && $this->grade_level !== 'all', function ($query) {
+                        $query->where('grade_level_id', $this->grade_level);
+                    });
             })
             ->when($this->quarter, function ($q) use ($schoolYear) {
                 switch ((int) $this->quarter) {
@@ -114,6 +118,7 @@ class LessonMain extends Component
             ->orderByDesc('created_at')
             ->paginate(10);
 
+        $this->grade_levels = Auth::user()->accountable->gradeLevels->sortBy('id')->values();
         return view('livewire.lesson-main', compact('lessons'));
     }
 }

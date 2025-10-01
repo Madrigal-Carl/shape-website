@@ -25,13 +25,13 @@ use Illuminate\Validation\ValidationException;
 class LessonAddModal extends Component
 {
     use WithFileUploads;
-    public $subjects, $grade_levels, $students, $activities, $curriculums, $youtube_link, $selected_student = '';
+    public $subjects, $grade_levels, $students, $activities, $curriculums, $youtube_link;
     public $videos = [];
     public $f2fActivities = [];
     public $selected_f2f_activities = [];
     public $isOpen = false;
     public $lesson_name, $curriculum = '', $subject = '', $grade_level = '', $description;
-    public $uploadedVideos = [], $selected_activities = [], $selected_students = [];
+    public $uploadedVideos = [], $selected_activities = [];
     public $student_search = '';
 
     public function getFilteredStudentsProperty()
@@ -47,22 +47,6 @@ class LessonAddModal extends Component
             });
     }
 
-    public function toggleStudent($studentId)
-    {
-        if (in_array($studentId, $this->selected_students)) {
-            $this->selected_students = array_values(
-                array_diff($this->selected_students, [$studentId])
-            );
-        } else {
-            $this->selected_students[] = $studentId;
-        }
-    }
-
-    public function clearStudents()
-    {
-        $this->selected_students = [];
-    }
-
     public function resetFields()
     {
         $this->lesson_name = null;
@@ -72,8 +56,6 @@ class LessonAddModal extends Component
         $this->students = collect();
         $this->curriculums = collect();
         $this->curriculum = '';
-        $this->selected_student = '';
-        $this->selected_students = [];
         $this->description = null;
         $this->videos = [];
         $this->uploadedVideos = [];
@@ -204,6 +186,11 @@ class LessonAddModal extends Component
             return false;
         }
 
+        if ($this->students->isEmpty()) {
+            $this->dispatch('swal-toast', icon: 'error', title: 'You must have at least one student to assign this lesson.');
+            return false;
+        }
+
         if (empty($this->selected_activities) && empty($this->selected_f2f_activities)) {
             $this->dispatch('swal-toast', icon: 'error', title: 'You must add at least one Game or Class activity.');
             return false;
@@ -238,11 +225,7 @@ class LessonAddModal extends Component
             'description' => $this->description,
         ]);
 
-        $studentsToAssign = empty($this->selected_students)
-            ? $this->students
-            : Student::whereIn('id', $this->selected_students)->get();
-
-        foreach ($studentsToAssign as $student) {
+        foreach ($this->students as $student) {
             LessonSubjectStudent::create([
                 'curriculum_subject_id' => $curriculumSubject->id,
                 'lesson_id' => $lesson->id,
@@ -296,31 +279,11 @@ class LessonAddModal extends Component
         $this->selected_activities = array_values($this->selected_activities);
     }
 
-    public function mount()
-    {
-        $this->activities = GameActivity::orderBy('id')->get();
-        $this->grade_levels = Curriculum::where('instructor_id', Auth::user()->accountable->id)
-            ->where('status', 'active')
-            ->orderBy('grade_level')
-            ->pluck('grade_level')
-            ->unique()
-            ->values()
-            ->toArray();
-        $this->students = collect();
-        $this->curriculums = collect();
-        $this->subjects = collect();
-    }
-
     public function updatedGradeLevel()
     {
-        $this->curriculums = Curriculum::where('instructor_id', Auth::user()->accountable->id)->where('grade_level', $this->grade_level)->where('status', 'active')->get();
-        if (!empty($this->selected_students)) {
-            $this->selected_students = [];
-        }
+        $this->curriculums = Curriculum::where('instructor_id', Auth::user()->accountable->id)->where('grade_level_id', $this->grade_level)->where('status', 'active')->get();
         $this->curriculum = '';
         $this->subject = '';
-        $this->selected_student = '';
-        $this->selected_students = [];
         $this->f2fActivities = [];
         $this->selected_f2f_activities = [];
         $this->subjects = collect();
@@ -329,12 +292,7 @@ class LessonAddModal extends Component
 
     public function updatedCurriculum()
     {
-        if (!empty($this->selected_students)) {
-            $this->selected_students = [];
-        }
         $this->subject = '';
-        $this->selected_student = '';
-        $this->selected_students = [];
         $this->f2fActivities = [];
         $this->selected_f2f_activities = [];
         $this->subjects = Subject::whereHas('curriculumSubjects', function ($query) {
@@ -343,7 +301,7 @@ class LessonAddModal extends Component
         $this->students = Auth::user()->accountable->students()
             ->where('status', 'active')
             ->whereHas('enrollments', function ($query) {
-                $query->where('grade_level', $this->grade_level)
+                $query->where('grade_level_id', $this->grade_level)
                     ->where('school_year_id', now()->schoolYear()->id);
             })
             ->whereIn(
@@ -386,6 +344,16 @@ class LessonAddModal extends Component
     public function clearF2fActivities()
     {
         $this->selected_f2f_activities = [];
+    }
+
+    public function mount()
+    {
+        $this->activities = GameActivity::orderBy('id')->get();
+        $this->grade_levels = Auth::user()->accountable->gradeLevels->sortBy('id')->values();
+
+        $this->students = collect();
+        $this->curriculums = collect();
+        $this->subjects = collect();
     }
 
     public function render()

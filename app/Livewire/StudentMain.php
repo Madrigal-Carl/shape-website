@@ -74,15 +74,7 @@ class StudentMain extends Component
             ->orderBy('first_name')
             ->paginate(10);
 
-        $this->grade_levels = Enrollment::whereIn('student_id', Auth::user()->accountable->students->pluck('id'))
-            ->where('school_year_id', $this->school_year)
-            ->with('gradeLevel')
-            ->get()
-            ->pluck('gradeLevel')
-            ->unique('id')
-            ->sortBy('name')
-            ->values();
-
+        $this->grade_levels = Auth::user()->accountable->gradeLevels->sortBy('id')->values();
         return view('livewire.student-main', compact('students'));
     }
 }

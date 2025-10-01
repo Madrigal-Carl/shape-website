@@ -136,7 +136,7 @@ class StudentAdvanceModal extends Component
 
     public function render()
     {
-        $this->grade_levels = Auth::user()->accountable->gradeLevels;
+        $this->grade_levels = Auth::user()->accountable->gradeLevels->sortBy('id')->values();
         return view('livewire.student-advance-modal', [
             'students' => $this->filteredStudents,
         ]);

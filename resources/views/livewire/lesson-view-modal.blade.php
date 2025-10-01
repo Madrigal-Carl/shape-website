@@ -50,7 +50,8 @@
                             <div class="flex items-center w-auto gap-4">
                                 <h3 class="text-sm font-semibold w-40">Grade level:</h3>
                                 <p class="text-sm w-full">
-                                    {{ ucwords($lesson->lessonSubjectStudents->first()->curriculum->grade_level) }}</p>
+                                    {{ ucwords($lesson->lessonSubjectStudents->first()->curriculum->gradeLevel->name) }}
+                                </p>
                             </div>
 
                             <div class="flex items-center w-auto gap-4">

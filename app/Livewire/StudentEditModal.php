@@ -566,7 +566,7 @@ class StudentEditModal extends Component
         ];
         $this->municipalities = array_keys($this->barangayData);
         $this->specializations = Auth::user()->accountable->specializations;
-        $this->grade_levels = Auth::user()->accountable->gradeLevels;
+        $this->grade_levels = Auth::user()->accountable->gradeLevels->sortBy('id')->values();
         return view('livewire.student-edit-modal');
     }
 }

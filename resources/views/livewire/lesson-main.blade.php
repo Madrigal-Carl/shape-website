@@ -71,6 +71,22 @@
             <div class="flex items-center gap-4 self-start">
                 <div
                     class="flex items-center bg-white py-3 px-5 rounded-full border-2 border-white hover:border-blue-button text-paragraph hover:bg-blue-button hover:text-white cursor-pointer">
+                    <select class="w-max outline-none" wire:model.live="grade_level">
+                        <option value="" class=" text-heading-dark" disabled>
+                            Grade Level
+                        </option>
+                        <option value="all" class=" text-heading-dark">
+                            All
+                        </option>
+                        @foreach ($grade_levels as $grade)
+                            <option value="{{ $grade->id }}" class=" text-heading-dark">
+                                {{ ucwords($grade->name) }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                <div
+                    class="flex items-center bg-white py-3 px-5 rounded-full border-2 border-white hover:border-blue-button text-paragraph hover:bg-blue-button hover:text-white cursor-pointer">
                     <select name="" id="" class="w-max outline-none" wire:model.live="quarter">
                         <option value="1" class=" text-heading-dark">
                             1st Quarter
@@ -136,7 +152,7 @@
                                         </p>
                                     </td>
                                     <td class="px-4 py-3 text-center text-paragraph">
-                                        {{ ucwords($lesson->lessonSubjectStudents->first()->curriculumSubject->curriculum->grade_level) }}
+                                        {{ ucwords($lesson->lessonSubjectStudents->first()->curriculumSubject->curriculum->gradeLevel->name) }}
                                     </td>
                                     <td class="px-4 py-3 text-center text-paragraph flex flex-col items-center">
                                         <p class="w-30 truncate">

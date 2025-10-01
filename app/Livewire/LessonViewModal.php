@@ -21,7 +21,7 @@ class LessonViewModal extends Component
         $this->lesson = Lesson::with([
             'videos',
             'students',
-            'lessonSubjectStudents.curriculum',
+            'lessonSubjectStudents.curriculum.gradeLevel',
             'lessonSubjectStudents.subject',
             'activityLessons.activityLessonable' => function ($morphTo) {
                 $morphTo->morphWith([
