@@ -238,44 +238,47 @@ class DatabaseSeeder extends Seeder
             }
         });
 
-        // === Lessons, Activities, Videos ===
-        $lessons = Lesson::factory()->count(36)->create();
+        // === Activities ===
         $activities = GameActivity::factory()->count(30)->create();
 
         $activities->each(function ($activity) use ($specializations) {
             $activity->specializations()->attach(
                 $specializations->random(rand(1, 2))->pluck('id')->toArray()
             );
+
             GameImage::factory()->count(7)->create(['game_activity_id' => $activity->id]);
-            $activity->subjects()->attach(Subject::inRandomOrder()->take(rand(1, 2))->pluck('id'));
+
+            $activity->subjects()->attach(
+                Subject::inRandomOrder()->take(rand(1, 2))->pluck('id')
+            );
         });
 
-        // Assign lessons properly to a curriculum (which belongs to an instructor)
-        $lessons->each(function ($lesson) use ($activities, $curriculums) {
-            Video::factory()->create(['lesson_id' => $lesson->id]);
-
-            $lessonActivity = ActivityLesson::firstOrCreate([
-                'lesson_id' => $lesson->id,
-                'activity_lessonable_id' => $activities->random()->id,
-                'activity_lessonable_type' => GameActivity::class,
-            ]);
-            $lesson->setRelation('lessonActivity', $lessonActivity);
-        });
-
-        // === Assign lessons to the respective instructor's students ===
-        $instructors->each(function ($instructor) use ($lessons, $curriculums) {
-            // Get this instructor’s curriculums and subjects
+        // === Assign lessons per instructor (unique) ===
+        $instructors->each(function ($instructor) use ($activities, $curriculums) {
             $instructorCurriculums = $curriculums->where('instructor_id', $instructor->id);
 
-            $instructorCurriculums->each(function ($curriculum) use ($lessons, $instructor) {
+            $instructorCurriculums->each(function ($curriculum) use ($activities, $instructor) {
                 $curriculumSubjects = $curriculum->curriculumSubjects;
 
-                // ✅ Get only the students that match grade_level + specialization
+                // ✅ Get only students that match grade_level + specialization
                 $eligibleStudents = $instructor->eligibleStudents($curriculum)->get();
 
-                // ✅ Assign 2 lessons per curriculum
-                $curriculumLessons = $lessons->random(2);
+                // ✅ Create fresh lessons for this instructor/curriculum (not shared globally)
+                $curriculumLessons = Lesson::factory()->count(2)->create([
+                    'school_year_id' => now()->schoolYear()->id,
+                ]);
 
+                $curriculumLessons->each(function ($lesson) use ($activities) {
+                    Video::factory()->create(['lesson_id' => $lesson->id]);
+
+                    ActivityLesson::create([
+                        'lesson_id' => $lesson->id,
+                        'activity_lessonable_id' => $activities->random()->id,
+                        'activity_lessonable_type' => GameActivity::class,
+                    ]);
+                });
+
+                // ✅ Assign these lessons to eligible students
                 $eligibleStudents->each(function ($student) use ($curriculumLessons, $curriculumSubjects) {
                     $curriculumLessons->each(function ($lesson) use ($student, $curriculumSubjects) {
                         $curriculumSubject = $curriculumSubjects->random();
@@ -286,7 +289,7 @@ class DatabaseSeeder extends Seeder
                             'student_id'            => $student->id,
                         ]);
 
-                        // Assign activity logs too
+                        // Assign activity logs
                         if ($lesson->activityLessons->isNotEmpty()) {
                             foreach ($lesson->activityLessons as $activityLesson) {
                                 $studentActivity = StudentActivity::firstOrCreate([
@@ -300,6 +303,7 @@ class DatabaseSeeder extends Seeder
                 });
             });
         });
+
 
 
         // === Class Activity ===
