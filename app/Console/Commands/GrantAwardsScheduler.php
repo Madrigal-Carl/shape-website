@@ -161,10 +161,15 @@ class GrantAwardsScheduler extends Command
                 ->filter();
 
             foreach ($subjects as $subject) {
-                $allActivities = $subject->curriculumSubjects
+                // FIX: use relation, not collection, for whereHas
+                $activeCurriculumSubjects = $subject->curriculumSubjects()
                     ->whereHas('curriculum', fn($q) => $q->where('status', 'active'))
+                    ->get();
+
+                $allActivities = $activeCurriculumSubjects
                     ->flatMap(fn($cs) => $cs->lessons()->where('school_year_id', $schoolYear->id)->get())
                     ->flatMap(fn($lesson) => $lesson->activityLessons);
+
                 if ($allActivities->isEmpty()) continue;
                 $allCompleted = $allActivities->every(function ($al) use ($student) {
                     $sa = $al->studentActivities->where('student_id', $student->id)->first();
@@ -185,8 +190,13 @@ class GrantAwardsScheduler extends Command
         $gameActivityIds = \App\Models\GameActivity::whereHas('activityLesson.lesson', function ($q) use ($schoolYear) {
             $q->where('school_year_id', $schoolYear->id);
         })
-            ->whereHas('curriculumSubject.curriculum', fn($q) => $q->where('status', 'active'))
-            ->pluck('id')->toArray();
+            ->get()
+            ->filter(function ($gameActivity) {
+                $curriculum = optional(optional($gameActivity->curriculumSubject)->curriculum);
+                return $curriculum && $curriculum->status === 'active';
+            })
+            ->pluck('id')
+            ->toArray();
 
         return $students->filter(function ($student) use ($gameActivityIds) {
             if (empty($gameActivityIds)) return false;
