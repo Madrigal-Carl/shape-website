@@ -41,6 +41,44 @@ class CurriculumMain extends Component
         $this->dispatch('swal-toast', icon: 'warning', title: 'Curriculum has been deactived.');
     }
 
+    protected function checkGradeLevelCurriculums()
+    {
+        $instructor = Auth::user()->accountable;
+        $gradeLevels = $instructor->gradeLevels()->get();
+
+        $missingCurriculum = [];
+        $inactiveCurriculum = [];
+        $multipleActiveCurriculum = [];
+
+        foreach ($gradeLevels as $gradeLevel) {
+            $curriculums = $instructor->curriculums()->where('grade_level_id', $gradeLevel->id)->get();
+
+            if ($curriculums->isEmpty()) {
+                $missingCurriculum[] = $gradeLevel->name;
+            } else {
+                $active = $curriculums->where('status', 'active');
+                $activeCount = $active->count();
+                if ($activeCount === 0) {
+                    $inactiveCurriculum[] = $gradeLevel->name;
+                } elseif ($activeCount > 1) {
+                    $multipleActiveCurriculum[] = $gradeLevel->name;
+                }
+            }
+        }
+
+        if (!empty($missingCurriculum)) {
+            $this->dispatch('show-curriculum-warning', text: 'Missing curriculum for grade level(s): ' . implode(', ', $missingCurriculum));
+        } elseif (!empty($inactiveCurriculum)) {
+            $this->dispatch('show-curriculum-warning', text: 'No active curriculum for grade level(s): ' . implode(', ', $inactiveCurriculum));
+        } elseif (!empty($multipleActiveCurriculum)) {
+            $this->dispatch('show-curriculum-warning', text: 'Only one active curriculum is allowed per grade level. Multiple active curriculums found for: ' . implode(', ', $multipleActiveCurriculum));
+        }
+    }
+
+    public function mount()
+    {
+        $this->checkGradeLevelCurriculums();
+    }
 
     public function render()
     {

@@ -220,5 +220,23 @@
             </div>
         @endif
     </div>
-
 </main>
+
+<script>
+    document.addEventListener('livewire:init', () => {
+        Livewire.on('show-curriculum-warning', ({
+            text
+        }) => {
+            Swal.fire({
+                title: 'Notice',
+                text: text,
+                icon: 'warning',
+                confirmButtonText: 'Continue',
+                confirmButtonColor: '#2563eb',
+                customClass: {
+                    title: 'swal-title',
+                }
+            });
+        });
+    });
+</script>
