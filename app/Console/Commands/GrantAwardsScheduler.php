@@ -32,214 +32,231 @@ class GrantAwardsScheduler extends Command
         $this->info('Checking awards...');
 
         $currentSchoolYear = now()->schoolYear();
+        if (!$currentSchoolYear) {
+            $this->error('No current school year found.');
+            return;
+        }
 
+        // Only students enrolled this school year
         $students = Student::whereHas('enrollments', function ($q) use ($currentSchoolYear) {
-            $q->where('school_year_id', $currentSchoolYear);
-        })
-            ->with([
-                'lessonSubjectStudents.lesson.activityLessons.studentActivities.logs',
-                'lessonSubjectStudents.curriculumSubject.subject',
-            ])
-            ->get();
+            $q->where('school_year_id', $currentSchoolYear->id);
+        })->get();
 
-        $activityAceIds = $this->getActivityAceStudentIds($students);
-        $resilientLearnerIds = $this->getResilientLearnerStudentIds($students);
-        $progressPioneerIds = $this->getProgressPioneerStudentIds($students);
-        $speedLearnerIds = $this->getSpeedLearnerStudentIds($students);
+        // Calculate all award eligibility
+        $lessonFinisherIds = $this->getLessonFinisherIds($students, $currentSchoolYear);
+        $activityAceIds    = $this->getActivityAceIds($students, $currentSchoolYear, $lessonFinisherIds);
+        $subjectSpecialistIds = $this->getSubjectSpecialistIds($students, $currentSchoolYear);
+        $gameMasterIds     = $this->getGameMasterIds($students, $currentSchoolYear);
+        $earlyBirdIds      = $this->getEarlyBirdIds($students, $currentSchoolYear);
+        $consistencyAwardIds = $this->getConsistencyAwardIds($students, $currentSchoolYear);
 
+        // Award logic
         foreach ($students as $student) {
             $awards = [];
 
-            if (in_array($student->id, $activityAceIds)) $awards[] = 'Activity Ace';
-            if ($this->isLessonFinisher($student)) $awards[] = 'Lesson Finisher';
-            if (in_array($student->id, $resilientLearnerIds)) $awards[] = 'Resilient Learner';
-            if (in_array($student->id, $progressPioneerIds)) $awards[] = 'Progress Pioneer';
-            if ($this->isSubjectSpecialist($student)) $awards[] = 'Subject Specialist';
-            if (in_array($student->id, $speedLearnerIds)) $awards[] = 'Speed Learner';
-
-            // Remove Activity Ace if student is a Lesson Finisher
-            if (in_array('Lesson Finisher', $awards)) {
-                $awards = array_diff($awards, ['Activity Ace']);
+            if (in_array($student->id, $lessonFinisherIds)) {
+                $awards[] = 'Lesson Finisher';
+            } elseif (in_array($student->id, $activityAceIds)) {
+                $awards[] = 'Activity Ace';
             }
 
-            foreach (['Activity Ace', 'Lesson Finisher', 'Resilient Learner', 'Progress Pioneer', 'Subject Specialist', 'Speed Learner'] as $awardName) {
-                $this->grantOrRevokeAward($student, $awardName, in_array($awardName, $awards));
+            if (in_array($student->id, $subjectSpecialistIds)) {
+                $awards[] = 'Subject Specialist';
+            }
+            if (in_array($student->id, $gameMasterIds)) {
+                $awards[] = 'Game Master';
+            }
+            if (in_array($student->id, $earlyBirdIds)) {
+                $awards[] = 'Early Bird';
+            }
+            if (in_array($student->id, $consistencyAwardIds)) {
+                $awards[] = 'Consistency Award';
+            }
+
+            // Grant or revoke each award
+            foreach (
+                [
+                    'Activity Ace',
+                    'Lesson Finisher',
+                    'Subject Specialist',
+                    'Game Master',
+                    'Early Bird',
+                    'Consistency Award'
+                ] as $awardName
+            ) {
+                $this->grantOrRevokeAward($student, $awardName, in_array($awardName, $awards), $currentSchoolYear->id);
             }
         }
 
         $this->info('Award checks finished.');
     }
 
-    protected function grantOrRevokeAward(Student $student, string $awardName, bool $meetsCriteria)
+    protected function grantOrRevokeAward($student, $awardName, $meetsCriteria, $schoolYearId)
     {
         $award = Award::firstOrCreate(['name' => $awardName]);
-        $currentYear = now()->schoolYear();
-
-        $alreadyHas = $student->awards()
-            ->wherePivot('school_year', $currentYear)
+        $alreadyHas = $student->studentAwards()
             ->where('award_id', $award->id)
+            ->where('school_year_id', $schoolYearId)
             ->exists();
 
         if ($meetsCriteria && !$alreadyHas) {
-            $student->awards()->attach($award->id, ['school_year' => $currentYear]);
+            $student->studentAwards()->create([
+                'award_id' => $award->id,
+                'school_year_id' => $schoolYearId,
+            ]);
             Feed::create([
                 'notifiable_id' => $student->id,
                 'group' => 'award',
-                'title' => "{$student->fullname} earned a new award!",
-                'message' => "{$student->fullname} has been awarded the '{$award->name}' for outstanding performance.",
+                'title' => "{$student->full_name} earned a new award!",
+                'message' => "{$student->full_name} has been awarded the '{$award->name}' for outstanding performance.",
             ]);
-            Log::info("Granted {$awardName} ({$currentYear}) to {$student->full_name}");
         } elseif (!$meetsCriteria && $alreadyHas) {
-            $student->awards()->detach($award->id);
+            $student->studentAwards()
+                ->where('award_id', $award->id)
+                ->where('school_year_id', $schoolYearId)
+                ->delete();
             Feed::create([
                 'notifiable_id' => $student->id,
                 'group' => 'award',
-                'title' => "Award revoked from {$student->fullname}",
-                'message' => "The '{$award->name}' award has been revoked from {$student->fullname}.",
+                'title' => "Award revoked from {$student->full_name}",
+                'message' => "The '{$award->name}' award has been revoked from {$student->full_name}.",
             ]);
-            Log::info("Revoked {$awardName} ({$currentYear}) from {$student->full_name}");
         }
     }
 
-    // Activity Ace: Top 3 students with most activities completed (current school year)
-    protected function getActivityAceStudentIds($students)
+    // Lesson Finisher: completed all activities assigned (from active curriculums)
+    protected function getLessonFinisherIds($students, $schoolYear)
     {
-        $schoolYear = now()->schoolYear();
-        $completedCounts = $students->mapWithKeys(function ($student) use ($schoolYear) {
-            return [$student->id => $student->completedActivitiesCount($schoolYear)];
-        });
-        $sorted = $completedCounts->sortDesc();
+        return $students->filter(function ($student) use ($schoolYear) {
+            $total = $student->totalActivitiesCount($schoolYear->id);
+            $completed = $student->completedActivitiesCount($schoolYear->id);
+            return $total > 0 && $completed == $total;
+        })->pluck('id')->toArray();
+    }
+
+    // Activity Ace: Top 3 (with ties), excluding lesson finishers (from active curriculums)
+    protected function getActivityAceIds($students, $schoolYear, $lessonFinisherIds)
+    {
+        $filtered = $students->filter(fn($s) => !in_array($s->id, $lessonFinisherIds));
+        $counts = $filtered->mapWithKeys(fn($s) => [$s->id => $s->completedActivitiesCount($schoolYear->id)]);
+        $sorted = $counts->sortDesc();
         $topCounts = $sorted->take(3)->values();
         if ($topCounts->isEmpty() || $topCounts[0] == 0) return [];
         $minTop = $topCounts->last();
-        return $completedCounts->filter(fn($count) => $count >= $minTop && $count > 0)->keys()->toArray();
+        return $counts->filter(fn($count) => $count >= $minTop && $count > 0)->keys()->toArray();
     }
 
-    // Lesson Finisher: All lessons completed (current school year)
-    protected function isLessonFinisher(Student $student)
+    // Subject Specialist: finished all activities in any subject (from active curriculums)
+    protected function getSubjectSpecialistIds($students, $schoolYear)
     {
-        $schoolYear = now()->schoolYear();
-        $total = $student->totalLessonsCount($schoolYear);
-        $completed = $student->completedLessonsCount($schoolYear);
-        return $total > 0 && $completed == $total;
-    }
+        $ids = [];
+        foreach ($students as $student) {
+            $subjects = $student->lessonSubjectStudents()
+                ->whereHas('lesson', fn($q) => $q->where('school_year_id', $schoolYear->id))
+                ->whereHas('curriculum', fn($q) => $q->where('status', 'active'))
+                ->with('curriculumSubject.subject')
+                ->get()
+                ->pluck('curriculumSubject.subject')
+                ->unique('id')
+                ->filter();
 
-    // Resilient Learner: Top 3 students with most attempts before completing any activity, must have completed at least 50% of lessons (current school year)
-    protected function getResilientLearnerStudentIds($students)
-    {
-        $schoolYear = now()->schoolYear();
-        $attempts = $students->mapWithKeys(function ($student) use ($schoolYear) {
-            $maxAttempts = 0;
-            $lssList = $student->lessonSubjectStudents->filter(function ($lss) use ($schoolYear) {
-                return $lss->lesson && $lss->lesson->school_year === $schoolYear;
-            });
-            foreach ($lssList as $lss) {
-                foreach ($lss->lesson->activityLessons as $al) {
+            foreach ($subjects as $subject) {
+                $allActivities = $subject->curriculumSubjects
+                    ->whereHas('curriculum', fn($q) => $q->where('status', 'active'))
+                    ->flatMap(fn($cs) => $cs->lessons()->where('school_year_id', $schoolYear->id)->get())
+                    ->flatMap(fn($lesson) => $lesson->activityLessons);
+                if ($allActivities->isEmpty()) continue;
+                $allCompleted = $allActivities->every(function ($al) use ($student) {
                     $sa = $al->studentActivities->where('student_id', $student->id)->first();
-                    if ($sa) {
-                        $logs = $sa->logs->sortBy('attempt_number');
-                        $completedLog = $logs->where('status', 'completed')->first();
-                        if ($completedLog) {
-                            $maxAttempts = max($maxAttempts, $completedLog->attempt_number ?? 1);
-                        }
-                    }
+                    return $sa && $sa->status === 'finished';
+                });
+                if ($allCompleted) {
+                    $ids[] = $student->id;
+                    break;
                 }
             }
-            // Only consider if completed at least 50% of lessons (current school year)
-            $total = $student->totalLessonsCount($schoolYear);
-            $completed = $student->completedLessonsCount($schoolYear);
-            $ratio = $total > 0 ? $completed / $total : 0;
-            return [$student->id => ($ratio >= 0.5 ? $maxAttempts : 0)];
-        });
-        $sorted = $attempts->sortDesc();
-        $topCounts = $sorted->take(3)->values();
-        if ($topCounts->isEmpty() || $topCounts[0] == 0) return [];
-        $minTop = $topCounts->last();
-        return $attempts->filter(fn($count) => $count >= $minTop && $count > 0)->keys()->toArray();
+        }
+        return array_unique($ids);
     }
 
-    // Progress Pioneer: Top 3 students with greatest average improvement (current school year)
-    protected function getProgressPioneerStudentIds($students)
+    // Game Master: finished all GameActivities (from active curriculums)
+    protected function getGameMasterIds($students, $schoolYear)
     {
-        $schoolYear = now()->schoolYear();
-        $improvements = $students->mapWithKeys(function ($student) use ($schoolYear) {
-            $totalImprovement = 0;
-            $count = 0;
-            $lssList = $student->lessonSubjectStudents->filter(function ($lss) use ($schoolYear) {
-                return $lss->lesson && $lss->lesson->school_year === $schoolYear;
-            });
-            foreach ($lssList as $lss) {
-                foreach ($lss->lesson->activityLessons as $al) {
-                    $sa = $al->studentActivities->where('student_id', $student->id)->first();
-                    if ($sa && $sa->logs->count() >= 2) {
-                        $first = $sa->logs->sortBy('attempt_number')->first();
-                        $last = $sa->logs->sortByDesc('attempt_number')->first();
-                        $improvement = ($last->score ?? 0) - ($first->score ?? 0);
-                        $totalImprovement += $improvement;
-                        $count++;
-                    }
+        $gameActivityIds = \App\Models\GameActivity::whereHas('activityLesson.lesson', function ($q) use ($schoolYear) {
+            $q->where('school_year_id', $schoolYear->id);
+        })
+            ->whereHas('curriculumSubject.curriculum', fn($q) => $q->where('status', 'active'))
+            ->pluck('id')->toArray();
+
+        return $students->filter(function ($student) use ($gameActivityIds) {
+            if (empty($gameActivityIds)) return false;
+            $completed = 0;
+            foreach ($gameActivityIds as $gaId) {
+                $al = \App\Models\ActivityLesson::where('activity_lessonable_type', \App\Models\GameActivity::class)
+                    ->where('activity_lessonable_id', $gaId)
+                    ->first();
+                if (!$al) return false;
+                $sa = $al->studentActivities()->where('student_id', $student->id)->first();
+                if ($sa && $sa->status === 'finished') {
+                    $completed++;
                 }
             }
-            return [$student->id => $count > 0 ? $totalImprovement / $count : 0];
-        });
-        $sorted = $improvements->sortDesc();
-        $topCounts = $sorted->take(3)->values();
-        if ($topCounts->isEmpty() || $topCounts[0] == 0) return [];
-        $minTop = $topCounts->last();
-        return $improvements->filter(fn($val) => $val >= $minTop && $val > 0)->keys()->toArray();
+            return $completed === count($gameActivityIds) && $completed > 0;
+        })->pluck('id')->toArray();
     }
 
-    // Subject Specialist: Completed every activity in any subject (current school year)
-    protected function isSubjectSpecialist(Student $student)
+    // Early Bird: Top 3 (with ties) by earliest average completion time (from active curriculums)
+    protected function getEarlyBirdIds($students, $schoolYear)
     {
-        $schoolYear = now()->schoolYear();
-        $subjects = $student->lessonSubjectStudents
-            ->filter(fn($lss) => $lss->lesson && $lss->lesson->school_year === $schoolYear)
-            ->pluck('curriculumSubject.subject')->unique('id')->filter();
-        foreach ($subjects as $subject) {
-            $allActivities = $subject->curriculumSubjects
-                ->flatMap(fn($cs) => $cs->lessons->where('school_year', $schoolYear))
-                ->flatMap(fn($lesson) => $lesson->activityLessons);
-            if ($allActivities->isEmpty()) continue;
-            $allCompleted = $allActivities->every(function ($al) use ($student) {
+        $avgTimes = $students->mapWithKeys(function ($student) use ($schoolYear) {
+            $activities = $student->lessonSubjectStudents()
+                ->whereHas('lesson', fn($q) => $q->where('school_year_id', $schoolYear->id))
+                ->whereHas('curriculum', fn($q) => $q->where('status', 'active'))
+                ->get()
+                ->flatMap(fn($lss) => $lss->lesson->activityLessons ?? []);
+            $times = $activities->map(function ($al) use ($student) {
                 $sa = $al->studentActivities->where('student_id', $student->id)->first();
-                if (!$sa) return false;
-                $log = $sa->logs->sortByDesc('attempt_number')->first();
-                return $log && $log->status === 'completed';
-            });
-            if ($allCompleted) return true;
-        }
-        return false;
+                return $sa && $sa->status === 'finished' ? $sa->updated_at->timestamp - $al->created_at->timestamp : null;
+            })->filter();
+            return [$student->id => $times->count() ? $times->avg() : null];
+        })->filter();
+
+        $sorted = $avgTimes->sort();
+        $top = $sorted->take(3)->values();
+        if ($top->isEmpty()) return [];
+        $maxTop = $top->last();
+        return $avgTimes->filter(fn($avg) => $avg !== null && $avg <= $maxTop)->keys()->toArray();
     }
 
-    // Speed Learner: Top 3 students with shortest total time, must have completed at least 50% of lessons (current school year)
-    protected function getSpeedLearnerStudentIds($students)
+    // Consistency Award: Top 3 (with ties) who finish all activities each week (from active curriculums)
+    protected function getConsistencyAwardIds($students, $schoolYear)
     {
-        $schoolYear = now()->schoolYear();
-        $times = $students->mapWithKeys(function ($student) use ($schoolYear) {
-            $totalTime = 0;
-            $lssList = $student->lessonSubjectStudents->filter(function ($lss) use ($schoolYear) {
-                return $lss->lesson && $lss->lesson->school_year === $schoolYear;
-            });
-            foreach ($lssList as $lss) {
-                foreach ($lss->lesson->activityLessons as $al) {
-                    $sa = $al->studentActivities->where('student_id', $student->id)->first();
-                    if ($sa) {
-                        $log = $sa->logs->where('status', 'completed')->sortByDesc('attempt_number')->first();
-                        $totalTime += $log->time_spent_seconds ?? 0;
-                    }
-                }
+        $weekCounts = $students->mapWithKeys(function ($student) use ($schoolYear) {
+            $weeks = [];
+            $activities = $student->lessonSubjectStudents()
+                ->whereHas('lesson', fn($q) => $q->where('school_year_id', $schoolYear->id))
+                ->whereHas('curriculum', fn($q) => $q->where('status', 'active'))
+                ->get()
+                ->flatMap(fn($lss) => $lss->lesson->activityLessons ?? []);
+            foreach ($activities as $al) {
+                $week = $al->created_at->format('W');
+                $weeks[$week] = $weeks[$week] ?? [];
+                $weeks[$week][] = $al;
             }
-            // Only consider if completed at least 50% of lessons (current school year)
-            $total = $student->totalLessonsCount($schoolYear);
-            $completed = $student->completedLessonsCount($schoolYear);
-            $ratio = $total > 0 ? $completed / $total : 0;
-            return [$student->id => ($ratio >= 0.5 ? $totalTime : null)];
-        })->filter(fn($t) => !is_null($t) && $t > 0);
-        $sorted = $times->sort();
-        $topCounts = $sorted->take(3)->values();
-        if ($topCounts->isEmpty()) return [];
-        $maxTop = $topCounts->last();
-        return $times->filter(fn($t) => $t <= $maxTop)->keys()->toArray();
+            $consistentWeeks = 0;
+            foreach ($weeks as $week => $als) {
+                $allDone = collect($als)->every(function ($al) use ($student) {
+                    $sa = $al->studentActivities->where('student_id', $student->id)->first();
+                    return $sa && $sa->status === 'finished';
+                });
+                if ($allDone && count($als) > 0) $consistentWeeks++;
+            }
+            return [$student->id => $consistentWeeks];
+        });
+        $sorted = $weekCounts->sortDesc();
+        $top = $sorted->take(3)->values();
+        if ($top->isEmpty() || $top[0] == 0) return [];
+        $minTop = $top->last();
+        return $weekCounts->filter(fn($count) => $count >= $minTop && $count > 0)->keys()->toArray();
     }
 }

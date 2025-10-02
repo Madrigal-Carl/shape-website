@@ -174,10 +174,10 @@ class DatabaseSeeder extends Seeder
         $awards = [
             ['name' => 'Activity Ace', 'description' => 'Recognizes the student who completes the highest number of activities overall.'],
             ['name' => 'Lesson Finisher', 'description' => 'Awarded for completing all lessons assigned in the course.'],
-            ['name' => 'Resilient Learner', 'description' => 'Granted to a student who keeps trying until success, completing an activity after multiple failed attempts.'],
-            ['name' => 'Progress Pioneer', 'description' => 'Awarded the student who shows the greatest improvement across activities.'],
             ['name' => 'Subject Specialist', 'description' => 'Earned by completing every activity within a single subject (demonstrates mastery).'],
-            ['name' => 'Speed Learner', 'description' => 'Awarded to the student who complete lessons in the shortest recorded time.'],
+            ['name' => 'Game Master', 'description' => 'Awarded to students who finish all game-based activities (from GameActivity).'],
+            ['name' => 'Early Bird', 'description' => 'Given to the student who consistently finishes activities before others.'],
+            ['name' => 'Consistency Award', 'description' => 'Recognizes students who complete activities week after week without missing any.'],
         ];
 
         foreach ($awards as $award) {

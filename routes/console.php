@@ -8,4 +8,4 @@ Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote');
 
-Schedule::command('app:grant-awards-scheduler')->daily();
+Schedule::command('app:grant-awards-scheduler')->monthly();
