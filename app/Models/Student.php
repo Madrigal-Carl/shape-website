@@ -104,28 +104,6 @@ class Student extends Model
             ->count();
     }
 
-    public function totalLessonsCount($schoolYearId = null, $quarter = null)
-    {
-        $schoolYearId = $schoolYearId ?? now()->schoolYear()?->id;
-        $schoolYear   = SchoolYear::find($schoolYearId);
-
-        $lessons = $this->lessonSubjectStudents()
-            ->whereHas('lesson', function ($q) use ($schoolYearId) {
-                $q->where('school_year_id', $schoolYearId);
-            })
-            ->whereHas('curriculum', function ($q) {
-                $q->where('status', 'active');
-            })
-            ->get()
-            ->map(fn($lss) => $lss->lesson);
-
-        if ($quarter && $schoolYear) {
-            $lessons = $lessons->filter(fn($lesson) => $lesson->isInQuarter($schoolYear, $quarter));
-        }
-
-        return $lessons->count();
-    }
-
     public function completedLessonsCount($schoolYearId = null, $quarter = null)
     {
         $schoolYearId = $schoolYearId ?? now()->schoolYear()?->id;
@@ -148,20 +126,88 @@ class Student extends Model
         return $lessons->filter(fn($lesson) => $lesson->isCompletedByStudent($this->id))->count();
     }
 
-    public function totalActivitiesCount($schoolYearId = null, $quarter = null)
+    public function totalLessonsCount($schoolYearId = null, $quarter = null)
     {
         $schoolYearId = $schoolYearId ?? now()->schoolYear()?->id;
-        $schoolYear   = SchoolYear::find($schoolYearId);
+        $schoolYear = SchoolYear::find($schoolYearId);
 
-        $lessons = $this->lessonSubjectStudents()
+        // Get student's enrollment for this school year
+        $enrollment = $this->enrollments()
+            ->where('school_year_id', $schoolYearId)
+            ->first();
+
+        if (!$enrollment) return 0;
+
+        $gradeLevelId = $enrollment->grade_level_id;
+        $instructorId = $enrollment->instructor_id;
+        $disability = strtolower(trim($this->disability_type));
+
+        // Get curriculums for this grade level, specialization, and instructor
+        $curriculumIds = Curriculum::where('grade_level_id', $gradeLevelId)
+            ->where('instructor_id', $instructorId)
+            ->where('status', 'active')
+            ->whereHas('specializations', function ($q) use ($disability) {
+                $q->whereRaw('LOWER(name) = ?', [$disability]);
+            })
+            ->pluck('id');
+
+        // Get all lessons from those curriculums (via CurriculumSubject)
+        $lessonSubjectStudentIds = CurriculumSubject::whereIn('curriculum_id', $curriculumIds)
+            ->pluck('id');
+
+        $lessons = LessonSubjectStudent::whereIn('curriculum_subject_id', $lessonSubjectStudentIds)
             ->whereHas('lesson', function ($q) use ($schoolYearId) {
                 $q->where('school_year_id', $schoolYearId);
             })
-            ->whereHas('curriculum', function ($q) {
-                $q->where('status', 'active');
-            })
+            ->with('lesson')
             ->get()
-            ->map(fn($lss) => $lss->lesson);
+            ->map(fn($lss) => $lss->lesson)
+            ->unique('id');
+
+        if ($quarter && $schoolYear) {
+            $lessons = $lessons->filter(fn($lesson) => $lesson->isInQuarter($schoolYear, $quarter));
+        }
+
+        return $lessons->count();
+    }
+
+    public function totalActivitiesCount($schoolYearId = null, $quarter = null)
+    {
+        $schoolYearId = $schoolYearId ?? now()->schoolYear()?->id;
+        $schoolYear = SchoolYear::find($schoolYearId);
+
+        // Get student's enrollment for this school year
+        $enrollment = $this->enrollments()
+            ->where('school_year_id', $schoolYearId)
+            ->first();
+
+        if (!$enrollment) return 0;
+
+        $gradeLevelId = $enrollment->grade_level_id;
+        $instructorId = $enrollment->instructor_id;
+        $disability = strtolower(trim($this->disability_type));
+
+        // Get curriculums for this grade level, specialization, and instructor
+        $curriculumIds = Curriculum::where('grade_level_id', $gradeLevelId)
+            ->where('instructor_id', $instructorId)
+            ->where('status', 'active')
+            ->whereHas('specializations', function ($q) use ($disability) {
+                $q->whereRaw('LOWER(name) = ?', [$disability]);
+            })
+            ->pluck('id');
+
+        // Get all lessons from those curriculums (via CurriculumSubject)
+        $lessonSubjectStudentIds = CurriculumSubject::whereIn('curriculum_id', $curriculumIds)
+            ->pluck('id');
+
+        $lessons = LessonSubjectStudent::whereIn('curriculum_subject_id', $lessonSubjectStudentIds)
+            ->whereHas('lesson', function ($q) use ($schoolYearId) {
+                $q->where('school_year_id', $schoolYearId);
+            })
+            ->with('lesson.activityLessons')
+            ->get()
+            ->map(fn($lss) => $lss->lesson)
+            ->unique('id');
 
         if ($quarter && $schoolYear) {
             $lessons = $lessons->filter(fn($lesson) => $lesson->isInQuarter($schoolYear, $quarter));
