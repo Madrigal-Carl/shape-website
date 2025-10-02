@@ -6,9 +6,11 @@ namespace Database\Seeders;
 use Carbon\Carbon;
 use App\Models\Log;
 use App\Models\Feed;
+use App\Models\Todo;
 use App\Models\Admin;
 use App\Models\Award;
 use App\Models\Video;
+use App\Models\Domain;
 use App\Models\Lesson;
 use App\Models\Account;
 use App\Models\Address;
@@ -17,6 +19,7 @@ use App\Models\Subject;
 use App\Models\Activity;
 use App\Models\Guardian;
 use App\Models\GameImage;
+use App\Models\SubDomain;
 use App\Models\Curriculum;
 use App\Models\Enrollment;
 use App\Models\GradeLevel;
@@ -40,6 +43,91 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        // === Domains ===
+        $domains = [
+            'Daily Living Skills Domain' => [
+                'subdomains' => [
+                    'Self-feeding' => [
+                        "Expresses need to eat or drink through non-verbal or verbal means.",
+                        "Chews and swallows different kinds of foods.",
+                        "Swallows liquid like soup.",
+                        "Picks up food with fingers or scoops with spoon.",
+                        "Uses spoon and fork.",
+                        "Drinks from a cup or glass.",
+                        "Feeds self independently.",
+                    ],
+                    'Toilet' => [
+                        "Urinates and defecates in proper places.",
+                        "Demonstrates control of bowel and bladder.",
+                        "Goes to the toilet independently.",
+                        "Uses toilet paper or other available materials.",
+                        "Washes hands after using the toilet.",
+                    ],
+                    'Dressing' => [
+                        "Puts on simple clothes.",
+                        "Removes clothes without assistance.",
+                        "Fastens and unfastens buttons, zippers, snaps, ties.",
+                        "Selects appropriate clothes for the occasion/weather.",
+                        "Takes care of clothes and shoes properly.",
+                    ],
+                    'Grooming and Hygiene' => [
+                        "Brushes teeth properly.",
+                        "Washes and dries hands.",
+                        "Combs or brushes hair.",
+                        "Bathes with assistance.",
+                        "Bathes independently.",
+                        "Keeps body clean and neat.",
+                    ],
+                ]
+            ],
+
+            'Socio-Emotional Domain' => [
+                'todos' => [
+                    "Uses courteous expression appropriately.",
+                    "Asks an apology when necessary.",
+                    "Shows respect to elders.",
+                    "Greets peers and adults.",
+                    "Expresses needs and feelings appropriately.",
+                    "Shows concern to others.",
+                    "Waits for his/her turn.",
+                    "Accepts mistakes and limitations.",
+                    "Accepts responsibility as a member of the family/cultural group.",
+                    "Displays positive and appropriate emotions.",
+                ]
+            ]
+        ];
+
+        foreach ($domains as $domainName => $data) {
+            $domain = Domain::create(['name' => $domainName]);
+
+            // If domain has subdomains
+            if (isset($data['subdomains'])) {
+                foreach ($data['subdomains'] as $subdomainName => $todos) {
+                    $subdomain = SubDomain::create([
+                        'name' => $subdomainName,
+                        'domain_id' => $domain->id,
+                    ]);
+
+                    foreach ($todos as $todo) {
+                        Todo::create([
+                            'todo' => $todo,
+                            'sub_domain_id' => $subdomain->id,
+                        ]);
+                    }
+                }
+            }
+
+            // If domain has direct todos
+            if (isset($data['todos'])) {
+                foreach ($data['todos'] as $todo) {
+                    Todo::create([
+                        'todo' => $todo,
+                        'domain_id' => $domain->id,
+                    ]);
+                }
+            }
+        }
+
         // === School Year ===
         $first_quarter_start = Carbon::now()->startOfDay();
         $first_quarter_end   = $first_quarter_start->copy()->addDays(6);
@@ -176,6 +264,12 @@ class DatabaseSeeder extends Seeder
 
 
         Subject::factory()->allSubjects();
+        // ========== To be changed ==========
+        Subject::all()->each(function ($subject) {
+            $randomDomains = Domain::inRandomOrder()->take(rand(1, 2))->pluck('id');
+            $subject->domains()->attach($randomDomains);
+        });
+
         $subjectIds = Subject::pluck('id')->toArray();
         $curriculums->each(function ($curriculum) use ($subjectIds, $specializations) {
             $randomSubjects = collect($subjectIds)->shuffle()->take(rand(5, 8))->toArray();
@@ -239,19 +333,50 @@ class DatabaseSeeder extends Seeder
         });
 
         // === Activities ===
-        $activities = GameActivity::factory()->count(30)->create();
+        $activities = collect(range(1, 30))->map(function () use ($specializations) {
+            // Pick subject(s) first
+            $subjects = Subject::inRandomOrder()->take(rand(1, 2))->get();
 
-        $activities->each(function ($activity) use ($specializations) {
+            // Pick a todo from one of the subjects’ domains
+            $subject = $subjects->random();
+            $domain = $subject->domains()->inRandomOrder()->first();
+
+            $todo = null;
+            if ($domain) {
+                $todo = $domain->todos()->inRandomOrder()->first();
+
+                if (!$todo) {
+                    $subDomain = $domain->subDomains()->with('todos')->inRandomOrder()->first();
+                    if ($subDomain) {
+                        $todo = $subDomain->todos()->inRandomOrder()->first();
+                    }
+                }
+            }
+
+            // ✅ ensure todo exists, otherwise skip
+            if (!$todo) {
+                return null; // or throw exception if you want to enforce
+            }
+
+            // Create activity with todo_id immediately
+            $activity = GameActivity::factory()->create([
+                'todo_id' => $todo->id,
+            ]);
+
+            // Attach specializations
             $activity->specializations()->attach(
                 $specializations->random(rand(1, 2))->pluck('id')->toArray()
             );
 
+            // Create images
             GameImage::factory()->count(7)->create(['game_activity_id' => $activity->id]);
 
-            $activity->subjects()->attach(
-                Subject::inRandomOrder()->take(rand(1, 2))->pluck('id')
-            );
+            // Attach subjects
+            $activity->subjects()->attach($subjects->pluck('id'));
+
+            return $activity;
         });
+
 
         // === Assign lessons per instructor (unique) ===
         $instructors->each(function ($instructor) use ($activities, $curriculums) {
@@ -289,14 +414,12 @@ class DatabaseSeeder extends Seeder
                             'student_id'            => $student->id,
                         ]);
 
-                        // Assign activity logs
                         if ($lesson->activityLessons->isNotEmpty()) {
                             foreach ($lesson->activityLessons as $activityLesson) {
-                                $studentActivity = StudentActivity::firstOrCreate([
+                                StudentActivity::factory()->create([
                                     'student_id'         => $student->id,
                                     'activity_lesson_id' => $activityLesson->id,
                                 ]);
-                                Log::factory()->create(['student_activity_id' => $studentActivity->id]);
                             }
                         }
                     });
@@ -310,43 +433,63 @@ class DatabaseSeeder extends Seeder
         $instructors = Instructor::all();
 
         foreach ($instructors as $instructor) {
-            $activities = ClassActivity::factory()
-                ->count(10)
-                ->create([
-                    'instructor_id' => $instructor->id,
+            $curriculumSubjects = CurriculumSubject::whereHas('curriculum', function ($q) use ($instructor) {
+                $q->where('instructor_id', $instructor->id);
+            })->with('subject.domains.subDomains.todos', 'subject.domains.todos')->get();
+
+            $activities = collect();
+
+            for ($i = 0; $i < 10; $i++) {
+                if ($curriculumSubjects->isEmpty()) {
+                    continue;
+                }
+
+                // 1. Pick random curriculum subject
+                $curriculumSubject = $curriculumSubjects->random();
+                $subject = $curriculumSubject->subject;
+
+                // 2. Pick a random domain from the subject
+                $domain = $subject->domains()->inRandomOrder()->first();
+
+                // 3. Get todo (domain first, else from subdomain)
+                $todo = $domain?->todos()->inRandomOrder()->first();
+                if (!$todo && $domain) {
+                    $subDomain = $domain->subDomains()->with('todos')->inRandomOrder()->first();
+                    if ($subDomain) {
+                        $todo = $subDomain->todos()->inRandomOrder()->first();
+                    }
+                }
+
+                // 4. Create Class Activity
+                $activity = ClassActivity::factory()->create([
+                    'instructor_id'         => $instructor->id,
+                    'curriculum_subject_id' => $curriculumSubject->id,
+                    'todo_id'               => $todo?->id,
                 ]);
 
+                $activities->push($activity);
+            }
+
+            // 5. Activity lessons + student assignments
             foreach ($activities as $activity) {
                 $activityLesson = ActivityLesson::create([
                     'activity_lessonable_id'   => $activity->id,
                     'activity_lessonable_type' => ClassActivity::class,
                 ]);
 
-                // Apply same filters as in ActivityEditModal
+                // Eligible students for this curriculum
                 $eligibleStudents = $instructor->eligibleStudents($activity->curriculumSubject->curriculum)->get();
                 $students = $eligibleStudents->shuffle()->take(rand(3, 6));
 
                 foreach ($students as $student) {
-                    $studentActivity = StudentActivity::create([
+                    StudentActivity::factory()->create([
                         'student_id'         => $student->id,
                         'activity_lesson_id' => $activityLesson->id,
                     ]);
-
-                    $attempts = rand(1, 3);
-
-                    for ($i = 1; $i <= $attempts; $i++) {
-                        $isLast = $i === $attempts;
-
-                        $studentActivity->logs()->create([
-                            'score'              => fake()->numberBetween(60, 100),
-                            'time_spent_seconds' => fake()->numberBetween(300, 1800),
-                            'attempt_number'     => $i,
-                            'status'             => $isLast ? 'completed' : 'in-progress',
-                        ]);
-                    }
                 }
             }
         }
+
 
 
 

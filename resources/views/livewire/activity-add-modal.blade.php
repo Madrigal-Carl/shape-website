@@ -26,9 +26,9 @@
                                         <option value="" class="text-sm text-black" selected disabled>
                                             Grade & Section
                                         </option>
-                                        @foreach ($grade_levels as $grade_level)
-                                            <option value="{{ $grade_level }}" class="text-sm text-paragraph">
-                                                {{ ucwords($grade_level) }}
+                                        @foreach ($grade_levels as $level)
+                                            <option value="{{ $level->id }}" class="text-sm text-paragraph">
+                                                {{ ucwords($level->name) }}
                                             </option>
                                         @endforeach
                                     </select>
@@ -72,52 +72,83 @@
                         </div>
 
                         <div class="flex flex-col gap-3 flex-1 min-h-0">
-                            <h2 class="font-semibold text-xl">Specialize Learning <span
-                                    class="text-paragraph font-normal text-sm">(optional)</span></h2>
+                            <h2 class="font-semibold text-xl">Domains</h2>
                             {{-- Specilize selected Student --}}
                             <div class=" rounded-lg relative flex flex-col gap-2 flex-1 min-h-0">
                                 {{-- Header --}}
                                 <div class="flex items-center justify-between w-full">
-                                    <p class="text-paragraph">Select Student for specialize learning.</p>
-                                    <button type="button" wire:click="clearStudents"
-                                        class="flex items-center justify-center gap-1 px-3 py-2 rounded-lg text-paragraph hover:text-white cursor-pointer bg-white hover:bg-blue-button">
-                                        <p class="text-sm">Clear All</p>
-                                        <span class="material-symbols-rounded">clear_all</span>
-                                    </button>
+                                    <p class="text-paragraph">Assign your activity to a domain.</p>
                                 </div>
 
                                 {{-- Search --}}
                                 <div class="flex items-center gap-2 px-4 py-2 rounded-lg bg-white w-full">
                                     <span class="material-symbols-rounded">person_search</span>
-                                    <input type="text" placeholder="Search Student" wire:model.live="student_search"
+                                    <input type="text" placeholder="Search Domain" wire:model.live="search"
                                         class="w-full outline-none text-heading-dark placeholder-heading-dark" />
                                 </div>
 
+                                <div class="flex items-center gap-2 px-4 py-2 rounded-lg bg-white w-full">
+                                    <p class="w-full outline-none text-heading-dark placeholder-heading-dark">
+                                        {{ $selectedTodoLabel ? $selectedTodoLabel : 'No Todo Selected' }}
+                                    </p>
+                                </div>
 
-
-                                {{-- Student List --}}
                                 <div class="flex-1 min-h-0 flex flex-col gap-1 bg-white rounded-lg p-2">
                                     <div class="flex flex-col gap-1 flex-1 min-h-0 overflow-y-scroll pr-2 rounded-lg">
-                                        @forelse($this->filteredStudents as $student)
-                                            <div
-                                                class="flex items-center gap-2 w-full p-2 hover:bg-card rounded-lg cursor-pointer">
-                                                <label class="container w-fit">
-                                                    <input type="checkbox"
-                                                        wire:click="toggleStudent({{ $student->id }})"
-                                                        @checked(in_array($student->id, $selected_students))>
-                                                    <div class="checkmark"></div>
-                                                </label>
-                                                <p class="w-full text-paragraph">{{ $student->full_name }}</p>
+                                        @forelse($this->filteredDomain as $domain)
+                                            <div>
+                                                <div wire:click="toggleDomain({{ $domain->id }})"
+                                                    class="flex items-center justify-between p-2 cursor-pointer hover:bg-gray-100 rounded-lg">
+                                                    <p class="text-paragraph font-semibold">{{ $domain->name }}</p>
+                                                    <span>{{ in_array($domain->id, $expandedDomains) ? '−' : '+' }}</span>
+                                                </div>
+
+                                                @if (in_array($domain->id, $expandedDomains))
+                                                    @if ($domain->subDomains->count())
+                                                        @foreach ($domain->subDomains as $subDomain)
+                                                            <div class="ml-4">
+                                                                <div wire:click="toggleSubDomain({{ $subDomain->id }})"
+                                                                    class="flex items-center justify-between p-2 cursor-pointer hover:bg-gray-50 rounded-lg">
+                                                                    <p class="text-sm text-gray-700">
+                                                                        {{ $subDomain->name }}</p>
+                                                                    <span>{{ in_array($subDomain->id, $expandedSubDomains) ? '−' : '+' }}</span>
+                                                                </div>
+
+                                                                @if (in_array($subDomain->id, $expandedSubDomains))
+                                                                    @foreach ($subDomain->todos as $todo)
+                                                                        <div class="flex items-center gap-2 ml-6 p-1">
+                                                                            <input type="radio" name="selectedTodo"
+                                                                                wire:click="selectTodo({{ $todo->id }})"
+                                                                                {{ $selectedTodoId == $todo->id ? 'checked' : '' }}>
+                                                                            <p class="text-sm">{{ $todo->todo }}</p>
+                                                                        </div>
+                                                                    @endforeach
+                                                                @endif
+                                                            </div>
+                                                        @endforeach
+                                                    @endif
+
+                                                    @if ($domain->todos->count())
+                                                        @foreach ($domain->todos as $todo)
+                                                            <div class="flex items-center gap-2 ml-4 p-1">
+                                                                <input type="radio" name="selectedTodo"
+                                                                    wire:click="selectTodo({{ $todo->id }})"
+                                                                    {{ $selectedTodoId == $todo->id ? 'checked' : '' }}>
+                                                                <p class="text-sm">{{ $todo->todo }}</p>
+                                                            </div>
+                                                        @endforeach
+                                                    @endif
+                                                @endif
                                             </div>
                                         @empty
                                             <p
                                                 class="text-center text-sm text-gray-500 h-full flex justify-center items-center">
-                                                No students found.</p>
+                                                No domain found.
+                                            </p>
                                         @endforelse
-
                                     </div>
                                 </div>
-                            </div>{{-- End of Specilize selected Student --}}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -136,11 +167,11 @@
                         <div class="flex flex-col gap-3 h-full">
 
                             {{-- Per Student container --}}
-                            @forelse ($studentsToRender as $stud)
+                            @forelse ($students as $stud)
                                 <div
                                     class="flex flex-col gap-4 items-center bg-white rounded-3xl hover:bg-gray-300  cursor-pointer">
                                     {{-- Student profile --}}
-                                    <button wire:click="toggleStudentAccordion({{ $stud->id }})"
+                                    <div
                                         class="flex gap-2 items-start justify-between w-full transition-all p-4  duration-200">
                                         <div class="flex gap-2 items-center w-full">
                                             <img src="{{ asset('storage/' . $stud->path) }}"
@@ -156,83 +187,20 @@
                                             </div>
                                         </div>
                                         <div class="flex items-center gap-6">
-                                            <div class="w-45 flex items-center gap-2">
-                                                <p class="font-semibold">Attemp:</p>
-                                                <input type="number" name="" id=""
-                                                    value="{{ count($attempts[$stud->id] ?? [['score' => '', 'time' => '']]) }}"
-                                                    readonly
-                                                    class="w-full outline-none bg-card px-2 py-1 text-blue-button font-semibold rounded-lg placeholder:text-blue-button"
-                                                    placeholder="999">
-                                            </div>
                                             <div class="flex items-center gap-2">
                                                 <label class="container w-fit">
-                                                    <input type="checkbox"
-                                                        wire:model="completed.{{ $stud->id }}">
+                                                    <input type="checkbox" wire:model="checkedStudents"
+                                                        value="{{ $stud->id }}">
                                                     <div class="checkmark"></div>
                                                 </label>
                                             </div>
                                         </div>
-                                    </button>
-
-                                    @if ($activeStudentId === $stud->id)
-                                        <div
-                                            class="flex w-full bg-white rounded-b-3xl flex-col gap-2 p-4 border-t-1 border-gray-300">
-
-                                            {{-- Heading --}}
-                                            <div class="grid grid-cols-2 w-full">
-                                                <h1 class="font-semibold">Score</h1>
-                                                <h1 class="font-semibold">Time</h1>
-                                            </div>
-
-                                            {{-- input cons --}}
-                                            <div class="flex flex-col w-full items-start justify-between gap-2">
-                                                @foreach ($attempts[$stud->id] ?? [['score' => '', 'time' => '']] as $index => $attempt)
-                                                    <div class="grid grid-cols-2 gap-2 w-full">
-                                                        {{-- Score --}}
-                                                        <div class="w-full px-4 py-2 rounded-lg bg-card">
-                                                            <input type="number"
-                                                                wire:model="attempts.{{ $stud->id }}.{{ $index }}.score"
-                                                                class="w-full outline-none text-heading-dark"
-                                                                placeholder="Enter Score">
-                                                        </div>
-                                                        {{-- Time --}}
-                                                        <div class="w-full px-4 py-2 rounded-lg bg-card">
-                                                            <input type="number"
-                                                                wire:model="attempts.{{ $stud->id }}.{{ $index }}.time"
-                                                                class="w-full outline-none text-heading-dark"
-                                                                placeholder="Enter time spent (mins)">
-                                                        </div>
-                                                    </div>
-                                                @endforeach
-
-                                                <div class="flex gap-2 self-end-safe">
-                                                    {{-- Add attempt --}}
-                                                    <button type="button"
-                                                        wire:click="addAttempt({{ $stud->id }})"
-                                                        class="px-4 py-2 flex items-center gap-1 bg-white border-1 border-gray-300 rounded-xl hover:bg-blue-button hover:text-white hover:border-blue-button cursor-pointer">
-                                                        <span class="material-symbols-rounded">add</span>
-                                                        <p class="text-sm">Add Attempt</p>
-                                                    </button>
-
-                                                    {{-- Remove attempt --}}
-                                                    <button type="button"
-                                                        wire:click="removeAttempt({{ $stud->id }})"
-                                                        class="px-4 py-2 flex items-center gap-1 bg-white border-1 border-gray-300 rounded-xl hover:bg-red-500 hover:text-white hover:border-red-500 cursor-pointer">
-                                                        <span class="material-symbols-rounded">delete</span>
-                                                        <p class="text-sm">Delete</p>
-                                                    </button>
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                    @endif
+                                    </div>
                                 </div>
                             @empty
                                 <div
                                     class="flex flex-col items-center justify-center gap-4 py-12 bg-white rounded-2xl shadow-inner h-full">
                                     <h2 class="text-lg font-semibold text-heading-dark">No Students Found</h2>
-                                    <p class="text-paragraph text-center">Add students to see their activity records
-                                        here.</p>
                                 </div>
                             @endforelse
 

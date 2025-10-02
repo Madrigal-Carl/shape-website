@@ -20,7 +20,7 @@ class GameActivityFactory extends Factory
     public function definition(): array
     {
         return [
-            'max_score' => $this->faker->numberBetween(100, 120),
+            'todo_id' => null,
             'name' => $this->faker->words(2, true),
             'path' => 'images/game-icons/mario.jpeg',
             'description' => $this->faker->paragraph(),

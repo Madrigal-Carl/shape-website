@@ -195,13 +195,7 @@ class Student extends Model
                     ->where('student_id', $this->id)
                     ->first();
 
-                if (!$studentActivity) return false;
-
-                $log = $studentActivity->logs()
-                    ->latest('attempt_number')
-                    ->first();
-
-                return $log && $log->status === 'completed';
+                return $studentActivity && $studentActivity->status === 'finished';
             })->count();
         });
     }

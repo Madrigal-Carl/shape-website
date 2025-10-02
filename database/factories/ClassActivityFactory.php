@@ -20,13 +20,11 @@ class ClassActivityFactory extends Factory
     protected $model = ClassActivity::class;
     public function definition(): array
     {
-        $curriculumSubject = CurriculumSubject::inRandomOrder()->first() ?? CurriculumSubject::factory()->create();
-        $instructor = Instructor::inRandomOrder()->first() ?? Instructor::factory()->create();
-
         return [
             'school_year_id' => null,
-            'curriculum_subject_id' => $curriculumSubject->id,
-            'instructor_id'         => $instructor->id,
+            'curriculum_subject_id' => null,
+            'todo_id'               => null,
+            'instructor_id'         => null,
             'name'                  => $this->faker->sentence(3), // e.g. "Math Quiz 1"
             'description'           => $this->faker->paragraph(),
         ];

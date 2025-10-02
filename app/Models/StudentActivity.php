@@ -11,12 +11,8 @@ class StudentActivity extends Model
     protected $fillable = [
         'student_id',
         'activity_lesson_id',
+        'status',
     ];
-
-    public function logs()
-    {
-        return $this->hasMany(Log::class);
-    }
 
     public function student()
     {
@@ -27,14 +23,4 @@ class StudentActivity extends Model
     {
         return $this->belongsTo(ActivityLesson::class);
     }
-
-    // public function latestLogForStudent($studentId)
-    // {
-    //     if (!$this->activityLesson) return null;
-
-    //     return $this->activityLesson->logs()
-    //         ->where('student_id', $studentId)
-    //         ->latest('attempt_number')
-    //         ->first();
-    // }
 }

@@ -23,22 +23,22 @@ class ActivityViewModal extends Component
         $this->activity = ClassActivity::with('curriculumSubject.curriculum', 'curriculumSubject.subject')
             ->withCount('studentActivities')
             ->where('instructor_id', Auth::user()->accountable->id)
-            ->first();
+            ->find($this->activity_id);
 
-        $this->studentsData = StudentActivity::with('student')
-            ->join('activity_lessons', 'student_activities.activity_lesson_id', '=', 'activity_lessons.id')
-            ->join('logs', 'logs.student_activity_id', '=', 'student_activities.id')
-            ->where('activity_lessons.activity_lessonable_type', ClassActivity::class)
-            ->where('activity_lessons.activity_lessonable_id', $this->activity->id)
-            ->select(
-                'student_activities.student_id',
-                DB::raw("MAX(logs.attempt_number) as max_attempt"),
-                DB::raw("MAX(logs.score) as max_score"),
-                DB::raw("SUM(logs.time_spent_seconds) / 60 as total_time_minutes")
-            )
-            ->groupBy('student_activities.student_id')
-            ->with('student') // so you can access full_name
-            ->get();
+        $this->studentsData = $this->activity->studentActivities
+            ->sortByDesc(function ($sa) {
+                return $sa->status === 'finished';
+            })
+            ->map(function ($sa) {
+                return [
+                    'id'             => $sa->student->id,
+                    'fullname'       => $sa->student->fullname,
+                    'disability_type' => $sa->student->disability_type,
+                    'path'           => $sa->student->path,
+                    'status'         => $sa->status,
+                ];
+            })
+            ->values();
     }
 
     public function closeModal()

@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('student_id')->constrained()->onDelete('cascade');
             $table->foreignId('activity_lesson_id')->constrained()->onDelete('cascade');
+            $table->enum('status', ['unfinished', 'finished'])->default('unfinished');
             $table->timestamps();
             $table->unique(['student_id', 'activity_lesson_id']);
         });

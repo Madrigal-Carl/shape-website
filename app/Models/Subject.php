@@ -22,4 +22,9 @@ class Subject extends Model
     {
         return $this->belongsToMany(GameActivity::class, 'activity_subject');
     }
+
+    public function domains()
+    {
+        return $this->belongsToMany(Domain::class, 'domain_subject');
+    }
 }

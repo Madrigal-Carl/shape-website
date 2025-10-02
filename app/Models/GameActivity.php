@@ -10,7 +10,7 @@ class GameActivity extends Model
     use HasFactory;
 
     protected $fillable = [
-        'max_score',
+        'todo_id',
         'name',
         'path',
         'description',
@@ -23,12 +23,17 @@ class GameActivity extends Model
 
     public function activityLesson()
     {
-        return $this->morphMany(ActivityLesson::class, 'activity_lessonable');
+        return $this->morphOne(ActivityLesson::class, 'activity_lessonable');
     }
 
     public function curriculumSubject()
     {
         return $this->belongsTo(CurriculumSubject::class);
+    }
+
+    public function todo()
+    {
+        return $this->belongsTo(Todo::class);
     }
 
     public function gameImages()

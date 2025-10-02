@@ -18,8 +18,13 @@ class Domain extends Model
         return $this->hasMany(SubDomain::class);
     }
 
-    public function questions()
+    public function todos()
     {
-        return $this->hasMany(Question::class);
+        return $this->hasMany(Todo::class);
+    }
+
+    public function subjects()
+    {
+        return $this->belongsToMany(Subject::class, 'domain_subject');
     }
 }

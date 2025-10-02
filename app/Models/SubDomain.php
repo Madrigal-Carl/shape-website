@@ -19,8 +19,8 @@ class SubDomain extends Model
         return $this->belongsTo(Domain::class);
     }
 
-    public function questions()
+    public function todos()
     {
-        return $this->hasMany(Question::class);
+        return $this->hasMany(Todo::class);
     }
 }

@@ -1,14 +1,14 @@
 <div>
     @if ($isOpen)
         <section class="bg-black/40 fixed w-dvw h-dvh p-10 top-0 left-0 z-50 backdrop-blur-xs flex justify-center gap-6">
-            <!-- Activity View Info-->
+
             <div class="w-200 h-full Addlesson bg-card p-8 rounded-4xl relative flex">
                 <div class="Addlesson w-full h-full flex flex-col  gap-4 self-center-safe overflow-y-auto">
                     <div class="w-full flex items-center justify-between">
                         <div class="flex items-start gap-2">
                             <img src="{{ asset('images/activity-icon.png') }}" class="h-8" alt="" />
                             <h1 class="text-3xl font-bold text-heading-dark">
-                                Activity name.
+                                {{ $activity->name }}
                             </h1>
                         </div>
 
@@ -58,45 +58,43 @@
                         @endif
                     </div>
 
+
                     <div class="flex flex-col bg-white rounded-2xl p-6 gap-4 ">
                         <h1 class="text-2xl font-semibold text-heading-dark">Class Activity Record</h1>
-                        <table class="table-auto border-collapse">
-                            <thead>
-                                <tr>
-                                    <th class="text-left font-semibold pb-2 text-lg">Student Name</th>
-                                    <th class="text-center font-semibold pb-2 text-lg">
-                                        Total Attempt
-                                    </th>
-                                    <th class="text-center font-semibold pb-2 text-lg">
-                                        Total Time
-                                    </th>
-                                    <th class="text-center font-semibold pb-2 text-lg">Max Score</th>
-                                </tr>
-                            </thead>
-
-                            <tbody>
-                                @forelse ($studentsData as $row)
-                                    <tr>
-                                        <td class="text-left pt-2 text-paragraph">{{ $row->student->full_name }}</td>
-                                        <td class="text-center pt-2 text-paragraph">{{ $row->max_attempt }}</td>
-                                        <td class="text-center pt-2 text-paragraph">
-                                            {{ number_format($row->total_time_minutes, 2) }} mins</td>
-                                        <td class="text-center pt-2 text-paragraph">{{ $row->max_score }}</td>
-                                    </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="5" class="text-center py-4 text-gray-500">
-                                            No lessons found.
-                                        </td>
-                                    </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
+                        <div class="grid grid-cols-2 gap-4">
+                            @foreach ($studentsData as $stud)
+                                <div
+                                    class="flex flex-col gap-4 items-center bg-white rounded-3xl hover:bg-gray-300 cursor-pointer">
+                                    <div
+                                        class="flex gap-2 items-start justify-between w-full transition-all p-4 duration-200">
+                                        <div class="flex gap-2 items-center w-full">
+                                            <img src="{{ asset('storage/' . $stud['path']) }}"
+                                                class="w-12 h-12 aspect-square object-cover rounded-full"
+                                                alt="" />
+                                            <div class="flex flex-col">
+                                                <p class="text-lg font-semibold">
+                                                    {{ $stud['fullname'] }}
+                                                </p>
+                                                <small class="leading-none text-paragraph">
+                                                    {{ ucwords($stud['disability_type']) }}
+                                                </small>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center gap-6">
+                                            <div class="flex items-center gap-2">
+                                                <label class="container w-fit">
+                                                    <input type="checkbox" disabled
+                                                        {{ $stud['status'] === 'finished' ? 'checked' : '' }}>
+                                                    <div class="checkmark"></div>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
                     </div>
-
-
                 </div>
-            </div><!-- End of Lesson View Info-->
         </section>
     @endif
 </div>

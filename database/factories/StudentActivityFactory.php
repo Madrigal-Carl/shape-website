@@ -21,6 +21,7 @@ class StudentActivityFactory extends Factory
         return [
             'student_id' => null,
             'activity_lesson_id' => null,
+            'status' => $this->faker->randomElement(['finished', 'unfinished']),
         ];
     }
 }

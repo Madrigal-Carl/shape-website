@@ -13,6 +13,7 @@ class ClassActivity extends Model
     protected $fillable = [
         'curriculum_subject_id',
         'instructor_id',
+        'todo_id',
         'name',
         'description',
     ];
@@ -24,7 +25,15 @@ class ClassActivity extends Model
 
     public function activityLesson()
     {
-        return $this->morphMany(ActivityLesson::class, 'activity_lessonable');
+        return $this->morphOne(ActivityLesson::class, 'activity_lessonable');
+    }
+
+    public function relatedStudents()
+    {
+        return $this->studentActivities()
+            ->with('student')
+            ->get()
+            ->pluck('student');
     }
 
     public function studentActivities()
@@ -55,6 +64,11 @@ class ClassActivity extends Model
     public function schoolYear()
     {
         return $this->belongsTo(SchoolYear::class);
+    }
+
+    public function todo()
+    {
+        return $this->belongsTo(Todo::class);
     }
 
     protected static function booted()

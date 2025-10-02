@@ -46,21 +46,14 @@ class Lesson extends Model
                 ->where('student_id', $studentId)
                 ->first();
 
-            if (!$studentActivity) {
-                return false;
-            }
-
-            $log = $studentActivity->logs()
-                ->latest('attempt_number')
-                ->first();
-
-            if (!$log || $log->status !== 'completed') {
+            if (!$studentActivity || $studentActivity->status !== 'finished') {
                 return false;
             }
         }
 
         return true;
     }
+
 
     public function isInQuarter(SchoolYear $schoolYear, int $quarter): bool
     {

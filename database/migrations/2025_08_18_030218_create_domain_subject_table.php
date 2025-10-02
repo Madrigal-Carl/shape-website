@@ -11,12 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('questions', function (Blueprint $table) {
+        Schema::create('domain_subject', function (Blueprint $table) {
             $table->id();
             $table->foreignId('domain_id')->constrained()->onDelete('cascade');
-            $table->foreignId('sub_domain_id')->constrained()->onDelete('cascade');
-            $table->string('todo')->unique();
+            $table->foreignId('subject_id')->constrained()->onDelete('cascade');
             $table->timestamps();
+            $table->unique(['domain_id', 'subject_id']);
         });
     }
 
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('questions');
+        Schema::dropIfExists('domain_subject');
     }
 };

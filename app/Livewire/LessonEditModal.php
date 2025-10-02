@@ -28,7 +28,7 @@ class LessonEditModal extends Component
     public $selected_f2f_activities = [];
     public $lesson_id = null;
     public $isOpen = false;
-    public $lesson_name, $grade_level = '', $description;
+    public $lesson_name, $grade_level = '', $description, $lesson;
     public $uploadedVideos = [], $selected_activities = [];
     public $original = [];
     public $student_search = '';
@@ -52,28 +52,16 @@ class LessonEditModal extends Component
         $this->lesson_id = $id;
         $this->isOpen = true;
 
-        $lesson = Lesson::with('students', 'videos', 'lessonSubjectStudents.curriculumSubject.curriculum', 'lessonSubjectStudents.curriculumSubject.subject')->find($id);
-        $this->lesson_name = $lesson->title;
-        $this->grade_level = $lesson->lessonSubjectStudents->first()->curriculumSubject->curriculum->grade_level_id;
-        $this->curriculum_id = $lesson->lessonSubjectStudents->first()->curriculumSubject->curriculum->id;
-        $this->subject_id = $lesson->lessonSubjectStudents->first()->curriculumSubject->subject->id;
-        $this->description = $lesson->description;
+        $this->lesson = Lesson::with('students', 'videos', 'lessonSubjectStudents.curriculumSubject.curriculum', 'lessonSubjectStudents.curriculumSubject.subject')->find($id);
+        $this->lesson_name = $this->lesson->title;
+        $this->grade_level = $this->lesson->lessonSubjectStudents->first()->curriculumSubject->curriculum->grade_level_id;
+        $this->curriculum_id = $this->lesson->lessonSubjectStudents->first()->curriculumSubject->curriculum->id;
+        $this->subject_id = $this->lesson->lessonSubjectStudents->first()->curriculumSubject->subject->id;
+        $this->description = $this->lesson->description;
 
-        $this->students = Auth::user()->accountable->students()
-            ->where('status', 'active')
-            ->whereHas('enrollments', function ($query) {
-                $query->where('grade_level_id', $this->grade_level)
-                    ->where('school_year_id', now()->schoolYear()->id);
-            })
-            ->whereIn(
-                'disability_type',
-                Curriculum::find($this->curriculum_id)
-                    ->specializations()
-                    ->pluck('name')
-            )
-            ->get();
+        $this->students = $this->lesson->students;
 
-        $this->uploadedVideos = $lesson->videos->map(function ($video) {
+        $this->uploadedVideos = $this->lesson->videos->map(function ($video) {
             return [
                 'video'     => $video->url,
                 'thumbnail' => $video->thumbnail,
@@ -81,7 +69,7 @@ class LessonEditModal extends Component
             ];
         })->toArray();
 
-        $this->selected_activities = $lesson->activityLessons()
+        $this->selected_activities = $this->lesson->activityLessons()
             ->where('activity_lessonable_type', GameActivity::class)
             ->get()
             ->map(function ($al) {
@@ -95,7 +83,7 @@ class LessonEditModal extends Component
             })
             ->toArray();
 
-        $this->selected_f2f_activities = $lesson->activityLessons()
+        $this->selected_f2f_activities = $this->lesson->activityLessons()
             ->where('activity_lessonable_type', ClassActivity::class)
             ->pluck('activity_lessonable_id')
             ->toArray();
@@ -377,19 +365,7 @@ class LessonEditModal extends Component
         $this->subjects = Subject::whereHas('curriculumSubjects', function ($query) {
             $query->where('curriculum_id', $this->curriculum_id);
         })->get();
-        $this->students = Auth::user()->accountable->students()
-            ->where('status', 'active')
-            ->whereHas('enrollments', function ($query) {
-                $query->where('grade_level_id', $this->grade_level)
-                    ->where('school_year_id', now()->schoolYear()->id);
-            })
-            ->whereIn(
-                'disability_type',
-                Curriculum::find($this->curriculum_id)
-                    ->specializations()
-                    ->pluck('name')
-            )
-            ->get();
+        $this->students = $this->lesson->students;
     }
 
     public function updatedSubjectId()

@@ -13,7 +13,7 @@ class ActivityMain extends Component
 {
     use WithPagination, WithoutUrlPagination;
     public $search = '';
-    public $school_year, $school_years, $grade_levels, $quarter;
+    public $school_year, $school_years, $grade_levels, $grade_level, $quarter;
     public $listeners = ["refresh" => '$refresh'];
 
     public function openAddActivityModal()
@@ -121,6 +121,7 @@ class ActivityMain extends Component
             ->orderByDesc('created_at')
             ->paginate(10);
 
+        $this->grade_levels = Auth::user()->accountable->gradeLevels->sortBy('id')->values();
         return view('livewire.activity-main', compact('activities'));
     }
 }
