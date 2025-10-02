@@ -34,12 +34,15 @@
                         class="ml-11 mt-2 flex flex-col gap-1 transition-all duration-200 ease-in-out
                         {{ $expanded === $item['name'] ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0 overflow-hidden' }}">
                         @foreach ($item['subcontent'] as $sub)
-                            <a wire:click="setActiveSubContent('{{ $item['name'] }}', '{{ $sub['name'] }}')"
-                                class="cursor-pointer border-l-2 border-paragraph hover:border-blue-button hover:bg-card hover:text-blue-button flex items-center gap-2 px-4 py-2 hover:rounded-lg text-sm
-                                    {{ $activeSubContent === $sub['name'] ? 'active:bg-blue-button active:text-white active-nav border-l-2 border-blue-button rounded-lg' : '' }}">
-                                <span class="material-symbols-rounded text-sm">{{ $sub['icon'] }}</span>
-                                <p>{{ $sub['name'] }}</p>
-                            </a>
+                            <div class="h-full flex items-center w-full gap-2">
+                                <div class="border-l-2 border-black hover:border-blue-button h-full"></div>
+                                <a wire:click="setActiveSubContent('{{ $item['name'] }}', '{{ $sub['name'] }}')"
+                                    class="cursor-pointer hover:bg-card hover:text-blue-button flex items-center gap-2 px-4 py-2 hover:rounded-lg text-sm w-full
+                                    {{ $activeSubContent === $sub['name'] ? 'active:bg-blue-button active:text-white active-nav rounded-lg' : '' }}">
+                                    <span class="material-symbols-rounded text-sm">{{ $sub['icon'] }}</span>
+                                    <p>{{ $sub['name'] }}</p>
+                                </a>
+                            </div>
                         @endforeach
                     </div>
                 @endif
