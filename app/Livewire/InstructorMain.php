@@ -48,7 +48,7 @@ class InstructorMain extends Component
                         ->orWhere('last_name', 'like', '%' . $this->search . '%');
                 });
             })
-            ->orderBy('created_at')
+            ->orderBy('created_at', 'desc')
             ->paginate(10);
 
         return view('livewire.instructor-main', compact('instructors', 'specializations'));

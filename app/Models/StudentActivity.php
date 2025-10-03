@@ -11,6 +11,7 @@ class StudentActivity extends Model
     protected $fillable = [
         'student_id',
         'activity_lesson_id',
+        'activity_lesson_type',
         'status',
     ];
 
@@ -21,6 +22,6 @@ class StudentActivity extends Model
 
     public function activityLesson()
     {
-        return $this->belongsTo(ActivityLesson::class);
+        return $this->morphTo();
     }
 }

@@ -8,7 +8,9 @@ use Livewire\Component;
 use App\Models\Curriculum;
 use App\Models\SchoolYear;
 use App\Models\StudentAward;
+use App\Models\ClassActivity;
 use App\Models\ActivityLesson;
+use App\Models\GameActivityLesson;
 use Illuminate\Support\Facades\Auth;
 
 class InstructorDashboardMain extends Component
@@ -66,12 +68,22 @@ class InstructorDashboardMain extends Component
             })
             ->count();
 
-        $this->totalActivities = ActivityLesson::whereHas('lesson', function ($q) use ($instructorId) {
-            $q->where('school_year_id', $this->school_year)
-                ->whereHas('lessonSubjectStudents.curriculumSubject.curriculum', function ($cq) use ($instructorId) {
-                    $cq->where('instructor_id', $instructorId)->where('status', 'active');
-                });
-        })->count();
+        $this->totalActivities =
+            GameActivityLesson::whereHas('lesson', function ($q) use ($instructorId) {
+                $q->where('school_year_id', $this->school_year)
+                    ->whereHas('lessonSubjectStudents.curriculumSubject.curriculum', function ($cq) use ($instructorId) {
+                        $cq->where('instructor_id', $instructorId)
+                            ->where('status', 'active');
+                    });
+            })->count()
+            +
+            ClassActivity::whereHas('lesson', function ($q) use ($instructorId) {
+                $q->where('school_year_id', $this->school_year)
+                    ->whereHas('lessonSubjectStudents.curriculumSubject.curriculum', function ($cq) use ($instructorId) {
+                        $cq->where('instructor_id', $instructorId)
+                            ->where('status', 'active');
+                    });
+            })->count();
 
         $this->totalAwards = StudentAward::whereHas('student.enrollments', function ($q) use ($instructorId) {
             $q->where('instructor_id', $instructorId)

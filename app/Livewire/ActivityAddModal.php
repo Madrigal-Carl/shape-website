@@ -154,15 +154,11 @@ class ActivityAddModal extends Component
             'description' => $this->description,
         ]);
 
-        $activityLesson = ActivityLesson::create([
-            'activity_lessonable_id'   => $activity->id,
-            'activity_lessonable_type' => ClassActivity::class,
-        ]);
-
         foreach ($this->students as $student) {
             StudentActivity::create([
                 'student_id' => $student->id,
-                'activity_lesson_id' => $activityLesson->id,
+                'activity_lesson_id' => $activity->id,
+                'activity_lesson_type' => ClassActivity::class,
                 'status'             => in_array($student->id, $this->checkedStudents ?? [])
                     ? 'finished'
                     : 'unfinished',
@@ -188,6 +184,8 @@ class ActivityAddModal extends Component
         $this->subject = '';
         $this->subjects = collect();
         $this->students = collect();
+        $this->selectedTodoId = null;
+        $this->selectedTodoLabel = null;
     }
 
     public function updatedCurriculum()
@@ -210,6 +208,8 @@ class ActivityAddModal extends Component
             )
             ->get();
 
+        $this->selectedTodoId = null;
+        $this->selectedTodoLabel = null;
         $this->checkedStudents = [];
     }
 

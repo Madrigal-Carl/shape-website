@@ -11,6 +11,7 @@ class ClassActivity extends Model
     use HasFactory;
 
     protected $fillable = [
+        'lesson_id',
         'curriculum_subject_id',
         'instructor_id',
         'todo_id',
@@ -23,9 +24,9 @@ class ClassActivity extends Model
         return $this->belongsTo(CurriculumSubject::class);
     }
 
-    public function activityLesson()
+    public function lesson()
     {
-        return $this->morphOne(ActivityLesson::class, 'activity_lessonable');
+        return $this->belongsTo(Lesson::class);
     }
 
     public function relatedStudents()
@@ -38,27 +39,14 @@ class ClassActivity extends Model
 
     public function studentActivities()
     {
-        return $this->hasManyThrough(
-            StudentActivity::class,   // final model
-            ActivityLesson::class,    // intermediate
-            'activity_lessonable_id', // foreign key on ActivityLesson
-            'activity_lesson_id',     // foreign key on StudentActivity
-            'id',                     // local key on ClassActivity
-            'id'                      // local key on ActivityLesson
-        )->where('activity_lessonable_type', self::class);
+        return $this->hasMany(StudentActivity::class, 'activity_lesson_id')
+            ->where('activity_lesson_type', self::class);
     }
 
     public function students()
     {
-        return $this->belongsToMany(
-            Student::class,
-            'student_activities',
-            'activity_lesson_id',
-            'student_id'
-        )
-            ->join('activity_lessons', 'student_activities.activity_lesson_id', '=', 'activity_lessons.id')
-            ->where('activity_lessons.activity_lessonable_type', self::class)
-            ->where('activity_lessons.activity_lessonable_id', $this->id);
+        return $this->belongsToMany(Student::class, 'student_activities', 'activity_lesson_id', 'student_id')
+            ->where('student_activities.activity_lesson_type', self::class);
     }
 
     public function schoolYear()

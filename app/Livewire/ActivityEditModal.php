@@ -33,7 +33,6 @@ class ActivityEditModal extends Component
 
         $activity = ClassActivity::with([
             'students',
-            'activityLesson',
             'curriculumSubject.curriculum',
             'curriculumSubject.subject',
             'studentActivities'
@@ -203,17 +202,12 @@ class ActivityEditModal extends Component
             'description'           => $this->description,
         ]);
 
-        $activityLesson = $activity->activityLesson ?? $activity->activityLesson()->create([
-            'activity_lessonable_id'   => $activity->id,
-            'activity_lessonable_type' => ClassActivity::class,
-        ]);
-
-        $activityLesson->studentActivities()->delete();
-
+        $activity->studentActivities()->delete();
         foreach ($this->students as $student) {
             StudentActivity::create([
                 'student_id'        => $student->id,
-                'activity_lesson_id' => $activityLesson->id,
+                'activity_lesson_id' => $activity->id,
+                'activity_lesson_type' => ClassActivity::class,
                 'status'            => in_array($student->id, $this->checkedStudents ?? [])
                     ? 'finished'
                     : 'unfinished',
@@ -237,6 +231,8 @@ class ActivityEditModal extends Component
         $this->curriculums = Curriculum::where('instructor_id', Auth::user()->accountable->id)->where('grade_level_id', $this->grade_level)->where('status', 'active')->get();
         $this->curriculum = '';
         $this->subject = '';
+        $this->selectedTodoId = null;
+        $this->selectedTodoLabel = null;
         $this->subjects = collect();
         $this->students = collect();
     }
@@ -244,6 +240,8 @@ class ActivityEditModal extends Component
     public function updatedCurriculum()
     {
         $this->subject = '';
+        $this->selectedTodoId = null;
+        $this->selectedTodoLabel = null;
         $this->subjects = Subject::whereHas('curriculumSubjects', function ($query) {
             $query->where('curriculum_id', $this->curriculum);
         })->get();

@@ -69,23 +69,22 @@ class LessonEditModal extends Component
             ];
         })->toArray();
 
-        $this->selected_activities = $this->lesson->activityLessons()
-            ->where('activity_lessonable_type', GameActivity::class)
+        $this->selected_activities = $this->lesson->gameActivityLessons()
+            ->with('gameActivity')
             ->get()
-            ->map(function ($al) {
-                $activity = $al->activityLessonable;
+            ->map(function ($gal) {
+                $activity = $gal->gameActivity;
                 return (object) [
-                    'id'              => $activity->id,
-                    'name'            => $activity->name,
-                    'path'            => $activity->path,
+                    'id' => $activity->id,
+                    'name' => $activity->name,
+                    'path' => $activity->path,
                     'specializations' => collect($activity->specializations ?? [])->pluck('name')->toArray(),
                 ];
             })
             ->toArray();
 
-        $this->selected_f2f_activities = $this->lesson->activityLessons()
-            ->where('activity_lessonable_type', ClassActivity::class)
-            ->pluck('activity_lessonable_id')
+        $this->selected_f2f_activities = $this->lesson->classActivities()
+            ->pluck('id')
             ->toArray();
 
         if ($this->curriculum_id && $this->subject_id) {
@@ -96,6 +95,7 @@ class LessonEditModal extends Component
             if ($curriculumSubject) {
                 $this->f2fActivities = ClassActivity::where('curriculum_subject_id', $curriculumSubject->id)
                     ->where('instructor_id', Auth::user()->accountable->id)
+                    ->orderBy('created_at', 'desc')
                     ->get();
             }
         }
@@ -327,20 +327,16 @@ class LessonEditModal extends Component
         }
 
         // Update activities
-        $lesson->activityLessons()->delete();
+        $lesson->gameActivityLessons()->delete();
         foreach ($this->selected_activities as $activity) {
-            $lesson->activityLessons()->create([
-                'activity_lessonable_id' => $activity->id,
-                'activity_lessonable_type' => GameActivity::class,
+            $lesson->gameActivityLessons()->create([
+                'game_activity_id' => $activity->id,
             ]);
         }
 
-        foreach ($this->selected_f2f_activities as $activityId) {
-            $lesson->activityLessons()->create([
-                'activity_lessonable_id'   => $activityId,
-                'activity_lessonable_type' => ClassActivity::class,
-            ]);
-        }
+        $lesson->classActivities()->update(['lesson_id' => null]);
+        ClassActivity::whereIn('id', $this->selected_f2f_activities)
+            ->update(['lesson_id' => $lesson->id]);
 
         $this->dispatch('swal-toast', icon: 'success', title: 'Lesson updated successfully!');
         $this->closeModal();
@@ -378,6 +374,7 @@ class LessonEditModal extends Component
             if ($curriculumSubject) {
                 $this->f2fActivities = ClassActivity::where('curriculum_subject_id', $curriculumSubject->id)
                     ->where('instructor_id', Auth::user()->accountable->id)
+                    ->orderBy('created_at', 'desc')
                     ->get();
             } else {
                 $this->f2fActivities = collect();

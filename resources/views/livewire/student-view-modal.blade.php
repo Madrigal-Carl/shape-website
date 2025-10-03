@@ -200,7 +200,7 @@
                                         <td class="text-left pt-2 text-paragraph">{{ $lesson->title }}</td>
                                         <td class="text-center pt-2 text-paragraph">{{ $lesson->videos->count() }}</td>
                                         <td class="text-center pt-2 text-paragraph">
-                                            {{ $lesson->activityLessons->count() }}</td>
+                                            {{ $lesson->activity_lessons->count() }}</td>
                                         <td class="text-center pt-2 text-paragraph">
                                             {{ $lesson->isCompletedByStudent($student->id) ? 'Finished' : 'Unfinished' }}
                                         </td>

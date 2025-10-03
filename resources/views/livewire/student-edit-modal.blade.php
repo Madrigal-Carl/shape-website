@@ -130,7 +130,7 @@
                                     wire:change="$set('disability', $event.target.value)">
                                     @foreach ($specializations as $specialization)
                                         @if ($disability === $specialization->name)
-                                            <option value="{{ $disability }}" class="text-sm text-black" selected>
+                                            <option value="{{ $disability }}" class="text-sm text-black">
                                                 {{ ucwords($disability) }}
                                             </option>
                                         @else

@@ -5,14 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class ActivityLesson extends Model
+class GameActivityLesson extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'lesson_id',
-        'activity_lessonable_id',
-        'activity_lessonable_type',
+        'game_activity_id',
     ];
 
     public function lesson()
@@ -20,13 +19,13 @@ class ActivityLesson extends Model
         return $this->belongsTo(Lesson::class);
     }
 
-    public function activityLessonable()
+    public function gameActivity()
     {
-        return $this->morphTo();
+        return $this->belongsTo(GameActivity::class);
     }
 
     public function studentActivities()
     {
-        return $this->hasMany(StudentActivity::class);
+        return $this->morphMany(StudentActivity::class, 'activity_lesson');
     }
 }

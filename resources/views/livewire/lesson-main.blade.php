@@ -163,7 +163,8 @@
                                         {{ $lesson->lesson_subject_students_count }}</td>
                                     <td class="px-4 py-3 text-center text-paragraph">{{ $lesson->videos_count }}</td>
                                     <td class="px-4 py-3 text-center text-paragraph">
-                                        {{ $lesson->activity_lessons_count }}</td>
+                                        {{ $lesson->game_activity_lessons_count + $lesson->class_activities_count }}
+                                    </td>
                                     <td class="px-4 py-3 text-center text-paragraph">
                                         <div class="flex justify-center items-center gap-1 text-white">
                                             <button wire:click='openEditLessonModal({{ $lesson->id }})'

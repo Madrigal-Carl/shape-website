@@ -23,9 +23,14 @@ class Lesson extends Model
         return $this->hasMany(LessonSubjectStudent::class);
     }
 
-    public function activityLessons()
+    public function gameActivityLessons()
     {
-        return $this->hasMany(ActivityLesson::class);
+        return $this->hasMany(GameActivityLesson::class);
+    }
+
+    public function classActivities()
+    {
+        return $this->hasMany(ClassActivity::class);
     }
 
     public function students()
@@ -39,14 +44,21 @@ class Lesson extends Model
             'student_id'
         );
     }
+
+    public function getActivityLessonsAttribute()
+    {
+        return $this->gameActivityLessons->merge($this->classActivities);
+    }
+
     public function isCompletedByStudent($studentId)
     {
         foreach ($this->activityLessons as $activityLesson) {
             $studentActivity = $activityLesson->studentActivities()
                 ->where('student_id', $studentId)
+                ->where('status', 'finished')
                 ->first();
 
-            if (!$studentActivity || $studentActivity->status !== 'finished') {
+            if (!$studentActivity) {
                 return false;
             }
         }

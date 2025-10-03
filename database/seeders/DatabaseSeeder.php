@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Carbon\Carbon;
-use App\Models\Log;
 use App\Models\Feed;
 use App\Models\Todo;
 use App\Models\Admin;
@@ -16,7 +15,6 @@ use App\Models\Account;
 use App\Models\Address;
 use App\Models\Student;
 use App\Models\Subject;
-use App\Models\Activity;
 use App\Models\Guardian;
 use App\Models\GameImage;
 use App\Models\SubDomain;
@@ -27,13 +25,12 @@ use App\Models\Instructor;
 use App\Models\SchoolYear;
 use App\Models\GameActivity;
 use App\Models\StudentAward;
-use App\Models\ActivityImage;
 use App\Models\ClassActivity;
-use App\Models\ActivityLesson;
 use App\Models\Specialization;
 use App\Models\StudentActivity;
 use Illuminate\Database\Seeder;
 use App\Models\CurriculumSubject;
+use App\Models\GameActivityLesson;
 use App\Models\LessonSubjectStudent;
 
 class DatabaseSeeder extends Seeder
@@ -385,27 +382,27 @@ class DatabaseSeeder extends Seeder
             $instructorCurriculums->each(function ($curriculum) use ($activities, $instructor) {
                 $curriculumSubjects = $curriculum->curriculumSubjects;
 
-                // ✅ Get only students that match grade_level + specialization
+                // ✅ Eligible students for this curriculum
                 $eligibleStudents = $instructor->eligibleStudents($curriculum)->get();
 
-                // ✅ Create fresh lessons for this instructor/curriculum (not shared globally)
+                // ✅ Create lessons for this instructor/curriculum
                 $curriculumLessons = Lesson::factory()->count(2)->create([
                     'school_year_id' => now()->schoolYear()->id,
                 ]);
 
-                $curriculumLessons->each(function ($lesson) use ($activities) {
+                $curriculumLessons->each(function ($lesson) use ($activities, $eligibleStudents, $curriculumSubjects) {
+                    // Attach video
                     Video::factory()->create(['lesson_id' => $lesson->id]);
 
-                    ActivityLesson::create([
-                        'lesson_id' => $lesson->id,
-                        'activity_lessonable_id' => $activities->random()->id,
-                        'activity_lessonable_type' => GameActivity::class,
+                    // Attach game activity to lesson
+                    $gameActivity = $activities->random();
+                    $gameActivityLesson = GameActivityLesson::create([
+                        'lesson_id'        => $lesson->id,
+                        'game_activity_id' => $gameActivity->id,
                     ]);
-                });
 
-                // ✅ Assign these lessons to eligible students
-                $eligibleStudents->each(function ($student) use ($curriculumLessons, $curriculumSubjects) {
-                    $curriculumLessons->each(function ($lesson) use ($student, $curriculumSubjects) {
+                    // Assign students
+                    $eligibleStudents->each(function ($student) use ($lesson, $curriculumSubjects, $gameActivityLesson) {
                         $curriculumSubject = $curriculumSubjects->random();
 
                         LessonSubjectStudent::firstOrCreate([
@@ -414,19 +411,15 @@ class DatabaseSeeder extends Seeder
                             'student_id'            => $student->id,
                         ]);
 
-                        if ($lesson->activityLessons->isNotEmpty()) {
-                            foreach ($lesson->activityLessons as $activityLesson) {
-                                StudentActivity::factory()->create([
-                                    'student_id'         => $student->id,
-                                    'activity_lesson_id' => $activityLesson->id,
-                                ]);
-                            }
-                        }
+                        StudentActivity::factory()->create([
+                            'student_id'         => $student->id,
+                            'activity_lesson_id' => $gameActivityLesson->id,
+                            'activity_lesson_type' => GameActivityLesson::class,
+                        ]);
                     });
                 });
             });
         });
-
 
 
         // === Class Activity ===
@@ -444,14 +437,11 @@ class DatabaseSeeder extends Seeder
                     continue;
                 }
 
-                // 1. Pick random curriculum subject
                 $curriculumSubject = $curriculumSubjects->random();
                 $subject = $curriculumSubject->subject;
 
-                // 2. Pick a random domain from the subject
+                // Pick todo
                 $domain = $subject->domains()->inRandomOrder()->first();
-
-                // 3. Get todo (domain first, else from subdomain)
                 $todo = $domain?->todos()->inRandomOrder()->first();
                 if (!$todo && $domain) {
                     $subDomain = $domain->subDomains()->with('todos')->inRandomOrder()->first();
@@ -460,38 +450,31 @@ class DatabaseSeeder extends Seeder
                     }
                 }
 
-                // 4. Create Class Activity
+                // ✅ Create ClassActivity (lesson_id nullable)
                 $activity = ClassActivity::factory()->create([
                     'instructor_id'         => $instructor->id,
                     'curriculum_subject_id' => $curriculumSubject->id,
                     'todo_id'               => $todo?->id,
+                    'lesson_id'             => null, // no lesson by default
                 ]);
 
                 $activities->push($activity);
             }
 
-            // 5. Activity lessons + student assignments
+            // Assign to students
             foreach ($activities as $activity) {
-                $activityLesson = ActivityLesson::create([
-                    'activity_lessonable_id'   => $activity->id,
-                    'activity_lessonable_type' => ClassActivity::class,
-                ]);
-
-                // Eligible students for this curriculum
                 $eligibleStudents = $instructor->eligibleStudents($activity->curriculumSubject->curriculum)->get();
                 $students = $eligibleStudents->shuffle()->take(rand(3, 6));
 
                 foreach ($students as $student) {
                     StudentActivity::factory()->create([
-                        'student_id'         => $student->id,
-                        'activity_lesson_id' => $activityLesson->id,
+                        'student_id'          => $student->id,
+                        'activity_lesson_id'  => $activity->id,
+                        'activity_lesson_type' => ClassActivity::class,
                     ]);
                 }
             }
         }
-
-
-
 
         // === Feeds ===
         $students->each(function ($student) {

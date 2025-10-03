@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('class_activities', function (Blueprint $table) {
             $table->id();
             $table->foreignId('school_year_id')->constrained()->onDelete('cascade');
+            $table->foreignId('lesson_id')->nullable()->constrained()->onDelete('set null');
             $table->foreignId('curriculum_subject_id')->constrained()->onDelete('cascade');
             $table->foreignId('instructor_id')->constrained()->onDelete('cascade');
             $table->foreignId('todo_id')->constrained()->onDelete('cascade');

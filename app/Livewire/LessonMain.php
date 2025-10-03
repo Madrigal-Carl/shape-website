@@ -87,7 +87,8 @@ class LessonMain extends Component
             ->withCount([
                 'lessonSubjectStudents',
                 'videos',
-                'activityLessons',
+                'gameActivityLessons',
+                'classActivities',
             ])
             ->where('school_year_id', $this->school_year)
             ->whereHas('lessonSubjectStudents.curriculumSubject.curriculum', function ($q) {

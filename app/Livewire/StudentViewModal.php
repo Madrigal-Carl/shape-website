@@ -29,7 +29,8 @@ class StudentViewModal extends Component
             'currentAddress',
             'lessons.schoolYear',
             'lessons.videos',
-            'lessons.activityLessons'
+            'lessons.gameActivityLessons',
+            'lessons.classActivities',
         ])->find($id);
     }
 

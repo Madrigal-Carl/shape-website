@@ -14,10 +14,13 @@ return new class extends Migration
         Schema::create('student_activities', function (Blueprint $table) {
             $table->id();
             $table->foreignId('student_id')->constrained()->onDelete('cascade');
-            $table->foreignId('activity_lesson_id')->constrained()->onDelete('cascade');
+            $table->morphs('activity_lesson');
             $table->enum('status', ['unfinished', 'finished'])->default('unfinished');
             $table->timestamps();
-            $table->unique(['student_id', 'activity_lesson_id']);
+            $table->unique(
+                ['student_id', 'activity_lesson_id', 'activity_lesson_type'],
+                'student_act_unique'
+            );
         });
     }
 

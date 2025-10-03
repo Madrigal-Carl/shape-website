@@ -21,9 +21,9 @@ class GameActivity extends Model
         return $this->morphToMany(Specialization::class, 'specializable');
     }
 
-    public function activityLesson()
+    public function gameActivityLessons()
     {
-        return $this->morphOne(ActivityLesson::class, 'activity_lessonable');
+        return $this->hasMany(GameActivityLesson::class);
     }
 
     public function curriculumSubject()
