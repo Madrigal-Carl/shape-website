@@ -26,11 +26,6 @@ class GameActivity extends Model
         return $this->hasMany(GameActivityLesson::class);
     }
 
-    public function curriculumSubject()
-    {
-        return $this->belongsTo(CurriculumSubject::class);
-    }
-
     public function todo()
     {
         return $this->belongsTo(Todo::class);

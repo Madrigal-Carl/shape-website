@@ -151,29 +151,39 @@ class GrantAwardsScheduler extends Command
     {
         $ids = [];
         foreach ($students as $student) {
+            // Get all subjects for this student in active curriculums for the school year
             $subjects = $student->lessonSubjectStudents()
                 ->whereHas('lesson', fn($q) => $q->where('school_year_id', $schoolYear->id))
                 ->whereHas('curriculum', fn($q) => $q->where('status', 'active'))
-                ->with('curriculumSubject.subject')
                 ->get()
-                ->pluck('curriculumSubject.subject')
+                ->map(fn($lss) => $lss->curriculumSubject->subject)
                 ->unique('id')
                 ->filter();
 
             foreach ($subjects as $subject) {
-                // FIX: use relation, not collection, for whereHas
+                // Get all curriculum subjects for this subject in active curriculums
                 $activeCurriculumSubjects = $subject->curriculumSubjects()
                     ->whereHas('curriculum', fn($q) => $q->where('status', 'active'))
                     ->get();
 
-                $allActivities = $activeCurriculumSubjects
-                    ->flatMap(fn($cs) => $cs->lessons()->where('school_year_id', $schoolYear->id)->get())
+                // Get all lessons for these curriculum subjects in the school year
+                $allLessons = $activeCurriculumSubjects
+                    ->flatMap(
+                        fn($cs) => $cs->lessonSubjectStudents()
+                            ->whereHas('lesson', fn($q) => $q->where('school_year_id', $schoolYear->id))
+                            ->get()
+                            ->map(fn($lss) => $lss->lesson)
+                    )
+                    ->unique('id');
+
+                // Get all activities for these lessons
+                $allActivities = $allLessons
                     ->flatMap(fn($lesson) => $lesson->activityLessons);
 
                 if ($allActivities->isEmpty()) continue;
                 $allCompleted = $allActivities->every(function ($al) use ($student) {
-                    $sa = $al->studentActivities->where('student_id', $student->id)->first();
-                    return $sa && $sa->status === 'finished';
+                    $sa = $al->studentActivities()->where('student_id', $student->id)->where('status', 'finished')->first();
+                    return $sa !== null;
                 });
                 if ($allCompleted) {
                     $ids[] = $student->id;
@@ -187,31 +197,27 @@ class GrantAwardsScheduler extends Command
     // Game Master: finished all GameActivities (from active curriculums)
     protected function getGameMasterIds($students, $schoolYear)
     {
-        $gameActivityIds = \App\Models\GameActivity::whereHas('activityLesson.lesson', function ($q) use ($schoolYear) {
-            $q->where('school_year_id', $schoolYear->id);
+        // Get all GameActivityLesson for lessons in the current school year and active curriculums
+        $gameActivityLessons = \App\Models\GameActivityLesson::whereHas('lesson.lessonSubjectStudents.curriculumSubject.curriculum', function ($q) {
+            $q->where('status', 'active');
         })
-            ->get()
-            ->filter(function ($gameActivity) {
-                $curriculum = optional(optional($gameActivity->curriculumSubject)->curriculum);
-                return $curriculum && $curriculum->status === 'active';
+            ->whereHas('lesson', function ($q) use ($schoolYear) {
+                $q->where('school_year_id', $schoolYear->id);
             })
-            ->pluck('id')
-            ->toArray();
+            ->get();
 
-        return $students->filter(function ($student) use ($gameActivityIds) {
-            if (empty($gameActivityIds)) return false;
-            $completed = 0;
-            foreach ($gameActivityIds as $gaId) {
-                $al = \App\Models\ActivityLesson::where('activity_lessonable_type', \App\Models\GameActivity::class)
-                    ->where('activity_lessonable_id', $gaId)
+        return $students->filter(function ($student) use ($gameActivityLessons) {
+            if ($gameActivityLessons->isEmpty()) return false;
+            foreach ($gameActivityLessons as $gal) {
+                $sa = $gal->studentActivities()
+                    ->where('student_id', $student->id)
+                    ->where('status', 'finished')
                     ->first();
-                if (!$al) return false;
-                $sa = $al->studentActivities()->where('student_id', $student->id)->first();
-                if ($sa && $sa->status === 'finished') {
-                    $completed++;
+                if (!$sa) {
+                    return false;
                 }
             }
-            return $completed === count($gameActivityIds) && $completed > 0;
+            return true;
         })->pluck('id')->toArray();
     }
 
