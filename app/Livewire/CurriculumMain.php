@@ -35,50 +35,34 @@ class CurriculumMain extends Component
         $curriculum = Curriculum::where('instructor_id', Auth::user()->accountable->id)->findOrFail($id);
         if ($curriculum->status === 'inactive') {
             $curriculum->update(['status' => 'active']);
-            return $this->dispatch('swal-toast', icon: 'success', title: 'Curriculum has been activated.');
+            $this->dispatch(
+                'swal-toast',
+                icon: 'success',
+                title: 'Curriculum has been activated.'
+            );
+        } else {
+            $curriculum->update(['status' => 'inactive']);
+            $this->dispatch(
+                'swal-toast',
+                icon: 'warning',
+                title: 'Curriculum has been deactivated.'
+            );
         }
-        $curriculum->update(['status' => 'inactive']);
-        $this->dispatch('swal-toast', icon: 'warning', title: 'Curriculum has been deactived.');
     }
 
-    protected function checkGradeLevelCurriculums()
+    public function isToggleDisabled($curriculum)
     {
-        $instructor = Auth::user()->accountable;
-        $gradeLevels = $instructor->gradeLevels()->get();
+        if ($curriculum->status === 'inactive') {
+            $activeCurriculum = Curriculum::where('instructor_id', Auth::user()->accountable->id)
+                ->where('grade_level_id', $curriculum->grade_level_id)
+                ->where('status', 'active')
+                ->first();
 
-        $missingCurriculum = [];
-        $inactiveCurriculum = [];
-        $multipleActiveCurriculum = [];
-
-        foreach ($gradeLevels as $gradeLevel) {
-            $curriculums = $instructor->curriculums()->where('grade_level_id', $gradeLevel->id)->get();
-
-            if ($curriculums->isEmpty()) {
-                $missingCurriculum[] = $gradeLevel->name;
-            } else {
-                $active = $curriculums->where('status', 'active');
-                $activeCount = $active->count();
-                if ($activeCount === 0) {
-                    $inactiveCurriculum[] = $gradeLevel->name;
-                } elseif ($activeCount > 1) {
-                    $multipleActiveCurriculum[] = $gradeLevel->name;
-                }
-            }
+            return $activeCurriculum ? true : false;
         }
-
-        if (!empty($missingCurriculum)) {
-            $this->dispatch('show-curriculum-warning', text: 'Missing curriculum for grade level(s): ' . implode(', ', $missingCurriculum));
-        } elseif (!empty($inactiveCurriculum)) {
-            $this->dispatch('show-curriculum-warning', text: 'No active curriculum for grade level(s): ' . implode(', ', $inactiveCurriculum));
-        } elseif (!empty($multipleActiveCurriculum)) {
-            $this->dispatch('show-curriculum-warning', text: 'Only one active curriculum is allowed per grade level. Multiple active curriculums found for: ' . implode(', ', $multipleActiveCurriculum));
-        }
+        return false;
     }
 
-    public function mount()
-    {
-        $this->checkGradeLevelCurriculums();
-    }
 
     public function render()
     {

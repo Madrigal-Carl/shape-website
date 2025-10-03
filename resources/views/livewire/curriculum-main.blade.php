@@ -117,7 +117,8 @@
                                             <div>
                                                 <input type="checkbox" id="checkboxInput-{{ $curriculum->id }}"
                                                     class="toggleInput" wire:click="toggleStatus({{ $curriculum->id }})"
-                                                    {{ $curriculum->status === 'active' ? 'checked' : '' }}>
+                                                    {{ $curriculum->status === 'active' ? 'checked' : '' }}
+                                                    {{ $isDisabled = $this->isToggleDisabled($curriculum) ? 'disabled cursor-not-allowed opacity-50' : '' }}>
                                                 <label for="checkboxInput-{{ $curriculum->id }}"
                                                     class="toggleSwitch"></label>
                                             </div>
@@ -221,22 +222,3 @@
         @endif
     </div>
 </main>
-
-<script>
-    document.addEventListener('livewire:init', () => {
-        Livewire.on('show-curriculum-warning', ({
-            text
-        }) => {
-            Swal.fire({
-                title: 'Notice',
-                text: text,
-                icon: 'warning',
-                confirmButtonText: 'Continue',
-                confirmButtonColor: '#2563eb',
-                customClass: {
-                    title: 'swal-title',
-                }
-            });
-        });
-    });
-</script>
