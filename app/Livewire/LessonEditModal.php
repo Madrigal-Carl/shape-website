@@ -95,6 +95,10 @@ class LessonEditModal extends Component
             if ($curriculumSubject) {
                 $this->f2fActivities = ClassActivity::where('curriculum_subject_id', $curriculumSubject->id)
                     ->where('instructor_id', Auth::user()->accountable->id)
+                    ->where(function ($query) {
+                        $query->whereNull('lesson_id')
+                            ->orWhereIn('id', $this->selected_f2f_activities);
+                    })
                     ->orderBy('created_at', 'desc')
                     ->get();
             }
@@ -374,6 +378,10 @@ class LessonEditModal extends Component
             if ($curriculumSubject) {
                 $this->f2fActivities = ClassActivity::where('curriculum_subject_id', $curriculumSubject->id)
                     ->where('instructor_id', Auth::user()->accountable->id)
+                    ->where(function ($query) {
+                        $query->whereNull('lesson_id')
+                            ->orWhereIn('id', $this->selected_f2f_activities);
+                    })
                     ->orderBy('created_at', 'desc')
                     ->get();
             } else {

@@ -321,6 +321,7 @@ class LessonAddModal extends Component
             if ($curriculumSubject) {
                 $this->f2fActivities = ClassActivity::where('curriculum_subject_id', $curriculumSubject->id)
                     ->where('instructor_id', Auth::user()->accountable->id)
+                    ->whereNull('lesson_id')
                     ->orderBy('created_at', 'desc')
                     ->get();
             } else {
