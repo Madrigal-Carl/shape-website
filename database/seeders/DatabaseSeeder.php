@@ -44,54 +44,162 @@ class DatabaseSeeder extends Seeder
         $domains = [
             'Daily Living Skills Domain' => [
                 'subdomains' => [
-                    'Self-feeding' => [
+                    'Self-Feeding' => [
                         "Expresses need to eat or drink through non-verbal or verbal means.",
                         "Chews and swallows different kinds of foods.",
                         "Swallows liquid like soup.",
                         "Picks up food with fingers or scoops with spoon.",
-                        "Uses spoon and fork.",
-                        "Drinks from a cup or glass.",
-                        "Feeds self independently.",
+                        "Picks up and eats finger foods.",
+                        "Sips and drinks liquid.",
+                        "Eats with spoon and fork.",
+                        "Uses the table knife for spreading.",
+                        "Cuts food using table knife.",
+                        "Distinguishes edible and non-edible foods and substances.",
+                        "Peels/unwraps food.",
+                        "Uses table napkins.",
+                        "Exhibits table setting skills.",
                     ],
-                    'Toilet' => [
-                        "Urinates and defecates in proper places.",
-                        "Demonstrates control of bowel and bladder.",
-                        "Goes to the toilet independently.",
-                        "Uses toilet paper or other available materials.",
-                        "Washes hands after using the toilet.",
+                    'Toileting' => [
+                        "Uses comfort room/toilet bowl to urinate or defecate.",
+                        "Uses the toilet paper to clean-up self and dispossess it properly.",
+                        "Uses diaper correctly.",
+                        "Cleans self with soap and water after toileting.",
                     ],
                     'Dressing' => [
-                        "Puts on simple clothes.",
-                        "Removes clothes without assistance.",
-                        "Fastens and unfastens buttons, zippers, snaps, ties.",
-                        "Selects appropriate clothes for the occasion/weather.",
-                        "Takes care of clothes and shoes properly.",
+                        "Removes/puts on shoes or slippers.",
+                        "Removes/puts on socks.",
+                        "Removes/puts on clothes.",
+                        "Opens and closes dressing implements (zip/unzip, button/unbutton).",
                     ],
                     'Grooming and Hygiene' => [
-                        "Brushes teeth properly.",
-                        "Washes and dries hands.",
-                        "Combs or brushes hair.",
-                        "Bathes with assistance.",
-                        "Bathes independently.",
-                        "Keeps body clean and neat.",
+                        "Washes and dries hands properly.",
+                        "Cleans own self.",
+                        "Brushes teeth.",
+                        "Combs/brushes hair.",
                     ],
                 ]
             ],
 
             'Socio-Emotional Domain' => [
                 'todos' => [
-                    "Uses courteous expression appropriately.",
+                    "Uses courteous expressions appropriately.",
                     "Asks an apology when necessary.",
-                    "Shows respect to elders.",
-                    "Greets peers and adults.",
-                    "Expresses needs and feelings appropriately.",
-                    "Shows concern to others.",
-                    "Waits for his/her turn.",
-                    "Accepts mistakes and limitations.",
-                    "Accepts responsibility as a member of the family/cultural group.",
-                    "Displays positive and appropriate emotions.",
+                    "Pays attention to someone talking.",
+                    "Engages in communication to others.",
+                    "Plays with peers.",
+                    "Makes friends easily.",
+                    "Follows rules and regulations.",
+                    "Seeks/accepts help.",
+                    "Expresses/shows appropriate emotions.",
+                    "Waits for one's turn.",
+                    "Asks permission to use things owned by others.",
+                    "Seeks help from older friends.",
+                    "Imitates adult activities.",
+                    "Displays sense of humor.",
+                    "Identifies self as a member of the family/cultural group.",
+                    "Identifies personal belongings.",
+                    "Displays sensitivity to the feelings of others.",
+                    "Shows sportsmanship.",
+                    "Shows interest in work or tasks.",
+                    "Works independently.",
+                    "Shows self-confidence.",
                 ]
-            ]
+            ],
+
+            'Language Development Domain' => [
+                'subdomains' => [
+                    'Listening' => [
+                        "Follows simple directions.",
+                        "Distinguishes different types of sounds.",
+                        "Comprehends similar and familiar stories.",
+                        "Listens attentively to stories, poems/rhymes.",
+                    ],
+                    'Speaking' => [
+                        "Increases vocabulary to describe things.",
+                        "Increases vocabulary to express one's feelings.",
+                        "Increases vocabulary to share information.",
+                        "Answers and responds to questions accordingly.",
+                        "Narrates simple and familiar stories.",
+                    ],
+                    'Reading' => [
+                        "Discriminates similarities and differences between pictures and objects.",
+                        "Classifies objects according to function.",
+                        "Notes details on pictures.",
+                        "Visualizes objects and pictures from memory.",
+                        "Comprehends picture stories.",
+                        "Performs relevant study skills.",
+                    ],
+                    'Writing' => [
+                        "Holds/grips pencil properly.",
+                        "Traces lines and shapes.",
+                        "Traces letters, numbers, and one's name properly.",
+                        "Copies lines, shapes, letters, numbers, and one's name properly.",
+                        "Draws basic figures.",
+                        "Uses basic strokes correctly.",
+                    ],
+                ]
+            ],
+
+            'Fine Motor Competencies Domain' => [
+                'subdomains' => [
+                    'Basic Movement' => [
+                        "Sits, stands, and walks with good posture.",
+                        "Runs and jumps gradually in increasing distance.",
+                        "Jumps and performs other exercises with or without music.",
+                        "Lifts increasingly heavy weights.",
+                        "Balances on one foot for gradually increasing period.",
+                        "Imitates motor movement of people and animals.",
+                        "Bends and strengthens knees properly while knees flat on the floor.",
+                        "Goes up and down the stairs.",
+                    ],
+                    'Fine Motor Competencies' => [
+                        "Makes an object using clay.",
+                        "Squeezes soft rubber ball of convenient sizes.",
+                        "Squeezes water from wet rag.",
+                        "Folds, divides, and tears paper into halves/pieces.",
+                        "Cuts out shapes, outline and objects.",
+                        "Pastes paper properly.",
+                        "Strings and threads beads.",
+                    ],
+                ]
+            ],
+
+            'Perceptual Motor Skills Domain' => [
+                'subdomains' => [
+                    'Perceptual Motor Skills' => [
+                        "Uses clay to make simple but increasingly meaningful shapes and objects.",
+                        "Uses crayon to color.",
+                    ],
+                ]
+            ],
+
+            'Gross Motor Competencies Domain' => [
+                'subdomains' => [
+                    'Gross Motor Competencies' => [
+                        "Walks while carrying an object.",
+                        "Jumps towards without falling.",
+                        "Throws and catches objects.",
+                        "Kicks ball without losing balance.",
+                        "Hops skillfully without falling.",
+                    ],
+                ]
+            ],
+
+            'Cognitive Domain' => [
+                'todos' => [
+                    "Identifies colors.",
+                    "Identifies shapes.",
+                    "Identifies letters of the alphabet.",
+                    "Identifies the sounds of the letters of the alphabet.",
+                    "Identifies sizes; long-short, big-small, tall-short.",
+                    "Sorts objects according to color.",
+                    "Sorts objects according to size.",
+                    "Sorts objects according to shape.",
+                    "Tells the size of the object.",
+                    "Identifies numbers up to 5.",
+                    "Counts numbers up to 20.",
+                ]
+            ],
         ];
 
         foreach ($domains as $domainName => $data) {
@@ -261,10 +369,38 @@ class DatabaseSeeder extends Seeder
 
 
         Subject::factory()->allSubjects();
-        // ========== To be changed ==========
-        Subject::all()->each(function ($subject) {
-            $randomDomains = Domain::inRandomOrder()->take(rand(1, 2))->pluck('id');
-            $subject->domains()->attach($randomDomains);
+        // Define the mapping of domains to subjects
+        $domainSubjects = [
+            'Daily Living Skills Domain' => ['self care', 'daily living skills', 'practical life skills'],
+            'Socio-Emotional Domain' => ['edukasyon sa pagpapakatao'],
+            'Language Development Domain' => ['english', 'language and literacy'],
+            'Basic Movement Domain' => ['health and pe', 'music and arts'],
+            'Perceptual Motor Skills Domain' => ['sensory', 'health and pe'],
+            'Gross Motor Competencies Domain' => ['health and pe'],
+            'Fine Motor Competencies Domain' => ['practical life skills'],
+            'Cognitive Domain' => ['numeracy', 'science', 'practical life skills'],
+        ];
+
+        // Loop through each domain and assign the subjects
+        foreach ($domainSubjects as $domainName => $subjects) {
+            $domain = Domain::where('name', $domainName)->first();
+
+            if ($domain) {
+                foreach ($subjects as $subjectName) {
+                    $subject = Subject::whereRaw('LOWER(name) = ?', [strtolower($subjectName)])->first();
+                    if ($subject) {
+                        $subject->domains()->syncWithoutDetaching([$domain->id]);
+                    }
+                }
+            }
+        }
+        // FOR THE HEARING AND SPEECH SUBJECT NOT YET ASSIGNED JUST RANDOM
+        // ======= Assign remaining subjects to random domains =======
+        $allDomainIds = Domain::pluck('id')->toArray();
+
+        Subject::doesntHave('domains')->get()->each(function ($subject) use ($allDomainIds) {
+            $randomDomainId = $allDomainIds[array_rand($allDomainIds)];
+            $subject->domains()->attach($randomDomainId);
         });
 
         $subjectIds = Subject::pluck('id')->toArray();
