@@ -9,3 +9,4 @@ Artisan::command('inspire', function () {
 })->purpose('Display an inspiring quote');
 
 Schedule::command('app:grant-awards-scheduler')->monthly();
+Schedule::command('app:send-student-progress-reports')->weekly();
