@@ -49,7 +49,7 @@ class SendStudentProgressReports extends Command
             $total     = $student->totalActivitiesCount($currentSchoolYear->id);
             $remaining = max(0, $total - $completed);
 
-            Mail::to($student->guardian->email)->send(
+            Mail::to($student->guardian->email)->queue(
                 new StudentProgressReportMail($student, $completed, $remaining)
             );
 
