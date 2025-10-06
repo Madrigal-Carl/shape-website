@@ -160,6 +160,8 @@ class DatabaseSeeder extends Seeder
                         "Cuts out shapes, outline and objects.",
                         "Pastes paper properly.",
                         "Strings and threads beads.",
+                        "Turns doorknob with forearm motion..",
+                        "Removes bottle cap.",
                     ],
                 ]
             ],

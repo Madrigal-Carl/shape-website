@@ -95,6 +95,19 @@ class Student extends Model
         );
     }
 
+    public function studentActivities()
+    {
+        return $this->hasMany(StudentActivity::class);
+    }
+
+    public function activityStatus($activityLesson)
+    {
+        return $this->studentActivities()
+            ->where('activity_lesson_type', get_class($activityLesson))
+            ->where('activity_lesson_id', $activityLesson->id)
+            ->value('status');
+    }
+
     public function totalAwardsCount($schoolYearId = null)
     {
         $schoolYearId = $schoolYearId ?? now()->schoolYear()?->id;

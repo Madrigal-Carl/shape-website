@@ -2,100 +2,165 @@
 
 namespace App\Services;
 
-use PhpOffice\PhpWord\PhpWord;
-use PhpOffice\PhpWord\IOFactory;
-use PhpOffice\PhpWord\SimpleType\JcTable;
-use Illuminate\Support\Facades\Response;
+use Exception;
+use App\Models\Todo;
+use App\Models\Student;
+use App\Models\SchoolYear;
+use PhpOffice\PhpWord\TemplateProcessor;
 
 class ReportHelper
 {
-    public static function generateLearningProgressReport(string $fileName = 'learning-progress.docx')
+    public function getAutismStudentActivities($studentId, $schoolYearId = null, $quarter = null)
     {
-        $phpWord = new PhpWord();
-        $section = $phpWord->addSection();
+        $student = Student::with([
+            'lessons.classActivities.todo',
+            'lessons.gameActivityLessons.gameActivity.todo',
+        ])->findOrFail($studentId);
 
-        // Title
-        $section->addText(
-            'REPORT ON LEARNING PROGRESS AND ACHIEVEMENT',
-            ['bold' => true],
-            ['align' => 'center']
-        );
+        $schoolYearId = $schoolYearId ?? now()->schoolYear()?->id;
+        $schoolYear   = SchoolYear::findOrFail($schoolYearId);
 
-        // Progress Table
-        $table = $section->addTable([
-            'borderSize' => 6,
-            'borderColor' => '000000',
-            'alignment'   => JcTable::CENTER,
-        ]);
+        $results = [];
 
-        // Header Row
-        $table->addRow();
-        $table->addCell(4000)->addText('LEARNING DOMAINS', ['bold' => true], ['align' => 'center']);
-        $table->addCell(1000)->addText('1st', ['bold' => true], ['align' => 'center']);
-        $table->addCell(1000)->addText('2nd', ['bold' => true], ['align' => 'center']);
-        $table->addCell(1000)->addText('3rd', ['bold' => true], ['align' => 'center']);
-        $table->addCell(1000)->addText('4th', ['bold' => true], ['align' => 'center']);
-        $table->addCell(1200)->addText('FINAL RATING', ['bold' => true], ['align' => 'center']);
+        foreach ($student->lessons as $lesson) {
+            // Determine lesson quarter
+            $lessonQuarter = null;
+            foreach ([1, 2, 3, 4] as $q) {
+                if ($lesson->isInQuarter($schoolYear, $q)) {
+                    $lessonQuarter = $q;
+                    break;
+                }
+            }
+            if (!$lessonQuarter) continue;
 
-        // Learning Domains
-        $domains = [
-            'I. SELF-HELP SKILLS',
-            'II. SOCIAL SKILLS',
-            'III. NUMERACY SKILLS',
-            'IV. LITERACY SKILLS',
-            'V. LANGUAGE / COMMUNICATION SKILLS',
-            'VI. MOTOR SKILLS',
-            '• Gross Motor Skills',
-            '• Fine Motor Skills',
-            'VII. PRE-VOCATIONAL SKILLS',
-            'VIII. VOCATIONAL SKILLS',
-            'IX. ORIENTATION AND MOBILITY (For Children with Visual Impairment)',
-        ];
+            // Skip if lesson quarter > requested quarter
+            if ($quarter && $lessonQuarter > $quarter) {
+                continue;
+            }
 
-        foreach ($domains as $domain) {
-            $table->addRow();
-            $table->addCell(4000)->addText($domain);
-            for ($i = 0; $i < 5; $i++) {
-                $table->addCell(1000)->addText('');
+            // class activities
+            foreach ($lesson->classActivities as $activity) {
+                if (!$activity->todo) continue;
+
+                $todoKey = 't' . $activity->todo->id;
+                $field   = $todoKey . '.q' . $lessonQuarter;
+
+                $status = $student->activityStatus($activity);
+                if ($status) {
+                    $results[$field][] = $status;
+                }
+            }
+
+            // game activities
+            foreach ($lesson->gameActivityLessons as $activity) {
+                if (!$activity->gameActivity?->todo) continue;
+
+                $todoKey = 't' . $activity->gameActivity->todo->id;
+                $field   = $todoKey . '.q' . $lessonQuarter;
+
+                $status = $student->activityStatus($activity);
+                if ($status) {
+                    $results[$field][] = $status;
+                }
             }
         }
 
-        $section->addText(
-            "The descriptive rating system used in this learner progress report is based upon your child's individual progress at his/her level of capability.",
-            ['italic' => true, 'size' => 9],
-            ['align' => 'center']
-        );
+        // Aggregate ratings
+        $final = [];
+        $allTodos = Todo::pluck('id')->toArray();
 
-        $section->addTextBreak(1);
+        foreach ($allTodos as $todoId) {
+            for ($q = 1; $q <= 4; $q++) {
+                $key = 't' . $todoId . '.q' . $q;
 
-        // Scoring and Performance Criteria
-        $section->addText('SCORING AND PERFORMANCE CRITERIA', ['bold' => true], ['align' => 'center']);
+                // Future quarters remain blank
+                if ($quarter && $q > $quarter) {
+                    $final[$key] = '';
+                    continue;
+                }
 
-        $criteriaTable = $section->addTable(['borderSize' => 6, 'borderColor' => '000000']);
-        $criteriaTable->addRow();
-        $criteriaTable->addCell(1500)->addText('Performance Code', ['bold' => true], ['align' => 'center']);
-        $criteriaTable->addCell(2500)->addText('Description', ['bold' => true], ['align' => 'center']);
-        $criteriaTable->addCell(5000)->addText('Performance Criteria', ['bold' => true], ['align' => 'center']);
+                $statuses = $results[$key] ?? [];
+                $total = count($statuses);
 
-        $rows = [
-            ['M', 'Mastered', 'Student is able to perform skill independently with 90-100% accuracy'],
-            ['P', 'Progressing', 'The student is able to perform skill with 70-89% accuracy and minimal prompts/cues'],
-            ['D', 'Developing', 'The student is able to perform skill with 50-69% accuracy and moderate prompts/cues'],
-            ['E', 'Emerging', 'The student is able to perform skill with 50% accuracy and maximal assistance'],
-            ['NI / NA', 'Needs Improvement / Not Applicable', 'No manifestation of the skills at all (Reconsider Target) / Not Applicable'],
-        ];
+                if ($total === 0) {
+                    $final[$key] = 'NO/NA'; // No activities for this todo in this quarter
+                    continue;
+                }
 
-        foreach ($rows as $row) {
-            $criteriaTable->addRow();
-            $criteriaTable->addCell(1500)->addText($row[0], ['bold' => true], ['align' => 'center']);
-            $criteriaTable->addCell(2500)->addText($row[1], [], ['align' => 'center']);
-            $criteriaTable->addCell(5000)->addText($row[2]);
+                $finishedCount = collect($statuses)->filter(fn($s) => $s === 'finished')->count();
+                $completionRate = $finishedCount / $total;
+
+                if ($completionRate === 1) {
+                    $final[$key] = 'P';
+                } elseif ($completionRate > 0.5) {
+                    $final[$key] = 'AP';
+                } elseif ($completionRate >= 0.3) {
+                    $final[$key] = 'D';
+                } elseif ($completionRate > 0 && $completionRate <= 0.2) {
+                    $final[$key] = 'B';
+                } else {
+                    $final[$key] = 'NO/NA';
+                }
+            }
         }
 
-        // Save
-        $tempFile = tempnam(sys_get_temp_dir(), $fileName);
-        IOFactory::createWriter($phpWord, 'Word2007')->save($tempFile);
-
-        return Response::download($tempFile, $fileName)->deleteFileAfterSend(true);
+        return $final;
     }
+
+
+    public function generateAutismReportCard($studentId, $schoolYearId = null, $quarter = null)
+    {
+        $templatePath = resource_path('templates/autism-report-card.docx');
+
+        if (!file_exists($templatePath)) {
+            throw new Exception('Template not found: ' . $templatePath);
+        }
+
+        $reportHelper = new self();
+
+        // Load student
+        $student = Student::findOrFail($studentId);
+        $studentFullName = $student->full_name ?? $student->name ?? 'N_A';
+        $studentActivities = $reportHelper->getAutismStudentActivities($studentId, $schoolYearId, $quarter);
+        $studentActivities['student_name'] = $studentFullName;
+
+        // Load school year
+        $schoolYear = $schoolYearId ? SchoolYear::findOrFail($schoolYearId) : now()->schoolYear();
+        $schoolYearName = str_replace(' ', '_', $schoolYear->name ?? 'UnknownYear'); // replace spaces with underscores
+        $quarterLabel = $quarter ? 'Q' . $quarter : 'AllQuarters';
+
+        // Generate filename
+        $studentFullNameSafe = preg_replace('/[^A-Za-z0-9_\-]/', '_', $studentFullName);
+        $fileName = "{$schoolYearName}_{$quarterLabel}_{$studentFullNameSafe}.docx";
+        $outputPath = storage_path('app/' . $fileName);
+
+        // Load all todos from DB to generate all possible placeholders
+        $allTodos = Todo::pluck('id')->toArray();
+        $allQuarters = [1, 2, 3, 4];
+
+        // Initialize blank placeholders
+        $allPlaceholders = [];
+        foreach ($allTodos as $todoId) {
+            foreach ($allQuarters as $q) {
+                $key = 't' . $todoId . '.q' . $q;
+                $allPlaceholders[$key] = '';
+            }
+        }
+
+        // Merge actual student activities
+        $allPlaceholders = array_merge($allPlaceholders, $studentActivities);
+
+        // Load template and replace placeholders
+        $templateProcessor = new TemplateProcessor($templatePath);
+        foreach ($allPlaceholders as $key => $value) {
+            $templateProcessor->setValue($key, (string) $value);
+        }
+
+        $templateProcessor->saveAs($outputPath);
+
+        // Return as download
+        return response()->download($outputPath)->deleteFileAfterSend(true);
+    }
+
+    public function generateSpeechHearingReportCard($studentId, $schoolYearId = null, $quarter = null) {}
 }
