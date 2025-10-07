@@ -31,7 +31,8 @@ class SubjectFactory extends Factory
         'edukasyon sa pagpapakatao',
         'practical life skills',
         'music and arts',
-        'health and pe'
+        'health and pe',
+        'mapeh',
     ];
 
     public function definition()

@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('last_name');
             $table->enum('sex', ['male', 'female'])->nullable();
             $table->date('birth_date');
-            $table->enum('disability_type', ['autism spectrum disorder', 'speech disorder', 'hearing impairment']);
+            $table->enum('disability_type', ['autism spectrum disorder', 'speech disorder', 'hearing impaired']);
             $table->text('support_need')->nullable();
             $table->timestamps();
         });

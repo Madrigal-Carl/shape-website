@@ -55,7 +55,7 @@ class InstructorDashboardMain extends Component
 
         $this->totalStudents   = $studentsQuery->count();
         $this->autismStudents  = (clone $studentsQuery)->where('disability_type', 'autism spectrum disorder')->count();
-        $this->hearingStudents = (clone $studentsQuery)->where('disability_type', 'hearing impairment')->count();
+        $this->hearingStudents = (clone $studentsQuery)->where('disability_type', 'hearing impaired')->count();
         $this->speechStudents  = (clone $studentsQuery)->where('disability_type', 'speech disorder')->count();
 
         $this->totalCurriculums = Curriculum::where('instructor_id', $instructorId)

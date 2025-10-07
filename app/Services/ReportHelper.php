@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use Exception;
+use Carbon\Carbon;
 use App\Models\Todo;
 use App\Models\Student;
 use App\Models\SchoolYear;
@@ -162,5 +163,68 @@ class ReportHelper
         return response()->download($outputPath)->deleteFileAfterSend(true);
     }
 
-    public function generateSpeechHearingReportCard($studentId, $schoolYearId = null, $quarter = null) {}
+    public function generateSpeechHearingReportCard($studentId, $schoolYearId = null, $quarter = null)
+    {
+        $templatePath = resource_path('templates/speech-hearing-report-card.docx');
+
+        if (!file_exists($templatePath)) {
+            throw new Exception('Template not found: ' . $templatePath);
+        }
+
+        // Load models
+        $student = Student::findOrFail($studentId);
+        $schoolYear = $schoolYearId
+            ? SchoolYear::findOrFail($schoolYearId)
+            : now()->schoolYear();
+
+        // Find student's enrollment for that school year
+        $enrollment = $student->enrollments()
+            ->where('school_year_id', $schoolYear->id)
+            ->first();
+
+        // --- Gather Report Info ---
+        $studentName = strtoupper($student->full_name); // For the docx content (still uppercase)
+        $schoolYearName = $schoolYear->name;
+        $birthDate = Carbon::parse($student->birth_date)->format('F j, Y');
+
+        $gradeLevel = $enrollment?->gradeLevel?->name ?? 'N/A';
+        // Remove "Grade" prefix if present (case-insensitive)
+        $gradeLevel = preg_replace('/^grade\s*/i', '', $gradeLevel);
+
+        $disabilityType = ucfirst($student->disability_type ?? 'N/A');
+
+        // Format coverage: e.g. "August 2024 - May 2025"
+        $start = Carbon::parse($schoolYear->first_quarter_start)->format('F Y');
+        $end = Carbon::parse($schoolYear->fourth_quarter_end)->format('F Y');
+        $covered = "{$start} - {$end}";
+
+        // --- Prepare placeholders ---
+        $placeholders = [
+            'name' => $studentName,
+            'sy' => $schoolYearName,
+            'birth_date' => $birthDate,
+            'grade_level' => $gradeLevel,
+            'disability_type' => $disabilityType,
+            'covered' => $covered,
+        ];
+
+        // --- Prepare filename ---
+        $studentFullNameSafe = preg_replace('/[^A-Za-z0-9_\-]/', '_', $student->full_name); // normal case name
+        $schoolYearSafe = str_replace(' ', '_', $schoolYearName);
+        $quarterLabel = $quarter ? 'Q' . $quarter : 'AllQuarters';
+        $fileName = "{$schoolYearSafe}_{$quarterLabel}_{$studentFullNameSafe}.docx";
+        $outputPath = storage_path('app/' . $fileName);
+
+        // --- Fill Template ---
+        $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor($templatePath);
+
+        foreach ($placeholders as $key => $value) {
+            $templateProcessor->setValue($key, (string) $value);
+        }
+
+        $templateProcessor->saveAs($outputPath);
+
+        // --- Return Download ---
+        return response()->download($outputPath)->deleteFileAfterSend(true);
+    }
 }

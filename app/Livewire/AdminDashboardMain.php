@@ -42,7 +42,7 @@ class AdminDashboardMain extends Component
 
         $totalStudents = $studentQuery->count();
         $autismCount = (clone $studentQuery)->where('disability_type', 'autism spectrum disorder')->count();
-        $hearingCount = (clone $studentQuery)->where('disability_type', 'hearing impairment')->count();
+        $hearingCount = (clone $studentQuery)->where('disability_type', 'hearing impaired')->count();
         $speechCount = (clone $studentQuery)->where('disability_type', 'speech disorder')->count();
 
         // Instructors: Exclude resigned, retired, terminated

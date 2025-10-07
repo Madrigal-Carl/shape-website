@@ -298,7 +298,7 @@ class DatabaseSeeder extends Seeder
         $specializations = collect([
             Specialization::firstOrCreate(['name' => 'autism spectrum disorder'], ['icon' => 'autism-icon.png']),
             Specialization::firstOrCreate(['name' => 'speech disorder'], ['icon' => 'speech-icon.png']),
-            Specialization::firstOrCreate(['name' => 'hearing impairment'], ['icon' => 'hearing-icon.png']),
+            Specialization::firstOrCreate(['name' => 'hearing impaired'], ['icon' => 'hearing-icon.png']),
         ]);
 
         // === Admin (only 1) ===
@@ -373,6 +373,13 @@ class DatabaseSeeder extends Seeder
         Subject::factory()->allSubjects();
         // Define the mapping of domains to subjects
         $domainSubjects = [
+            'Language/Communication Development' => ['filipino', 'english', 'filipino sign language'],
+            'Reading Skills' => ['filipino', 'english', 'filipino sign language'],
+            'Writing Skills' => ['filipino', 'english'],
+            'Numerical Skills' => ['mathematics'],
+            'Motor Development' => ['mapeh', 'filipino sign language'],
+            'Social and Emotional Development' => ['araling panlipunan', 'filipino'],
+            'Self Help Skills' => ['science', 'araling panlipunan', 'filipino', 'mapeh'],
             'Daily Living Skills Domain' => ['self care', 'daily living skills', 'practical life skills'],
             'Socio-Emotional Domain' => ['edukasyon sa pagpapakatao'],
             'Language Development Domain' => ['english', 'language and literacy'],
@@ -382,6 +389,7 @@ class DatabaseSeeder extends Seeder
             'Fine Motor Competencies Domain' => ['practical life skills'],
             'Cognitive Domain' => ['numeracy', 'science', 'practical life skills'],
         ];
+
 
         // Loop through each domain and assign the subjects
         foreach ($domainSubjects as $domainName => $subjects) {

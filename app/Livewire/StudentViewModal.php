@@ -59,20 +59,20 @@ class StudentViewModal extends Component
         }
 
         // If today is Q1 and school year not ended → disallow
-        if (!$schoolYear->hasEnded() && $maxQuarterAllowed <= 0) {
-            $this->dispatch('swal-toast', icon: 'error', title: 'The 1st grading is not yet finished.');
-            return;
-        }
+        // if (!$schoolYear->hasEnded() && $maxQuarterAllowed <= 0) {
+        //     $this->dispatch('swal-toast', icon: 'error', title: 'The 1st grading is not yet finished.');
+        //     return;
+        // }
 
         // If requested quarter is greater than allowed → disallow
-        if ($requestedQuarter > $maxQuarterAllowed) {
-            $this->dispatch(
-                'swal-toast',
-                icon: 'error',
-                title: "The {$this->ordinal($requestedQuarter)} quarter is not yet finished."
-            );
-            return;
-        }
+        // if ($requestedQuarter > $maxQuarterAllowed) {
+        //     $this->dispatch(
+        //         'swal-toast',
+        //         icon: 'error',
+        //         title: "The {$this->ordinal($requestedQuarter)} quarter is not yet finished."
+        //     );
+        //     return;
+        // }
 
         if ($schoolYear->hasEnded()) {
             $quarterToGenerate = 4;

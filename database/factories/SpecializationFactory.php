@@ -36,7 +36,7 @@ class SpecializationFactory extends Factory
                 'icon' => 'hearing-icon.png',
             ],
             [
-                'name' => 'hearing impairment',
+                'name' => 'hearing impaired',
                 'icon' => 'speech-icon.png',
             ],
         ];
