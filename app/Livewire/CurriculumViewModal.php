@@ -27,11 +27,14 @@ class CurriculumViewModal extends Component
     public function render()
     {
         $curriculum = Curriculum::with([
-            'curriculumSubjects.subject',
             'gradeLevel',
-            'curriculumSubjects' => function ($query) {
-                $query->withCount('lessons');
-            }
+            'curriculumSubjects.subject',
+            'curriculumSubjects' => fn($query) =>
+            $query->withCount([
+                'lessonSubjectStudents as unique_lessons_count' => function ($q) {
+                    $q->selectRaw('COUNT(DISTINCT lesson_id)');
+                },
+            ]),
         ])->find($this->curriculum_id);
         return view('livewire.curriculum-view-modal', compact('curriculum'));
     }

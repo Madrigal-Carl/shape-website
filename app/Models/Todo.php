@@ -34,4 +34,25 @@ class Todo extends Model
     {
         return $this->hasMany(GameActivity::class);
     }
+
+    public function subjects()
+    {
+        return $this->hasManyThrough(
+            Subject::class,
+            Domain::class,
+            'id',
+            'id',
+            'domain_id',
+            'id'
+        );
+    }
+
+    public function getSubjectIdsAttribute()
+    {
+        if (!$this->relationLoaded('domain')) {
+            $this->load('domain.subjects');
+        }
+
+        return $this->domain?->subjects->pluck('id') ?? collect();
+    }
 }

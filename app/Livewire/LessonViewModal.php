@@ -23,17 +23,13 @@ class LessonViewModal extends Component
             'students',
             'lessonSubjectStudents.curriculum.gradeLevel',
             'lessonSubjectStudents.subject',
-            'activityLessons.activityLessonable' => function ($morphTo) {
-                $morphTo->morphWith([
-                    \App\Models\GameActivity::class => ['specializations'],
-                    \App\Models\ClassActivity::class => ['curriculumSubject'],
-                ]);
-            }
+            'gameActivityLessons.gameActivity.specializations',
+            'classActivities.curriculumSubject',
         ])
             ->whereHas('lessonSubjectStudents.curriculum', function ($query) {
-                $query->where('status', 'active'); // assuming curriculum has `status`
+                $query->where('status', 'active');
             })
-            ->find($id);
+            ->findOrFail($id);
     }
 
     public function closeModal()

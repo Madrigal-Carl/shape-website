@@ -15,6 +15,7 @@ use App\Models\ClassActivity;
 use Livewire\WithFileUploads;
 use FFMpeg\Coordinate\TimeCode;
 use App\Models\CurriculumSubject;
+use App\Models\GameActivityLesson;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
@@ -331,11 +332,20 @@ class LessonEditModal extends Component
         }
 
         // Update activities
+        $lesson->gameActivityLessons()->each(function ($gameActivityLesson) {
+            $gameActivityLesson->studentActivities()->delete();
+        });
         $lesson->gameActivityLessons()->delete();
         foreach ($this->selected_activities as $activity) {
-            $lesson->gameActivityLessons()->create([
+            $gameActivityLesson = $lesson->gameActivityLessons()->create([
                 'game_activity_id' => $activity->id,
             ]);
+
+            foreach ($this->students as $student) {
+                $gameActivityLesson->studentActivities()->create([
+                    'student_id' => $student->id,
+                ]);
+            }
         }
 
         $lesson->classActivities()->update(['lesson_id' => null]);

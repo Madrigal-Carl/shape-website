@@ -60,6 +60,7 @@ class SubjectFactory extends Factory
             'practical life skills' => 'practical-life-skills-icon.png',
             'music and arts' => 'music-and-arts-icon.png',
             'health and pe' => 'health-and-pe-icon.png',
+            'mapeh' => 'mapeh-icon.png.png',
         ];
 
         foreach ($this->subjects as $subject) {

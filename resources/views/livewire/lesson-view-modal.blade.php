@@ -112,11 +112,29 @@
                         <div class="w-full grid grid-cols-2 gap-2 items-center justify-center rounded-lg">
                             @foreach ($lesson->activityLessons as $act)
                                 @php
-                                    $activity = $act->activityLessonable;
-                                    $isGame = $activity instanceof \App\Models\GameActivity;
-                                    $isClass = $activity instanceof \App\Models\ClassActivity;
-                                    $hasImage = $isGame && !empty($activity->path);
-                                    $imagePath = $activity->path ?? asset('images/default-img-holder.png');
+                                    // Determine if it's a GameActivityLesson or ClassActivity
+$isGameLesson = $act instanceof \App\Models\GameActivityLesson;
+$isClassLesson = $act instanceof \App\Models\ClassActivity;
+
+if ($isGameLesson) {
+    $activity = $act->gameActivity;
+    $name = $activity->name ?? '';
+    $hasImage = !empty($activity->path);
+    $imagePath = $hasImage
+        ? $activity->path
+        : asset('images/default-img-holder.png');
+    $specializations =
+        $activity->specializations
+            ?->pluck('name')
+            ->map(fn($s) => ucwords($s))
+            ->join(', ') ?? '';
+} elseif ($isClassLesson) {
+    $activity = $act;
+    $name = $activity->name ?? '';
+    $hasImage = false;
+    $imagePath = asset('images/default-img-holder.png');
+    $specializations = '';
+                                    }
                                 @endphp
 
                                 <div class="flex w-full justify-between bg-white p-2 rounded-lg col-span-1">
@@ -125,16 +143,13 @@
                                             class="h-12 rounded-md aspect-square object-cover">
 
                                         <div>
-                                            <h1 class="font-medium">{{ $activity->name ?? '' }}</h1>
+                                            <h1 class="font-medium">{{ $name }}</h1>
 
-                                            @if ($isGame && $hasImage)
-                                                @if ($activity->specializations && $activity->specializations->isNotEmpty())
-                                                    <p class="text-sm text-paragraph truncate w-60">
-                                                        {{ $activity->specializations->pluck('name')->map(fn($s) => ucwords($s))->join(', ') }}
-                                                    </p>
-                                                @endif
+                                            @if ($isGameLesson && $specializations)
+                                                <p class="text-sm text-paragraph truncate w-60">
+                                                    {{ $specializations }}
+                                                </p>
                                             @endif
-                                            {{-- ClassActivity shows only the name, so nothing else --}}
                                         </div>
                                     </div>
                                 </div>

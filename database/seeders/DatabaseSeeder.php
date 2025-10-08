@@ -202,6 +202,183 @@ class DatabaseSeeder extends Seeder
                     "Counts numbers up to 20.",
                 ]
             ],
+
+            'Language/Communication Development' => [
+                'todos' => [
+                    "Says/Signs/Writes about oneself",
+                    "Says/Signs and speechreads one’s name",
+                    "Associates one’s name with printed symbols",
+                    "Says/Signs and speechreads one’s grade",
+                    "Says/Signs and speechreads one’s address",
+                    "Uses expressions of social amenities in appropriate situations",
+                    "Identifies correctly letters/words commonly interchanged",
+                    "Names and speechreads one’s brother’s/sister’s name",
+                    "Arranges big/small letters of the alphabet sequentially",
+                    "Names places in school",
+                    "Answers “where” questions",
+                    "Answers “who” questions",
+                    "Talks about school materials",
+                    "Names objects using a, an",
+                    "Uses in, on, under with names of objects",
+                    "Uses this is and these are correctly",
+                    "Talks about farm animals",
+                    "Recognizes beginning and ending of words",
+                    "Tells the number of syllables of words read",
+                    "Talks about the days of the week",
+                    "Follows simple directions",
+                ]
+            ],
+
+            'Reading Skills' => [
+                'todos' => [
+                    "Recognizes his name in print",
+                    "Identifies the letters of the alphabet",
+                    "Fingerspells the letters of the alphabet",
+                    "Writes the letters of the alphabet with correct form",
+                    "Fingerspells one’s name and family members’ names",
+                    "Writes one’s name and names of family members",
+                    "Signs one’s name and names of family members and friends",
+                ]
+            ],
+
+            'Writing Skills' => [
+                'todos' => [
+                    "Grips pencil properly while writing",
+                    "Executes fundamental strokes",
+                    "Shows mastery of letter forms",
+                    "Writes name accurately",
+                    "Copies simple words correctly",
+                    "Copies evenly following lines",
+                ]
+            ],
+
+            'Numerical Skills' => [
+                'todos' => [
+                    "Sets and numerals",
+                    "Place value of whole numbers",
+                    "Ordering & constructing sets from least to greatest (and vice versa)",
+                    "Ordinal numbers",
+                    "Odd and even numbers",
+                    "Roman numerals",
+                    "Rounding numbers to the nearest tens, hundreds, and thousands",
+                    "Skip counting",
+                    "Addition of two–three digit numbers",
+                    "Addition of two-digit numbers with regrouping",
+                    "Addition of three-digit numbers with regrouping",
+                    "Subtraction of whole numbers",
+                    "Subtraction of two-digit numbers with regrouping",
+                    "Subtraction of three-digit numbers with regrouping",
+                    "Subtraction with zero number",
+                    "Multiplication of whole numbers",
+                    "Multiplying by 6",
+                    "Multiplying by 7",
+                    "Multiplying by 8",
+                    "Multiplying by 9",
+                    "Multiplying two–three digit numbers by one-digit number",
+                    "Multiplying two-digit numbers by one-digit number with regrouping",
+                    "Multiplying three-digit numbers by one-digit number with regrouping",
+                    "Multiplying three-digit numbers by two-digit number with regrouping",
+                ]
+            ],
+
+            'Motor Development' => [
+                'subdomains' => [
+                    'Gross Motor Skills' => [
+                        "Jumps over an object with both feet",
+                        "Walks forward independently",
+                        "Climbs upstairs and goes downstairs using alternate feet",
+                        "Skips well with or without rope",
+                        "Handles balls and blocks with ease",
+                        "Throws and catches ball properly",
+                        "Balances well within a given path",
+                        "Hops well",
+                        "Kicks while standing",
+                    ],
+                    'Fine Motor Skills' => [
+                        "Builds tower (2nd stage of block building)",
+                        "Strings beads on thread or shoelace",
+                        "Performs twisting activities efficiently",
+                        "Folds paper or napkins with ease",
+                        "Cuts straight lines",
+                        "Cuts curved lines",
+                        "Cuts jagged lines",
+                        "Cuts round picture",
+                        "Rolls up mats, paper, or similar materials",
+                        "Rolls balls",
+                        "Holds pencils, crayons, and paintbrush properly",
+                        "Uses three-finger grasp",
+                        "Puts small objects in a bottle",
+                        "Handles pegs on board properly",
+                    ],
+                ]
+            ],
+
+            'Social and Emotional Development' => [
+                'todos' => [
+                    "Plays at ease with others",
+                    "Shares with others",
+                    "Responds positively",
+                    "Exhibits self-confidence",
+                    "Welcomes responsibility",
+                    "Shows a happy disposition",
+                    "Copes well with varying situations",
+                    "Initiates interaction (through eye contact, touching, and calling)",
+                    "Responds to his name when called",
+                    "Stops crying with verbal attention",
+                    "Shows affection to adults",
+                    "Interacts with strangers appropriately",
+                    "Explores his environment",
+                    "Plays appropriately with toys and packs them away",
+                    "Plays alone near peers",
+                    "Initiates play with peers",
+                    "Interacts with peers",
+                    "Identifies personal belongings",
+                    "Cares for his own belongings",
+                    "Accepts routines and adjusts to changes",
+                    "Knows how to listen",
+                    "Knows how to follow adult direction",
+                    "Greets visitors and familiar personalities",
+                    "Behaves appropriately in various social settings",
+                    "Knows how to say “Please”",
+                    "Knows how to say “Excuse Me”",
+                    "Knows how to say “Thank You”",
+                    "Knows how to say “You’re Welcome”",
+                    "Knows how to say “Po and Opo”",
+                ]
+            ],
+
+            'Self Help Skills' => [
+                'subdomains' => [
+                    'Feeding' => [
+                        "Drinks from a cup/glass",
+                        "Drinks with a straw",
+                        "Pours liquid from a container",
+                        "Uses eating utensils (spoon, knife, fork) properly",
+                        "Serves self from serving plate",
+                        "Cleans spillage",
+                        "Eats independently",
+                    ],
+                    'Toileting' => [
+                        "Sounds off when or soiled",
+                        "Uses toilet without help",
+                        "Follows complete toileting steps (wiping, flushing, washing hands)",
+                    ],
+                    'Hygiene and Grooming' => [
+                        "Washes hands with soap",
+                        "Washes face with soap",
+                        "Dries hands/face independently",
+                        "Combs/brushes hair properly",
+                        "Brushes teeth regularly",
+                        "Blows nose on command",
+                        "Keeps nose clean with hanky or tissue",
+                        "Takes care of personal needs",
+                    ],
+                    'Safety' => [
+                        "Handles sharp objects with care",
+                        "Recognizes safety rules",
+                    ],
+                ]
+            ],
         ];
 
         foreach ($domains as $domainName => $data) {
@@ -331,7 +508,7 @@ class DatabaseSeeder extends Seeder
 
         $instructors->each(function ($instructor) use ($specializations, $instructorTest) {
             $instructor->specializations()->attach(
-                $specializations->random(rand(1, 2))->pluck('id')->toArray()
+                $specializations->random()->pluck('id')->toArray()
             );
             Address::factory()->instructor()->create([
                 'owner_id' => $instructor->id,
@@ -383,10 +560,9 @@ class DatabaseSeeder extends Seeder
             'Daily Living Skills Domain' => ['self care', 'daily living skills', 'practical life skills'],
             'Socio-Emotional Domain' => ['edukasyon sa pagpapakatao'],
             'Language Development Domain' => ['english', 'language and literacy'],
-            'Basic Movement Domain' => ['health and pe', 'music and arts'],
             'Perceptual Motor Skills Domain' => ['sensory', 'health and pe'],
             'Gross Motor Competencies Domain' => ['health and pe'],
-            'Fine Motor Competencies Domain' => ['practical life skills'],
+            'Fine Motor Competencies Domain' => ['practical life skills', 'health and pe', 'music and arts'],
             'Cognitive Domain' => ['numeracy', 'science', 'practical life skills'],
         ];
 
@@ -404,14 +580,6 @@ class DatabaseSeeder extends Seeder
                 }
             }
         }
-        // FOR THE HEARING AND SPEECH SUBJECT NOT YET ASSIGNED JUST RANDOM
-        // ======= Assign remaining subjects to random domains =======
-        $allDomainIds = Domain::pluck('id')->toArray();
-
-        Subject::doesntHave('domains')->get()->each(function ($subject) use ($allDomainIds) {
-            $randomDomainId = $allDomainIds[array_rand($allDomainIds)];
-            $subject->domains()->attach($randomDomainId);
-        });
 
         $subjectIds = Subject::pluck('id')->toArray();
         $curriculums->each(function ($curriculum) use ($subjectIds, $specializations) {
@@ -477,48 +645,34 @@ class DatabaseSeeder extends Seeder
 
         // === Activities ===
         $activities = collect(range(1, 30))->map(function () use ($specializations) {
-            // Pick subject(s) first
+            // Pick random subjects (for diversity)
             $subjects = Subject::inRandomOrder()->take(rand(1, 2))->get();
 
-            // Pick a todo from one of the subjects’ domains
-            $subject = $subjects->random();
-            $domain = $subject->domains()->inRandomOrder()->first();
+            // ✅ Manually assign a random todo_id between 1 and 102
+            $todoId = rand(103, 229);
 
-            $todo = null;
-            if ($domain) {
-                $todo = $domain->todos()->inRandomOrder()->first();
-
-                if (!$todo) {
-                    $subDomain = $domain->subDomains()->with('todos')->inRandomOrder()->first();
-                    if ($subDomain) {
-                        $todo = $subDomain->todos()->inRandomOrder()->first();
-                    }
-                }
-            }
-
-            // ✅ ensure todo exists, otherwise skip
-            if (!$todo) {
-                return null; // or throw exception if you want to enforce
-            }
-
-            // Create activity with todo_id immediately
+            // Create the GameActivity linked to that todo
             $activity = GameActivity::factory()->create([
-                'todo_id' => $todo->id,
+                'todo_id' => $todoId,
             ]);
 
-            // Attach specializations
+            // Attach related subjects
+            $activity->subjects()->attach($subjects->pluck('id'));
+
+            // Attach random specializations (1–2)
             $activity->specializations()->attach(
                 $specializations->random(rand(1, 2))->pluck('id')->toArray()
             );
 
-            // Create images
-            GameImage::factory()->count(7)->create(['game_activity_id' => $activity->id]);
-
-            // Attach subjects
-            $activity->subjects()->attach($subjects->pluck('id'));
+            // Create game images
+            GameImage::factory()->count(7)->create([
+                'game_activity_id' => $activity->id,
+            ]);
 
             return $activity;
         });
+
+
 
 
         // === Assign lessons per instructor (unique) ===
@@ -532,37 +686,59 @@ class DatabaseSeeder extends Seeder
                 $eligibleStudents = $instructor->eligibleStudents($curriculum)->get();
 
                 // ✅ Create lessons for this instructor/curriculum
-                $curriculumLessons = Lesson::factory()->count(2)->create([
-                    'school_year_id' => now()->schoolYear()->id,
-                ]);
+                $curriculumLessons = Lesson::factory()->count(2)->create();
 
-                $curriculumLessons->each(function ($lesson) use ($activities, $eligibleStudents, $curriculumSubjects) {
-                    // Attach video
-                    Video::factory()->create(['lesson_id' => $lesson->id]);
+                $curriculumLessons->each(function ($lesson) use ($eligibleStudents, $curriculumSubjects) {
+                    $curriculumSubject = $curriculumSubjects->random(); // fixed per lesson
 
-                    // Attach game activity to lesson
-                    $gameActivity = $activities->random();
-                    $gameActivityLesson = GameActivityLesson::create([
-                        'lesson_id'        => $lesson->id,
-                        'game_activity_id' => $gameActivity->id,
-                    ]);
-
-                    // Assign students
-                    $eligibleStudents->each(function ($student) use ($lesson, $curriculumSubjects, $gameActivityLesson) {
-                        $curriculumSubject = $curriculumSubjects->random();
-
+                    $eligibleStudents->each(function ($student) use ($lesson, $curriculumSubject) {
                         LessonSubjectStudent::firstOrCreate([
                             'curriculum_subject_id' => $curriculumSubject->id,
                             'lesson_id'             => $lesson->id,
                             'student_id'            => $student->id,
                         ]);
-
-                        StudentActivity::factory()->create([
-                            'student_id'         => $student->id,
-                            'activity_lesson_id' => $gameActivityLesson->id,
-                            'activity_lesson_type' => GameActivityLesson::class,
-                        ]);
                     });
+                });
+
+                $curriculumLessons->each(function ($lesson) use ($activities, $eligibleStudents, $curriculumSubjects) {
+                    // Attach video
+                    Video::factory()->create(['lesson_id' => $lesson->id]);
+
+                    // ✅ Filter activities whose Todo belongs to subjects in this curriculum
+                    $subjectIds = $curriculumSubjects->pluck('subject_id');
+                    $eligibleGameActivities = $activities->filter(function ($activity) use ($subjectIds) {
+                        $todoSubjectIds = $activity->todo?->subject_ids ?? collect();
+                        return $todoSubjectIds->intersect($subjectIds)->isNotEmpty();
+                    });
+
+                    // ✅ Pick a random eligible activity (if any)
+                    $gameActivity = $eligibleGameActivities->isNotEmpty()
+                        ? $eligibleGameActivities->random()
+                        : null;
+
+                    if ($gameActivity) {
+                        $gameActivityLesson = GameActivityLesson::create([
+                            'lesson_id'        => $lesson->id,
+                            'game_activity_id' => $gameActivity->id,
+                        ]);
+
+                        // Assign students only if there’s a matching activity
+                        $eligibleStudents->each(function ($student) use ($lesson, $curriculumSubjects, $gameActivityLesson) {
+                            $curriculumSubject = $curriculumSubjects->random();
+
+                            LessonSubjectStudent::firstOrCreate([
+                                'curriculum_subject_id' => $curriculumSubject->id,
+                                'lesson_id'             => $lesson->id,
+                                'student_id'            => $student->id,
+                            ]);
+
+                            StudentActivity::factory()->create([
+                                'student_id'           => $student->id,
+                                'activity_lesson_id'   => $gameActivityLesson->id,
+                                'activity_lesson_type' => GameActivityLesson::class,
+                            ]);
+                        });
+                    }
                 });
             });
         });
@@ -583,44 +759,64 @@ class DatabaseSeeder extends Seeder
                     continue;
                 }
 
+                // 1️⃣ Pick a random CurriculumSubject
                 $curriculumSubject = $curriculumSubjects->random();
+
+                // 2️⃣ Get the related Subject
                 $subject = $curriculumSubject->subject;
 
-                // Pick todo
+                if (!$subject) {
+                    continue; // skip if no subject
+                }
+
+                // 3️⃣ Get a random domain from that subject
                 $domain = $subject->domains()->inRandomOrder()->first();
-                $todo = $domain?->todos()->inRandomOrder()->first();
-                if (!$todo && $domain) {
+
+                if (!$domain) {
+                    continue; // skip if no domain exists for subject
+                }
+
+                // 4️⃣ Get todo — first from domain, fallback to subdomain
+                $todo = $domain->todos()->inRandomOrder()->first();
+
+                if (!$todo) {
                     $subDomain = $domain->subDomains()->with('todos')->inRandomOrder()->first();
                     if ($subDomain) {
                         $todo = $subDomain->todos()->inRandomOrder()->first();
                     }
                 }
 
-                // ✅ Create ClassActivity (lesson_id nullable)
+                // 5️⃣ If still no todo, skip
+                if (!$todo) {
+                    continue;
+                }
+
+                // 6️⃣ Create ClassActivity now that we have a todo
                 $activity = ClassActivity::factory()->create([
                     'instructor_id'         => $instructor->id,
                     'curriculum_subject_id' => $curriculumSubject->id,
-                    'todo_id'               => $todo?->id,
-                    'lesson_id'             => null, // no lesson by default
+                    'todo_id'               => $todo->id,
+                    'lesson_id'             => null, // optional
                 ]);
 
                 $activities->push($activity);
             }
 
-            // Assign to students
+            // 7️⃣ Assign created activities to random students
             foreach ($activities as $activity) {
                 $eligibleStudents = $instructor->eligibleStudents($activity->curriculumSubject->curriculum)->get();
                 $students = $eligibleStudents->shuffle()->take(rand(3, 6));
 
                 foreach ($students as $student) {
                     StudentActivity::factory()->create([
-                        'student_id'          => $student->id,
-                        'activity_lesson_id'  => $activity->id,
+                        'student_id'           => $student->id,
+                        'activity_lesson_id'   => $activity->id,
                         'activity_lesson_type' => ClassActivity::class,
                     ]);
                 }
             }
         }
+
 
         // === Feeds ===
         $students->each(function ($student) {

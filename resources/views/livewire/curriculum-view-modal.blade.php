@@ -87,8 +87,7 @@
 
                                     <div>
                                         <p class="text-sm text-paragraph">
-                                            {{ count($curriculumSubject->lessons) ?? 0 }}
-                                            Lessons</p>
+                                            {{ $curriculumSubject->unique_lessons_count }} Lessons</p>
                                     </div>
                                 </div>
                             @endforeach

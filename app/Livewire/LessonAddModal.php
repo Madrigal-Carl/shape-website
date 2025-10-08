@@ -249,9 +249,15 @@ class LessonAddModal extends Component
         }
 
         foreach ($this->selected_activities as $activity) {
-            $lesson->gameActivityLessons()->create([
+            $gameActivityLesson = $lesson->gameActivityLessons()->create([
                 'game_activity_id' => $activity->id,
             ]);
+
+            foreach ($this->students as $student) {
+                $gameActivityLesson->studentActivities()->create([
+                    'student_id' => $student->id,
+                ]);
+            }
         }
 
         if (!empty($this->selected_f2f_activities)) {
