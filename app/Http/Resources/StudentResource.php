@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -27,7 +28,9 @@ class StudentResource extends JsonResource
             'middle_name' => $this->middle_name,
             'last_name'  => $this->last_name,
             'sex'        => $this->sex,
-            'birth_date' => $this->birth_date?->toDateString(),
+            'birth_date' => $this->birth_date instanceof Carbon
+                ? $this->birth_date->toDateString()
+                : $this->birth_date,
             'lrn'        => $this->lrn,
             'disability_type' => $this->disability_type,
             'support_need' => $this->support_need,
