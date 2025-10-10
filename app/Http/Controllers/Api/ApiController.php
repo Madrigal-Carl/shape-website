@@ -53,11 +53,9 @@ class ApiController extends Controller
             return response()->json(['success' => false, 'message' => 'Student is not enrolled for the current school year.'], 403);
         }
 
-        // create token for mobile
-        $token = $account->createToken('mobile')->plainTextToken;
+        $student = $account->accountable;
 
-        // Eager load relationships for resource
-        $student = $account->accountable->load(['permanentAddress', 'currentAddress', 'guardian']);
+        $token = $account->createToken('mobile')->plainTextToken;
 
         return response()->json([
             'success' => true,
