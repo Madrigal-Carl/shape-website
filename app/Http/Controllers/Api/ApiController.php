@@ -60,7 +60,7 @@ class ApiController extends Controller
         return response()->json([
             'success' => true,
             'token' => $token,
-            'student' => new StudentResource($student),
+            'data' => new StudentResource($student),
         ], 200);
     }
 
