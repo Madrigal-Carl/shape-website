@@ -214,10 +214,10 @@
                                         <p class="w-30 truncate">{{ ucwords($student->disability_type) }}</p>
                                     </td>
                                     <td class="px-4 py-3 text-center text-paragraph">
-                                        {{ $student->completedLessonsCount($school_year) }}/{{ $student->totalLessonsCount($school_year) }}
+                                        {{ $student->completedLessonsCount($school_year) }}/{{ $student->studentTotalLessonsCount($school_year) }}
                                     </td>
                                     <td class="px-4 py-3 text-center text-paragraph">
-                                        {{ $student->completedActivitiesCount($school_year) }}/{{ $student->totalActivitiesCount($school_year) }}
+                                        {{ $student->completedActivitiesCount($school_year) }}/{{ $student->studentTotalActivitiesCount($school_year) }}
                                     </td>
                                     <td class="px-4 py-3 text-center">
                                         <div class="flex justify-center items-center">

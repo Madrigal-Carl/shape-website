@@ -234,6 +234,66 @@ class Student extends Model
         return $gameCount + $classCount;
     }
 
+    public function studentTotalLessonsCount($schoolYearId = null, $quarter = null)
+    {
+        $schoolYearId = $schoolYearId ?? now()->schoolYear()?->id;
+        $schoolYear   = SchoolYear::find($schoolYearId);
+
+        // Get assigned lessons through LessonSubjectStudent
+        $lessonSubjectStudents = LessonSubjectStudent::where('student_id', $this->id)
+            ->whereHas('lesson', fn($q) => $q->where('school_year_id', $schoolYearId))
+            ->whereHas('curriculumSubject.curriculum', fn($q) => $q->where('status', 'active'))
+            ->get();
+
+        if ($lessonSubjectStudents->isEmpty()) return 0;
+
+        $lessonIds = $lessonSubjectStudents->pluck('lesson_id')->unique();
+
+        // Optionally filter by quarter
+        if ($quarter && $schoolYear) {
+            $lessonIds = Lesson::whereIn('id', $lessonIds)
+                ->get()
+                ->filter(fn($lesson) => $lesson->isInQuarter($schoolYear, $quarter))
+                ->pluck('id')
+                ->values();
+        }
+
+        return $lessonIds->count();
+    }
+
+    public function studentTotalActivitiesCount($schoolYearId = null, $quarter = null)
+    {
+        $schoolYearId = $schoolYearId ?? now()->schoolYear()?->id;
+        $schoolYear   = SchoolYear::find($schoolYearId);
+
+        // Lessons assigned to this student (and active curriculums)
+        $lessonSubjectStudents = LessonSubjectStudent::where('student_id', $this->id)
+            ->whereHas('lesson', fn($q) => $q->where('school_year_id', $schoolYearId))
+            ->whereHas('curriculumSubject.curriculum', fn($q) => $q->where('status', 'active'))
+            ->get();
+
+        if ($lessonSubjectStudents->isEmpty()) return 0;
+
+        $lessonIds = $lessonSubjectStudents->pluck('lesson_id')->unique();
+
+        // Optional quarter filter
+        if ($quarter && $schoolYear) {
+            $lessonIds = Lesson::whereIn('id', $lessonIds)
+                ->get()
+                ->filter(fn($lesson) => $lesson->isInQuarter($schoolYear, $quarter))
+                ->pluck('id')
+                ->values();
+
+            if ($lessonIds->isEmpty()) return 0;
+        }
+
+        // Count both game and class activities from these lessons
+        $gameCount  = GameActivityLesson::whereIn('lesson_id', $lessonIds)->count();
+        $classCount = ClassActivity::whereIn('lesson_id', $lessonIds)->count();
+
+        return $gameCount + $classCount;
+    }
+
     public function completedActivitiesCount($schoolYearId = null, $quarter = null)
     {
         $schoolYearId = $schoolYearId ?? now()->schoolYear()?->id;
