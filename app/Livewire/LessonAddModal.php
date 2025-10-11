@@ -102,8 +102,8 @@ class LessonAddModal extends Component
                 $frame->save($thumbnailPath);
 
                 $this->uploadedVideos[] = [
-                    'video' => 'storage/' . $videoPath,
-                    'thumbnail' => 'storage/thumbnails/' . $thumbnailName,
+                    'video' => $videoPath,
+                    'thumbnail' => 'thumbnails/' . $thumbnailName,
                     'title' => pathinfo($video->getClientOriginalName(), PATHINFO_FILENAME)
                 ];
             } else {

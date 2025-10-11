@@ -184,11 +184,11 @@
                                             <div
                                                 class="flex flex-col gap-2 relative video-container-{{ $index }}">
                                                 <div class="w-full flex flex-col items-center justify-center shrink-0">
-                                                    <img src="{{ $video['thumbnail'] ? asset($video['thumbnail']) : asset('images/default-img-holder.png') }}"
+                                                    <img src="{{ $video['thumbnail'] ? asset('storage/' . $video['thumbnail']) : asset('images/default-img-holder.png') }}"
                                                         class="aspect-video w-max h-fit rounded-lg object-cover video-thumb-{{ $index }}" />
                                                     <button type="button"
                                                         class="absolute rounded-full cursor-pointer hover:scale-120 shadow-xl/40 z-10 playBtn-{{ $index }}"
-                                                        onclick="playVideo({{ $index }}, '{{ $video['video'] }}')">
+                                                        onclick="playVideo({{ $index }}, '{{ 'storage/' . $video['video'] }}')">
                                                         <span
                                                             class="material-symbols-rounded p-2 rounded-full text-white bg-black/35 backdrop-blur-[3px] shadow-white/70 shadow-inner playBtn">
                                                             play_arrow

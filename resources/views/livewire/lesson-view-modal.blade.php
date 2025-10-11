@@ -80,12 +80,13 @@
                                     <div class="flex flex-col gap-2 relative group video-container-{{ $i }}">
                                         <div class="flex flex-col items-center justify-center">
                                             {{-- Thumbnail --}}
-                                            <img src="{{ $video->thumbnail ? asset($video->thumbnail) : asset('images/default-img-holder.png') }}"
+                                            <img src="{{ $video->thumbnail ? asset('storage/' . $video->thumbnail) : asset('images/default-img-holder.png') }}"
                                                 alt=""
                                                 class="aspect-video w-full h-fit rounded-lg object-cover video-thumb-{{ $i }}">
 
                                             {{-- Play button --}}
-                                            <button onclick="playVideo({{ $i }}, '{{ $video->url }}')"
+                                            <button
+                                                onclick="playVideo({{ $i }}, '{{ 'storage/' . $video->url }}')"
                                                 class="absolute rounded-full cursor-pointer hover:scale-110 shadow-xl/40 z-10 playBtn-{{ $i }}">
                                                 <span
                                                     class="material-symbols-rounded p-2 rounded-full text-white bg-black/35 backdrop-blur-[3px] shadow-white/70 shadow-inner playBtn">play_arrow</span>
