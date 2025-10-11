@@ -3,9 +3,10 @@
 namespace App\Http\Resources;
 
 use Carbon\Carbon;
+use App\Models\Video;
+use App\Models\Lesson;
 use Illuminate\Http\Request;
 use App\Http\Resources\LessonResource;
-use App\Models\Lesson;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class StudentResource extends JsonResource
@@ -23,10 +24,16 @@ class StudentResource extends JsonResource
         // ✅ Handle case when no active school year or quarter is found
         if (!$schoolYear || !$currentQuarter) {
             $lessons = collect();
+            $videos = collect();
         } else {
+            // Get lessons in the current quarter
             $lessons = Lesson::where('school_year_id', $schoolYear->id)
                 ->get()
                 ->filter(fn($lesson) => $lesson->isInQuarter($schoolYear, $currentQuarter));
+
+            // Get all videos belonging to those lessons
+            $lessonIds = $lessons->pluck('id');
+            $videos = Video::whereIn('lesson_id', $lessonIds)->get();
         }
 
         return [
@@ -48,6 +55,7 @@ class StudentResource extends JsonResource
                 'updated_at' => $this->updated_at?->toDateTimeString(),
             ],
             'lessons' => LessonResource::collection($lessons),
+            'videos'  => VideoResource::collection($videos),
         ];
     }
 }
