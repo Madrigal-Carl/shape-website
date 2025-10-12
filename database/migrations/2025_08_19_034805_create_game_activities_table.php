@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('game_activities', function (Blueprint $table) {
             $table->id();
             $table->foreignId('todo_id')->constrained()->onDelete('cascade');
-            $table->string('name');
+            $table->string('name')->unique();
             $table->string('path');
             $table->text('description');
             $table->timestamps();
