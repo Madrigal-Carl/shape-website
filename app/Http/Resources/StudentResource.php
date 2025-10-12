@@ -3,9 +3,12 @@
 namespace App\Http\Resources;
 
 use Carbon\Carbon;
+use App\Models\Feed;
+use App\Models\Award;
 use App\Models\Video;
 use App\Models\Lesson;
 use App\Models\GameActivity;
+use App\Models\StudentAward;
 use Illuminate\Http\Request;
 use App\Models\StudentActivity;
 use App\Models\GameActivityLesson;
@@ -32,6 +35,9 @@ class StudentResource extends JsonResource
             $gameActivities = collect();
             $gameActivityLessons = collect();
             $studentActivities = collect();
+            $feeds = collect();
+            $awards = collect();
+            $studentAwards = collect();
         } else {
             // Get lessons in the current quarter
             $lessonIds = LessonSubjectStudent::where('student_id', $this->id)
@@ -51,6 +57,14 @@ class StudentResource extends JsonResource
             $gameActivityLessons = GameActivityLesson::whereIn('lesson_id', $lessonIds)->get();
 
             $studentActivities = StudentActivity::where('student_id', $this->id)->get();
+
+            $feeds = Feed::where('notifiable_id', $this->id)->latest()->get();
+
+            $studentAwards = StudentAward::where('student_id', $this->id)
+                ->where('school_year_id', $schoolYear->id)
+                ->get();
+
+            $awards = Award::whereIn('id', $studentAwards->pluck('award_id'))->get();
         }
 
         return [
@@ -76,6 +90,9 @@ class StudentResource extends JsonResource
             'game_activities'        => GameActivityResource::collection($gameActivities),
             'game_activity_lessons'  => GameActivityLessonResource::collection($gameActivityLessons),
             'student_activities'     => StudentActivityResource::collection($studentActivities),
+            'feeds'          => FeedResource::collection($feeds),
+            'awards'         => AwardResource::collection($awards),
+            'student_awards' => StudentAwardResource::collection($studentAwards),
         ];
     }
 }
