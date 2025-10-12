@@ -7,7 +7,9 @@ use App\Models\Student;
 use Livewire\Component;
 use Livewire\Attributes\On;
 use Livewire\WithFileUploads;
-use App\Models\Specialization;
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Gd\Driver;
+use Spatie\ImageOptimizer\OptimizerChainFactory;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -230,7 +232,6 @@ class StudentEditModal extends Component
 
         if ($this->photo instanceof UploadedFile) {
             if (
-                $this->photo instanceof UploadedFile &&
                 $student->path &&
                 Storage::disk('public')->exists($student->path) &&
                 strpos($student->path, 'default_profiles/') !== 0
@@ -241,8 +242,18 @@ class StudentEditModal extends Component
             $studentName = preg_replace('/\s+/', '', "{$this->last_name}_{$this->first_name}_{$this->middle_name}");
             $extension   = $this->photo->getClientOriginalExtension();
             $customName  = "{$studentName}_Profile.{$extension}";
+            $path        = "students/{$customName}";
 
-            $path = $this->photo->storeAs('students', $customName, 'public');
+            $manager = new ImageManager(new Driver());
+            $image = $manager->read($this->photo->getRealPath())
+                ->scaleDown(width: 800)
+                ->toJpeg(quality: 90);
+
+            $savePath = storage_path('app/public/' . $path);
+            $image->save($savePath);
+
+            $optimizer = OptimizerChainFactory::create();
+            $optimizer->optimize($savePath);
             $student->path = $path;
         }
 

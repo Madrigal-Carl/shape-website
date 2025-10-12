@@ -7,6 +7,9 @@ use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Gd\Driver;
+use Spatie\ImageOptimizer\OptimizerChainFactory;
 use Illuminate\Validation\ValidationException;
 
 class Profile extends Component
@@ -373,8 +376,21 @@ class Profile extends Component
         );
         $extension  = $this->photo->getClientOriginalExtension();
         $customName = "{$instructorName}_Profile.{$extension}";
+        $path       = "instructors/{$customName}";
 
-        $path = $this->photo->storeAs('instructors', $customName, 'public');
+        // --- Compress and resize image before saving ---
+        $manager = new ImageManager(new Driver());
+        $image = $manager->read($this->photo->getRealPath())
+            ->scaleDown(width: 800) // resize width (keep aspect ratio)
+            ->toJpeg(quality: 85); // compress quality (adjust as needed)
+
+        // Save to storage/app/public/instructors/
+        $savePath = storage_path('app/public/' . $path);
+        $image->save($savePath);
+
+        // Optional: further optimize the file
+        $optimizer = OptimizerChainFactory::create();
+        $optimizer->optimize($savePath);
 
         $this->user->accountable->update([
             'path' => $path,
