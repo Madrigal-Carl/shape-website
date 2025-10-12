@@ -6,7 +6,7 @@ use App\Models\Award;
 use Livewire\Component;
 use App\Models\Enrollment;
 use App\Models\SchoolYear;
-use App\Models\StudentAward;
+use App\Services\AwardPrinterHelper;
 use Illuminate\Support\Facades\Auth;
 
 class AwardMain extends Component
@@ -20,6 +20,27 @@ class AwardMain extends Component
         $this->school_years = SchoolYear::orderBy('name')->get();
     }
 
+    public function printAward($awardName, $awardeeCount)
+    {
+        $awardImages = [
+            'Activity Ace' => 'award-icons-printables/activity-ace-printable.png',
+            'Lesson Finisher' => 'award-icons-printables/lesson-finisher-printable.png',
+            'Subject Specialist' => 'award-icons-printables/subject-specialist-printable.png',
+            'Game Master' => 'award-icons-printables/game-master-printable.png',
+            'Early Bird' => 'award-icons-printables/early-bird-printable.png',
+            'Consistency Award' => 'award-icons-printables/consistency-printable.png',
+        ];
+
+        $imagePath = $awardImages[$awardName] ?? null;
+
+        if (!$imagePath) {
+            throw new \Exception("No image found for award: $awardName");
+        }
+
+        $helper = new AwardPrinterHelper();
+
+        return $helper->generate($awardName, $awardeeCount, $imagePath);
+    }
 
     public function openViewAwardModal($id)
     {
