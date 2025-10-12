@@ -456,18 +456,18 @@ class DatabaseSeeder extends Seeder
 
         // === Awards ===
         $awards = [
-            ['name' => 'Activity Ace', 'description' => 'Recognizes the student who completes the highest number of activities overall.'],
-            ['name' => 'Lesson Finisher', 'description' => 'Awarded for completing all lessons assigned in the course.'],
-            ['name' => 'Subject Specialist', 'description' => 'Earned by completing every activity within a single subject (demonstrates mastery).'],
-            ['name' => 'Game Master', 'description' => 'Awarded to students who finish all game-based activities (from GameActivity).'],
-            ['name' => 'Early Bird', 'description' => 'Given to the student who consistently finishes activities before others.'],
-            ['name' => 'Consistency Award', 'description' => 'Recognizes students who complete activities week after week without missing any.'],
+            ['name' => 'Activity Ace', 'description' => 'Recognizes the student who completes the highest number of activities overall.', 'path' => 'award-icons/activity-ace.png'],
+            ['name' => 'Lesson Finisher', 'description' => 'Awarded for completing all lessons assigned in the course.', 'path' => 'award-icons/lesson-finisher.png'],
+            ['name' => 'Subject Specialist', 'description' => 'Earned by completing every activity within a single subject (demonstrates mastery).', 'path' => 'award-icons/subject-specialist.png'],
+            ['name' => 'Game Master', 'description' => 'Awarded to students who finish all game-based activities (from GameActivity).', 'path' => 'award-icons/game-master.png'],
+            ['name' => 'Early Bird', 'description' => 'Given to the student who consistently finishes activities before others.', 'path' => 'award-icons/early-bird.png'],
+            ['name' => 'Consistency Award', 'description' => 'Recognizes students who complete activities week after week without missing any.', 'path' => 'award-icons/consistency-award.png'],
         ];
 
         foreach ($awards as $award) {
             Award::firstOrCreate(
                 ['name' => $award['name']],
-                ['description' => $award['description']]
+                ['description' => $award['description'], 'path' => $award['path']]
             );
         }
 

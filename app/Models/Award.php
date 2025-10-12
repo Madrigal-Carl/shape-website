@@ -10,7 +10,8 @@ class Award extends Model
     use HasFactory;
     protected $fillable = [
         'name',
-        'description'
+        'description',
+        'path',
     ];
 
     public function studentAwards()

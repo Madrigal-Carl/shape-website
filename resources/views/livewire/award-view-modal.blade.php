@@ -15,7 +15,7 @@
 
 
                     <div class="w-full flex flex-col gap-4 items-center justify-center my-10">
-                        <img src="{{ asset('images/Awards_icons/medal.png') }}" alt="" class="h-50">
+                        <img src="{{ asset('storage/' . $award->path) }}" alt="" class="h-50">
                         <h1 class="text-5xl font-bold text-center w-80%">{{ $award->name }}</h1>
                     </div>
 
