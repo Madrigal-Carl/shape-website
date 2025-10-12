@@ -12,6 +12,10 @@ use Livewire\Attributes\On;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Gd\Driver;
+use Spatie\LaravelImageOptimizer\Facades\ImageOptimizer;
+
 
 class StudentAddModal extends Component
 {
@@ -192,7 +196,14 @@ class StudentAddModal extends Component
             $extension   = $this->photo->getClientOriginalExtension();
             $customName  = "{$studentName}_Profile.{$extension}";
 
-            $path = $this->photo->storeAs('students', $customName, 'public');
+            $manager = new ImageManager(new Driver());
+            $image = $manager->read($this->photo->getRealPath())
+                ->scaleDown(width: 800)
+                ->toJpeg(quality: 90);
+
+            $path = "students/{$customName}";
+            $image->save(storage_path('app/public/' . $path));
+            ImageOptimizer::optimize(storage_path('app/public/' . $path));
         } else {
             if ($this->sex === 'male') {
                 $path = 'default_profiles/default-male-student-pfp.png';

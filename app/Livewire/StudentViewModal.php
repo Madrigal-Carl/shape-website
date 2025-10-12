@@ -45,36 +45,34 @@ class StudentViewModal extends Component
 
     public function exportDocx()
     {
-        // $schoolYear = SchoolYear::find($this->school_year);
-        // $todayQuarter = $schoolYear->currentQuarter();
-        // $requestedQuarter = $this->quarter;
-        // if ($requestedQuarter == 1) {
-        //     $this->dispatch('swal-toast', icon: 'error', title: 'The 1st grading is not yet finished.');
-        //     return;
-        // }
+        $schoolYear = SchoolYear::find($this->school_year);
+        $todayQuarter = $schoolYear->currentQuarter();
+        $requestedQuarter = $this->quarter;
+        if ($requestedQuarter == 1) {
+            $this->dispatch('swal-toast', icon: 'error', title: 'The 1st grading is not yet finished.');
+            return;
+        }
 
-        // if ($schoolYear->hasEnded()) {
-        //     $quarterToGenerate = 4;
-        // } else {
-        //     if ($requestedQuarter > $todayQuarter) {
-        //         $this->dispatch(
-        //             'swal-toast',
-        //             icon: 'error',
-        //             title: "The {$this->ordinal($todayQuarter)} quarter is not yet finished."
-        //         );
-        //         return;
-        //     }
-        //     $quarterToGenerate = $todayQuarter - 1;
-        // }
+        if ($schoolYear->hasEnded()) {
+            $quarterToGenerate = 4;
+        } else {
+            if ($requestedQuarter > $todayQuarter) {
+                $this->dispatch(
+                    'swal-toast',
+                    icon: 'error',
+                    title: "The {$this->ordinal($todayQuarter)} quarter is not yet finished."
+                );
+                return;
+            }
+            $quarterToGenerate = $todayQuarter - 1;
+        }
 
         $helper = new ReportHelper();
 
         if ($this->student->disability_type === 'autism spectrum disorder') {
-            // return $helper->generateAutismReportCard($this->student_id, $this->school_year, $quarterToGenerate);
-            return $helper->generateAutismReportCard($this->student_id, $this->school_year, 1);
+            return $helper->generateAutismReportCard($this->student_id, $this->school_year, $quarterToGenerate);
         } else {
-            // return $helper->generateSpeechHearingReportCard($this->student_id, $this->school_year, $quarterToGenerate);
-            return $helper->generateSpeechHearingReportCard($this->student_id, $this->school_year, 1);
+            return $helper->generateSpeechHearingReportCard($this->student_id, $this->school_year, $quarterToGenerate);
         }
     }
 
