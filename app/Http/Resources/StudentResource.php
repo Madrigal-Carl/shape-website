@@ -54,8 +54,6 @@ class StudentResource extends JsonResource
                 ->pluck('game_activity_id');
             $gameActivities = GameActivity::whereIn('id', $gameActivityLessonIds)->get();
 
-            $gameActivityLessons = GameActivityLesson::whereIn('lesson_id', $lessonIds)->get();
-
             $studentActivities = StudentActivity::where('student_id', $this->id)->get();
 
             $feeds = Feed::where('notifiable_id', $this->id)->latest()->get();
@@ -88,7 +86,6 @@ class StudentResource extends JsonResource
             'lessons' => LessonResource::collection($lessons),
             'videos'  => VideoResource::collection($videos),
             'game_activities'        => GameActivityResource::collection($gameActivities),
-            'game_activity_lessons'  => GameActivityLessonResource::collection($gameActivityLessons),
             'student_activities'     => StudentActivityResource::collection($studentActivities),
             'feeds'          => FeedResource::collection($feeds),
             'awards'         => AwardResource::collection($awards),
