@@ -66,7 +66,7 @@
 
                 <div class="flex items-center gap-2" wire:loading.class="invisible"
                     wire:target="openAddOldStudentModal">
-                    <span class="material-symbols-rounded">upgrade</span>
+                    <span class="material-symbols-rounded">add</span>
                     <p class="">Add Old Student</p>
                 </div>
 
