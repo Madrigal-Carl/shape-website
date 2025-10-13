@@ -7,6 +7,7 @@ use App\Models\Feed;
 use App\Models\Award;
 use App\Models\Video;
 use App\Models\Lesson;
+use App\Models\Enrollment;
 use App\Models\GameActivity;
 use App\Models\StudentAward;
 use Illuminate\Http\Request;
@@ -27,6 +28,16 @@ class StudentResource extends JsonResource
     {
         $schoolYear = now()->schoolYear();
         $currentQuarter = $schoolYear?->currentQuarter();
+
+        $currentEnrollment = null;
+        if ($schoolYear) {
+            $currentEnrollment = Enrollment::where('student_id', $this->id)
+                ->where('school_year_id', $schoolYear->id)
+                ->latest()
+                ->first();
+        }
+
+        $status = $currentEnrollment?->status;
 
         // ✅ Handle case when no active school year or quarter is found
         if (!$schoolYear || !$currentQuarter) {
@@ -56,6 +67,8 @@ class StudentResource extends JsonResource
 
             $studentActivities = StudentActivity::where('student_id', $this->id)->get();
 
+            $gameActivityLessons = GameActivityLesson::whereIn('lesson_id', $lessonIds)->get();
+
             $feeds = Feed::where('notifiable_id', $this->id)->latest()->get();
 
             $studentAwards = StudentAward::where('student_id', $this->id)
@@ -80,12 +93,14 @@ class StudentResource extends JsonResource
                     : $this->birth_date,
                 'disability_type' => $this->disability_type,
                 'support_need' => $this->support_need,
+                'status' => $status,
                 'created_at' => $this->created_at?->toDateTimeString(),
                 'updated_at' => $this->updated_at?->toDateTimeString(),
             ],
             'lessons' => LessonResource::collection($lessons),
             'videos'  => VideoResource::collection($videos),
             'game_activities'        => GameActivityResource::collection($gameActivities),
+            'game_activity_lessons'  => GameActivityLessonResource::collection($gameActivityLessons),
             'student_activities'     => StudentActivityResource::collection($studentActivities),
             'feeds'          => FeedResource::collection($feeds),
             'awards'         => AwardResource::collection($awards),
