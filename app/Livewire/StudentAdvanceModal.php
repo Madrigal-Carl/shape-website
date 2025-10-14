@@ -5,6 +5,7 @@ namespace App\Livewire;
 use Carbon\Carbon;
 use App\Models\Student;
 use Livewire\Component;
+use App\Models\GradeLevel;
 use App\Models\SchoolYear;
 use Livewire\Attributes\On;
 use Illuminate\Support\Facades\Auth;
@@ -33,6 +34,24 @@ class StudentAdvanceModal extends Component
         $unqualified = 0;
         $graduated = 0;
 
+        // Define grade level ranking
+        $gradeRank = [
+            'kindergarten 1' => 1,
+            'kindergarten 2' => 2,
+            'kindergarten 3' => 3,
+            'grade 1'        => 4,
+            'grade 2'        => 5,
+            'grade 3'        => 6,
+            'grade 4'        => 7,
+            'grade 5'        => 8,
+            'grade 6'        => 9,
+        ];
+
+        // Map grade levels by name for easy lookup
+        $gradeLevels = GradeLevel::all()->mapWithKeys(function ($level) {
+            return [strtolower(trim($level->name)) => $level];
+        });
+
         foreach ($this->selectedStudents as $studentId) {
             $student = Student::find($studentId);
 
@@ -43,21 +62,36 @@ class StudentAdvanceModal extends Component
                 continue;
             }
 
-            $currentLevelId = $latestEnrollment->grade_level_id;
-            $gradeLevelIds = $this->grade_levels->pluck('id')->toArray();
-            $currentIndex = array_search($currentLevelId, $gradeLevelIds);
+            // Find the student's current grade name
+            $currentGrade = strtolower(trim(optional($latestEnrollment->gradeLevel)->name));
 
-            if ($currentIndex !== false) {
-                // If student is at the last level -> graduate
-                if ($currentIndex === count($gradeLevelIds) - 1) {
-                    $latestEnrollment->update(['status' => 'graduated']);
-                    $graduated++;
-                }
-                // Otherwise -> qualify for next level
-                elseif ($currentIndex < count($gradeLevelIds) - 1) {
-                    $latestEnrollment->update(['status' => 'qualified']);
-                    $qualified++;
-                }
+            if (!isset($gradeRank[$currentGrade])) {
+                $unqualified++;
+                continue;
+            }
+
+            $currentRank = $gradeRank[$currentGrade];
+            $nextRank = $currentRank + 1;
+
+            // If student is at the last level → graduate
+            if ($nextRank > max($gradeRank)) {
+                $latestEnrollment->update(['status' => 'graduated']);
+                $graduated++;
+                continue;
+            }
+
+            // Find next grade name and model
+            $nextGradeName = collect($gradeRank)
+                ->filter(fn($rank) => $rank === $nextRank)
+                ->keys()
+                ->first();
+
+            $nextGrade = $gradeLevels[$nextGradeName] ?? null;
+
+            if ($nextGrade) {
+                // Qualify student for next grade level
+                $latestEnrollment->update(['status' => 'qualified']);
+                $qualified++;
             } else {
                 $unqualified++;
             }
@@ -78,7 +112,6 @@ class StudentAdvanceModal extends Component
 
         $this->dispatch('swal-toast', icon: ($qualified || $graduated) ? 'success' : 'info', title: $message);
     }
-
 
     public function canAdvanceStudent()
     {

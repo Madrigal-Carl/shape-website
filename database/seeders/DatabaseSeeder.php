@@ -439,15 +439,15 @@ class DatabaseSeeder extends Seeder
 
         // === Grade Levels ===
         $levels = [
-            'Kindergarten 1',
-            'Kindergarten 2',
-            'Kindergarten 3',
-            'Grade 1',
-            'Grade 2',
-            'Grade 3',
-            'Grade 4',
-            'Grade 5',
-            'Grade 6',
+            'kindergarten 1',
+            'kindergarten 2',
+            'kindergarten 3',
+            'grade 1',
+            'grade 2',
+            'grade 3',
+            'grade 4',
+            'grade 5',
+            'grade 6',
         ];
 
         foreach ($levels as $level) {

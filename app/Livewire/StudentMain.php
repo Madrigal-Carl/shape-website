@@ -71,7 +71,7 @@ class StudentMain extends Component
             ->when($this->status !== 'all', function ($query) {
                 $query->where('status', $this->status);
             })
-            ->orderBy('first_name')
+            ->orderBy('created_at', 'desc')
             ->paginate(10);
 
         $this->grade_levels = Auth::user()->accountable->gradeLevels->sortBy('id')->values();

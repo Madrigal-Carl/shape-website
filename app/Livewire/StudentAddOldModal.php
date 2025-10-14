@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use App\Models\Student;
 use Livewire\Component;
 use App\Models\Enrollment;
+use App\Models\GradeLevel;
 use App\Models\SchoolYear;
 use Livewire\Attributes\On;
 use Illuminate\Support\Facades\Auth;
@@ -38,21 +39,75 @@ class StudentAddOldModal extends Component
 
     public function getFilteredStudentsProperty()
     {
-        $query = Auth::user()->accountable->students()
-            ->whereHas('enrollments', function ($q) {
-                $q->where('school_year_id', now()->schoolYear()->id)
-                    ->where('status', 'qualified');
-            });
+        $last = SchoolYear::orderBy('fourth_quarter_end', 'desc')->first();
+        $instructor = Auth::user()->accountable;
 
-        // Filter by grade level
+        // Grade rank map
+        $gradeRank = [
+            'kindergarten 1' => 1,
+            'kindergarten 2' => 2,
+            'kindergarten 3' => 3,
+            'grade 1'        => 4,
+            'grade 2'        => 5,
+            'grade 3'        => 6,
+            'grade 4'        => 7,
+            'grade 5'        => 8,
+            'grade 6'        => 9,
+        ];
+
+        // Instructor's assigned grade levels
+        $allowedGradeLevels = $instructor->gradeLevels()->pluck('name')->map(fn($n) => strtolower(trim($n)))->values();
+        $allowedRanks = collect($allowedGradeLevels)->map(fn($g) => $gradeRank[$g] ?? null)->filter();
+
+        // Compute previous grade levels (one rank lower)
+        $previousRanks = $allowedRanks->map(fn($r) => $r - 1)->filter(fn($r) => $r > 0);
+        $previousGradeLevels = collect($gradeRank)
+            ->filter(fn($rank) => $previousRanks->contains($rank))
+            ->keys()
+            ->map(fn($n) => strtolower(trim($n)));
+
+        $previousGradeLevelIds = GradeLevel::whereIn('name', $previousGradeLevels)->pluck('id');
+
+        $query = Student::query()
+            ->whereHas('enrollments', function ($q) use ($last) {
+                $q->where('school_year_id', $last->id)
+                    ->where('status', 'qualified');
+            })
+            ->whereIn(
+                'disability_type',
+                $instructor->specializations
+                    ->pluck('name')
+                    ->map(fn($s) => strtolower(trim($s)))
+            );
+
         if ($this->grade_level && $this->grade_level !== 'all') {
-            $query->whereHas('enrollments', function ($q) {
-                $q->where('grade_level_id', $this->grade_level)
-                    ->where('school_year_id', now()->schoolYear()->id);
+            // find the one rank below that grade only
+            $selectedGrade = strtolower(GradeLevel::find($this->grade_level)->name);
+            $selectedRank = $gradeRank[$selectedGrade] ?? null;
+
+            if ($selectedRank) {
+                $targetRank = $selectedRank - 1;
+                $targetGradeLevels = collect($gradeRank)
+                    ->filter(fn($rank) => $rank === $targetRank)
+                    ->keys()
+                    ->map(fn($n) => strtolower(trim($n)));
+
+                $targetGradeLevelIds = GradeLevel::whereIn('name', $targetGradeLevels)->pluck('id');
+
+                $query->whereHas('enrollments', function ($q) use ($last, $targetGradeLevelIds) {
+                    $q->whereIn('grade_level_id', $targetGradeLevelIds)
+                        ->where('school_year_id', $last->id);
+                });
+            }
+        } else {
+            // When "All" is selected, show all one rank lower than instructor’s grade levels
+            $query->whereHas('enrollments', function ($q) use ($last, $previousGradeLevelIds) {
+                $q->whereIn('grade_level_id', $previousGradeLevelIds)
+                    ->where('school_year_id', $last->id);
             });
         }
 
-        // Search by name
+        // Search filter
         if ($this->student_search) {
             $search = $this->student_search;
             $query->where(function ($q) use ($search) {
@@ -61,11 +116,14 @@ class StudentAddOldModal extends Component
                     ->orWhere('last_name', 'like', "%$search%");
             });
         }
+
         $query->orderBy('first_name');
-        return $query->with(['enrollments' => function ($q) {
-            $q->where('school_year_id', now()->schoolYear()->id);
+
+        return $query->with(['enrollments' => function ($q) use ($last) {
+            $q->where('school_year_id', $last->id);
         }])->get();
     }
+
 
     public function addOldStudents()
     {
