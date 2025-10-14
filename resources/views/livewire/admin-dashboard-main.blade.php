@@ -132,7 +132,7 @@
         </div>
     </div>
     <livewire:quarter-setup-modal :is-open="$shouldOpenModal" />
-    <div class="grid grid-cols-2 grid-rows-4 gap-4">
+    {{-- <div class="grid grid-cols-2 grid-rows-4 gap-4">
         <div class="col-span-1 row-span-2 h-full bg-white p-6 rounded-3xl flex flex-col gap-4">
             <h1 class="text-2xl font-semibold">Weekly Activities</h1>
             <div id="Barchart" class="w-full" wire:ignore x-data="{}" x-init="() => {
@@ -162,7 +162,7 @@
                     fill: { opacity: 1 },
                     tooltip: { y: { formatter: val => `$ ${val} thousands` } },
                 };
-            
+
                 var chart = new ApexCharts(document.querySelector('#Barchart'), options);
                 chart.render();
             }">
@@ -188,7 +188,7 @@
                         }
                     }]
                 };
-            
+
                 var chart = new ApexCharts(document.querySelector('#Piechart'), options);
                 chart.render();
             }">
@@ -227,12 +227,12 @@
                         x: { format: 'dd/MM/yy HH:mm' }
                     }
                 };
-            
+
                 var chart = new ApexCharts(document.querySelector('#Linechart'), options);
                 chart.render();
             }">
             </div>
 
         </div>
-    </div>
+    </div> --}}
 </main>

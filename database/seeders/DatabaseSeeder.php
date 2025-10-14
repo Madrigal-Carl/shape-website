@@ -704,14 +704,14 @@ class DatabaseSeeder extends Seeder
                     // Attach video
                     Video::factory()->create(['lesson_id' => $lesson->id]);
 
-                    // ✅ Filter activities whose Todo belongs to subjects in this curriculum
+                    // Filter activities whose Todo belongs to subjects in this curriculum
                     $subjectIds = $curriculumSubjects->pluck('subject_id');
                     $eligibleGameActivities = $activities->filter(function ($activity) use ($subjectIds) {
-                        $todoSubjectIds = $activity->todo?->subject_ids ?? collect();
-                        return $todoSubjectIds->intersect($subjectIds)->isNotEmpty();
+                        $activitySubjectIds = $activity->subjects->pluck('id');
+                        return $activitySubjectIds->intersect($subjectIds)->isNotEmpty();
                     });
 
-                    // ✅ Pick a random eligible activity (if any)
+                    // Pick a random eligible activity (if any)
                     $gameActivity = $eligibleGameActivities->isNotEmpty()
                         ? $eligibleGameActivities->random()
                         : null;

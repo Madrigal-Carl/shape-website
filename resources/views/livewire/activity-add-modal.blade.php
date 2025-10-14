@@ -109,18 +109,23 @@
                                                             <div class="ml-4">
                                                                 <div wire:click="toggleSubDomain({{ $subDomain->id }})"
                                                                     class="flex items-center justify-between p-2 cursor-pointer hover:bg-gray-50 rounded-lg">
-                                                                    <p class="text-sm text-gray-700">
+                                                                    <p class="text-sm text-paragraph font-medium">
                                                                         {{ $subDomain->name }}</p>
                                                                     <span>{{ in_array($subDomain->id, $expandedSubDomains) ? '−' : '+' }}</span>
                                                                 </div>
 
                                                                 @if (in_array($subDomain->id, $expandedSubDomains))
                                                                     @foreach ($subDomain->todos as $todo)
-                                                                        <div class="flex items-center gap-2 ml-6 p-1">
-                                                                            <input type="checkbox"
-                                                                                wire:model.live="selectedTodoIds"
-                                                                                value="{{ $todo->id }}">
-                                                                            <p class="text-sm">{{ $todo->todo }}</p>
+                                                                        <div class="flex items-center gap-2 ml-4 p-1">
+                                                                            <label class="container w-fit">
+                                                                                <input type="checkbox"
+                                                                                    wire:model.live="selectedTodoIds"
+                                                                                    value="{{ $todo->id }}">
+                                                                                <div class="checkmark"></div>
+                                                                            </label>
+                                                                            <p class="text-sm text-paragraph">
+                                                                                {{ $todo->todo }}
+                                                                            </p>
                                                                         </div>
                                                                     @endforeach
                                                                 @endif
@@ -131,9 +136,14 @@
                                                     @if ($domain->todos->count())
                                                         @foreach ($domain->todos as $todo)
                                                             <div class="flex items-center gap-2 ml-4 p-1">
-                                                                <input type="checkbox" wire:model.live="selectedTodoIds"
-                                                                    value="{{ $todo->id }}">
-                                                                <p class="text-sm">{{ $todo->todo }}</p>
+                                                                <label class="container w-fit">
+                                                                    <input type="checkbox"
+                                                                        wire:model.live="selectedTodoIds"
+                                                                        value="{{ $todo->id }}">
+                                                                    <div class="checkmark"></div>
+                                                                </label>
+                                                                <p class="text-sm text-paragraph">{{ $todo->todo }}
+                                                                </p>
                                                             </div>
                                                         @endforeach
                                                     @endif
