@@ -65,7 +65,9 @@ class StudentResource extends JsonResource
                 ->pluck('game_activity_id');
             $gameActivities = GameActivity::whereIn('id', $gameActivityLessonIds)->get();
 
-            $studentActivities = StudentActivity::where('student_id', $this->id)->get();
+            $studentActivities = StudentActivity::where('student_id', $this->id)
+                ->where('activity_lesson_type', GameActivityLesson::class)
+                ->get();
 
             $gameActivityLessons = GameActivityLesson::whereIn('lesson_id', $lessonIds)->get();
 
