@@ -37,9 +37,24 @@ class AwardMain extends Component
             throw new \Exception("No image found for award: $awardName");
         }
 
+        $awardees = Award::where('name', $awardName)
+            ->first()
+            ->students()
+            ->where('student_awards.school_year_id', $this->school_year)
+            ->whereHas('enrollments', function ($q) {
+                $q->where('instructor_id', Auth::user()->accountable->id)
+                    ->where('school_year_id', $this->school_year)
+                    ->when($this->grade_level && $this->grade_level !== 'all', function ($q) {
+                        $q->where('grade_level_id', $this->grade_level);
+                    });
+            })
+            ->get()
+            ->map(fn($student) => $student->full_name)
+            ->toArray();
+
         $helper = new AwardPrinterHelper();
 
-        return $helper->generate($awardName, $awardeeCount, $imagePath);
+        return $helper->generate($awardName, $awardees, $imagePath);
     }
 
     public function openViewAwardModal($id)

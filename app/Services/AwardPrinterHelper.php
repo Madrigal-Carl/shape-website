@@ -8,7 +8,7 @@ use Exception;
 
 class AwardPrinterHelper
 {
-    public static function generate(string $awardName, int $awardeeCount, string $imagePath)
+    public static function generate(string $awardName, array $awardeeNames, string $imagePath)
     {
         $templatePath = resource_path('templates/award-template.docx');
         if (!file_exists($templatePath)) {
@@ -24,6 +24,7 @@ class AwardPrinterHelper
 
         // Each block (page) can hold 6 images
         $perPage = 6;
+        $awardeeCount = count($awardeeNames);
         $pages = (int) ceil($awardeeCount / $perPage);
 
         // Clone the block according to how many pages we need
@@ -48,6 +49,11 @@ class AwardPrinterHelper
                 }
             }
         }
+
+        $lastPage = $pages;
+        $awardeesList = implode("\n- ", $awardeeNames);
+        $awardeesList = '- ' . $awardeesList;
+        $templateProcessor->setValue("awardees_names#{$lastPage}", $awardeesList);
 
         // Save & return
         $safeName = preg_replace('/[^A-Za-z0-9_\-]/', '_', $awardName);
