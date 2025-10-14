@@ -14,8 +14,8 @@ class ReportHelper
     public function getAutismStudentActivities($studentId, $schoolYearId = null, $quarter = null)
     {
         $student = Student::with([
-            'lessons.classActivities.todo',
-            'lessons.gameActivityLessons.gameActivity.todo',
+            'lessons.classActivities.todos',
+            'lessons.gameActivityLessons.gameActivity.todos',
         ])->findOrFail($studentId);
         $schoolYearId = $schoolYearId ?? now()->schoolYear()?->id;
         $schoolYear   = SchoolYear::findOrFail($schoolYearId);
@@ -38,27 +38,31 @@ class ReportHelper
 
             // ----- CLASS ACTIVITIES -----
             foreach ($lesson->classActivities as $activity) {
-                if (!$activity->todo) continue;
+                if ($activity->todos->isEmpty()) continue;
 
-                $todoKey = 't' . $activity->todo->id;
-                $field   = $todoKey . '.q' . $lessonQuarter;
+                foreach ($activity->todos as $todo) {
+                    $todoKey = 't' . $todo->id;
+                    $field = $todoKey . '.q' . $lessonQuarter;
 
-                $status = $student->activityStatus($activity);
-                if ($status) {
-                    $results[$field][] = $status;
+                    $status = $student->activityStatus($activity);
+                    if ($status) {
+                        $results[$field][] = $status;
+                    }
                 }
             }
 
             // ----- GAME ACTIVITIES -----
             foreach ($lesson->gameActivityLessons as $activity) {
-                if (!$activity->gameActivity->todo) continue;
+                if ($activity->todos->isEmpty()) continue;
 
-                $todoKey = 't' . $activity->gameActivity->todo->id;
-                $field   = $todoKey . '.q' . $lessonQuarter;
+                foreach ($activity->todos as $todo) {
+                    $todoKey = 't' . $todo->id;
+                    $field = $todoKey . '.q' . $lessonQuarter;
 
-                $status = $student->activityStatus($activity);
-                if ($status) {
-                    $results[$field][] = $status;
+                    $status = $student->activityStatus($activity);
+                    if ($status) {
+                        $results[$field][] = $status;
+                    }
                 }
             }
         }
@@ -177,8 +181,8 @@ class ReportHelper
     public function getSpeechHearingStudentActivities($studentId, $schoolYearId = null, $quarter = null)
     {
         $student = Student::with([
-            'lessons.classActivities.todo',
-            'lessons.gameActivityLessons.gameActivity.todo',
+            'lessons.classActivities.todos',
+            'lessons.gameActivityLessons.gameActivity.todos',
         ])->findOrFail($studentId);
 
         $schoolYearId = $schoolYearId ?? now()->schoolYear()?->id;
@@ -204,27 +208,31 @@ class ReportHelper
 
             // Class activities
             foreach ($lesson->classActivities as $activity) {
-                if (!$activity->todo) continue;
+                if ($activity->todos->isEmpty()) continue;
 
-                $todoKey = 't' . $activity->todo->id;
-                $field   = $todoKey . '.q' . $lessonQuarter;
+                foreach ($activity->todos as $todo) {
+                    $todoKey = 't' . $todo->id;
+                    $field = $todoKey . '.q' . $lessonQuarter;
 
-                $status = $student->activityStatus($activity);
-                if ($status) {
-                    $results[$field][] = $status;
+                    $status = $student->activityStatus($activity);
+                    if ($status) {
+                        $results[$field][] = $status;
+                    }
                 }
             }
 
             // Game activities
             foreach ($lesson->gameActivityLessons as $activity) {
-                if (!$activity->gameActivity?->todo) continue;
+                if ($activity->todos->isEmpty()) continue;
 
-                $todoKey = 't' . $activity->gameActivity->todo->id;
-                $field   = $todoKey . '.q' . $lessonQuarter;
+                foreach ($activity->todos as $todo) {
+                    $todoKey = 't' . $todo->id;
+                    $field = $todoKey . '.q' . $lessonQuarter;
 
-                $status = $student->activityStatus($activity);
-                if ($status) {
-                    $results[$field][] = $status;
+                    $status = $student->activityStatus($activity);
+                    if ($status) {
+                        $results[$field][] = $status;
+                    }
                 }
             }
         }

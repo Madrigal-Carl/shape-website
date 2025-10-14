@@ -649,12 +649,12 @@ class DatabaseSeeder extends Seeder
             $subjects = Subject::inRandomOrder()->take(rand(1, 2))->get();
 
             // ✅ Manually assign a random todo_id between 1 and 102
-            $todoId = rand(103, 229);
+            $todo = Todo::inRandomOrder()->whereBetween('id', [103, 229])->first();
 
-            // Create the GameActivity linked to that todo
-            $activity = GameActivity::factory()->create([
-                'todo_id' => $todoId,
-            ]);
+            // Create the GameActivity
+            $activity = GameActivity::factory()->create();
+
+            $activity->todos()->attach($todo->id);
 
             // Attach related subjects
             $activity->subjects()->attach($subjects->pluck('id'));
@@ -759,24 +759,22 @@ class DatabaseSeeder extends Seeder
                     continue;
                 }
 
-                // 1️⃣ Pick a random CurriculumSubject
+                // Pick a random CurriculumSubject
                 $curriculumSubject = $curriculumSubjects->random();
 
                 // 2️⃣ Get the related Subject
                 $subject = $curriculumSubject->subject;
-
                 if (!$subject) {
                     continue; // skip if no subject
                 }
 
-                // 3️⃣ Get a random domain from that subject
+                // Get a random domain from that subject
                 $domain = $subject->domains()->inRandomOrder()->first();
-
                 if (!$domain) {
                     continue; // skip if no domain exists for subject
                 }
 
-                // 4️⃣ Get todo — first from domain, fallback to subdomain
+                // Get todo — first from domain, fallback to subdomain
                 $todo = $domain->todos()->inRandomOrder()->first();
 
                 if (!$todo) {
@@ -786,7 +784,7 @@ class DatabaseSeeder extends Seeder
                     }
                 }
 
-                // 5️⃣ If still no todo, skip
+                // If still no todo, skip
                 if (!$todo) {
                     continue;
                 }
@@ -795,9 +793,10 @@ class DatabaseSeeder extends Seeder
                 $activity = ClassActivity::factory()->create([
                     'instructor_id'         => $instructor->id,
                     'curriculum_subject_id' => $curriculumSubject->id,
-                    'todo_id'               => $todo->id,
                     'lesson_id'             => null, // optional
                 ]);
+
+                $activity->todos()->attach($todo->id);
 
                 $activities->push($activity);
             }

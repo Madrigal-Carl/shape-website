@@ -14,7 +14,6 @@ class ClassActivity extends Model
         'lesson_id',
         'curriculum_subject_id',
         'instructor_id',
-        'todo_id',
         'name',
         'description',
     ];
@@ -54,9 +53,9 @@ class ClassActivity extends Model
         return $this->belongsTo(SchoolYear::class);
     }
 
-    public function todo()
+    public function todos()
     {
-        return $this->belongsTo(Todo::class);
+        return $this->belongsToMany(Todo::class, 'class_activity_todo');
     }
 
     protected static function booted()

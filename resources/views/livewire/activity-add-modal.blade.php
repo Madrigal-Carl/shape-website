@@ -89,7 +89,7 @@
 
                                 <div class="flex items-center gap-2 px-4 py-2 rounded-lg bg-white w-full">
                                     <p class="w-full outline-none text-heading-dark placeholder-heading-dark">
-                                        {{ $selectedTodoLabel ? $selectedTodoLabel : 'No Todo Selected' }}
+                                        {{ count($selectedTodoIds) ? count($selectedTodoIds) . ' Todos Selected' : 'No Todo Selected' }}
                                     </p>
                                 </div>
 
@@ -117,9 +117,9 @@
                                                                 @if (in_array($subDomain->id, $expandedSubDomains))
                                                                     @foreach ($subDomain->todos as $todo)
                                                                         <div class="flex items-center gap-2 ml-6 p-1">
-                                                                            <input type="radio" name="selectedTodo"
-                                                                                wire:click="selectTodo({{ $todo->id }})"
-                                                                                {{ $selectedTodoId == $todo->id ? 'checked' : '' }}>
+                                                                            <input type="checkbox"
+                                                                                wire:model.live="selectedTodoIds"
+                                                                                value="{{ $todo->id }}">
                                                                             <p class="text-sm">{{ $todo->todo }}</p>
                                                                         </div>
                                                                     @endforeach
@@ -131,9 +131,8 @@
                                                     @if ($domain->todos->count())
                                                         @foreach ($domain->todos as $todo)
                                                             <div class="flex items-center gap-2 ml-4 p-1">
-                                                                <input type="radio" name="selectedTodo"
-                                                                    wire:click="selectTodo({{ $todo->id }})"
-                                                                    {{ $selectedTodoId == $todo->id ? 'checked' : '' }}>
+                                                                <input type="checkbox" wire:model.live="selectedTodoIds"
+                                                                    value="{{ $todo->id }}">
                                                                 <p class="text-sm">{{ $todo->todo }}</p>
                                                             </div>
                                                         @endforeach

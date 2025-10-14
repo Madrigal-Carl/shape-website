@@ -21,7 +21,7 @@ class ActivityEditModal extends Component
     public $isOpen = false, $activeStudentId = null, $activity_id = null;
     public $activity_name, $curriculum = '', $subject = '', $grade_level = '', $description;
 
-    public $search = '', $selectedTodoId = null, $selectedTodoLabel = null;
+    public $search = '', $selectedTodoIds = [];
     public $expandedDomains = [], $expandedSubDomains = [], $checkedStudents = [];
     public $original = [];
 
@@ -45,8 +45,7 @@ class ActivityEditModal extends Component
         $this->curriculum    = $activity->curriculumSubject->curriculum->id;
         $this->subject       = $activity->curriculumSubject->subject->id;
 
-        $this->selectedTodoId    = $activity->todo_id;
-        $this->selectedTodoLabel = $activity->todo?->todo;
+        $this->selectedTodoIds    = $activity->todos->pluck('id')->toArray();
         $this->checkedStudents = $activity->studentActivities
             ->where('status', 'finished')
             ->pluck('student_id')
@@ -71,7 +70,7 @@ class ActivityEditModal extends Component
             'curriculum'  => $this->curriculum,
             'subject'     => $this->subject,
             'students'    => $this->checkedStudents,
-            'todo_id'     => $this->selectedTodoId,
+            'todo_id'     => $this->selectedTodoIds,
         ];
     }
 
@@ -101,14 +100,6 @@ class ActivityEditModal extends Component
         }
     }
 
-
-    public function selectTodo($todoId)
-    {
-        $todo = Todo::find($todoId);
-        $this->selectedTodoId = $todo->id;
-        $this->selectedTodoLabel = $todo->todo;
-    }
-
     public function getFilteredDomainProperty()
     {
         $subject = Subject::find($this->subject);
@@ -133,7 +124,7 @@ class ActivityEditModal extends Component
                 'grade_level'        => 'required',
                 'subject'            => 'required',
                 'curriculum'         => 'required',
-                'selectedTodoId'         => 'required',
+                'selectedTodoIds' => 'required|array|min:1',
             ], [
                 'lesson_name.required' => 'Lesson name is required.',
                 'lesson_name.min'      => 'Lesson name must be at least 5 characters.',
@@ -141,7 +132,7 @@ class ActivityEditModal extends Component
                 'grade_level.required' => 'Grade & Section is required.',
                 'subject.required'     => 'Please select a subject.',
                 'curriculum.required'  => 'Please select a curriculum.',
-                'selectedTodoId.required'  => 'Please select a Todo.',
+                'selectedTodoIds.required' => 'Please select at least one Todo.',
             ]);
         } catch (ValidationException $e) {
             $message = $e->validator->errors()->first();
@@ -175,7 +166,7 @@ class ActivityEditModal extends Component
             'curriculum'  => $this->curriculum,
             'subject'     => $this->subject,
             'students'    => $this->checkedStudents,
-            'todo_id'     => $this->selectedTodoId,
+            'todo_id'     => $this->selectedTodoIds,
         ];
 
         if ($current == $this->original) {
@@ -197,10 +188,11 @@ class ActivityEditModal extends Component
 
         $activity->update([
             'curriculum_subject_id' => $curriculumSubject->id,
-            'todo_id'               => $this->selectedTodoId,
             'name'                  => $this->activity_name,
             'description'           => $this->description,
         ]);
+
+        $activity->todos()->attach($this->selectedTodoIds);
 
         $activity->studentActivities()->delete();
         foreach ($this->students as $student) {
@@ -231,8 +223,7 @@ class ActivityEditModal extends Component
         $this->curriculums = Curriculum::where('instructor_id', Auth::user()->accountable->id)->where('grade_level_id', $this->grade_level)->where('status', 'active')->get();
         $this->curriculum = '';
         $this->subject = '';
-        $this->selectedTodoId = null;
-        $this->selectedTodoLabel = null;
+        $this->selectedTodoIds = [];
         $this->subjects = collect();
         $this->students = collect();
     }
@@ -240,8 +231,7 @@ class ActivityEditModal extends Component
     public function updatedCurriculum()
     {
         $this->subject = '';
-        $this->selectedTodoId = null;
-        $this->selectedTodoLabel = null;
+        $this->selectedTodoIds = [];
         $this->subjects = Subject::whereHas('curriculumSubjects', function ($query) {
             $query->where('curriculum_id', $this->curriculum);
         })->get();

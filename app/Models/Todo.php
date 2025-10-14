@@ -25,14 +25,14 @@ class Todo extends Model
         return $this->belongsTo(SubDomain::class);
     }
 
-    public function classActivities()
-    {
-        return $this->hasMany(ClassActivity::class);
-    }
-
     public function gameActivities()
     {
-        return $this->hasMany(GameActivity::class);
+        return $this->belongsToMany(GameActivity::class, 'game_activity_todo');
+    }
+
+    public function classActivities()
+    {
+        return $this->belongsToMany(ClassActivity::class, 'class_activity_todo');
     }
 
     public function subjects()

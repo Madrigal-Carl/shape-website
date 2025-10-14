@@ -20,7 +20,7 @@ class ActivityAddModal extends Component
     public $isOpen = false;
     public $activity_name, $curriculum = '', $subject = '', $grade_level = '', $description;
 
-    public $search = '', $selectedTodoId = null, $selectedTodoLabel = null;
+    public $search = '', $selectedTodoIds = [];
     public $expandedDomains = [], $expandedSubDomains = [], $checkedStudents = [];
 
     #[On('openModal')]
@@ -54,14 +54,6 @@ class ActivityAddModal extends Component
         }
     }
 
-
-    public function selectTodo($todoId)
-    {
-        $todo = Todo::find($todoId);
-        $this->selectedTodoId = $todo->id;
-        $this->selectedTodoLabel = $todo->todo;
-    }
-
     public function getFilteredDomainProperty()
     {
         $subject = Subject::find($this->subject);
@@ -88,8 +80,7 @@ class ActivityAddModal extends Component
         $this->students = collect();
         $this->curriculums = collect();
         $this->curriculum = '';
-        $this->selectedTodoId = null;
-        $this->selectedTodoLabel = null;
+        $this->selectedTodoIds = [];
         $this->description = null;
         $this->expandedDomains = [];
         $this->expandedSubDomains = [];
@@ -104,7 +95,7 @@ class ActivityAddModal extends Component
                 'grade_level'        => 'required',
                 'subject'            => 'required',
                 'curriculum'         => 'required',
-                'selectedTodoId'         => 'required',
+                'selectedTodoIds' => 'required|array|min:1',
             ], [
                 'lesson_name.required' => 'Lesson name is required.',
                 'lesson_name.min'      => 'Lesson name must be at least 5 characters.',
@@ -112,7 +103,7 @@ class ActivityAddModal extends Component
                 'grade_level.required' => 'Grade & Section is required.',
                 'subject.required'     => 'Please select a subject.',
                 'curriculum.required'  => 'Please select a curriculum.',
-                'selectedTodoId.required'  => 'Please select a Todo.',
+                'selectedTodoIds.required' => 'Please select at least one Todo.',
             ]);
         } catch (ValidationException $e) {
             $message = $e->validator->errors()->first();
@@ -149,10 +140,11 @@ class ActivityAddModal extends Component
         $activity = ClassActivity::create([
             'instructor_id' => Auth::user()->accountable->id,
             'curriculum_subject_id' => $curriculumSubject->id,
-            'todo_id'               => $this->selectedTodoId,
             'name'        => $this->activity_name,
             'description' => $this->description,
         ]);
+
+        $activity->todos()->attach($this->selectedTodoIds);
 
         foreach ($this->students as $student) {
             StudentActivity::create([
@@ -184,8 +176,7 @@ class ActivityAddModal extends Component
         $this->subject = '';
         $this->subjects = collect();
         $this->students = collect();
-        $this->selectedTodoId = null;
-        $this->selectedTodoLabel = null;
+        $this->selectedTodoIds = [];
     }
 
     public function updatedCurriculum()
@@ -208,8 +199,7 @@ class ActivityAddModal extends Component
             )
             ->get();
 
-        $this->selectedTodoId = null;
-        $this->selectedTodoLabel = null;
+        $this->selectedTodoIds = [];
         $this->checkedStudents = [];
     }
 

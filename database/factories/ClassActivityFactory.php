@@ -23,7 +23,6 @@ class ClassActivityFactory extends Factory
         return [
             'school_year_id' => null,
             'curriculum_subject_id' => null,
-            'todo_id'               => null,
             'instructor_id'         => null,
             'name'                  => $this->faker->sentence(3), // e.g. "Math Quiz 1"
             'description'           => $this->faker->paragraph(),

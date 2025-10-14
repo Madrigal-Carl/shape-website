@@ -11,11 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('game_activities', function (Blueprint $table) {
+        Schema::create('class_activity_todo', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->unique();
-            $table->string('path');
-            $table->text('description');
+            $table->foreignId('class_activity_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('todo_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
     }
@@ -25,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('game_activities');
+        Schema::dropIfExists('class_activity_todo');
     }
 };

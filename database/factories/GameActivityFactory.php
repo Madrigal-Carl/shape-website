@@ -20,7 +20,6 @@ class GameActivityFactory extends Factory
     public function definition(): array
     {
         return [
-            'todo_id' => null,
             'name' => $this->faker->words(2, true),
             'path' => 'images/game-icons/mario.jpeg',
             'description' => $this->faker->paragraph(),

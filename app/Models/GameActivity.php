@@ -10,7 +10,6 @@ class GameActivity extends Model
     use HasFactory;
 
     protected $fillable = [
-        'todo_id',
         'name',
         'path',
         'description',
@@ -26,9 +25,9 @@ class GameActivity extends Model
         return $this->hasMany(GameActivityLesson::class);
     }
 
-    public function todo()
+    public function todos()
     {
-        return $this->belongsTo(Todo::class);
+        return $this->belongsToMany(Todo::class, 'game_activity_todo');
     }
 
     public function gameImages()
