@@ -12,6 +12,10 @@ use Livewire\WithFileUploads;
 use App\Models\Specialization;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Gd\Driver;
+use Spatie\ImageOptimizer\OptimizerChainFactory;
+
 
 class InstructorAddModal extends Component
 {
@@ -97,16 +101,7 @@ class InstructorAddModal extends Component
         $lastName  = strtolower(trim($this->last_name));
         $firstName = strtolower(trim($this->first_name));
 
-        $baseUsername = "{$lastName}{$firstName}";
-        $username = $baseUsername;
-
-        $count = 1;
-        while (Account::where('username', $username)->exists()) {
-            $username = $baseUsername . $count;
-            $count++;
-        }
-
-        $this->account_username = $username;
+        $this->account_username = "{$lastName}{$firstName}";
         $this->account_password = "{$birthdate}-{$lastName}";
     }
 
@@ -181,12 +176,25 @@ class InstructorAddModal extends Component
 
         // Photo upload
         $path = null;
+
         if ($this->photo) {
             $instructorName = preg_replace('/\s+/', '', "{$this->last_name}_{$this->first_name}_{$this->middle_name}");
-            $extension   = $this->photo->getClientOriginalExtension();
-            $customName  = "{$instructorName}_Profile.{$extension}";
-            $path = $this->photo->storeAs('instructors', $customName, 'public');
+            $extension = strtolower($this->photo->getClientOriginalExtension());
+            $customName = "{$instructorName}_Profile.{$extension}";
+            $manager = new ImageManager(new Driver());
+
+            $image = $manager->read($this->photo->getRealPath())
+                ->scaleDown(width: 800)
+                ->toJpeg(quality: 90);
+            $path = "instructors/{$customName}";
+
+            $savePath = storage_path("app/public/{$path}");
+            $image->save($savePath);
+
+            $optimizer = OptimizerChainFactory::create();
+            $optimizer->optimize($savePath);
         } else {
+            // 🧍 Default profile by gender
             $path = $this->sex === 'male'
                 ? 'default_profiles/default-male-teacher-pfp.png'
                 : 'default_profiles/default-female-teacher-pfp.png';

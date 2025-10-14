@@ -131,22 +131,13 @@ class StudentEditModal extends Component
         $lastName  = strtolower(trim($student->last_name));
         $firstName = strtolower(trim($student->first_name));
 
-        $baseUsername = "{$lastName}{$firstName}";
-        $username = $baseUsername;
-
-        $count = 1;
-        while (Account::where('username', $username)->exists()) {
-            $username = $baseUsername . $count;
-            $count++;
-        }
-
-        $this->account_username = $username;
+        $this->account_username = "{$lastName}{$firstName}";
         $this->account_password = "{$birthdate}-{$lastName}";
 
         $this->account_username_changed = false;
         $this->account_password_changed = false;
 
-        $this->dispatch('swal-toast', icon: 'info', title: 'Account reset to default.');
+        $this->dispatch('swal-toast', icon: 'info', title: 'Account has been reset to default!');
     }
 
     protected function validateEdit()

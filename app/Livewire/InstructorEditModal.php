@@ -10,8 +10,11 @@ use Livewire\Attributes\On;
 use Livewire\WithFileUploads;
 use App\Models\Specialization;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
+use Intervention\Image\Drivers\Gd\Driver;
+use Spatie\ImageOptimizer\OptimizerChainFactory;
+use Illuminate\Support\Facades\Storage;
+use Intervention\Image\ImageManager;
 
 class InstructorEditModal extends Component
 {
@@ -111,9 +114,6 @@ class InstructorEditModal extends Component
     {
         if ($this->validateStep()) {
             $this->step++;
-            if ($this->step === 3) {
-                $this->generateAccount();
-            }
         }
     }
 
@@ -154,40 +154,17 @@ class InstructorEditModal extends Component
         $this->current_barangay = '';
     }
 
-    public function generateAccount()
-    {
-        $birthdate = str_replace('-', '', $this->birthdate);
-        $lastName  = strtolower(trim($this->last_name));
-        $firstName = strtolower(trim($this->first_name));
-
-        $baseUsername = "{$lastName}{$firstName}";
-        $username = $baseUsername;
-
-        $count = 1;
-        while (Account::where('username', $username)->where('accountable_id', '!=', $this->instructor_id)->exists()) {
-            $username = $baseUsername . $count;
-            $count++;
-        }
-
-        $this->account_username = $username;
-        $this->account_password = "{$birthdate}-{$lastName}";
-    }
-
     public function resetAccount()
     {
-        $defaultUsername = strtolower(trim($this->last_name . $this->first_name));
-        $defaultPassword = str_replace('-', '', $this->birthdate) . '-' . strtolower(trim($this->last_name));
+        $instructor = Instructor::findOrFail($this->instructor_id);
 
-        $instructor = Instructor::with('account')->findOrFail($this->instructor_id);
+        $birthdate = str_replace('-', '', $instructor->birth_date);
+        $lastName  = strtolower(trim($instructor->last_name));
+        $firstName = strtolower(trim($instructor->first_name));
 
-        if ($instructor->account) {
-            $instructor->account->username = $defaultUsername;
-            $instructor->account->password = Hash::make($defaultPassword);
-            $instructor->account->save();
-        }
+        $this->account_username = "{$lastName}{$firstName}";
+        $this->account_password = "{$birthdate}-{$lastName}";
 
-        $this->account_username = $defaultUsername;
-        $this->default_password = $defaultPassword;
         $this->account_username_changed = false;
         $this->account_password_changed = false;
 
@@ -308,10 +285,21 @@ class InstructorEditModal extends Component
             }
 
             $instructorName = preg_replace('/\s+/', '', "{$this->last_name}_{$this->first_name}_{$this->middle_name}");
-            $extension   = $this->photo->getClientOriginalExtension();
-            $customName  = "{$instructorName}_Profile_" . time() . ".{$extension}";
+            $timestamp = time();
+            $customName = "{$instructorName}_Profile_{$timestamp}.jpg"; // Always save as JPEG
+            $manager = new ImageManager(new Driver());
 
-            $path = $this->photo->storeAs('instructors', $customName, 'public');
+            $image = $manager->read($this->photo->getRealPath())
+                ->scaleDown(width: 800)
+                ->toJpeg(quality: 90);
+
+            $path = "instructors/{$customName}";
+            $savePath = storage_path("app/public/{$path}");
+            $image->save($savePath);
+
+            $optimizer = OptimizerChainFactory::create();
+            $optimizer->optimize($savePath);
+
             $instructor->path = $path;
             $this->currentPhoto = $path;
         }

@@ -35,16 +35,7 @@ class StudentAddModal extends Component
         $lastName  = strtolower(trim($this->last_name));
         $firstName = strtolower(trim($this->first_name));
 
-        $baseUsername = "{$lastName}{$firstName}";
-        $username = $baseUsername;
-
-        $count = 1;
-        while (Account::where('username', $username)->exists()) {
-            $username = $baseUsername . $count;
-            $count++;
-        }
-
-        $this->account_username = $username;
+        $this->account_username = "{$lastName}{$firstName}";
         $this->account_password = "{$birthdate}-{$lastName}";
     }
 

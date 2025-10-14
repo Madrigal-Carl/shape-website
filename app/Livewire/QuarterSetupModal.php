@@ -105,17 +105,11 @@ class QuarterSetupModal extends Component
             $schoolYear = SchoolYear::find($this->schoolYearId);
             $schoolYear->update($this->getData());
 
-            $this->dispatch('swal-toast', [
-                'icon'  => 'success',
-                'title' => 'School year quarters updated successfully!',
-            ]);
+            $this->dispatch('swal-toast', icon: 'success', title: 'School year quarters updated successfully!');
         } else {
             SchoolYear::create($this->getData());
 
-            $this->dispatch('swal-toast', [
-                'icon'  => 'success',
-                'title' => 'School year quarters created successfully!',
-            ]);
+            $this->dispatch('swal-toast', icon: 'success', title: 'School year quarters created successfully!');
         }
 
         $this->closeModal();
