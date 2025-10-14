@@ -230,6 +230,7 @@
                                                             {{ $video['title'] }}
                                                         </h1>
                                                         <button wire:click="removeVideo({{ $index }})"
+                                                            type="button"
                                                             class="absolute top-1 right-1 flex items-center justify-center bg-black/50 text-white rounded-full p-1 z-20 w-8 h-8 pointer-events-auto">
                                                             <span
                                                                 class="material-symbols-rounded text-sm">delete</span>
