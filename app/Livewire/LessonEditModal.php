@@ -175,8 +175,8 @@ class LessonEditModal extends Component
                 $frame->save($thumbnailPath);
 
                 $this->uploadedVideos[] = [
-                    'video' => 'storage/' . $videoPath,
-                    'thumbnail' => 'storage/thumbnails/' . $thumbnailName,
+                    'video' => $videoPath,
+                    'thumbnail' => 'thumbnails/' . $thumbnailName,
                     'title' => pathinfo($video->getClientOriginalName(), PATHINFO_FILENAME)
                 ];
             } else {
@@ -208,9 +208,24 @@ class LessonEditModal extends Component
             $oembedUrl = "https://www.youtube.com/oembed?url={$url}&format=json";
             $data = json_decode(file_get_contents($oembedUrl), true);
 
+            // Download and save YouTube thumbnail locally
+            $thumbnailUrl = "https://img.youtube.com/vi/{$videoId}/hqdefault.jpg";
+            $thumbnailContents = file_get_contents($thumbnailUrl);
+
+            if ($thumbnailContents === false) {
+                return $this->dispatch('swal-toast', icon: 'error', title: 'Could not download YouTube thumbnail.');
+            }
+
+            // Save thumbnail file
+            $thumbnailName = Str::random(10) . '.jpg';
+            $thumbnailPath = 'thumbnails/' . $thumbnailName;
+
+            Storage::disk('public')->put($thumbnailPath, $thumbnailContents);
+
+            // Add video entry
             $this->uploadedVideos[] = [
                 'video' => $url,
-                'thumbnail' => "https://img.youtube.com/vi/{$videoId}/hqdefault.jpg",
+                'thumbnail' => $thumbnailPath,
                 'title' => $data['title'] ?? 'YouTube Video',
             ];
 

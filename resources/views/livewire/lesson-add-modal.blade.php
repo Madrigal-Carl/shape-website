@@ -179,29 +179,55 @@
                                             <div
                                                 class="flex flex-col gap-2 relative video-container-{{ $index }}">
                                                 <div class="w-full flex flex-col items-center justify-center shrink-0">
-                                                    <img src="{{ 'storage/' . $video['thumbnail'] }}"
-                                                        class="aspect-video w-max h-fit rounded-lg object-cover video-thumb-{{ $index }}" />
-                                                    <button type="button"
-                                                        class="absolute rounded-full cursor-pointer hover:scale-120 shadow-xl/40 z-10 playBtn-{{ $index }}"
-                                                        onclick="playVideo({{ $index }}, '{{ 'storage/' . $video['video'] }}')">
-                                                        <span
-                                                            class="material-symbols-rounded p-2 rounded-full text-white bg-black/35 backdrop-blur-[3px] shadow-white/70 shadow-inner playBtn">
-                                                            play_arrow
-                                                        </span>
-                                                    </button>
+                                                    @if (str_contains($video['video'], 'youtube.com') || str_contains($video['video'], 'youtu.be'))
+                                                        @php
+                                                            $videoId = null;
+                                                            if (
+                                                                preg_match(
+                                                                    '/(?:youtube\.com\/(?:watch\?v=|shorts\/)|youtu\.be\/)([^\?&]+)/',
+                                                                    $video['video'],
+                                                                    $matches,
+                                                                )
+                                                            ) {
+                                                                $videoId = $matches[1];
+                                                            }
+                                                        @endphp
+                                                        @if ($videoId)
+                                                            <iframe class="aspect-video w-full rounded-lg"
+                                                                src="https://www.youtube.com/embed/{{ $videoId }}"
+                                                                title="{{ $video['title'] }}" frameborder="0"
+                                                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                                                allowfullscreen>
+                                                            </iframe>
+                                                        @else
+                                                            <p class="text-red-500">Invalid YouTube URL</p>
+                                                        @endif
+                                                    @else
+                                                        <img src="{{ 'storage/' . $video['thumbnail'] }}"
+                                                            class="aspect-video w-max h-fit rounded-lg object-cover video-thumb-{{ $index }}" />
+                                                        <button type="button"
+                                                            class="absolute rounded-full cursor-pointer hover:scale-120 shadow-xl/40 z-10 playBtn-{{ $index }} pointer-events-auto"
+                                                            onclick="playVideo({{ $index }}, '{{ 'storage/' . $video['video'] }}')">
+                                                            <span
+                                                                class="material-symbols-rounded p-2 rounded-full text-white bg-black/35 backdrop-blur-[3px] shadow-white/70 shadow-inner playBtn">
+                                                                play_arrow
+                                                            </span>
+                                                        </button>
+                                                    @endif
                                                 </div>
 
                                                 <div
-                                                    class="absolute bottom-0 bg-gradient-to-t from-black/80 via-black/0 to-black/0 w-full h-full rounded-lg">
+                                                    class="absolute bottom-0 bg-gradient-to-t from-black/80 via-black/0 to-black/0 w-full h-full rounded-lg pointer-events-none">
+
                                                     <div class="h-full w-full flex items-end justify-between p-3">
                                                         <h1
                                                             class="text-white font-medium text-sm ml-1 truncate w-[80%]">
                                                             {{ $video['title'] }}
                                                         </h1>
                                                         <button wire:click="removeVideo({{ $index }})"
-                                                            type="button"
-                                                            class="cursor-pointer p-0 flex items-center justify-center text-white hover:text-danger hover:scale-120">
-                                                            <span class="material-symbols-rounded">delete</span>
+                                                            class="absolute top-1 right-1 flex items-center justify-center bg-black/50 text-white rounded-full p-1 z-20 w-8 h-8 pointer-events-auto">
+                                                            <span
+                                                                class="material-symbols-rounded text-sm">delete</span>
                                                         </button>
                                                     </div>
                                                 </div>
