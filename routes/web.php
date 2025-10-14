@@ -25,15 +25,15 @@ Route::get('/admin', [AuthController::class, 'adminPanel'])
     ->name('admin.panel');
 
 // Email Testing Route
-// Route::get('/test-email', function () {
-//     $student = Student::first();
+Route::get('/test-email', function () {
+    $student = Student::first();
 
-//     $completed = 5;
-//     $remaining = 2;
+    $completed = 5;
+    $remaining = 2;
 
-//     Mail::to('carl.madrigal05@gmail.com')->send(
-//         new StudentProgressReportMail($student, $completed, $remaining)
-//     );
+    Mail::to('carl.madrigal05@gmail.com')->send(
+        new StudentProgressReportMail($student, $completed, $remaining)
+    );
 
-//     return "Test email sent!";
-// });
+    return "Test email sent!";
+});
