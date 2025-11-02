@@ -22,6 +22,7 @@ class VideoResource extends JsonResource
             'thumbnail' => $this->thumbnail ? asset('storage/' . $this->thumbnail) : null,
             'created_at' => $this->created_at?->toDateTimeString(),
             'updated_at' => $this->updated_at?->toDateTimeString(),
+            'deleted_at' => $this->deleted_at?->toDateTimeString(),
         ];
     }
 }

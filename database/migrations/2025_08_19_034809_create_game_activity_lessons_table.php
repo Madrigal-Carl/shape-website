@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('lesson_id')->constrained()->onDelete('cascade');
             $table->foreignId('game_activity_id')->constrained()->onDelete('cascade');
+            $table->softDeletes();
             $table->timestamps();
             $table->unique(['lesson_id', 'game_activity_id']);
         });

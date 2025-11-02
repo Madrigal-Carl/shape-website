@@ -101,12 +101,12 @@ class StudentResource extends JsonResource
             ],
             'lessons' => LessonResource::collection($lessons),
             'videos'  => VideoResource::collection($videos),
-            'game_activities'        => GameActivityResource::collection($gameActivities),
             'game_activity_lessons'  => GameActivityLessonResource::collection($gameActivityLessons),
+            'game_activities'        => GameActivityResource::collection($gameActivities),
             'student_activities'     => StudentActivityResource::collection($studentActivities),
             'feeds'          => FeedResource::collection($feeds),
-            'awards'         => AwardResource::collection($awards),
             'student_awards' => StudentAwardResource::collection($studentAwards),
+            'awards'         => AwardResource::collection($awards),
         ];
     }
 }
