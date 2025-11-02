@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\Account;
 use Illuminate\Http\Request;
+use App\Models\StudentActivity;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Resources\StudentResource;
@@ -61,6 +62,67 @@ class ApiController extends Controller
             'success' => true,
             'token' => $token,
             'data' => new StudentResource($student),
+        ], 200);
+    }
+
+    public function syncActivity(Request $request)
+    {
+        try {
+            $validated = $request->validate([
+                'activities' => 'required|array',
+                'activities.*.student_id' => 'required|integer|exists:students,id',
+                'activities.*.activity_lesson_id' => 'required|integer',
+                'activities.*.activity_lesson_type' => 'required|string',
+                'activities.*.status' => 'required|in:unfinished,finished',
+                'activities.*.created_at' => 'nullable|date',
+                'activities.*.updated_at' => 'nullable|date',
+            ], [
+                'activities.required' => 'Activities data is required.',
+                'activities.array' => 'Activities must be an array.',
+                'activities.*.student_id.required' => 'Student ID is required.',
+                'activities.*.student_id.integer' => 'Student ID must be an integer.',
+                'activities.*.student_id.exists' => 'The specified student does not exist.',
+                'activities.*.activity_lesson_id.required' => 'Activity lesson ID is required.',
+                'activities.*.activity_lesson_id.integer' => 'Activity lesson ID must be an integer.',
+                'activities.*.activity_lesson_type.required' => 'Activity lesson type is required.',
+                'activities.*.activity_lesson_type.string' => 'Activity lesson type must be a string.',
+                'activities.*.status.required' => 'Status is required.',
+                'activities.*.status.in' => 'Status must be either unfinished or finished.',
+                'activities.*.created_at.date' => 'Created at must be a valid date.',
+                'activities.*.updated_at.date' => 'Updated at must be a valid date.',
+            ]);
+        } catch (ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->validator->errors()->first(),
+            ], 422);
+        }
+
+        $syncedIds = [];
+
+        foreach ($validated['activities'] as $activityData) {
+            $activity = StudentActivity::where('student_id', $activityData['student_id'])
+                ->where('activity_lesson_id', $activityData['activity_lesson_id'])
+                ->where('activity_lesson_type', $activityData['activity_lesson_type'])
+                ->first();
+
+            if ($activity) {
+                $activity->update([
+                    'status' => $activityData['status'],
+                    'created_at' => $activityData['created_at'] ?? $activity->created_at,
+                    'updated_at' => $activityData['updated_at'] ?? $activity->updated_at,
+                ]);
+
+                $syncedIds[] = $activity->id;
+            }
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => count($syncedIds)
+                ? 'Existing activities updated successfully.'
+                : 'No matching activities were found to update.',
+            'synced_ids' => $syncedIds,
         ], 200);
     }
 

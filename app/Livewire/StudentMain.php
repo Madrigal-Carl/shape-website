@@ -15,9 +15,10 @@ class StudentMain extends Component
     use WithPagination, WithoutUrlPagination;
     public $search = '';
     public $grade_level = '';
+    public $disability = '';
     public $status = 'all';
     public $listeners = ["refresh" => '$refresh'];
-    public $school_year, $school_years, $grade_levels;
+    public $school_year, $school_years, $grade_levels, $disabilities;
 
     public function mount()
     {
@@ -71,10 +72,21 @@ class StudentMain extends Component
             ->when($this->status !== 'all', function ($query) {
                 $query->where('status', $this->status);
             })
+
+            ->when($this->disability && $this->disability !== 'all', function ($query) {
+                $specialization = Auth::user()->accountable
+                    ->specializations()
+                    ->find($this->disability);
+
+                if ($specialization) {
+                    $query->whereRaw('LOWER(disability_type) = ?', [strtolower($specialization->name)]);
+                }
+            })
             ->orderBy('created_at', 'desc')
             ->paginate(10);
 
         $this->grade_levels = Auth::user()->accountable->gradeLevels->sortBy('id')->values();
+        $this->disabilities = Auth::user()->accountable->specializations;
         return view('livewire.student-main', compact('students'));
     }
 }

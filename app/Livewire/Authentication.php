@@ -18,7 +18,7 @@ class Authentication extends Component
         try {
             $this->validate([
                 'username'    => 'required|min:5|max:18',
-                'password' => 'required|min:5|max:18|regex:/^[a-zA-Z0-9]+$/',
+                'password' => 'required|min:5|max:18',
             ], [
                 'username.required'    => 'Username is required.',
                 'username.min'      => 'Username must be at least 5 characters.',
@@ -26,7 +26,6 @@ class Authentication extends Component
                 'password.required' => 'Password is required.',
                 'password.min'      => 'Password must be at least 5 characters.',
                 'password.max'      => 'Password must not be more than 18 characters.',
-                'password.regex'    => 'Password must contain only letters and numbers (no special characters).',
             ]);
         } catch (ValidationException $e) {
             $message = $e->validator->errors()->first();
