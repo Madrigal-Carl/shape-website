@@ -9,16 +9,17 @@ use App\Models\Video;
 use App\Models\Lesson;
 use App\Models\Account;
 use App\Models\Student;
+use App\Models\Enrollment;
 use App\Models\GameActivity;
 use App\Models\StudentAward;
 use Illuminate\Http\Request;
 use App\Models\StudentActivity;
 use App\Models\GameActivityLesson;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\AwardResource;
 use App\Http\Resources\FeedResource;
 use App\Models\LessonSubjectStudent;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Resources\AwardResource;
 use App\Http\Resources\VideoResource;
 use App\Http\Resources\LessonResource;
 use App\Http\Resources\StudentResource;
@@ -83,44 +84,19 @@ class ApiController extends Controller
         ], 200);
     }
 
-    public function syncAll(Request $request)
+    public function updateActivities(Request $request)
     {
-        $schoolYear = now()->schoolYear();
-        $currentQuarter = $schoolYear?->currentQuarter();
-
-        try {
-            $validated = $request->validate([
-                'activities' => 'required|array',
-                'student_id' => 'required|integer|exists:students,id',
-                'activities.*.activity_lesson_id' => 'required|integer',
-                'activities.*.activity_lesson_type' => 'required|string',
-                'activities.*.status' => 'required|in:unfinished,finished',
-                'activities.*.created_at' => 'nullable|date',
-                'activities.*.updated_at' => 'nullable|date',
-            ], [
-                'activities.required' => 'Activities data is required.',
-                'activities.array' => 'Activities must be an array.',
-                'student_id.required' => 'Student ID is required.',
-                'student_id.integer' => 'Student ID must be an integer.',
-                'student_id.exists' => 'The specified student does not exist.',
-                'activities.*.activity_lesson_id.required' => 'Activity lesson ID is required.',
-                'activities.*.activity_lesson_id.integer' => 'Activity lesson ID must be an integer.',
-                'activities.*.activity_lesson_type.required' => 'Activity lesson type is required.',
-                'activities.*.activity_lesson_type.string' => 'Activity lesson type must be a string.',
-                'activities.*.status.required' => 'Status is required.',
-                'activities.*.status.in' => 'Status must be either unfinished or finished.',
-                'activities.*.created_at.date' => 'Created at must be a valid date.',
-                'activities.*.updated_at.date' => 'Updated at must be a valid date.',
-            ]);
-        } catch (ValidationException $e) {
-            return response()->json([
-                'success' => false,
-                'message' => $e->validator->errors()->first(),
-            ], 422);
-        }
+        $validated = $request->validate([
+            'student_id' => 'required|integer|exists:students,id',
+            'activities' => 'required|array',
+            'activities.*.activity_lesson_id' => 'required|integer',
+            'activities.*.activity_lesson_type' => 'required|string',
+            'activities.*.status' => 'required|in:unfinished,finished',
+            'activities.*.created_at' => 'nullable|date',
+            'activities.*.updated_at' => 'nullable|date',
+        ]);
 
         $studentId = $validated['student_id'];
-        $lastSyncTime = $validated['last_sync_time'] ?? null;
         $syncedIds = [];
 
         foreach ($validated['activities'] as $activityData) {
@@ -140,22 +116,72 @@ class ApiController extends Controller
             }
         }
 
+        return response()->json([
+            'success' => true,
+            'message' => 'Activities updated successfully.',
+            'synced_ids' => $syncedIds,
+        ]);
+    }
+
+    public function fetchStudentData(Request $request)
+    {
+        $schoolYear = now()->schoolYear();
+        $currentQuarter = $schoolYear?->currentQuarter();
+        $studentId = $request->input('student_id');
         $lastSyncTime = $request->input('last_sync_time');
 
-        $student = Student::where('id', $studentId)
-            ->when($lastSyncTime, function ($q) use ($lastSyncTime) {
-                $q->where('updated_at', '>', Carbon::parse($lastSyncTime));
-            })
-            ->first();
-        $studentData = $student ? (new StudentResource($student)) : null;
+        $currentEnrollment = null;
+        if ($schoolYear) {
+            $currentEnrollment = Enrollment::where('student_id', $studentId)
+                ->where('school_year_id', $schoolYear->id)
+                ->latest()
+                ->first();
+        }
 
+        $status = $currentEnrollment?->status;
+
+
+        $student = Student::where('id', $studentId)
+            ->when($lastSyncTime, fn($q) => $q->where('updated_at', '>', Carbon::parse($lastSyncTime)->timezone('Asia/Manila')))
+            ->first();
+
+        $studentData = null;
+
+        if ($student) {
+            $studentData = [
+                'id' => $student->id,
+                'lrn' => $student->lrn,
+                'path' => $student->path ? asset('storage/' . $student->path) : null,
+                'first_name' => $student->first_name,
+                'middle_name' => $student->middle_name,
+                'last_name' => $student->last_name,
+                'fullname' => $student->full_name,
+                'sex' => $student->sex,
+                'birth_date' => $student->birth_date instanceof Carbon
+                    ? $student->birth_date->toDateString()
+                    : $student->birth_date,
+                'disability_type' => $student->disability_type,
+                'support_need' => $student->support_need,
+                'status' => $status,
+                'created_at' => $student->created_at?->toDateTimeString(),
+                'updated_at' => $student->updated_at?->toDateTimeString(),
+            ];
+        }
+
+        // Lessons
         $lessonData = null;
+        $videosData = null;
+        $gameActivityLessonData = null;
+        $gameActivityData = null;
+        $studentActivityData = null;
+        $feedsData = null;
+        $studentAwardData = null;
+        $newAwardData = null;
 
         if ($schoolYear && $currentQuarter) {
-            // Get all lesson IDs for the student
             $lessonIds = LessonSubjectStudent::where('student_id', $studentId)->pluck('lesson_id');
 
-            // Get lessons in current quarter and optionally filter by last_sync_time
+            // Lessons
             $lessons = Lesson::whereIn('id', $lessonIds)
                 ->where('school_year_id', $schoolYear->id)
                 ->when($lastSyncTime, fn($q) => $q->where('updated_at', '>', Carbon::parse($lastSyncTime)))
@@ -165,89 +191,82 @@ class ApiController extends Controller
                 $lessonData = LessonResource::collection($lessons);
             }
 
-            $videos = Video::withTrashed()->whereIn('lesson_id', $lessonIds)->when($lastSyncTime, function ($q) use ($lastSyncTime) {
-                $q->where('created_at', '>', Carbon::parse($lastSyncTime))
-                    ->orWhere('deleted_at', '>', Carbon::parse($lastSyncTime));
-            })->get();
-            $videoData = $videos->isNotEmpty()
-                ? VideoResource::collection($videos)
-                : null;
-
-            $gameActivityLessons = GameActivityLesson::withTrashed()
-                ->whereIn('lesson_id', $lessonIds)
-                ->when($lastSyncTime, function ($q) use ($lastSyncTime) {
+            // Videos
+            $videos = Video::withTrashed()->whereIn('lesson_id', $lessonIds)
+                ->when(
+                    $lastSyncTime,
+                    fn($q) =>
                     $q->where('created_at', '>', Carbon::parse($lastSyncTime))
-                        ->orWhere('deleted_at', '>', Carbon::parse($lastSyncTime));
-                })
-                ->get();
-            $gameActivityLessonData = $gameActivityLessons->isNotEmpty()
-                ? GameActivityLessonResource::collection($gameActivityLessons)
-                : null;
+                        ->orWhere('deleted_at', '>', Carbon::parse($lastSyncTime))
+                )->get();
+            if ($videos->isNotEmpty()) $videosData = VideoResource::collection($videos);
 
-            // Game Activities: only for newly created Game Activity Lessons
-            $newGameActivityLessons = GameActivityLesson::whereIn('lesson_id', $lessonIds)
-                ->when($lastSyncTime, fn($q) => $q->where('created_at', '>', Carbon::parse($lastSyncTime)))
-                ->get();
-            $gameActivities = collect();
-            if ($newGameActivityLessons->isNotEmpty()) {
-                $lessonActivityIds = $newGameActivityLessons->pluck('id');
-                $gameActivities = GameActivity::whereIn('game_activity_lesson_id', $lessonActivityIds)->get();
-            }
-            $gameActivityData = $gameActivities->isNotEmpty()
-                ? GameActivityResource::collection($gameActivities)
-                : null;
+            // Game Activity Lessons
+            $gal = GameActivityLesson::withTrashed()->whereIn('lesson_id', $lessonIds)
+                ->when(
+                    $lastSyncTime,
+                    fn($q) =>
+                    $q->where('created_at', '>', Carbon::parse($lastSyncTime))
+                        ->orWhere('deleted_at', '>', Carbon::parse($lastSyncTime))
+                )->get();
+            if ($gal->isNotEmpty()) $gameActivityLessonData = GameActivityLessonResource::collection($gal);
 
+            // Game Activities
+            $newGALIds = $gal->pluck('id');
+            $gameActivities = GameActivity::whereIn('game_activity_lesson_id', $newGALIds)->get();
+            if ($gameActivities->isNotEmpty()) $gameActivityData = GameActivityResource::collection($gameActivities);
+
+            // Student Activities
             $studentActivities = StudentActivity::withTrashed()->where('student_id', $studentId)
-                ->when($lastSyncTime, fn($q) =>
-                $q->where('updated_at', '>', Carbon::parse($lastSyncTime))
-                    ->orWhere('deleted_at', '>', Carbon::parse($lastSyncTime)))
-                ->get();
-            $studentActivityData = $studentActivities->isNotEmpty()
-                ? StudentActivityResource::collection($studentActivities)
-                : null;
+                ->when(
+                    $lastSyncTime,
+                    fn($q) =>
+                    $q->where('updated_at', '>', Carbon::parse($lastSyncTime))
+                        ->orWhere('deleted_at', '>', Carbon::parse($lastSyncTime))
+                )->get();
+            if ($studentActivities->isNotEmpty()) $studentActivityData = StudentActivityResource::collection($studentActivities);
 
-            $feeds = Feed::where('notifiable_id', $studentId)
-                ->when($lastSyncTime, fn($q) => $q->where('created_at', '>', Carbon::parse($lastSyncTime)))
-                ->get();
-            $feedData = $feeds->isNotEmpty() ? FeedResource::collection($feeds) : null;
+            // Feeds
+            $feedsQuery = Feed::where('notifiable_id', $studentId);
+            if ($lastSyncTime) {
+                $feedsQuery->where('created_at', '>', Carbon::parse($lastSyncTime));
+            }
+            $feeds = $feedsQuery->get();
+            if ($feeds->isNotEmpty()) $feedsData = FeedResource::collection($feeds);
 
-            $studentAwards = StudentAward::withTrashed()
-                ->where('student_id', $studentId)
-                ->when($lastSyncTime, fn($q) =>
-                $q->where('updated_at', '>', Carbon::parse($lastSyncTime))
-                    ->orWhere('deleted_at', '>', Carbon::parse($lastSyncTime)))
-                ->get();
-            $studentAwardData = $studentAwards->isNotEmpty()
-                ? StudentAwardResource::collection($studentAwards)
-                : null;
+            // Student Awards
+            $studentAwards = StudentAward::withTrashed()->where('student_id', $studentId)
+                ->when(
+                    $lastSyncTime,
+                    fn($q) =>
+                    $q->where('updated_at', '>', Carbon::parse($lastSyncTime))
+                        ->orWhere('deleted_at', '>', Carbon::parse($lastSyncTime))
+                )->get();
+            if ($studentAwards->isNotEmpty()) $studentAwardData = StudentAwardResource::collection($studentAwards);
 
+            // New Awards
             $newAwards = StudentAward::where('student_id', $studentId)
                 ->when($lastSyncTime, fn($q) => $q->where('created_at', '>', Carbon::parse($lastSyncTime)))
                 ->get();
-            $newAwardees = collect();
             if ($newAwards->isNotEmpty()) {
-                $newAwardsId = $newAwards->pluck('id');
-                $newAwardees = Award::whereIn('student_award_id', $newAwardsId)->get();
+                $newAwardees = Award::whereIn('student_award_id', $newAwards->pluck('id'))->get();
+                if ($newAwardees->isNotEmpty()) $newAwardData = AwardResource::collection($newAwardees);
             }
-            $newAwardData = $newAwardees->isNotEmpty()
-                ? AwardResource::collection($newAwardees)
-                : null;
         }
 
         return response()->json([
             'success' => true,
-            'message' => 'Sync completed successfully.',
-            'synced_ids' => $syncedIds,
+            'message' => 'Data fetched successfully.',
             'student' => $studentData,
             'lessons' => $lessonData,
-            'videos' => $videoData,
+            'videos' => $videosData,
             'game_activity_lessons' => $gameActivityLessonData,
             'game_activities' => $gameActivityData,
             'student_activities' => $studentActivityData,
-            'feeds' => $feedData,
+            'feeds' => $feedsData,
             'student_awards' => $studentAwardData,
             'awards' => $newAwardData,
-        ], 200);
+        ]);
     }
 
     public function logout(Request $request)
