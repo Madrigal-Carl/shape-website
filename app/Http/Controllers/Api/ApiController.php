@@ -129,6 +129,14 @@ class ApiController extends Controller
         $currentQuarter = $schoolYear?->currentQuarter();
         $studentId = $request->input('student_id');
         $lastSyncTime = $request->input('last_sync_time');
+        $isNewQuarter = false;
+
+        if ($currentQuarter && $lastSyncTime) {
+            $quarterStart = Carbon::parse($currentQuarter->start_date);
+            $lastSync = Carbon::parse($lastSyncTime);
+
+            $isNewQuarter = $lastSync->lt($quarterStart);
+        }
 
         $currentEnrollment = null;
         if ($schoolYear) {
@@ -257,6 +265,7 @@ class ApiController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Data fetched successfully.',
+            'new_quarter' => $isNewQuarter,
             'student' => $studentData,
             'lessons' => $lessonData,
             'videos' => $videosData,
