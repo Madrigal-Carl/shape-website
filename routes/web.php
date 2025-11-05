@@ -24,7 +24,7 @@ Route::get('/admin', [AuthController::class, 'adminPanel'])
     ->middleware('role:admin')
     ->name('admin.panel');
 
-// Email Testing Route
+// Email Testing Route (Only for Admins)
 Route::get('/test-email', function () {
     $student = Student::first();
 
@@ -36,4 +36,4 @@ Route::get('/test-email', function () {
     );
 
     return "Test email sent!";
-});
+})->middleware('role:admin');

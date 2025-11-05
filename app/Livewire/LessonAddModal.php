@@ -32,7 +32,7 @@ class LessonAddModal extends Component
     public $isOpen = false;
     public $lesson_name, $curriculum = '', $subject = '', $grade_level = '', $description;
     public $uploadedVideos = [], $selected_activities = [];
-    public $student_search = '';
+    public $student_search = '', $activity_search = '';
 
     public function getFilteredStudentsProperty()
     {
@@ -172,7 +172,6 @@ class LessonAddModal extends Component
         }
     }
 
-
     private function getYoutubeId($url)
     {
         preg_match(
@@ -229,7 +228,6 @@ class LessonAddModal extends Component
 
         return true;
     }
-
 
     public function addLesson()
     {
@@ -343,23 +341,37 @@ class LessonAddModal extends Component
             ->get();
     }
 
-    public function updatedSubject()
+    private function loadF2fActivities()
     {
         if ($this->curriculum && $this->subject) {
             $curriculumSubject = CurriculumSubject::where('curriculum_id', $this->curriculum)
                 ->where('subject_id', $this->subject)
                 ->first();
 
-            if ($curriculumSubject) {
-                $this->f2fActivities = ClassActivity::where('curriculum_subject_id', $curriculumSubject->id)
-                    ->where('instructor_id', Auth::user()->accountable->id)
-                    ->whereNull('lesson_id')
-                    ->orderBy('created_at', 'desc')
-                    ->get();
-            } else {
-                $this->f2fActivities = collect();
-            }
+            $this->f2fActivities = $curriculumSubject
+                ? ClassActivity::query()
+                ->where([
+                    'curriculum_subject_id' => $curriculumSubject->id,
+                    'instructor_id' => Auth::user()->accountable->id,
+                ])
+                ->whereNull('lesson_id')
+                ->when(
+                    $this->activity_search,
+                    fn($q) => $q->where('name', 'like', "%{$this->activity_search}%")
+                )
+                ->latest()
+                ->get()
+                : collect();
         }
+    }
+    public function updatedActivitySearch()
+    {
+        $this->loadF2fActivities();
+    }
+
+    public function updatedSubject()
+    {
+        $this->loadF2fActivities();
     }
 
     public function toggleF2fActivity($activityId)
