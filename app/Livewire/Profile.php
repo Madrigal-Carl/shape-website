@@ -52,12 +52,7 @@ class Profile extends Component
 
     public function mount()
     {
-        $this->user = Auth::user()->load([
-            'accountable',
-            // Don't eager load address relationships for Admin
-            // 'accountable.permanentAddress',
-            // 'accountable.currentAddress',
-        ]);
+        $this->user = Auth::user();
 
         // Names
         $this->first_name  = $this->user->accountable->first_name;
