@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('student_id')->constrained()->onDelete('cascade');
             $table->morphs('activity_lesson');
             $table->enum('status', ['unfinished', 'finished'])->default('unfinished');
+            $table->softDeletes();
             $table->timestamps();
             $table->unique(
                 ['student_id', 'activity_lesson_id', 'activity_lesson_type'],

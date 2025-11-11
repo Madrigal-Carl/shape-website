@@ -94,35 +94,54 @@ class GrantAwardsScheduler extends Command
     protected function grantOrRevokeAward($student, $awardName, $meetsCriteria, $schoolYearId)
     {
         $award = Award::firstOrCreate(['name' => $awardName]);
-        $alreadyHas = $student->studentAwards()
+
+        // Fetch existing student award including soft-deleted ones
+        $existingAward = $student->studentAwards()
+            ->withTrashed()
             ->where('award_id', $award->id)
             ->where('school_year_id', $schoolYearId)
-            ->exists();
+            ->first();
 
-        if ($meetsCriteria && !$alreadyHas) {
-            $student->studentAwards()->create([
-                'award_id' => $award->id,
-                'school_year_id' => $schoolYearId,
-            ]);
-            Feed::create([
-                'notifiable_id' => $student->id,
-                'group' => 'award',
-                'title' => "{$student->full_name} earned a new award!",
-                'message' => "{$student->full_name} has been awarded the '{$award->name}' for outstanding performance.",
-            ]);
-        } elseif (!$meetsCriteria && $alreadyHas) {
-            $student->studentAwards()
-                ->where('award_id', $award->id)
-                ->where('school_year_id', $schoolYearId)
-                ->delete();
-            Feed::create([
-                'notifiable_id' => $student->id,
-                'group' => 'award',
-                'title' => "Award revoked from {$student->full_name}",
-                'message' => "The '{$award->name}' award has been revoked from {$student->full_name}.",
-            ]);
+        if ($meetsCriteria) {
+            if ($existingAward) {
+                // Restore if it was soft-deleted
+                if ($existingAward->trashed()) {
+                    $existingAward->restore();
+                    Feed::create([
+                        'notifiable_id' => $student->id,
+                        'group' => 'award',
+                        'title' => "{$student->full_name} regained an award!",
+                        'message' => "{$student->full_name} has regained the '{$award->name}' award.",
+                    ]);
+                }
+                // No need to recreate if it already exists and active
+            } else {
+                // Create a new award if none exists
+                $student->studentAwards()->create([
+                    'award_id' => $award->id,
+                    'school_year_id' => $schoolYearId,
+                ]);
+                Feed::create([
+                    'notifiable_id' => $student->id,
+                    'group' => 'award',
+                    'title' => "{$student->full_name} earned a new award!",
+                    'message' => "{$student->full_name} has been awarded the '{$award->name}' for outstanding performance.",
+                ]);
+            }
+        } else {
+            // If criteria no longer met and award exists, soft delete it
+            if ($existingAward && !$existingAward->trashed()) {
+                $existingAward->delete();
+                Feed::create([
+                    'notifiable_id' => $student->id,
+                    'group' => 'award',
+                    'title' => "Award revoked from {$student->full_name}",
+                    'message' => "The '{$award->name}' award has been revoked from {$student->full_name}.",
+                ]);
+            }
         }
     }
+
 
     // Lesson Finisher: completed all activities assigned (from active curriculums)
     protected function getLessonFinisherIds($students, $schoolYear)

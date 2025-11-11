@@ -308,13 +308,13 @@
                                 <div class="flex items-center gap-2 px-4 py-2 rounded-lg bg-white w-full">
                                     <span class="material-symbols-rounded">quick_reference_all</span>
                                     <input type="text" placeholder="Search Activity"
-                                        wire:model.live="student_search"
+                                        wire:model.live="activity_search"
                                         class="w-full outline-none text-heading-dark placeholder-heading-dark" />
                                 </div>
 
 
 
-                                {{-- Student List --}}
+                                {{-- F2F Activity List --}}
                                 <div class="h-full flex flex-col gap-1 bg-white rounded-lg p-2">
                                     <div class="flex flex-col gap-1 h-48 overflow-y-scroll pr-2 rounded-lg">
                                         @forelse ($f2fActivities  as $activity)

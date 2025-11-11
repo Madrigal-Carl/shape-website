@@ -192,19 +192,36 @@ class ActivityEditModal extends Component
             'description'           => $this->description,
         ]);
 
-        $activity->todos()->attach($this->selectedTodoIds);
+        $activity->todos()->sync($this->selectedTodoIds);
 
         $activity->studentActivities()->delete();
         foreach ($this->students as $student) {
-            StudentActivity::create([
-                'student_id'        => $student->id,
-                'activity_lesson_id' => $activity->id,
-                'activity_lesson_type' => ClassActivity::class,
-                'status'            => in_array($student->id, $this->checkedStudents ?? [])
-                    ? 'finished'
-                    : 'unfinished',
-            ]);
+            // Check if the student activity already exists (even if soft-deleted)
+            $existingStudentActivity = StudentActivity::withTrashed()
+                ->where('student_id', $student->id)
+                ->where('activity_lesson_id', $activity->id)
+                ->where('activity_lesson_type', ClassActivity::class)
+                ->first();
+
+            $status = in_array($student->id, $this->checkedStudents ?? [])
+                ? 'finished'
+                : 'unfinished';
+
+            if ($existingStudentActivity) {
+                // Restore and update status if previously soft-deleted
+                $existingStudentActivity->restore();
+                $existingStudentActivity->update(['status' => $status]);
+            } else {
+                // Create new if none exists
+                StudentActivity::create([
+                    'student_id' => $student->id,
+                    'activity_lesson_id' => $activity->id,
+                    'activity_lesson_type' => ClassActivity::class,
+                    'status' => $status,
+                ]);
+            }
         }
+
 
         $this->dispatch('swal-toast', icon: 'success', title: 'Activity updated successfully!');
         return $this->closeModal();

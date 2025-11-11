@@ -3,11 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class GameActivityLesson extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'lesson_id',
@@ -27,5 +28,15 @@ class GameActivityLesson extends Model
     public function studentActivities()
     {
         return $this->morphMany(StudentActivity::class, 'activity_lesson');
+    }
+
+
+    public static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($lesson) {
+            $lesson->studentActivities()->delete();
+        });
     }
 }

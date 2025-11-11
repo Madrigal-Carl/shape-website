@@ -124,6 +124,23 @@
             <div class="flex items-center gap-4 self-start">
                 <div
                     class="flex items-center bg-white py-3 px-5 rounded-full border-2 border-white hover:border-blue-button text-paragraph hover:bg-blue-button hover:text-white cursor-pointer">
+                    <select class="w-max outline-none" wire:model.live="disability">
+                        <option value="" class=" text-heading-dark" disabled>
+                            Disability Type
+                        </option>
+                        <option value="all" class=" text-heading-dark">
+                            All
+                        </option>
+                        @foreach ($disabilities as $disability)
+                            <option value="{{ $disability->id }}" class=" text-heading-dark">
+                                {{ ucwords($disability->name) }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div
+                    class="flex items-center bg-white py-3 px-5 rounded-full border-2 border-white hover:border-blue-button text-paragraph hover:bg-blue-button hover:text-white cursor-pointer">
                     <select class="w-max outline-none" wire:model.live="grade_level">
                         <option value="" class=" text-heading-dark" disabled>
                             Grade Level

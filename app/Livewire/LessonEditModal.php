@@ -32,7 +32,7 @@ class LessonEditModal extends Component
     public $lesson_name, $grade_level = '', $description, $lesson;
     public $uploadedVideos = [], $selected_activities = [];
     public $original = [];
-    public $student_search = '';
+    public $student_search = '', $activity_search = '';
 
     public function getFilteredStudentsProperty()
     {
@@ -99,6 +99,11 @@ class LessonEditModal extends Component
                     ->where(function ($query) {
                         $query->whereNull('lesson_id')
                             ->orWhereIn('id', $this->selected_f2f_activities);
+                    })
+                    ->when($this->activity_search, function ($query) {
+                        $query->where(function ($q) {
+                            $q->where('name', 'like', '%' . $this->activity_search . '%');
+                        });
                     })
                     ->orderBy('created_at', 'desc')
                     ->get();
@@ -364,14 +369,33 @@ class LessonEditModal extends Component
         });
         $lesson->gameActivityLessons()->delete();
         foreach ($this->selected_activities as $activity) {
-            $gameActivityLesson = $lesson->gameActivityLessons()->create([
-                'game_activity_id' => $activity->id,
-            ]);
+            $existing = $lesson->gameActivityLessons()
+                ->withTrashed()
+                ->where('game_activity_id', $activity->id)
+                ->first();
+
+            if ($existing) {
+                $existing->restore();
+                $gameActivityLesson = $existing;
+            } else {
+                $gameActivityLesson = $lesson->gameActivityLessons()->create([
+                    'game_activity_id' => $activity->id,
+                ]);
+            }
 
             foreach ($this->students as $student) {
-                $gameActivityLesson->studentActivities()->create([
-                    'student_id' => $student->id,
-                ]);
+                $existingStudentActivity = $gameActivityLesson->studentActivities()
+                    ->withTrashed()
+                    ->where('student_id', $student->id)
+                    ->first();
+
+                if ($existingStudentActivity) {
+                    $existingStudentActivity->restore();
+                } else {
+                    $gameActivityLesson->studentActivities()->create([
+                        'student_id' => $student->id,
+                    ]);
+                }
             }
         }
 
@@ -405,6 +429,33 @@ class LessonEditModal extends Component
         $this->students = $this->lesson->students;
     }
 
+    public function updatedActivitySearch()
+    {
+        if ($this->curriculum_id && $this->subject_id) {
+            $curriculumSubject = CurriculumSubject::where('curriculum_id', $this->curriculum_id)
+                ->where('subject_id', $this->subject_id)
+                ->first();
+
+            if ($curriculumSubject) {
+                $this->f2fActivities = ClassActivity::where('curriculum_subject_id', $curriculumSubject->id)
+                    ->where('instructor_id', Auth::user()->accountable->id)
+                    ->where(function ($query) {
+                        $query->whereNull('lesson_id')
+                            ->orWhereIn('id', $this->selected_f2f_activities);
+                    })
+                    ->when($this->activity_search, function ($query) {
+                        $query->where(function ($q) {
+                            $q->where('name', 'like', '%' . $this->activity_search . '%');
+                        });
+                    })
+                    ->orderBy('created_at', 'desc')
+                    ->get();
+            } else {
+                $this->f2fActivities = collect();
+            }
+        }
+    }
+
     public function updatedSubjectId()
     {
         if ($this->curriculum_id && $this->subject_id) {
@@ -418,6 +469,11 @@ class LessonEditModal extends Component
                     ->where(function ($query) {
                         $query->whereNull('lesson_id')
                             ->orWhereIn('id', $this->selected_f2f_activities);
+                    })
+                    ->when($this->activity_search, function ($query) {
+                        $query->where(function ($q) {
+                            $q->where('name', 'like', '%' . $this->activity_search . '%');
+                        });
                     })
                     ->orderBy('created_at', 'desc')
                     ->get();
