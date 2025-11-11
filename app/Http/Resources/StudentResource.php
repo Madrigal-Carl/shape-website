@@ -55,6 +55,7 @@ class StudentResource extends JsonResource
                 ->pluck('lesson_id');
 
             $lessons = Lesson::whereIn('id', $lessonIds)
+                ->with('lessonSubjectStudents.subject')
                 ->where('school_year_id', $schoolYear->id)
                 ->get()
                 ->filter(fn($lesson) => $lesson->isInQuarter($schoolYear, $currentQuarter));

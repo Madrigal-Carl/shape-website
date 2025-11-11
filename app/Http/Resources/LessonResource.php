@@ -17,6 +17,7 @@ class LessonResource extends JsonResource
         return [
             'id'            => $this->id,
             'school_year_id' => $this->school_year_id,
+            'subject_name'  => $this->lessonSubjectStudents->first()?->subject?->name,
             'title'         => $this->title,
             'description'   => $this->description,
             'created_at'    => $this->created_at?->toDateTimeString(),
