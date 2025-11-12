@@ -29,6 +29,11 @@ class Enrollment extends Model
         return $this->belongsTo(GradeLevel::class);
     }
 
+    public function educationRecord()
+    {
+        return $this->hasOne(EducationRecord::class);
+    }
+
     protected static function booted()
     {
         static::creating(function ($model) {

@@ -4,7 +4,7 @@ namespace App\Livewire;
 
 use Carbon\Carbon;
 use App\Models\Feed;
-use App\Models\Account;
+use App\Models\GradeLevel;
 use App\Models\Student;
 use Livewire\Component;
 use App\Models\SchoolYear;
@@ -27,7 +27,7 @@ class StudentAddModal extends Component
     public $province = "marinduque";
     public $permanent_barangay = '', $permanent_municipal = '', $current_barangay = '', $current_municipal = '', $guardian_first_name, $guardian_middle_name, $guardian_last_name, $guardian_email, $guardian_phone;
     public $account_username, $account_password = '';
-
+    public $background_grade_levels, $background_grade_level = '', $school_id = '', $last_school_year_completed = '', $last_school_attended = '';
 
     public function updatedCopyPermanentToCurrent()
     {
@@ -80,45 +80,40 @@ class StudentAddModal extends Component
 
     protected function validateStep()
     {
-        if ($this->step === 1) {
-            try {
+        try {
+            // STEP 1 — Student Information
+            if ($this->step === 1) {
                 $this->validate([
-                    'photo' => 'nullable|image|max:5120',
-                    'lrn' => 'required|digits:12|unique:students,lrn',
-                    'first_name' => 'required',
-                    'middle_name' => 'required',
-                    'last_name' => 'required',
-                    'birthdate' => 'required|before_or_equal:-5 years',
-                    'sex' => 'required',
-                    'grade_level' => 'required',
-                    'disability' => 'required',
-                    'description' => 'nullable|max:255',
+                    'photo'        => 'nullable|image|max:5120',
+                    'lrn'          => 'required|digits:12|unique:students,lrn',
+                    'first_name'   => 'required',
+                    'middle_name'  => 'required',
+                    'last_name'    => 'required',
+                    'birthdate'    => 'required|before_or_equal:-5 years',
+                    'sex'          => 'required',
+                    'grade_level'  => 'required',
+                    'disability'   => 'required',
+                    'description'  => 'nullable|max:255',
                 ], [
-                    'photo.image'            => 'The photo must be an image file.',
-                    'photo.max'              => 'The photo size must not exceed 5MB.',
-                    'lrn.required'           => 'The LRN field is required.',
-                    'lrn.digits'             => 'The LRN must be exactly 12 digits.',
-                    'lrn.unique'      => 'The LRN already existed.',
-                    'first_name.required'    => 'The first name is required.',
-                    'middle_name.required'   => 'The middle name is required.',
-                    'last_name.required'     => 'The last name is required.',
-                    'birthdate.required'     => 'The birthdate is required.',
+                    'photo.image'               => 'The photo must be an image file.',
+                    'photo.max'                 => 'The photo size must not exceed 5MB.',
+                    'lrn.required'              => 'The LRN field is required.',
+                    'lrn.digits'                => 'The LRN must be exactly 12 digits.',
+                    'lrn.unique'                => 'The LRN already exists.',
+                    'first_name.required'       => 'The first name is required.',
+                    'middle_name.required'      => 'The middle name is required.',
+                    'last_name.required'        => 'The last name is required.',
+                    'birthdate.required'        => 'The birthdate is required.',
                     'birthdate.before_or_equal' => 'The student must be at least 5 years old.',
-                    'sex.required'           => 'Please select a sex.',
-                    'grade_level.required'   => 'The grade level is required.',
-                    'disability.required'    => 'Please specify the disability.',
-                    'description.max'   => 'The description is too long.',
+                    'sex.required'              => 'Please select a sex.',
+                    'grade_level.required'      => 'The grade level is required.',
+                    'disability.required'       => 'Please specify the disability.',
+                    'description.max'           => 'The description is too long.',
                 ]);
-            } catch (ValidationException $e) {
-                $message = $e->validator->errors()->first();
-                $this->dispatch('swal-toast', icon: 'error', title: $message);
-                return false;
             }
-            return true;
-        }
 
-        if ($this->step === 2) {
-            try {
+            // STEP 2 — Address and Guardian Info
+            if ($this->step === 2) {
                 $this->validate([
                     'permanent_municipal'  => 'required',
                     'permanent_barangay'   => 'required',
@@ -135,24 +130,41 @@ class StudentAddModal extends Component
                     'current_municipal.required'   => 'The current municipal is required.',
                     'current_barangay.required'    => 'The current barangay is required.',
                     'guardian_first_name.required' => 'The guardian first name is required.',
-                    'guardian_first_name.max' => 'The guardian first name is too long.',
-                    'guardian_middle_name.required' => 'The guardian middle name is required.',
+                    'guardian_first_name.max'      => 'The guardian first name is too long.',
                     'guardian_middle_name.max'     => 'The guardian middle name is too long.',
                     'guardian_last_name.required'  => 'The guardian last name is required.',
-                    'guardian_last_name.max'     => 'The guardian last name is too long.',
+                    'guardian_last_name.max'       => 'The guardian last name is too long.',
                     'guardian_email.required'      => 'The guardian email is required.',
                     'guardian_email.email'         => 'The guardian email must be a valid email address.',
-                    'guardian_email.unique'      => 'The guardian email already existed.',
+                    'guardian_email.unique'        => 'The guardian email already exists.',
                     'guardian_phone.digits'        => 'The guardian phone must be exactly 10 digits.',
-                    'guardian_phone.unique'      => 'The guardian phone already existed.',
+                    'guardian_phone.unique'        => 'The guardian phone already exists.',
                 ]);
-            } catch (ValidationException $e) {
-                $message = $e->validator->errors()->first();
-                $this->dispatch('swal-toast', icon: 'error', title: $message);
-                return false;
             }
-            return true;
+
+            // STEP 3 — Educational Background
+            if ($this->step === 3) {
+                $this->validate([
+                    'school_id'                  => 'nullable|digits:6|required_with:last_school_attended',
+                    'last_school_attended'       => 'nullable|string|max:100|required_with:school_id',
+                    'background_grade_level'     => 'nullable|exists:grade_levels,id',
+                    'last_school_year_completed' => 'nullable|regex:/^\d{4}[-–]\d{4}$/',
+                ], [
+                    'school_id.digits'                  => 'The school ID must be 6 digits.',
+                    'school_id.required_with'           => 'The school ID is required when the last school attended is provided.',
+                    'last_school_attended.required_with' => 'The last school attended is required when the school ID is provided.',
+                    'background_grade_level.exists'     => 'Please select a valid grade level.',
+                    'last_school_year_completed.regex'  => 'Enter the school year in format YYYY–YYYY.',
+                    'last_school_attended.max'          => 'The school name is too long.',
+                ]);
+            }
+        } catch (ValidationException $e) {
+            $message = $e->validator->errors()->first();
+            $this->dispatch('swal-toast', icon: 'error', title: $message);
+            return false;
         }
+
+        return true;
     }
 
     public function closeModal()
@@ -189,7 +201,9 @@ class StudentAddModal extends Component
 
     public function addStudent()
     {
-        $this->validateStep();
+        if (!$this->validateStep()) {
+            return;
+        }
 
         if (!$this->canRegisterStudent()) {
             return $this->dispatch('swal-toast', icon: 'error', title: 'Enrollment period is closed.');
@@ -230,10 +244,24 @@ class StudentAddModal extends Component
             'lrn'           => $this->lrn,
         ]);
 
-        $student->enrollments()->create([
+        $enrollment = $student->enrollments()->create([
             'instructor_id' => Auth::user()->accountable->id,
             'grade_level_id'   => $this->grade_level,
         ]);
+
+        if (
+            !empty($this->background_grade_level) &&
+            !empty($this->school_id) &&
+            !empty($this->last_school_year_completed) &&
+            !empty($this->last_school_attended)
+        ) {
+            $enrollment->educationRecord()->create([
+                'grade_level_id' => $this->background_grade_level,
+                'school_id'      => $this->school_id,
+                'school_year'    => $this->last_school_year_completed,
+                'school_name'    => $this->last_school_attended,
+            ]);
+        }
 
         $student->guardian()->create([
             'first_name'   => $this->guardian_first_name,
@@ -520,6 +548,7 @@ class StudentAddModal extends Component
         $this->municipalities = array_keys($this->barangayData);
         $this->specializations = Auth::user()->accountable->specializations;
         $this->grade_levels = Auth::user()->accountable->gradeLevels->sortBy('id')->values();
+        $this->background_grade_levels = GradeLevel::all();
         return view('livewire.student-add-modal');
     }
 }

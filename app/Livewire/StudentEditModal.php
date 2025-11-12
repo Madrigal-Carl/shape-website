@@ -2,7 +2,7 @@
 
 namespace App\Livewire;
 
-use App\Models\Account;
+use App\Models\GradeLevel;
 use App\Models\Student;
 use Livewire\Component;
 use Livewire\Attributes\On;
@@ -25,6 +25,7 @@ class StudentEditModal extends Component
     public $permanent_barangay = '', $permanent_municipal = '', $current_barangay = '', $current_municipal = '', $copyPermanentToCurrent = false;
     public $guardian_first_name, $guardian_middle_name, $guardian_last_name, $guardian_email, $guardian_phone;
     public $account_username, $account_password, $default_password;
+    public $background_grade_levels, $background_grade_level = '', $school_id = '', $last_school_year_completed = '', $last_school_attended = '';
     public $account_username_changed = false;
     public $account_password_changed = false;
     public $grade_levels, $specializations, $barangayData = [], $municipalities = [], $permanent_barangays = [], $current_barangays = [];
@@ -92,6 +93,14 @@ class StudentEditModal extends Component
 
         $this->account_username = $student->account->username;
 
+        $latestEnrollment = $student->enrollments()->latest()->first();
+        $educationRecord  = $latestEnrollment?->educationRecord;
+
+        $this->background_grade_level     = $educationRecord->grade_level_id ?? '';
+        $this->school_id                  = $educationRecord->school_id ?? '';
+        $this->last_school_year_completed = $educationRecord->school_year ?? '';
+        $this->last_school_attended       = $educationRecord->school_name ?? '';
+
         $this->original = [
             'lrn'        => $this->lrn,
             'first_name' => $this->first_name,
@@ -113,6 +122,9 @@ class StudentEditModal extends Component
             'current_municipal'   => $this->current_municipal,
             'current_barangay'    => $this->current_barangay,
             'account_username'    => $this->account_username,
+            'school_id'              => $this->school_id,
+            'last_school_year_completed' => $this->last_school_year_completed,
+            'last_school_attended'   => $this->last_school_attended,
         ];
     }
 
@@ -218,6 +230,22 @@ class StudentEditModal extends Component
                     'guardian_phone.unique'        => 'The guardian phone already exists.',
                 ]);
             }
+
+            if ($this->step === 2) {
+                $this->validate([
+                    'school_id'                  => 'nullable|digits:6|required_with:last_school_attended',
+                    'last_school_attended'       => 'nullable|string|max:100|required_with:school_id',
+                    'background_grade_level'     => 'nullable|exists:grade_levels,id',
+                    'last_school_year_completed' => 'nullable|regex:/^\d{4}[-–]\d{4}$/',
+                ], [
+                    'school_id.digits'         => 'The school ID must be 6 digits.',
+                    'school_id.required_with'          => 'The school ID is required when the last school attended is provided.',
+                    'last_school_attended.required_with' => 'The last school attended is required when the school ID is provided.',
+                    'background_grade_level.exists'    => 'Please select a valid grade level.',
+                    'last_school_year_completed.regex' => 'Enter the school year in format YYYY–YYYY.',
+                    'last_school_attended.max'         => 'The school name is too long.',
+                ]);
+            }
         } catch (\Illuminate\Validation\ValidationException $e) {
             $message = $e->validator->errors()->first();
             $this->dispatch('swal-toast', icon: 'error', title: $message);
@@ -283,6 +311,10 @@ class StudentEditModal extends Component
             'current_municipal'   => [$this->current_municipal, $this->original['current_municipal']],
             'current_barangay'    => [$this->current_barangay, $this->original['current_barangay']],
             'account_username'    => [$this->account_username, $this->original['account_username']],
+            'background_grade_level' => [$this->background_grade_level, $this->original['background_grade_level']],
+            'school_id'              => [$this->school_id, $this->original['school_id']],
+            'last_school_year_completed' => [$this->last_school_year_completed, $this->original['last_school_year_completed']],
+            'last_school_attended'   => [$this->last_school_attended, $this->original['last_school_attended']],
         ])
             ->filter(fn($pair) => $pair[0] !== $pair[1])
             ->map(fn($pair) => $pair[0])
@@ -306,10 +338,36 @@ class StudentEditModal extends Component
             'support_need' => $this->description,
         ]);
 
-        $student->isEnrolledIn(now()->schoolYear()->id)->update([
+        $enrollment = $student->isEnrolledIn(now()->schoolYear()->id);
+        $enrollment->update([
             'grade_level_id' => $this->grade_level,
-            'status'        => $this->status,
+            'status'         => $this->status,
         ]);
+
+        if (
+            !empty($this->background_grade_level) &&
+            !empty($this->school_id) &&
+            !empty($this->last_school_year_completed) &&
+            !empty($this->last_school_attended)
+        ) {
+            $educationRecord = $enrollment->educationRecord;
+
+            if ($educationRecord) {
+                $educationRecord->update([
+                    'grade_level_id' => $this->background_grade_level,
+                    'school_id'      => $this->school_id,
+                    'school_year'    => $this->last_school_year_completed,
+                    'school_name'    => $this->last_school_attended,
+                ]);
+            } else {
+                $enrollment->educationRecord()->create([
+                    'grade_level_id' => $this->background_grade_level,
+                    'school_id'      => $this->school_id,
+                    'school_year'    => $this->last_school_year_completed,
+                    'school_name'    => $this->last_school_attended,
+                ]);
+            }
+        }
 
         $student->guardian->update([
             'first_name' => $this->guardian_first_name,
@@ -583,6 +641,7 @@ class StudentEditModal extends Component
         $this->municipalities = array_keys($this->barangayData);
         $this->specializations = Auth::user()->accountable->specializations;
         $this->grade_levels = Auth::user()->accountable->gradeLevels->sortBy('id')->values();
+        $this->background_grade_levels = GradeLevel::all();
         return view('livewire.student-edit-modal');
     }
 }

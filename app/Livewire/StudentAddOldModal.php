@@ -159,12 +159,20 @@ class StudentAddOldModal extends Component
             if ($currentIndex !== false && $currentIndex < count($gradeLevelIds) - 1) {
                 $nextLevelId = $gradeLevelIds[$currentIndex + 1];
 
-                // Create enrollment for the next school year
-                Enrollment::create([
-                    'instructor_id' => Auth::user()->accountable->id,
-                    'student_id' => $student->id,
+                // Create new enrollment
+                $enrollment = Enrollment::create([
+                    'instructor_id'  => Auth::user()->accountable->id,
+                    'student_id'     => $student->id,
                     'grade_level_id' => $nextLevelId,
                     'school_year_id' => now()->schoolYear()->id,
+                ]);
+
+                // ✅ Create related education record
+                $enrollment->educationRecord()->create([
+                    'grade_level_id' => $currentLevelId,
+                    'school_id'      => 109870,
+                    'school_year'    => $latestEnrollment->schoolYear->name,
+                    'school_name'    => 'Don Luis Hidalgo Memorial School',
                 ]);
 
                 $registered++;
