@@ -3,7 +3,7 @@
         <section
             class="bg-black/40 fixed w-dvw h-dvh top-0 left-0 z-50 backdrop-blur-xs flex justify-center items-center overflow-y-auto p-10">
             <!-- first form -->
-            @if ($step === 1)
+            @if ($step === 2)
                 <div class="bg-card p-8 rounded-4xl w-180 flex flex-col gap-8">
                     <div class="flex items-center gap-2">
                         <img src="{{ asset('images/form-icon.png') }}" class="h-8" alt="" />
@@ -130,7 +130,7 @@
             <!-- End of first form -->
 
             <!-- Second form -->
-            @if ($step === 2)
+            @if ($step === 1)
                 <div class="bg-card p-8 rounded-4xl w-180 flex flex-col gap-8">
                     <div class="flex items-center gap-2">
                         <img src="{{ asset('images/form-icon.png') }}" class="h-8" alt="" />
@@ -176,7 +176,17 @@
                         </div>
                     </div>
                     <div class="flex flex-col gap-3">
-                        <h2 class="font-semibold text-xl">Current Address</h2>
+                        <div class="flex items-center justify-between w-full">
+                            <h2 class="font-semibold text-xl">Current Address</h2>
+                            <div class="flex items-center gap-2 w-fit p-2 hover:bg-card rounded-lg cursor-pointer">
+                                <label class="container w-fit">
+                                    <input type="checkbox" wire:model.live="copyPermanentToCurrent">
+                                    <div class="checkmark"></div>
+                                </label>
+                                <p class="w-full text-paragraph">Use Permanent Address</p>
+                            </div>
+                        </div>
+
                         <div class="flex items-center gap-2 w-full">
                             <div class="px-4 py-2 rounded-lg bg-white w-full">
                                 <select name="" id="" class="w-full outline-none text-paragraph">
@@ -188,7 +198,7 @@
                             <div class="px-4 py-2 rounded-lg bg-white w-full">
                                 <select name="" id="" class="w-full outline-none text-paragraph"
                                     wire:model.live="current_municipal">
-                                    <option value='' class="text-sm text-black" disabled>
+                                    <option value="" class="text-sm text-black" disabled>
                                         Municipal
                                     </option>
                                     @foreach ($municipalities as $municipality)
@@ -258,8 +268,33 @@
                     <div class="flex items-center gap-2">
                         <img src="{{ asset('images/account.png') }}" class="h-8" alt="" />
                         <h1 class="text-3xl font-bold text-heading-dark">
-                            Create Student Account
+                            Educational Background
                         </h1>
+                    </div>
+                    <div class="flex flex-col gap-3">
+                        <h2 class="font-semibold text-xl">For Transferee and Returning Learners</h2>
+                        <div class="flex flex-col gap-2">
+                            <input type="number" name="" id="" placeholder="School ID" disabled
+                                class="px-4 py-2 rounded-lg bg-white placeholder-paragraph outline-none w-full" />
+                            <div class="pl-3 pr-4 py-2 rounded-lg bg-white">
+                                <select name="" id="" class="w-full outline-none text-paragraph"
+                                    wire:model.live="grade_level">
+                                    <option value="" class="text-sm text-black" selected disabled>
+                                        Last Grade Level Completed </option>
+                                    @foreach ($grade_levels as $level)
+                                        <option value="{{ $level->id }}" class="text-sm text-paragraph">
+                                            {{ ucwords($level->name) }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <input type="text" placeholder="Last School Year Completed"
+                                class="px-4 py-2 rounded-lg bg-white placeholder-paragraph outline-none w-full text-paragraph"
+                                onfocus="this.type='date'" onblur="if(!this.value) this.type='text'" />
+                            <input type="text" name="" id="" placeholder="Last School Attended"
+                                disabled
+                                class="px-4 py-2 rounded-lg bg-white placeholder-paragraph outline-none w-full" />
+                        </div>
                     </div>
 
                     <div class="flex flex-col gap-3">

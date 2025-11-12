@@ -34,9 +34,13 @@
                 <span class="material-symbols-rounded bg-white/80 p-2 rounded-full stroke">
                     key
                 </span>
-                <input wire:model="password"
+                <input wire:model="password" id="passwordInput"
                     class="text-base w-full h-full p-2 pl-4 rounded-full outline-none placeholder:text-heading-dark"
-                    type="password" placeholder="password" />
+                    type="password" placeholder="password" autocomplete="new-password" />
+                <span id="togglePassword"
+                    class="material-symbols-rounded p-2 rounded-full stroke hover:cursor-pointer select-none">
+                    visibility_off
+                </span>
             </div>
         </div>
 
@@ -62,3 +66,14 @@
     </div>
 
 </div>
+
+<script>
+    const passwordInput = document.getElementById("passwordInput");
+    const togglePassword = document.getElementById("togglePassword");
+
+    togglePassword.addEventListener("click", () => {
+        const isHidden = passwordInput.type === "password";
+        passwordInput.type = isHidden ? "text" : "password";
+        togglePassword.textContent = isHidden ? "visibility" : "visibility_off";
+    });
+</script>

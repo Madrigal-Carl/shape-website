@@ -177,23 +177,32 @@
 
                         <div class="flex flex-col gap-2">
                             <h1 class="text-xl font-semibold">Preview:</h1>
-                            <div class="grid grid-cols-3 grid-rows-3 gap-1">
-                                @foreach ($act->gameImages as $image)
-                                    @if ($loop->iteration == 2)
-                                        <img src="{{ asset($image->path) }}" alt=""
-                                            wire:click="openPreview({{ $act->id }}, {{ $loop->index }})"
-                                            class="w-full rounded-lg col-span-2 row-span-2 hover:scale-102 cursor-pointer">
-                                    @elseif ($loop->iteration > 2)
-                                        <img src="{{ asset($image->path) }}" alt=""
-                                            wire:click="openPreview({{ $act->id }}, {{ $loop->index }})"
-                                            class="w-full rounded-lg col-span-1 row-span-1 hover:scale-104 cursor-pointer">
-                                    @endif
-                                @endforeach
+                            <div class="flex items-center gap-2 overflow-x-scroll overflow-y-hidden pb-4">
+                                <img src="{{ asset('images/game-previews/Cast a spell - FSL.png') }}" alt=""
+                                    class="w-45 rounded-3xl col-span-2 row-span-2 cursor-pointer">
+                                <img src="{{ asset('images/game-previews/Cast a spell - FSL.png') }}" alt=""
+                                    class="w-45 rounded-3xl col-span-2 row-span-2 cursor-pointer">
+                                <img src="{{ asset('images/game-previews/Cast a spell - FSL.png') }}" alt=""
+                                    class="w-45 rounded-3xl col-span-2 row-span-2 cursor-pointer">
+                                <img src="{{ asset('images/game-previews/Cast a spell - FSL.png') }}" alt=""
+                                    class="w-45 rounded-3xl col-span-2 row-span-2 cursor-pointer">
+                                <img src="{{ asset('images/game-previews/Cast a spell - FSL.png') }}" alt=""
+                                    class="w-45 rounded-3xl col-span-2 row-span-2 cursor-pointer">
                             </div>
                         </div>
                         <div class="flex flex-col gap-2">
                             <h1 class="text-xl font-semibold">Description</h1>
                             <p class="text-sm text-paragraph">{{ $act->description }}</p>
+                            <ul class=" list-disc pl-8">
+                                <li class="text-sm ">Todo 1: Identifies the sounds of the letters of the
+                                    alphabet.</li>
+                                <li class="text-sm ">Todo 1: Identifies the sounds of the letters of the
+                                    alphabet.</li>
+                                <li class="text-sm ">Todo 1: Identifies the sounds of the letters of the
+                                    alphabet.</li>
+                                <li class="text-sm ">Todo 1: Identifies the sounds of the letters of the
+                                    alphabet.</li>
+                            </ul>
                         </div>
                     </div>
                 </div>

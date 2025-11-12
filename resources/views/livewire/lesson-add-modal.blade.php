@@ -16,8 +16,7 @@
                         <div class="flex flex-col gap-3">
                             <h2 class="font-semibold text-xl ">Lesson Information</h2>
                             <div class="flex flex-col gap-2">
-                                <input type="text" placeholder="Lesson Name" wire:model.live="lesson_name"
-                                    class="px-4 py-2 rounded-lg bg-white placeholder-paragraph outline-none w-full" />
+
 
                                 <div class="px-4 py-2 rounded-lg bg-white">
                                     <select wire:model.live="grade_level" name="" id=""
@@ -62,7 +61,8 @@
                                         </select>
                                     </div>
                                 </div>
-
+                                <input type="text" placeholder="Lesson Name" wire:model.live="lesson_name"
+                                    class="px-4 py-2 rounded-lg bg-white placeholder-paragraph outline-none w-full" />
                                 <textarea name="" id="" maxlength="200" placeholder="Description (Optional)"
                                     wire:model.live="description"
                                     class="px-3 py-2 rounded-lg bg-white placeholder-paragraph resize-none h-24 outline-none"></textarea>

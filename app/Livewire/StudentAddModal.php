@@ -22,12 +22,26 @@ class StudentAddModal extends Component
     use WithFileUploads;
     public $step = 0;
     public $grade_levels, $specializations;
-    public $barangayData = [], $municipalities = [], $permanent_barangays = [], $current_barangays = [];
+    public $barangayData = [], $municipalities = [], $permanent_barangays = [], $current_barangays = [], $copyPermanentToCurrent = false;
     public $photo, $lrn, $first_name, $middle_name, $last_name, $birthdate, $sex, $grade_level = '', $disability = '', $description;
     public $province = "marinduque";
     public $permanent_barangay = '', $permanent_municipal = '', $current_barangay = '', $current_municipal = '', $guardian_first_name, $guardian_middle_name, $guardian_last_name, $guardian_email, $guardian_phone;
     public $account_username, $account_password = '';
 
+
+    public function updatedCopyPermanentToCurrent()
+    {
+        if ($this->copyPermanentToCurrent) {
+            $this->current_municipal = $this->permanent_municipal;
+            $this->current_barangay = $this->permanent_barangay;
+            $this->current_barangays = $this->permanent_barangays;
+        } else {
+            // Optional: clear current address when unchecked
+            $this->current_municipal = "";
+            $this->current_barangay = "";
+            $this->current_barangays = [];
+        }
+    }
 
     public function generateAccount()
     {

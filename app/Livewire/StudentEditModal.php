@@ -22,13 +22,27 @@ class StudentEditModal extends Component
     public $step = 0, $isOpen = false, $student_id = null;
     public $photo, $currentPhoto, $lrn, $status = '', $first_name, $middle_name, $last_name, $birthdate, $sex, $grade_level = '', $disability, $description;
     public $province = "marinduque";
-    public $permanent_barangay = '', $permanent_municipal = '', $current_barangay = '', $current_municipal = '';
+    public $permanent_barangay = '', $permanent_municipal = '', $current_barangay = '', $current_municipal = '', $copyPermanentToCurrent = false;
     public $guardian_first_name, $guardian_middle_name, $guardian_last_name, $guardian_email, $guardian_phone;
     public $account_username, $account_password, $default_password;
     public $account_username_changed = false;
     public $account_password_changed = false;
     public $grade_levels, $specializations, $barangayData = [], $municipalities = [], $permanent_barangays = [], $current_barangays = [];
     public $original = [];
+
+    public function updatedCopyPermanentToCurrent()
+    {
+        if ($this->copyPermanentToCurrent) {
+            $this->current_municipal = $this->permanent_municipal;
+            $this->current_barangay = $this->permanent_barangay;
+            $this->current_barangays = $this->permanent_barangays;
+        } else {
+            // Optional: clear current address when unchecked
+            $this->current_municipal = "";
+            $this->current_barangay = "";
+            $this->current_barangays = [];
+        }
+    }
 
     #[On('openModal')]
     public function openModal($id)

@@ -29,7 +29,7 @@ class LessonAddModal extends Component
     public $videos = [];
     public $f2fActivities = [];
     public $selected_f2f_activities = [];
-    public $isOpen = false;
+    public $isOpen = true;
     public $lesson_name, $curriculum = '', $subject = '', $grade_level = '', $description;
     public $uploadedVideos = [], $selected_activities = [];
     public $student_search = '', $activity_search = '';

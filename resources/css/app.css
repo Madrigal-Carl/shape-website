@@ -1,4 +1,4 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
@@ -6,155 +6,166 @@
 @source '../**/*.js';
 
 * {
-  transition: none !important;
-  font-family: var(--font-poppins);
+    transition: none !important;
+    font-family: var(--font-poppins);
 }
 body,
 html {
-  margin: 0;
-  padding: 0;
+    margin: 0;
+    padding: 0;
 }
 
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+    font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+    line-height: 1.5;
+    font-weight: 400;
 
-  /* color-scheme: light dark;
+    /* color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
   background-color: #242424; */
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* 🔒 Hide Edge and IE "eye" icon for password fields */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+    display: none;
+}
+
+/* Hide WebKit-based reveal icons (for Edge Chromium, Chrome, Safari) */
+input[type="password"]::-webkit-credentials-auto-fill-button,
+input[type="password"]::-webkit-clear-button,
+input[type="password"]::-webkit-reveal {
+    display: none;
 }
 
 @theme {
-  --font-poppins: "Poppins", "sans-serif";
-  --font-anton: "Anton", "sans-serif";
-  --breakpoint-3xl: 120rem;
+    --font-poppins: "Poppins", "sans-serif";
+    --font-anton: "Anton", "sans-serif";
+    --breakpoint-3xl: 120rem;
 
-  /* Fonts Color */
-  --color-heading-dark: #3a3a3a;
-  --color-paragraph: #7b7676;
+    /* Fonts Color */
+    --color-heading-dark: #3a3a3a;
+    --color-paragraph: #7b7676;
 
-  /* Colors */
-  --color-blue-button: #247bff;
-  --color-card: #F4F6F8;
-  --color-lime: #1ec515;
-  --color-yellowOrange: #ffb120;
-  --color-danger: #ed234f;
-  --color-active: #7adb37;
+    /* Colors */
+    --color-blue-button: #247bff;
+    --color-card: #f4f6f8;
+    --color-lime: #1ec515;
+    --color-yellowOrange: #ffb120;
+    --color-danger: #ed234f;
+    --color-active: #7adb37;
 
-  --color-avocado-100: oklch(0.99 0 0);
-  --color-avocado-200: oklch(0.98 0.04 113.22);
-  --color-avocado-300: oklch(0.94 0.11 115.03);
-  --color-avocado-400: oklch(0.92 0.19 114.08);
-  --color-avocado-500: oklch(0.84 0.18 117.33);
-  --color-avocado-600: oklch(0.53 0.12 118.34);
-  --ease-fluid: cubic-bezier(0.3, 0, 0, 1);
-  --ease-snappy: cubic-bezier(0.2, 0, 0, 1);
-  /* ... */
+    --color-avocado-100: oklch(0.99 0 0);
+    --color-avocado-200: oklch(0.98 0.04 113.22);
+    --color-avocado-300: oklch(0.94 0.11 115.03);
+    --color-avocado-400: oklch(0.92 0.19 114.08);
+    --color-avocado-500: oklch(0.84 0.18 117.33);
+    --color-avocado-600: oklch(0.53 0.12 118.34);
+    --ease-fluid: cubic-bezier(0.3, 0, 0, 1);
+    --ease-snappy: cubic-bezier(0.2, 0, 0, 1);
+    /* ... */
 }
 
 /* Prevent any transition during resizing/zooming */
 
 .material-symbols-rounded {
-  font-variation-settings: "FILL" 1, "wght" 400, "GRAD" 0, "opsz" 24;
+    font-variation-settings: "FILL" 1, "wght" 400, "GRAD" 0, "opsz" 24;
 }
-.stroke{
+.stroke {
     font-variation-settings: "FILL" 0;
 }
 
 .icon {
-  font-size: 28px;
+    font-size: 28px;
 }
 
 .small-icons {
-  font-size: 0.8rem;
+    font-size: 0.8rem;
 }
 
-.award-icon{
+.award-icon {
     font-size: 1.2rem;
 }
 
 .inputs .small-icons {
-  font-size: 1rem;
+    font-size: 1rem;
 }
 
 .active-nav {
-  background-color: var(--color-blue-button);
-  color: white;
-  border-color: var(--color-blue-button);
+    background-color: var(--color-blue-button);
+    color: white;
+    border-color: var(--color-blue-button);
 }
 
-.large-icon{
+.large-icon {
     font-size: 2rem;
 }
 
-
 .playBtn {
-  font-size: 2rem;
+    font-size: 2rem;
 }
 
 .remove-icon {
-  font-size: 1rem;
+    font-size: 1rem;
 }
 
 /* Custom Scrollbar */
 
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-  padding: 2rem;
-  /* display: none; */
+    width: 8px;
+    height: 8px;
+    padding: 2rem;
+    /* display: none; */
 }
 ::-webkit-scrollbar-track {
-  background-color: rgba(221, 229, 236, 0.3);
+    background-color: rgba(221, 229, 236, 0.3);
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: rgba(205, 213, 219, 0.5);
-  border-radius: 2rem;
+    background-color: rgba(205, 213, 219, 0.5);
+    border-radius: 2rem;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(155, 180, 201, 0.897);
+    background-color: rgba(155, 180, 201, 0.897);
 }
 
 .reward-sum::-webkit-scrollbar-track {
-  background-color: rgba(221, 229, 236, 0.15);
+    background-color: rgba(221, 229, 236, 0.15);
 }
 
 .reward-sum::-webkit-scrollbar-thumb {
-  background-color: rgba(255, 255, 255, 0.4);
+    background-color: rgba(255, 255, 255, 0.4);
 }
 
 .reward-sum::-webkit-scrollbar-thumb:hover {
-  background-color: white;
+    background-color: white;
 }
 
 .Addlesson::-webkit-scrollbar {
-  width: 0;
-}
-
-
-.gameCategories::-webkit-scrollbar{
-    height: 5px;
-}
-.gamesGrid::-webkit-scrollbar{
     width: 0;
 }
 
-.gamePreview{
-    background-image: url('/public/images/game-icons/game-posters/mario-kart-world-review-1.jpg');
+.gameCategories::-webkit-scrollbar {
+    height: 5px;
+}
+.gamesGrid::-webkit-scrollbar {
+    width: 0;
+}
+
+.gamePreview {
+    background-image: url("/public/images/game-icons/game-posters/mario-kart-world-review-1.jpg");
     backdrop-filter: blur(60px);
     background-size: cover;
     background-position: center;
 }
 
-.image-preview-active{
+.image-preview-active {
     opacity: 1;
     border: 2px;
     border-style: solid;
@@ -174,155 +185,146 @@ html {
 } */
 
 @keyframes fade-in {
-  from {
-    opacity: 0;
-    transform: scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
 }
 .animate-fade-in {
-  animation: fade-in 0.25s ease-out;
+    animation: fade-in 0.25s ease-out;
 }
 
 #secondForm input[type="text"],
 #secondForm input[list],
 #secondForm select {
-  height: 40px;
-  padding: 0 12px;
-  border: none;
-  background-color: #f8f9fa; /* matches bg-card */
-  border-radius: 0.5rem;
-  font-size: 0.95rem;
-  font-family: inherit;
-  width: 100%;
-  box-sizing: border-box;
+    height: 40px;
+    padding: 0 12px;
+    border: none;
+    background-color: #f8f9fa; /* matches bg-card */
+    border-radius: 0.5rem;
+    font-size: 0.95rem;
+    font-family: inherit;
+    width: 100%;
+    box-sizing: border-box;
 }
-
-
 
 /* Curriculum Toggle switch */
 /* To hide the checkbox */
 .toggleInput {
-  display: none;
+    display: none;
 }
 
 .toggleSwitch {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  width: 40px;
-  height: 25px;
-  background-color: rgb(82, 82, 82);
-  border-radius: 20px;
-  cursor: pointer;
-  transition-duration: .2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    width: 40px;
+    height: 25px;
+    background-color: rgb(82, 82, 82);
+    border-radius: 20px;
+    cursor: pointer;
+    transition-duration: 0.2s;
 }
 
 .toggleSwitch::after {
-  content: "";
-  position: absolute;
-  height: 15px;
-  width: 15px;
-  left: 5px;
-  background-color: transparent;
-  border-radius: 50%;
-  transition-duration: .2s;
-  box-shadow: 5px 2px 7px rgba(8, 8, 8, 0.26);
-  border: 5px solid white;
+    content: "";
+    position: absolute;
+    height: 15px;
+    width: 15px;
+    left: 5px;
+    background-color: transparent;
+    border-radius: 50%;
+    transition-duration: 0.2s;
+    box-shadow: 5px 2px 7px rgba(8, 8, 8, 0.26);
+    border: 5px solid white;
 }
 
 .toggleInput:checked + .toggleSwitch::after {
-  transform: translateX(100%);
-  transition-duration: .2s;
-  background-color: white;
+    transform: translateX(100%);
+    transition-duration: 0.2s;
+    background-color: white;
 }
 
 /* Switch background change */
 .toggleInput:checked + .toggleSwitch {
-  background-color: var(--color-active);
-  transition-duration: .2s;
+    background-color: var(--color-active);
+    transition-duration: 0.2s;
 }
 
 /* End Of TOggle switch */
 
-
-
 /* Checkbox */
 /* Hide the default checkbox */
 .container input {
- position: absolute;
- opacity: 0;
- cursor: pointer;
- height: 0;
- width: 0;
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
 }
 
 .container {
- display: block;
- position: relative;
- cursor: pointer;
- font-size: 20px;
- user-select: none;
+    display: block;
+    position: relative;
+    cursor: pointer;
+    font-size: 20px;
+    user-select: none;
 }
 
 /* Create a custom checkbox */
 .checkmark {
- position: relative;
- top: 0;
- left: 0;
- height: 1.4rem;
- width: 1.4rem;
- background: #9e9e9e;
- border-radius: 50px;
- box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.30), 0px 1px 1px rgba(0,5);
+    position: relative;
+    top: 0;
+    left: 0;
+    height: 1.4rem;
+    width: 1.4rem;
+    background: #9e9e9e;
+    border-radius: 50px;
+    box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.3), 0px 1px 1px rgba(0, 5);
 }
 
 /* When the checkbox is checked, add a blue background */
 .container input:checked ~ .checkmark {
- background-image: linear-gradient(#7adb37,#7adb37)
+    background-image: linear-gradient(#7adb37, #7adb37);
 }
 
 /* Create the checkmark/indicator (hidden when not checked) */
 .checkmark:after {
- content: "";
- position: absolute;
- display: none;
+    content: "";
+    position: absolute;
+    display: none;
 }
 
 /* Show the checkmark when checked */
 .container input:checked ~ .checkmark:after {
- display: block;
+    display: block;
 }
 
 /* Style the checkmark/indicator */
 .container .checkmark:after {
- left: 0.40em;
- top: 0.25em;
- width: 0.25em;
- height: 0.5em;
- border: solid white;
- border-width: 0 0.15em 0.15em 0;
- transform: rotate(45deg);
+    left: 0.4em;
+    top: 0.25em;
+    width: 0.25em;
+    height: 0.5em;
+    border: solid white;
+    border-width: 0 0.15em 0.15em 0;
+    transform: rotate(45deg);
 }
 /* End of Checkox */
 
-
-
-
-
-
-
 /* Animations */
 @keyframes float1 {
-    0%, 100% {
-    transform: translateY(0);
+    0%,
+    100% {
+        transform: translateY(0);
     }
     50% {
-    transform: translateY(-20px);
+        transform: translateY(-20px);
     }
 }
 
@@ -330,13 +332,13 @@ html {
     animation: float1 3s ease-in-out infinite;
 }
 
-
 @keyframes float2 {
-    0%, 100% {
-    transform: translateY(-20px);
+    0%,
+    100% {
+        transform: translateY(-20px);
     }
     50% {
-    transform: translateY(0);
+        transform: translateY(0);
     }
 }
 
@@ -344,9 +346,7 @@ html {
     animation: float2 3s ease-in-out infinite;
 }
 
-
-
 /* Landing Page */
-.feature{
+.feature {
     font-size: 3.5rem;
 }

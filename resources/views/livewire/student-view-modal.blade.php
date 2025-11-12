@@ -181,6 +181,29 @@
                         </div>
                         <!-- End of Basic Info -->
                     </div>
+
+                    <!-- Educational Background -->
+                    <div class="flex flex-col gap-4 bg-white p-6 rounded-2xl">
+                        <h1 class="text-2xl font-semibold text-heading-dark">Educational Background</h1>
+                        <div class="grid grid-cols-4 gap-4">
+                            <div class="col-span-1 flex flex-col gap-1">
+                                <p class="font-medium">School ID:</p>
+                                <p class="font-medium">Last Grade Level Completed:</p>
+                                <p class="font-medium">Last School Year Completed:</p>
+                                <p class="font-medium">Last School Attended:</p>
+                            </div>
+
+                            <div class="col-span-3 flex flex-col gap-1">
+                                <p class="text-paragraph">AHHAHAHAH</p>
+                                <p class="text-paragraph">AHHAHAHAH</p>
+                                <p class="text-paragraph">AHHAHAHAH</p>
+                                <p class="text-paragraph">AHHAHAHAH</p>
+                            </div>
+                        </div>
+                        <!-- End of Basic Info -->
+                    </div>
+
+
                     <div class="flex flex-col bg-white rounded-2xl p-6 gap-4 ">
                         <h1 class="text-2xl font-semibold text-heading-dark">Assigned Lessons</h1>
                         <table class="table-auto border-collapse">
@@ -201,7 +224,8 @@
                                 @forelse ($filteredLessons as $lesson)
                                     <tr>
                                         <td class="text-left pt-2 text-paragraph">{{ $lesson->title }}</td>
-                                        <td class="text-center pt-2 text-paragraph">{{ $lesson->videos->count() }}</td>
+                                        <td class="text-center pt-2 text-paragraph">{{ $lesson->videos->count() }}
+                                        </td>
                                         <td class="text-center pt-2 text-paragraph">
                                             {{ $lesson->activity_lessons->count() }}</td>
                                         <td class="text-center pt-2 text-paragraph">
@@ -259,7 +283,7 @@
                                                 fill: { opacity: 1 },
                                                 tooltip: { y: { formatter: val => `${val}%` } },
                                             };
-                                        
+
                                             var chart = new ApexCharts(document.querySelector('#PerformanceBarchart'), options);
                                             chart.render();
                                         }">
@@ -332,7 +356,7 @@
                                                 }
                                             }]
                                         };
-                                    
+
                                         var chart = new ApexCharts(document.querySelector('#RadarChart'), options);
                                         chart.render();
                                     }">
@@ -379,7 +403,7 @@
                                             x: { format: 'dd/MM/yy HH:mm' },
                                         },
                                     };
-                                
+
                                     var chart = new ApexCharts(document.querySelector('#PerformanceLinechart'), options);
                                     chart.render();
                                 }">
