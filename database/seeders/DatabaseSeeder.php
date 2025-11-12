@@ -665,9 +665,11 @@ class DatabaseSeeder extends Seeder
             );
 
             // Create game images
-            GameImage::factory()->count(7)->create([
-                'game_activity_id' => $activity->id,
-            ]);
+            GameImage::factory()
+                ->count(rand(4, 6))
+                ->create([
+                    'game_activity_id' => $activity->id,
+                ]);
 
             return $activity;
         });

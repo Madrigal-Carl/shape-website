@@ -19,7 +19,7 @@ class GameImageFactory extends Factory
     public function definition(): array
     {
         return [
-            'path' => 'images/game-icons/game-posters/mario-kart-world-review-1.jpg',
+            'path' => 'images/game-previews/default.png',
             'game_activity_id' => null,
         ];
     }

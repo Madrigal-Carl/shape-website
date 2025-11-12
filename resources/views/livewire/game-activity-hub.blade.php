@@ -1,49 +1,4 @@
 <div>
-
-    {{-- Image game Preview page --}}
-    @if ($isPreviewOpen)
-        <section
-            class=" bg-black/30 fixed w-dvw h-dvh top-0 left-0 z-50 backdrop-blur-xs flex justify-center items-center gap-6">
-            <div class="gamePreview w-full h-full">
-                <div class="fixed top-0 left-0 w-full h-full bg-black/70 backdrop-blur-3xl shrink-0 p-10">
-
-                    <button wire:click='closePreview' type="button"
-                        class="absolute top-10 right-10 z-10 p-3 rounded-full aspect-square flex items-center justify-center bg-white/10 hover:bg-white/30 cursor-pointer">
-                        <span class="material-symbols-rounded scale-x-110 text-gray-400">close</span>
-                    </button>
-                    <div class="w-full h-full flex flex-col justify-center gap-4 relative">
-                        {{-- Image pagination --}}
-                        <div class="flex items-center gap-4 justify-between w-full h-full">
-                            <button type="button" wire:click="prevImage"
-                                class="p-3 rounded-full aspect-square flex items-center justify-center bg-white/10 hover:bg-white/30 cursor-pointer">
-                                <span class="material-symbols-rounded scale-x-110 text-gray-400">chevron_backward</span>
-                            </button>
-
-                            <div
-                                class="w-300 aspect-video object-contain object-center flex items-center justify-center overflow-hidden rounded-2xl">
-                                <img src="{{ asset($previewImages[$previewIndex]) }}"
-                                    class="h-full object-contain object-center rounded-2xl" alt="">
-                            </div>
-
-
-                            <button type="button" wire:click="nextImage"
-                                class="p-3 rounded-full aspect-square flex items-center justify-center bg-white/10 hover:bg-white/30 cursor-pointer">
-                                <span class="material-symbols-rounded scale-110 text-gray-400">chevron_forward</span>
-                            </button>
-                        </div>
-                        <div class="flex items-center gap-2 justify-center">
-                            @foreach ($previewImages as $i => $path)
-                                <img src="{{ asset($path) }}" wire:click="setImage({{ $i }})"
-                                    class="w-24 aspect-video object-cover rounded-lg cursor-pointer
-                                {{ $i === $previewIndex ? 'opacity-100 ring-2 ring-blue-500' : 'opacity-40 hover:opacity-80' }}">
-                            @endforeach
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-    @endif
-    {{-- End Image game Preview page --}}
     @if ($isOpen)
         <section
             class="bg-black/40 fixed w-dvw h-dvh p-10 top-0 left-0 z-30 backdrop-blur-xs flex justify-center items-center gap-6">
@@ -87,8 +42,8 @@
                             <div wire:click="toggleSubject({{ $subj->id }})"
                                 class="w-fit shrink-0 flex items-center gap-2 px-4 py-2 rounded-xl cursor-pointer
                                 {{ in_array($subj->id, $selectedSubjects ?? []) ? 'bg-blue-button text-white' : 'bg-white hover:bg-blue-button hover:text-white' }}">
-                                <img src="{{ asset('images/subject_icons/' . $subj->icon) }}"
-                                    alt="{{ $subj->name }}" class="h-6">
+                                <img src="{{ asset('images/subject_icons/' . $subj->icon) }}" alt="{{ $subj->name }}"
+                                    class="h-6">
                                 <p class="text-base">{{ ucwords($subj->name) }}</p>
                             </div>
                         @endforeach
@@ -178,16 +133,11 @@
                         <div class="flex flex-col gap-2">
                             <h1 class="text-xl font-semibold">Preview:</h1>
                             <div class="flex items-center gap-2 overflow-x-scroll overflow-y-hidden pb-4">
-                                <img src="{{ asset('images/game-previews/Cast a spell - FSL.png') }}" alt=""
-                                    class="w-45 rounded-3xl col-span-2 row-span-2 cursor-pointer">
-                                <img src="{{ asset('images/game-previews/Cast a spell - FSL.png') }}" alt=""
-                                    class="w-45 rounded-3xl col-span-2 row-span-2 cursor-pointer">
-                                <img src="{{ asset('images/game-previews/Cast a spell - FSL.png') }}" alt=""
-                                    class="w-45 rounded-3xl col-span-2 row-span-2 cursor-pointer">
-                                <img src="{{ asset('images/game-previews/Cast a spell - FSL.png') }}" alt=""
-                                    class="w-45 rounded-3xl col-span-2 row-span-2 cursor-pointer">
-                                <img src="{{ asset('images/game-previews/Cast a spell - FSL.png') }}" alt=""
-                                    class="w-45 rounded-3xl col-span-2 row-span-2 cursor-pointer">
+                                @foreach ($act->gameImages as $image)
+                                    <img src="{{ asset($image->path) }}" alt=""
+                                        class="w-45 rounded-3xl col-span-2 row-span-2 cursor-pointer"
+                                        wire:click="showImagePreview('{{ $image->path }}')">
+                                @endforeach
                             </div>
                         </div>
                         <div class="flex flex-col gap-2">
@@ -207,6 +157,20 @@
                     </div>
                 </div>
             @endif
+
+            @if ($isImagePreviewOpen && $previewImage)
+                <div wire:ignore.self class="fixed inset-0 bg-black/80 flex items-center justify-center z-[9999]"
+                    wire:click="closeImagePreview">
+                    <img src="{{ asset($previewImage) }}" alt="Preview"
+                        class="max-w-[90vw] max-h-[90vh] rounded-3xl shadow-2xl object-contain transition-transform duration-300 scale-100 hover:scale-105">
+                    <button type="button"
+                        class="absolute top-6 right-6 bg-white/20 hover:bg-white/40 text-white rounded-full p-2"
+                        wire:click.stop="closeImagePreview">
+                        <span class="material-symbols-rounded text-3xl">close</span>
+                    </button>
+                </div>
+            @endif
+
         </section>
     @endif
 </div>
