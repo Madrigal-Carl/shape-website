@@ -9,6 +9,7 @@ use App\Models\Video;
 use App\Models\Lesson;
 use App\Models\Account;
 use App\Models\Student;
+use App\Models\Curriculum;
 use App\Models\Enrollment;
 use App\Models\GameActivity;
 use App\Models\StudentAward;
@@ -139,7 +140,7 @@ class ApiController extends Controller
         }
 
         if ($lastSyncTime) {
-            $activeCurriculum = \App\Models\Curriculum::where('is_active', true)
+            $activeCurriculum = Curriculum::where('active', true)
                 ->latest('updated_at')
                 ->first();
 

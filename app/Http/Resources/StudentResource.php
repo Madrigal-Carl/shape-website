@@ -52,6 +52,9 @@ class StudentResource extends JsonResource
         } else {
             // Get lessons in the current quarter
             $lessonIds = LessonSubjectStudent::where('student_id', $this->id)
+                ->whereHas('curriculumSubject.curriculum', function ($query) {
+                    $query->where('status', 'active');
+                })
                 ->pluck('lesson_id');
 
             $lessons = Lesson::whereIn('id', $lessonIds)
