@@ -99,6 +99,7 @@ class ApiController extends Controller
         ]);
 
         $studentId = $validated['student_id'];
+        $student = Student::find($studentId);
         $syncedIds = [];
 
         foreach ($validated['activities'] as $activityData) {
@@ -112,6 +113,12 @@ class ApiController extends Controller
                     'status' => $activityData['status'],
                     'created_at' => $activityData['created_at'] ?? $activity->created_at,
                     'updated_at' => $activityData['updated_at'] ?? $activity->updated_at,
+                ]);
+
+                Feed::create([
+                    'group' => 'student',
+                    'title' => 'Activity Finished',
+                    'message' => "{$student->fullname} has completed the activity '{$activity->activityLesson->gameActivity->name}'.",
                 ]);
 
                 $syncedIds[] = $activity->id;
