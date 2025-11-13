@@ -18,8 +18,8 @@
                         {{ \Carbon\Carbon::parse($feed->created_at)->diffForHumans() }}</p>
                 </div>
             @empty
-                <div class="h-full w-full text-center">
-                    <p>Empty</p>
+                <div class="h-full w-full text-center py-[100%]">
+                    <p class="text-paragraph">No Award Feed yet.</p>
                 </div>
             @endforelse
         </div>

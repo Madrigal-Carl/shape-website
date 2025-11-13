@@ -42,7 +42,7 @@
                                 </div>
                             @empty
                                 <div
-                                    class="w-full h-full row-span-3 bg-white p-4 text-center flex flex-col justify-center items-center rounded-2xl text-paragraph">
+                                    class="w-full h-full col-span-2 bg-white p-4 text-center flex flex-col justify-center items-center rounded-2xl text-paragraph ">
                                     <p class="font-medium text-lg">No students have received this award yet.</p>
                                 </div>
                             @endforelse

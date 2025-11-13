@@ -25,7 +25,9 @@
                     </div>
                 </div>
             @empty
-                <p class="text-sm text-paragraph italic">No recent activity.</p>
+                <div class="h-full w-full text-center py-[100%]">
+                    <p class="text-paragraph">No Recent Activity.</p>
+                </div>
             @endforelse
         </div>
     </div>
