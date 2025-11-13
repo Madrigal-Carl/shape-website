@@ -38,7 +38,7 @@ class ApiController extends Controller
         try {
             $data = $request->validate([
                 'username' => 'required|min:5|max:18',
-                'password' => 'required|min:5|max:18|regex:/^[a-zA-Z0-9]+$/',
+                'password' => 'required|min:5|max:18',
             ], [
                 'username.required' => 'Username is required.',
                 'username.min'      => 'Username must be at least 5 characters.',
@@ -46,7 +46,6 @@ class ApiController extends Controller
                 'password.required' => 'Password is required.',
                 'password.min'      => 'Password must be at least 5 characters.',
                 'password.max'      => 'Password must not be more than 18 characters.',
-                'password.regex'    => 'Password must contain only letters and numbers (no special characters).',
             ]);
         } catch (ValidationException $e) {
             return response()->json([
@@ -76,12 +75,13 @@ class ApiController extends Controller
         }
 
         $student = $account->accountable;
-
         $token = $account->createToken('mobile')->plainTextToken;
+        $currentSchoolYear = now()->schoolYear()?->id;
 
         return response()->json([
             'success' => true,
             'token' => $token,
+            'current_school_year_id' => $currentSchoolYear,
             'data' => new StudentResource($student),
         ], 200);
     }
@@ -134,65 +134,63 @@ class ApiController extends Controller
 
     public function fetchStudentData(Request $request)
     {
-        $schoolYear = now()->schoolYear();
-        $currentQuarter = $schoolYear?->currentQuarter();
-        $studentId = $request->input('student_id');
-        $lastSyncTime = $request->input('last_sync_time');
-        $reset = false;
-        $newSchoolYearDetected = false;
+        try {
+            $schoolYear = now()->schoolYear();
+            $currentQuarter = $schoolYear?->currentQuarter();
+            $studentId = $request->input('student_id');
+            $lastSyncTime = $request->input('last_sync_time');
+            $lastSchoolYearId = $request->input('last_school_year_id');
+            $reset = false;
+            $newSchoolYearDetected = false;
 
-        if ($lastSyncTime) {
-            $latestSchoolYear = SchoolYear::latest('updated_at')->first();
-
-            if ($latestSchoolYear && Carbon::parse($lastSyncTime)->lt(Carbon::parse($latestSchoolYear->updated_at))) {
+            if ($lastSchoolYearId && $schoolYear && $lastSchoolYearId != $schoolYear->id) {
                 $newSchoolYearDetected = true;
+                return response()->json([
+                    'success' => true,
+                    'new_school_year' => $newSchoolYearDetected,
+                ]);
             }
-        }
 
-        if ($newSchoolYearDetected) {
-            return response()->json([
-                'success' => true,
-                'new_school_year' => true,
-                'message' => 'New school year detected, please re-login.',
-            ], 200);
-        }
+            $quarterStart = match ($currentQuarter) {
+                1 => Carbon::parse($schoolYear->first_quarter_start),
+                2 => Carbon::parse($schoolYear->second_quarter_start),
+                3 => Carbon::parse($schoolYear->third_quarter_start),
+                4 => Carbon::parse($schoolYear->fourth_quarter_start),
+                default => null
+            };
 
-        if ($currentQuarter && $lastSyncTime) {
-            $quarterStart = Carbon::parse($currentQuarter->start_date);
-            $lastSync = Carbon::parse($lastSyncTime);
+            if ($lastSyncTime) {
+                $lastSync = Carbon::parse($lastSyncTime);
 
-            $reset = $lastSync->lt($quarterStart);
-        }
+                if ($quarterStart && $lastSync->lt($quarterStart)) {
+                    $reset = true;
+                }
 
-        if ($lastSyncTime) {
-            $activeCurriculum = Curriculum::where('active', true)
-                ->latest('updated_at')
+                $activeCurriculum = Curriculum::where('status', 'active')
+                    ->latest('updated_at')
+                    ->first();
+
+                if ($activeCurriculum && $lastSync->lt(Carbon::parse($activeCurriculum->updated_at))) {
+                    $reset = true;
+                }
+            }
+
+            $currentEnrollment = null;
+            if ($schoolYear) {
+                $currentEnrollment = Enrollment::where('student_id', $studentId)
+                    ->where('school_year_id', $schoolYear->id)
+                    ->latest()
+                    ->first();
+            }
+
+            $status = $currentEnrollment?->status;
+
+            $student = Student::where('id', $studentId)
+                ->when($lastSyncTime, fn($q) => $q->where('updated_at', '>', Carbon::parse($lastSyncTime)->timezone('Asia/Manila')))
                 ->first();
 
-            if ($activeCurriculum && Carbon::parse($lastSyncTime)->lt(Carbon::parse($activeCurriculum->updated_at))) {
-                $reset = true;
-            }
-        }
-
-        $currentEnrollment = null;
-        if ($schoolYear) {
-            $currentEnrollment = Enrollment::where('student_id', $studentId)
-                ->where('school_year_id', $schoolYear->id)
-                ->latest()
-                ->first();
-        }
-
-        $status = $currentEnrollment?->status;
-
-
-        $student = Student::where('id', $studentId)
-            ->when($lastSyncTime, fn($q) => $q->where('updated_at', '>', Carbon::parse($lastSyncTime)->timezone('Asia/Manila')))
-            ->first();
-
-        $studentData = null;
-
-        if ($student) {
-            $studentData = [
+            $student = Student::find($studentId);
+            $studentData = $student ? [
                 'id' => $student->id,
                 'lrn' => $student->lrn,
                 'path' => $student->path ? asset('storage/' . $student->path) : null,
@@ -209,109 +207,123 @@ class ApiController extends Controller
                 'status' => $status,
                 'created_at' => $student->created_at?->toDateTimeString(),
                 'updated_at' => $student->updated_at?->toDateTimeString(),
+            ] : [
+                'id' => $studentId,
+                'path' => null,
+                'fullname' => null,
+                'status' => $status,
             ];
-        }
-
-        // Lessons
-        $lessonData = null;
-        $videosData = null;
-        $gameActivityLessonData = null;
-        $gameActivityData = null;
-        $studentActivityData = null;
-        $feedsData = null;
-        $studentAwardData = null;
-        $newAwardData = null;
-
-        if ($schoolYear && $currentQuarter) {
-            $lessonIds = LessonSubjectStudent::where('student_id', $studentId)->pluck('lesson_id');
 
             // Lessons
-            $lessons = Lesson::whereIn('id', $lessonIds)
-                ->where('school_year_id', $schoolYear->id)
-                ->when($lastSyncTime, fn($q) => $q->where('updated_at', '>', Carbon::parse($lastSyncTime)))
-                ->get()
-                ->filter(fn($lesson) => $lesson->isInQuarter($schoolYear, $currentQuarter));
-            if ($lessons->isNotEmpty()) {
-                $lessonData = LessonResource::collection($lessons);
+            $lessonData = null;
+            $videosData = null;
+            $gameActivityLessonData = null;
+            $gameActivityData = null;
+            $studentActivityData = null;
+            $feedsData = null;
+            $studentAwardData = null;
+            $newAwardData = null;
+
+            if ($schoolYear && $currentQuarter) {
+                $lessonIds = LessonSubjectStudent::where('student_id', $studentId)->pluck('lesson_id');
+
+                // Lessons
+                $lessons = Lesson::whereIn('id', $lessonIds)
+                    ->where('school_year_id', $schoolYear->id)
+                    ->when($lastSyncTime, fn($q) => $q->where('updated_at', '>', Carbon::parse($lastSyncTime)))
+                    ->get()
+                    ->filter(fn($lesson) => $lesson->isInQuarter($schoolYear, $currentQuarter));
+                if ($lessons->isNotEmpty()) {
+                    $lessonData = LessonResource::collection($lessons);
+                }
+
+                // Videos
+                $videos = Video::withTrashed()->whereIn('lesson_id', $lessonIds)
+                    ->when(
+                        $lastSyncTime,
+                        fn($q) =>
+                        $q->where('created_at', '>', Carbon::parse($lastSyncTime))
+                            ->orWhere('deleted_at', '>', Carbon::parse($lastSyncTime))
+                    )->get();
+                if ($videos->isNotEmpty()) $videosData = VideoResource::collection($videos);
+
+                // Game Activity Lessons
+                $gal = GameActivityLesson::withTrashed()->whereIn('lesson_id', $lessonIds)
+                    ->when(
+                        $lastSyncTime,
+                        fn($q) =>
+                        $q->where('created_at', '>', Carbon::parse($lastSyncTime))
+                            ->orWhere('deleted_at', '>', Carbon::parse($lastSyncTime))
+                    )->get();
+                if ($gal->isNotEmpty()) $gameActivityLessonData = GameActivityLessonResource::collection($gal);
+
+                // Game Activities
+                $newGALIds = $gal->pluck('game_activity_id')->filter();
+                $gameActivities = GameActivity::whereIn('id', $newGALIds)->get();
+
+                if ($gameActivities->isNotEmpty()) {
+                    $gameActivityData = GameActivityResource::collection($gameActivities);
+                }
+
+                // Student Activities
+                $studentActivities = StudentActivity::withTrashed()->where('student_id', $studentId)
+                    ->when(
+                        $lastSyncTime,
+                        fn($q) =>
+                        $q->where('updated_at', '>', Carbon::parse($lastSyncTime))
+                            ->orWhere('deleted_at', '>', Carbon::parse($lastSyncTime))
+                    )->get();
+                if ($studentActivities->isNotEmpty()) $studentActivityData = StudentActivityResource::collection($studentActivities);
+
+                // Feeds
+                $feedsQuery = Feed::where('notifiable_id', $studentId);
+                if ($lastSyncTime) {
+                    $feedsQuery->where('created_at', '>', Carbon::parse($lastSyncTime));
+                }
+                $feeds = $feedsQuery->get();
+                if ($feeds->isNotEmpty()) $feedsData = FeedResource::collection($feeds);
+
+                // Student Awards
+                $studentAwards = StudentAward::withTrashed()->where('student_id', $studentId)
+                    ->when(
+                        $lastSyncTime,
+                        fn($q) =>
+                        $q->where('updated_at', '>', Carbon::parse($lastSyncTime))
+                            ->orWhere('deleted_at', '>', Carbon::parse($lastSyncTime))
+                    )->get();
+                if ($studentAwards->isNotEmpty()) $studentAwardData = StudentAwardResource::collection($studentAwards);
+
+                // New Awards
+                $newAwards = StudentAward::where('student_id', $studentId)
+                    ->when($lastSyncTime, fn($q) => $q->where('created_at', '>', Carbon::parse($lastSyncTime)))
+                    ->get();
+                if ($newAwards->isNotEmpty()) {
+                    $newAwardees = Award::whereIn('student_award_id', $newAwards->pluck('id'))->get();
+                    if ($newAwardees->isNotEmpty()) $newAwardData = AwardResource::collection($newAwardees);
+                }
             }
 
-            // Videos
-            $videos = Video::withTrashed()->whereIn('lesson_id', $lessonIds)
-                ->when(
-                    $lastSyncTime,
-                    fn($q) =>
-                    $q->where('created_at', '>', Carbon::parse($lastSyncTime))
-                        ->orWhere('deleted_at', '>', Carbon::parse($lastSyncTime))
-                )->get();
-            if ($videos->isNotEmpty()) $videosData = VideoResource::collection($videos);
-
-            // Game Activity Lessons
-            $gal = GameActivityLesson::withTrashed()->whereIn('lesson_id', $lessonIds)
-                ->when(
-                    $lastSyncTime,
-                    fn($q) =>
-                    $q->where('created_at', '>', Carbon::parse($lastSyncTime))
-                        ->orWhere('deleted_at', '>', Carbon::parse($lastSyncTime))
-                )->get();
-            if ($gal->isNotEmpty()) $gameActivityLessonData = GameActivityLessonResource::collection($gal);
-
-            // Game Activities
-            $newGALIds = $gal->pluck('id');
-            $gameActivities = GameActivity::whereIn('game_activity_lesson_id', $newGALIds)->get();
-            if ($gameActivities->isNotEmpty()) $gameActivityData = GameActivityResource::collection($gameActivities);
-
-            // Student Activities
-            $studentActivities = StudentActivity::withTrashed()->where('student_id', $studentId)
-                ->when(
-                    $lastSyncTime,
-                    fn($q) =>
-                    $q->where('updated_at', '>', Carbon::parse($lastSyncTime))
-                        ->orWhere('deleted_at', '>', Carbon::parse($lastSyncTime))
-                )->get();
-            if ($studentActivities->isNotEmpty()) $studentActivityData = StudentActivityResource::collection($studentActivities);
-
-            // Feeds
-            $feedsQuery = Feed::where('notifiable_id', $studentId);
-            if ($lastSyncTime) {
-                $feedsQuery->where('created_at', '>', Carbon::parse($lastSyncTime));
-            }
-            $feeds = $feedsQuery->get();
-            if ($feeds->isNotEmpty()) $feedsData = FeedResource::collection($feeds);
-
-            // Student Awards
-            $studentAwards = StudentAward::withTrashed()->where('student_id', $studentId)
-                ->when(
-                    $lastSyncTime,
-                    fn($q) =>
-                    $q->where('updated_at', '>', Carbon::parse($lastSyncTime))
-                        ->orWhere('deleted_at', '>', Carbon::parse($lastSyncTime))
-                )->get();
-            if ($studentAwards->isNotEmpty()) $studentAwardData = StudentAwardResource::collection($studentAwards);
-
-            // New Awards
-            $newAwards = StudentAward::where('student_id', $studentId)
-                ->when($lastSyncTime, fn($q) => $q->where('created_at', '>', Carbon::parse($lastSyncTime)))
-                ->get();
-            if ($newAwards->isNotEmpty()) {
-                $newAwardees = Award::whereIn('student_award_id', $newAwards->pluck('id'))->get();
-                if ($newAwardees->isNotEmpty()) $newAwardData = AwardResource::collection($newAwardees);
-            }
+            return response()->json([
+                'success' => true,
+                'message' => 'Data fetched successfully.',
+                'reset' => $reset,
+                'new_school_year' => $newSchoolYearDetected,
+                'student' => $studentData,
+                'lessons' => $lessonData,
+                'videos' => $videosData,
+                'game_activity_lessons' => $gameActivityLessonData,
+                'game_activities' => $gameActivityData,
+                'student_activities' => $studentActivityData,
+                'feeds' => $feedsData,
+                'student_awards' => $studentAwardData,
+                'awards' => $newAwardData,
+            ]);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage(),
+            ], 500);
         }
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Data fetched successfully.',
-            'reset' => $reset,
-            'student' => $studentData,
-            'lessons' => $lessonData,
-            'videos' => $videosData,
-            'game_activity_lessons' => $gameActivityLessonData,
-            'game_activities' => $gameActivityData,
-            'student_activities' => $studentActivityData,
-            'feeds' => $feedsData,
-            'student_awards' => $studentAwardData,
-            'awards' => $newAwardData,
-        ]);
     }
 
     public function logout(Request $request)
