@@ -31,7 +31,7 @@ Route::get('/test-email', function () {
     $completed = 5;
     $remaining = 2;
 
-    Mail::to('carl.madrigal05@gmail.com')->send(
+    Mail::to('ericksongeroleo2003@gmail.com')->send(
         new StudentProgressReportMail($student, $completed, $remaining)
     );
 
