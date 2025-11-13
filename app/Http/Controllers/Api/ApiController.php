@@ -11,6 +11,7 @@ use App\Models\Account;
 use App\Models\Student;
 use App\Models\Curriculum;
 use App\Models\Enrollment;
+use App\Models\SchoolYear;
 use App\Models\GameActivity;
 use App\Models\StudentAward;
 use Illuminate\Http\Request;
@@ -131,6 +132,23 @@ class ApiController extends Controller
         $studentId = $request->input('student_id');
         $lastSyncTime = $request->input('last_sync_time');
         $reset = false;
+        $newSchoolYearDetected = false;
+
+        if ($lastSyncTime) {
+            $latestSchoolYear = SchoolYear::latest('updated_at')->first();
+
+            if ($latestSchoolYear && Carbon::parse($lastSyncTime)->lt(Carbon::parse($latestSchoolYear->updated_at))) {
+                $newSchoolYearDetected = true;
+            }
+        }
+
+        if ($newSchoolYearDetected) {
+            return response()->json([
+                'success' => true,
+                'new_school_year' => true,
+                'message' => 'New school year detected, please re-login.',
+            ], 200);
+        }
 
         if ($currentQuarter && $lastSyncTime) {
             $quarterStart = Carbon::parse($currentQuarter->start_date);
