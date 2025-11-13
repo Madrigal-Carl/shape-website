@@ -106,9 +106,9 @@
                         </button>
                     </div>
 
-                    <div class="relative">
+                    <div class="relative w-full">
                         <img src="{{ asset($act->gameImages->first()->path) }}" alt=""
-                            class=" aspect-[3/1.2] object-cover rounded-t-4xl">
+                            class=" aspect-[3/1.2] w-full object-cover object-center rounded-t-4xl">
                         <div
                             class="absolute bottom-0 bg-gradient-to-b from-black/80 via-black/0 to-black/0 w-full h-full rounded-t-4xl items-center">
                         </div>
