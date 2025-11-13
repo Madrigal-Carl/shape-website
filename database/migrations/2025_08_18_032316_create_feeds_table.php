@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('feeds', function (Blueprint $table) {
             $table->id();
             $table->foreignId('notifiable_id')->nullable()->constrained('students')->onDelete('set null');
-            $table->enum('group', ['curriculum', 'student', 'lesson', 'award', 'instructor']);
+            $table->enum('group', ['curriculum', 'student', 'award', 'instructor']);
             $table->string('title');
             $table->text('message');
             $table->timestamps();

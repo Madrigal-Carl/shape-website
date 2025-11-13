@@ -146,14 +146,9 @@
                             <h1 class="text-xl font-semibold">Description</h1>
                             <p class="text-sm text-paragraph">{{ $act->description }}</p>
                             <ul class=" list-disc pl-8">
-                                <li class="text-sm ">Todo 1: Identifies the sounds of the letters of the
-                                    alphabet.</li>
-                                <li class="text-sm ">Todo 1: Identifies the sounds of the letters of the
-                                    alphabet.</li>
-                                <li class="text-sm ">Todo 1: Identifies the sounds of the letters of the
-                                    alphabet.</li>
-                                <li class="text-sm ">Todo 1: Identifies the sounds of the letters of the
-                                    alphabet.</li>
+                                @foreach ($act->todos as $todo)
+                                    <li class="text-sm ">Todo : {{ $todo->todo }}</li>
+                                @endforeach
                             </ul>
                         </div>
                     </div>

@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use Carbon\Carbon;
+use App\Models\Feed;
 use App\Models\Student;
 use Livewire\Component;
 use App\Models\Enrollment;
@@ -158,6 +159,12 @@ class StudentAddOldModal extends Component
 
             if ($currentIndex !== false && $currentIndex < count($gradeLevelIds) - 1) {
                 $nextLevelId = $gradeLevelIds[$currentIndex + 1];
+
+                Feed::create([
+                    'group' => 'student',
+                    'title' => 'New Student Enrolled',
+                    'message' => "'{$student->fullname}' has been enrolled as a student.",
+                ]);
 
                 // Create new enrollment
                 $enrollment = Enrollment::create([

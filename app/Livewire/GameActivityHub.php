@@ -66,7 +66,7 @@ class GameActivityHub extends Component
     public function viewActivity($activityId)
     {
         $this->act = null;
-        $this->act = GameActivity::with('specializations', 'gameImages')->find($activityId);
+        $this->act = GameActivity::with('specializations', 'gameImages', 'todos')->find($activityId);
         $this->openViewActivity();
     }
 
