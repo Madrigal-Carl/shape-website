@@ -643,36 +643,218 @@ class DatabaseSeeder extends Seeder
             }
         });
 
-        // === Activities ===
-        $activities = collect(range(1, 30))->map(function () use ($specializations) {
-            // Pick random subjects (for diversity)
-            $subjects = Subject::inRandomOrder()->take(rand(1, 2))->get();
 
-            // ✅ Manually assign a random todo_id between 1 and 102
-            $todo = Todo::inRandomOrder()->whereBetween('id', [103, 229])->first();
+        $games = [
+            [
+                'name' => 'Count Quest',
+                'path' => 'images/game-icons/game-posters/mario-kart-world-review-1.jpg',
+                'description' => 'Learn about the planets through an interactive exploration game.',
+                'todos' => [101, 102],
+                'subjects' => [1, 10],
+                'specializations' => [1, 2, 3],
+                'images' => [
+                    'solar1.png',
+                    'solar2.png',
+                    'solar3.png',
+                ],
+            ],
+            [
+                'name' => 'Finger Addition',
+                'path' => 'images/game-icons/game-posters/mario-kart-world-review-1.jpg',
+                'description' => 'Solve math puzzles to advance through the fantasy world.',
+                'todos' => [145, 146, 147],
+                'subjects' => [1],
+                'specializations' => [2, 3],
+                'images' => [
+                    'math1.png',
+                    'math2.png',
+                    'math3.png',
+                ],
+            ],
+            [
+                'name' => 'Fruit Subtraction',
+                'path' => 'images/game-icons/game-posters/mario-kart-world-review-1.jpg',
+                'description' => 'Battle grammar monsters using your language skills.',
+                'todos' => [101, 102],
+                'subjects' => [10],
+                'specializations' => [1],
+                'images' => [
+                    'grammar1.png',
+                    'grammar2.png',
+                ],
+            ],
+            [
+                'name' => 'Objectify',
+                'path' => 'images/game-icons/game-posters/mario-kart-world-review-1.jpg',
+                'description' => 'Battle grammar monsters using your language skills.',
+                'todos' => [91, 92],
+                'subjects' => [2, 8, 14],
+                'specializations' => [1],
+                'images' => [
+                    'grammar1.png',
+                    'grammar2.png',
+                ],
+            ],
+            [
+                'name' => 'Fruit Addition',
+                'path' => 'images/game-icons/game-posters/mario-kart-world-review-1.jpg',
+                'description' => 'Battle grammar monsters using your language skills.',
+                'todos' => [101, 102],
+                'subjects' => [10],
+                'specializations' => [1],
+                'images' => [
+                    'grammar1.png',
+                    'grammar2.png',
+                ],
+            ],
+            [
+                'name' => 'Finger Subtraction',
+                'path' => 'images/game-icons/game-posters/mario-kart-world-review-1.jpg',
+                'description' => 'Battle grammar monsters using your language skills.',
+                'todos' => [148, 149, 150, 151],
+                'subjects' => [1],
+                'specializations' => [2, 3],
+                'images' => [
+                    'grammar1.png',
+                    'grammar2.png',
+                ],
+            ],
+            [
+                'name' => 'Sign Quest',
+                'path' => 'images/game-icons/game-posters/mario-kart-world-review-1.jpg',
+                'description' => 'Battle grammar monsters using your language skills.',
+                'todos' => [94, 47, 126],
+                'subjects' => [7, 4],
+                'specializations' => [2, 3],
+                'images' => [
+                    'grammar1.png',
+                    'grammar2.png',
+                ],
+            ],
+            [
+                'name' => 'Cast Spell',
+                'path' => 'images/game-icons/game-posters/mario-kart-world-review-1.jpg',
+                'description' => 'Battle grammar monsters using your language skills.',
+                'todos' => [109, 47, 125, 126],
+                'subjects' => [4, 7,],
+                'specializations' => [2, 3],
+                'images' => [
+                    'grammar1.png',
+                    'grammar2.png',
+                ],
+            ],
+            [
+                'name' => 'Number Quest',
+                'path' => 'images/game-icons/game-posters/mario-kart-world-review-1.jpg',
+                'description' => 'Battle grammar monsters using your language skills.',
+                'todos' => [144, 138, 137, 101, 102],
+                'subjects' => [1, 7],
+                'specializations' => [1, 2, 3],
+                'images' => [
+                    'grammar1.png',
+                    'grammar2.png',
+                ],
+            ],
+            [
+                'name' => 'Self Care',
+                'path' => 'images/game-icons/game-posters/mario-kart-world-review-1.jpg',
+                'description' => 'Battle grammar monsters using your language skills.',
+                'todos' => [144, 138, 137, 101, 102],
+                'subjects' => [1, 7],
+                'specializations' => [1, 2, 3],
+                'images' => [
+                    'grammar1.png',
+                    'grammar2.png',
+                ],
+            ],
+            [
+                'name' => 'Number Quest',
+                'path' => 'images/game-icons/game-posters/mario-kart-world-review-1.jpg',
+                'description' => 'Battle grammar monsters using your language skills.',
+                'todos' => [144, 138, 137, 101, 102],
+                'subjects' => [1, 7],
+                'specializations' => [1, 2, 3],
+                'images' => [
+                    'grammar1.png',
+                    'grammar2.png',
+                ],
+            ],
+            [
+                'name' => 'Number Quest',
+                'path' => 'images/game-icons/game-posters/mario-kart-world-review-1.jpg',
+                'description' => 'Battle grammar monsters using your language skills.',
+                'todos' => [144, 138, 137, 101, 102],
+                'subjects' => [1, 7],
+                'specializations' => [1, 2, 3],
+                'images' => [
+                    'grammar1.png',
+                    'grammar2.png',
+                ],
+            ],
+        ];
 
-            // Create the GameActivity
-            $activity = GameActivity::factory()->create();
+        foreach ($games as $data) {
+            // Create the game activity
+            $activity = GameActivity::create([
+                'name' => $data['name'],
+                'path' => $data['path'],
+                'description' => $data['description'],
+            ]);
 
-            $activity->todos()->attach($todo->id);
+            // Attach Todos
+            if (!empty($data['todos'])) {
+                $activity->todos()->attach($data['todos']);
+            }
 
-            // Attach related subjects
-            $activity->subjects()->attach($subjects->pluck('id'));
+            // Attach Subjects
+            if (!empty($data['subjects'])) {
+                $activity->subjects()->attach($data['subjects']);
+            }
 
-            // Attach random specializations (1–2)
-            $activity->specializations()->attach(
-                $specializations->random(rand(1, 2))->pluck('id')->toArray()
-            );
+            // Attach Specializations
+            if (!empty($data['specializations'])) {
+                $activity->specializations()->attach($data['specializations']);
+            }
 
-            // Create game images
-            GameImage::factory()
-                ->count(rand(4, 6))
-                ->create([
+            // Create Game Images
+            foreach ($data['images'] as $imagePath) {
+                GameImage::create([
+                    'path' => $imagePath,
                     'game_activity_id' => $activity->id,
                 ]);
+            }
+        }
 
-            return $activity;
-        });
+        // // === Activities ===
+        // $activities = collect(range(1, 30))->map(function () use ($specializations) {
+        //     // Pick random subjects (for diversity)
+        //     $subjects = Subject::inRandomOrder()->take(rand(1, 2))->get();
+
+        //     // ✅ Manually assign a random todo_id between 1 and 102
+        //     $todo = Todo::inRandomOrder()->whereBetween('id', [103, 229])->first();
+
+        //     // Create the GameActivity
+        //     $activity = GameActivity::factory()->create();
+
+        //     $activity->todos()->attach($todo->id);
+
+        //     // Attach related subjects
+        //     $activity->subjects()->attach($subjects->pluck('id'));
+
+        //     // Attach random specializations (1–2)
+        //     $activity->specializations()->attach(
+        //         $specializations->random(rand(1, 2))->pluck('id')->toArray()
+        //     );
+
+        //     // Create game images
+        //     GameImage::factory()
+        //         ->count(rand(4, 6))
+        //         ->create([
+        //             'game_activity_id' => $activity->id,
+        //         ]);
+
+        //     return $activity;
+        // });
 
 
 
