@@ -185,7 +185,6 @@ class ApiController extends Controller
 
             $status = $currentEnrollment?->status;
 
-
             $student = Student::where('id', $studentId)
                 ->when($lastSyncTime, fn($q) => $q->where('updated_at', '>', Carbon::parse($lastSyncTime)->timezone('Asia/Manila')))
                 ->first();
