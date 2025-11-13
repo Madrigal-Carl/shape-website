@@ -443,11 +443,6 @@ class DatabaseSeeder extends Seeder
             'kindergarten 2',
             'kindergarten 3',
             'grade 1',
-            'grade 2',
-            'grade 3',
-            'grade 4',
-            'grade 5',
-            'grade 6',
         ];
 
         foreach ($levels as $level) {
@@ -533,20 +528,6 @@ class DatabaseSeeder extends Seeder
             }
         });
 
-        // === Curriculums for each instructor ===
-        $curriculums = $instructors->map(function ($instructor) {
-            $gradeLevelIds = $instructor->gradeLevels->pluck('id')->toArray();
-
-            return Curriculum::factory()->count(12)->make()->map(function ($curriculum) use ($instructor, $gradeLevelIds) {
-                $curriculum->instructor_id = $instructor->id;
-                $curriculum->grade_level_id = $gradeLevelIds[array_rand($gradeLevelIds)];
-                $curriculum->save();
-
-                return $curriculum;
-            });
-        })->flatten();
-
-
         Subject::factory()->allSubjects();
         // Define the mapping of domains to subjects
         $domainSubjects = [
@@ -581,214 +562,239 @@ class DatabaseSeeder extends Seeder
             }
         }
 
-        $subjectIds = Subject::pluck('id')->toArray();
-        $curriculums->each(function ($curriculum) use ($subjectIds, $specializations) {
-            $randomSubjects = collect($subjectIds)->shuffle()->take(rand(5, 8))->toArray();
-            foreach ($randomSubjects as $subjectId) {
-                CurriculumSubject::firstOrCreate([
-                    'curriculum_id' => $curriculum->id,
-                    'subject_id' => $subjectId
-                ]);
-            }
-            $curriculum->specializations()->attach(
-                $specializations->random(rand(1, 2))->pluck('id')->toArray()
-            );
-        });
-
-        // === Students (20 per instructor) ===
-        $instructors = Instructor::take(3)->get();
-        $students = collect();
-
-        foreach ($instructors as $instructor) {
-            $students = $students->merge(
-                Student::factory()->count(20)->create()
-            );
-        }
-
-        $students->each(function ($student) use ($instructors) {
-            $instructor = $instructors->random();
-            $gradeLevelId = $instructor->gradeLevels->random()->id;
-
-            Account::factory()->student($student)->create([
-                'username' => strtolower($student->first_name . $student->id),
-                'password' => 'password123',
-            ]);
-            Guardian::factory()->create(['student_id' => $student->id]);
-            Enrollment::factory()->create([
-                'instructor_id' => $instructor->id,
-                'student_id'    => $student->id,
-                'grade_level_id' => $gradeLevelId,
-            ]);
-            Address::factory()->student()->create([
-                'owner_id' => $student->id,
-                'owner_type' => Student::class,
-                'type' => 'permanent',
-            ]);
-            Address::factory()->student()->create([
-                'owner_id' => $student->id,
-                'owner_type' => Student::class,
-                'type' => 'current',
-            ]);
-        });
-
-        // === Awards for students ===
-        $allAwards = Award::all();
-        $students->each(function ($student) use ($allAwards) {
-            $randomAwards = $allAwards->random(rand(0, 3));
-            foreach ($randomAwards as $award) {
-                StudentAward::firstOrCreate([
-                    'student_id' => $student->id,
-                    'award_id'   => $award->id,
-                ]);
-            }
-        });
-
-
         $games = [
             [
                 'name' => 'Count Quest',
-                'path' => 'images/game-icons/game-posters/mario-kart-world-review-1.jpg',
+                'path' => 'images/game-icons/count-quest-icon.png',
                 'description' => 'Learn about the planets through an interactive exploration game.',
                 'todos' => [101, 102],
                 'subjects' => [1, 10],
                 'specializations' => [1, 2, 3],
                 'images' => [
-                    'solar1.png',
-                    'solar2.png',
-                    'solar3.png',
+                    'images/game-icons/game-posters/mario-kart-world-review-1.jpg',
+                    'images/game-previews/count-quest/1.png',
+                    'images/game-previews/count-quest/2.png',
+                    'images/game-previews/count-quest/3.png',
+                    'images/game-previews/count-quest/4.png',
+                    'images/game-previews/count-quest/5.png',
                 ],
             ],
             [
                 'name' => 'Finger Addition',
-                'path' => 'images/game-icons/game-posters/mario-kart-world-review-1.jpg',
+                'path' => 'images/game-icons/finger-addition-icon.png',
                 'description' => 'Solve math puzzles to advance through the fantasy world.',
                 'todos' => [145, 146, 147],
                 'subjects' => [1],
                 'specializations' => [2, 3],
                 'images' => [
-                    'math1.png',
-                    'math2.png',
-                    'math3.png',
+                    'images/game-icons/game-posters/mario-kart-world-review-1.jpg',
+                    'images/game-previews/finger-addition/1.png',
+                    'images/game-previews/finger-addition/2.png',
+                    'images/game-previews/finger-addition/3.png',
+                    'images/game-previews/finger-addition/4.png',
+                    'images/game-previews/finger-addition/5.png',
+                    'images/game-previews/finger-addition/6.png',
+                    'images/game-previews/finger-addition/7.png',
                 ],
             ],
             [
                 'name' => 'Fruit Subtraction',
-                'path' => 'images/game-icons/game-posters/mario-kart-world-review-1.jpg',
+                'path' => 'images/game-icons/fruit-subtraction-icon.png',
                 'description' => 'Battle grammar monsters using your language skills.',
                 'todos' => [101, 102],
                 'subjects' => [10],
                 'specializations' => [1],
                 'images' => [
-                    'grammar1.png',
-                    'grammar2.png',
+                    'images/game-icons/game-posters/mario-kart-world-review-1.jpg',
+                    'images/game-previews/fruit-subtraction/1.png',
+                    'images/game-previews/fruit-subtraction/2.png',
+                    'images/game-previews/fruit-subtraction/3.png',
+                    'images/game-previews/fruit-subtraction/4.png',
+                    'images/game-previews/fruit-subtraction/5.png',
                 ],
             ],
             [
                 'name' => 'Objectify',
-                'path' => 'images/game-icons/game-posters/mario-kart-world-review-1.jpg',
+                'path' => 'images/game-icons/objectify-icon.png',
                 'description' => 'Battle grammar monsters using your language skills.',
                 'todos' => [91, 92],
                 'subjects' => [2, 8, 14],
                 'specializations' => [1],
                 'images' => [
-                    'grammar1.png',
-                    'grammar2.png',
+                    'images/game-icons/game-posters/mario-kart-world-review-1.jpg',
+                    'images/game-previews/objectify/1.png',
+                    'images/game-previews/objectify/2.png',
+                    'images/game-previews/objectify/3.png',
+                    'images/game-previews/objectify/4.png',
+                    'images/game-previews/objectify/5.png',
+                    'images/game-previews/objectify/6.png',
                 ],
             ],
             [
                 'name' => 'Fruit Addition',
-                'path' => 'images/game-icons/game-posters/mario-kart-world-review-1.jpg',
+                'path' => 'images/game-icons/fruit-addition-icon.png',
                 'description' => 'Battle grammar monsters using your language skills.',
                 'todos' => [101, 102],
                 'subjects' => [10],
                 'specializations' => [1],
                 'images' => [
-                    'grammar1.png',
-                    'grammar2.png',
+                    'images/game-icons/game-posters/mario-kart-world-review-1.jpg',
+                    'images/game-previews/fruit-addition/1.png',
+                    'images/game-previews/fruit-addition/2.png',
+                    'images/game-previews/fruit-addition/3.png',
+                    'images/game-previews/fruit-addition/4.png',
+                    'images/game-previews/fruit-addition/5.png',
                 ],
             ],
             [
                 'name' => 'Finger Subtraction',
-                'path' => 'images/game-icons/game-posters/mario-kart-world-review-1.jpg',
+                'path' => 'images/game-icons/fruit-subtraction-icon.png',
                 'description' => 'Battle grammar monsters using your language skills.',
                 'todos' => [148, 149, 150, 151],
                 'subjects' => [1],
                 'specializations' => [2, 3],
                 'images' => [
-                    'grammar1.png',
-                    'grammar2.png',
+                    'images/game-icons/game-posters/mario-kart-world-review-1.jpg',
+                    'images/game-previews/finger-subtraction/1.png',
+                    'images/game-previews/finger-subtraction/2.png',
+                    'images/game-previews/finger-subtraction/3.png',
+                    'images/game-previews/finger-subtraction/4.png',
+                    'images/game-previews/finger-subtraction/5.png',
                 ],
             ],
             [
                 'name' => 'Sign Quest',
-                'path' => 'images/game-icons/game-posters/mario-kart-world-review-1.jpg',
+                'path' => 'images/game-icons/sign-quest-icon.png',
                 'description' => 'Battle grammar monsters using your language skills.',
                 'todos' => [94, 47, 126],
                 'subjects' => [7, 4],
                 'specializations' => [2, 3],
                 'images' => [
-                    'grammar1.png',
-                    'grammar2.png',
+                    'images/game-icons/game-posters/mario-kart-world-review-1.jpg',
+                    'images/game-previews/sign-quest/1.png',
+                    'images/game-previews/sign-quest/2.png',
+                    'images/game-previews/sign-quest/3.png',
+                    'images/game-previews/sign-quest/4.png',
+                    'images/game-previews/sign-quest/5.png',
                 ],
             ],
             [
                 'name' => 'Cast Spell',
-                'path' => 'images/game-icons/game-posters/mario-kart-world-review-1.jpg',
+                'path' => 'images/game-icons/cast-spell-icon.png',
                 'description' => 'Battle grammar monsters using your language skills.',
                 'todos' => [109, 47, 125, 126],
                 'subjects' => [4, 7,],
                 'specializations' => [2, 3],
                 'images' => [
-                    'grammar1.png',
-                    'grammar2.png',
+                    'images/game-icons/game-posters/mario-kart-world-review-1.jpg',
+                    'images/game-previews/cast-a-spell/1.png',
+                    'images/game-previews/cast-a-spell/2.png',
+                    'images/game-previews/cast-a-spell/3.png',
+                    'images/game-previews/cast-a-spell/4.png',
+                    'images/game-previews/cast-a-spell/5.png',
+                    'images/game-previews/cast-a-spell/6.png',
                 ],
             ],
             [
                 'name' => 'Number Quest',
-                'path' => 'images/game-icons/game-posters/mario-kart-world-review-1.jpg',
+                'path' => 'images/game-icons/number-quest-icon.png',
                 'description' => 'Battle grammar monsters using your language skills.',
                 'todos' => [144, 138, 137, 101, 102],
                 'subjects' => [1, 7],
                 'specializations' => [1, 2, 3],
                 'images' => [
-                    'grammar1.png',
-                    'grammar2.png',
+                    'images/game-icons/game-posters/mario-kart-world-review-1.jpg',
+                    'images/game-previews/number-quest/1.png',
+                    'images/game-previews/number-quest/2.png',
+                    'images/game-previews/number-quest/3.png',
+                    'images/game-previews/number-quest/4.png',
+                    'images/game-previews/number-quest/5.png',
+                    'images/game-previews/number-quest/6.png',
                 ],
             ],
             [
-                'name' => 'Self Care',
-                'path' => 'images/game-icons/game-posters/mario-kart-world-review-1.jpg',
+                ////
+                'name' => 'Care for yourself',
+                'path' => 'images/game-icons/care-for-yourself-icon.png',
                 'description' => 'Battle grammar monsters using your language skills.',
-                'todos' => [144, 138, 137, 101, 102],
-                'subjects' => [1, 7],
-                'specializations' => [1, 2, 3],
+                'todos' => [],
+                'subjects' => [],
+                'specializations' => [],
                 'images' => [
-                    'grammar1.png',
-                    'grammar2.png',
+                    'images/game-icons/game-posters/mario-kart-world-review-1.jpg',
+                    'images/game-previews/care-for-yourself/1.png',
+                    'images/game-previews/care-for-yourself/2.png',
+                    'images/game-previews/care-for-yourself/3.png',
+                    'images/game-previews/care-for-yourself/4.png',
+                    'images/game-previews/care-for-yourself/5.png',
                 ],
             ],
             [
-                'name' => 'Number Quest',
-                'path' => 'images/game-icons/game-posters/mario-kart-world-review-1.jpg',
+                'name' => 'Sort Safari',
+                'path' => 'images/game-icons/sort-safari-icon.png',
                 'description' => 'Battle grammar monsters using your language skills.',
-                'todos' => [144, 138, 137, 101, 102],
-                'subjects' => [1, 7],
-                'specializations' => [1, 2, 3],
+                'todos' => [],
+                'subjects' => [],
+                'specializations' => [],
                 'images' => [
-                    'grammar1.png',
-                    'grammar2.png',
+                    'images/game-icons/game-posters/mario-kart-world-review-1.jpg',
+                    'images/game-previews/sort-safari/1.png',
+                    'images/game-previews/sort-safari/2.png',
+                    'images/game-previews/sort-safari/3.png',
+                    'images/game-previews/sort-safari/4.png',
+                    'images/game-previews/sort-safari/5.png',
+                    'images/game-previews/sort-safari/6.png',
+                    'images/game-previews/sort-safari/7.png',
+                    'images/game-previews/sort-safari/8.png',
+                    'images/game-previews/sort-safari/9.png',
+                    'images/game-previews/sort-safari/10.png',
                 ],
             ],
             [
-                'name' => 'Number Quest',
+                'name' => 'Fairly Multiplication',
+                'path' => 'images/game-icons/the-fairly-multiflication.png',
+                'description' => 'Battle grammar monsters using your language skills.',
+                'todos' => [],
+                'subjects' => [],
+                'specializations' => [],
+                'images' => [
+                    'images/game-icons/game-posters/mario-kart-world-review-1.jpg',
+                    'images/game-previews/the-fairy-multiflication/1.png',
+                    'images/game-previews/the-fairy-multiflication/2.png',
+                    'images/game-previews/the-fairy-multiflication/3.png',
+                    'images/game-previews/the-fairy-multiflication/4.png',
+                ],
+            ],
+            [
+                'name' => 'Animal Trace',
                 'path' => 'images/game-icons/game-posters/mario-kart-world-review-1.jpg',
                 'description' => 'Battle grammar monsters using your language skills.',
-                'todos' => [144, 138, 137, 101, 102],
-                'subjects' => [1, 7],
-                'specializations' => [1, 2, 3],
+                'todos' => [],
+                'subjects' => [],
+                'specializations' => [],
                 'images' => [
-                    'grammar1.png',
-                    'grammar2.png',
+                    'images/game-icons/game-posters/mario-kart-world-review-1.jpg',
+                    'images/game-previews/animal-trace/1.png',
+                    'images/game-previews/animal-trace/2.png',
+                    'images/game-previews/animal-trace/3.png',
+                    'images/game-previews/animal-trace/4.png',
+                    'images/game-previews/animal-trace/5.png',
+                ],
+            ],
+            [
+                'name' => 'Shape Trace',
+                'path' => 'images/game-icons/game-posters/mario-kart-world-review-1.jpg',
+                'description' => 'Battle grammar monsters using your language skills.',
+                'todos' => [],
+                'subjects' => [],
+                'specializations' => [],
+                'images' => [
+                    'images/game-icons/game-posters/mario-kart-world-review-1.jpg',
+                    'images/game-previews/shape-trace/1.png',
+                    'images/game-previews/shape-trace/2.png',
+                    'images/game-previews/shape-trace/3.png',
+                    'images/game-previews/shape-trace/4.png',
+                    'images/game-previews/shape-trace/5.png',
                 ],
             ],
         ];
@@ -825,6 +831,84 @@ class DatabaseSeeder extends Seeder
             }
         }
 
+        // // === Curriculums for each instructor ===
+        // $curriculums = $instructors->map(function ($instructor) {
+        //     $gradeLevelIds = $instructor->gradeLevels->pluck('id')->toArray();
+
+        //     return Curriculum::factory()->count(12)->make()->map(function ($curriculum) use ($instructor, $gradeLevelIds) {
+        //         $curriculum->instructor_id = $instructor->id;
+        //         $curriculum->grade_level_id = $gradeLevelIds[array_rand($gradeLevelIds)];
+        //         $curriculum->save();
+
+        //         return $curriculum;
+        //     });
+        // })->flatten();
+
+
+
+        // $subjectIds = Subject::pluck('id')->toArray();
+        // $curriculums->each(function ($curriculum) use ($subjectIds, $specializations) {
+        //     $randomSubjects = collect($subjectIds)->shuffle()->take(rand(5, 8))->toArray();
+        //     foreach ($randomSubjects as $subjectId) {
+        //         CurriculumSubject::firstOrCreate([
+        //             'curriculum_id' => $curriculum->id,
+        //             'subject_id' => $subjectId
+        //         ]);
+        //     }
+        //     $curriculum->specializations()->attach(
+        //         $specializations->random(rand(1, 2))->pluck('id')->toArray()
+        //     );
+        // });
+
+        // // === Students (20 per instructor) ===
+        // $instructors = Instructor::take(3)->get();
+        // $students = collect();
+
+        // foreach ($instructors as $instructor) {
+        //     $students = $students->merge(
+        //         Student::factory()->count(20)->create()
+        //     );
+        // }
+
+        // $students->each(function ($student) use ($instructors) {
+        //     $instructor = $instructors->random();
+        //     $gradeLevelId = $instructor->gradeLevels->random()->id;
+
+        //     Account::factory()->student($student)->create([
+        //         'username' => strtolower($student->first_name . $student->id),
+        //         'password' => 'password123',
+        //     ]);
+        //     Guardian::factory()->create(['student_id' => $student->id]);
+        //     Enrollment::factory()->create([
+        //         'instructor_id' => $instructor->id,
+        //         'student_id'    => $student->id,
+        //         'grade_level_id' => $gradeLevelId,
+        //     ]);
+        //     Address::factory()->student()->create([
+        //         'owner_id' => $student->id,
+        //         'owner_type' => Student::class,
+        //         'type' => 'permanent',
+        //     ]);
+        //     Address::factory()->student()->create([
+        //         'owner_id' => $student->id,
+        //         'owner_type' => Student::class,
+        //         'type' => 'current',
+        //     ]);
+        // });
+
+        // // === Awards for students ===
+        // $allAwards = Award::all();
+        // $students->each(function ($student) use ($allAwards) {
+        //     $randomAwards = $allAwards->random(rand(0, 3));
+        //     foreach ($randomAwards as $award) {
+        //         StudentAward::firstOrCreate([
+        //             'student_id' => $student->id,
+        //             'award_id'   => $award->id,
+        //         ]);
+        //     }
+        // });
+
+
         // // === Activities ===
         // $activities = collect(range(1, 30))->map(function () use ($specializations) {
         //     // Pick random subjects (for diversity)
@@ -859,152 +943,152 @@ class DatabaseSeeder extends Seeder
 
 
 
-        // === Assign lessons per instructor (unique) ===
-        $instructors->each(function ($instructor) use ($activities, $curriculums) {
-            $instructorCurriculums = $curriculums->where('instructor_id', $instructor->id);
+        // // === Assign lessons per instructor (unique) ===
+        // $instructors->each(function ($instructor) use ($activities, $curriculums) {
+        //     $instructorCurriculums = $curriculums->where('instructor_id', $instructor->id);
 
-            $instructorCurriculums->each(function ($curriculum) use ($activities, $instructor) {
-                $curriculumSubjects = $curriculum->curriculumSubjects;
+        //     $instructorCurriculums->each(function ($curriculum) use ($activities, $instructor) {
+        //         $curriculumSubjects = $curriculum->curriculumSubjects;
 
-                // ✅ Eligible students for this curriculum
-                $eligibleStudents = $instructor->eligibleStudents($curriculum)->get();
+        //         // ✅ Eligible students for this curriculum
+        //         $eligibleStudents = $instructor->eligibleStudents($curriculum)->get();
 
-                // ✅ Create lessons for this instructor/curriculum
-                $curriculumLessons = Lesson::factory()->count(2)->create();
+        //         // ✅ Create lessons for this instructor/curriculum
+        //         $curriculumLessons = Lesson::factory()->count(2)->create();
 
-                $curriculumLessons->each(function ($lesson) use ($eligibleStudents, $curriculumSubjects) {
-                    $curriculumSubject = $curriculumSubjects->random(); // fixed per lesson
+        //         $curriculumLessons->each(function ($lesson) use ($eligibleStudents, $curriculumSubjects) {
+        //             $curriculumSubject = $curriculumSubjects->random(); // fixed per lesson
 
-                    $eligibleStudents->each(function ($student) use ($lesson, $curriculumSubject) {
-                        LessonSubjectStudent::firstOrCreate([
-                            'curriculum_subject_id' => $curriculumSubject->id,
-                            'lesson_id'             => $lesson->id,
-                            'student_id'            => $student->id,
-                        ]);
-                    });
-                });
+        //             $eligibleStudents->each(function ($student) use ($lesson, $curriculumSubject) {
+        //                 LessonSubjectStudent::firstOrCreate([
+        //                     'curriculum_subject_id' => $curriculumSubject->id,
+        //                     'lesson_id'             => $lesson->id,
+        //                     'student_id'            => $student->id,
+        //                 ]);
+        //             });
+        //         });
 
-                $curriculumLessons->each(function ($lesson) use ($activities, $eligibleStudents, $curriculumSubjects) {
-                    // Attach video
-                    Video::factory()->create(['lesson_id' => $lesson->id]);
+        //         $curriculumLessons->each(function ($lesson) use ($activities, $eligibleStudents, $curriculumSubjects) {
+        //             // Attach video
+        //             Video::factory()->create(['lesson_id' => $lesson->id]);
 
-                    // Filter activities whose Todo belongs to subjects in this curriculum
-                    $subjectIds = $curriculumSubjects->pluck('subject_id');
-                    $eligibleGameActivities = $activities->filter(function ($activity) use ($subjectIds) {
-                        $activitySubjectIds = $activity->subjects->pluck('id');
-                        return $activitySubjectIds->intersect($subjectIds)->isNotEmpty();
-                    });
+        //             // Filter activities whose Todo belongs to subjects in this curriculum
+        //             $subjectIds = $curriculumSubjects->pluck('subject_id');
+        //             $eligibleGameActivities = $activities->filter(function ($activity) use ($subjectIds) {
+        //                 $activitySubjectIds = $activity->subjects->pluck('id');
+        //                 return $activitySubjectIds->intersect($subjectIds)->isNotEmpty();
+        //             });
 
-                    // Pick a random eligible activity (if any)
-                    $gameActivity = $eligibleGameActivities->isNotEmpty()
-                        ? $eligibleGameActivities->random()
-                        : null;
+        //             // Pick a random eligible activity (if any)
+        //             $gameActivity = $eligibleGameActivities->isNotEmpty()
+        //                 ? $eligibleGameActivities->random()
+        //                 : null;
 
-                    if ($gameActivity) {
-                        $gameActivityLesson = GameActivityLesson::create([
-                            'lesson_id'        => $lesson->id,
-                            'game_activity_id' => $gameActivity->id,
-                        ]);
+        //             if ($gameActivity) {
+        //                 $gameActivityLesson = GameActivityLesson::create([
+        //                     'lesson_id'        => $lesson->id,
+        //                     'game_activity_id' => $gameActivity->id,
+        //                 ]);
 
-                        // Assign students only if there’s a matching activity
-                        $eligibleStudents->each(function ($student) use ($lesson, $curriculumSubjects, $gameActivityLesson) {
-                            $curriculumSubject = $curriculumSubjects->random();
+        //                 // Assign students only if there’s a matching activity
+        //                 $eligibleStudents->each(function ($student) use ($lesson, $curriculumSubjects, $gameActivityLesson) {
+        //                     $curriculumSubject = $curriculumSubjects->random();
 
-                            LessonSubjectStudent::firstOrCreate([
-                                'curriculum_subject_id' => $curriculumSubject->id,
-                                'lesson_id'             => $lesson->id,
-                                'student_id'            => $student->id,
-                            ]);
+        //                     LessonSubjectStudent::firstOrCreate([
+        //                         'curriculum_subject_id' => $curriculumSubject->id,
+        //                         'lesson_id'             => $lesson->id,
+        //                         'student_id'            => $student->id,
+        //                     ]);
 
-                            StudentActivity::factory()->create([
-                                'student_id'           => $student->id,
-                                'activity_lesson_id'   => $gameActivityLesson->id,
-                                'activity_lesson_type' => GameActivityLesson::class,
-                            ]);
-                        });
-                    }
-                });
-            });
-        });
-
-
-        // === Class Activity ===
-        $instructors = Instructor::all();
-
-        foreach ($instructors as $instructor) {
-            $curriculumSubjects = CurriculumSubject::whereHas('curriculum', function ($q) use ($instructor) {
-                $q->where('instructor_id', $instructor->id);
-            })->with('subject.domains.subDomains.todos', 'subject.domains.todos')->get();
-
-            $activities = collect();
-
-            for ($i = 0; $i < 10; $i++) {
-                if ($curriculumSubjects->isEmpty()) {
-                    continue;
-                }
-
-                // Pick a random CurriculumSubject
-                $curriculumSubject = $curriculumSubjects->random();
-
-                // 2️⃣ Get the related Subject
-                $subject = $curriculumSubject->subject;
-                if (!$subject) {
-                    continue; // skip if no subject
-                }
-
-                // Get a random domain from that subject
-                $domain = $subject->domains()->inRandomOrder()->first();
-                if (!$domain) {
-                    continue; // skip if no domain exists for subject
-                }
-
-                // Get todo — first from domain, fallback to subdomain
-                $todo = $domain->todos()->inRandomOrder()->first();
-
-                if (!$todo) {
-                    $subDomain = $domain->subDomains()->with('todos')->inRandomOrder()->first();
-                    if ($subDomain) {
-                        $todo = $subDomain->todos()->inRandomOrder()->first();
-                    }
-                }
-
-                // If still no todo, skip
-                if (!$todo) {
-                    continue;
-                }
-
-                // 6️⃣ Create ClassActivity now that we have a todo
-                $activity = ClassActivity::factory()->create([
-                    'instructor_id'         => $instructor->id,
-                    'curriculum_subject_id' => $curriculumSubject->id,
-                    'lesson_id'             => null, // optional
-                ]);
-
-                $activity->todos()->attach($todo->id);
-
-                $activities->push($activity);
-            }
-
-            // 7️⃣ Assign created activities to random students
-            foreach ($activities as $activity) {
-                $eligibleStudents = $instructor->eligibleStudents($activity->curriculumSubject->curriculum)->get();
-                $students = $eligibleStudents->shuffle()->take(rand(3, 6));
-
-                foreach ($students as $student) {
-                    StudentActivity::factory()->create([
-                        'student_id'           => $student->id,
-                        'activity_lesson_id'   => $activity->id,
-                        'activity_lesson_type' => ClassActivity::class,
-                    ]);
-                }
-            }
-        }
+        //                     StudentActivity::factory()->create([
+        //                         'student_id'           => $student->id,
+        //                         'activity_lesson_id'   => $gameActivityLesson->id,
+        //                         'activity_lesson_type' => GameActivityLesson::class,
+        //                     ]);
+        //                 });
+        //             }
+        //         });
+        //     });
+        // });
 
 
-        // === Feeds ===
-        $students->each(function ($student) {
-            Feed::factory()->create(['notifiable_id' => $student->id, 'group' => 'student']);
-        });
-        Feed::factory()->count(30)->create();
+        // // === Class Activity ===
+        // $instructors = Instructor::all();
+
+        // foreach ($instructors as $instructor) {
+        //     $curriculumSubjects = CurriculumSubject::whereHas('curriculum', function ($q) use ($instructor) {
+        //         $q->where('instructor_id', $instructor->id);
+        //     })->with('subject.domains.subDomains.todos', 'subject.domains.todos')->get();
+
+        //     $activities = collect();
+
+        //     for ($i = 0; $i < 10; $i++) {
+        //         if ($curriculumSubjects->isEmpty()) {
+        //             continue;
+        //         }
+
+        //         // Pick a random CurriculumSubject
+        //         $curriculumSubject = $curriculumSubjects->random();
+
+        //         // 2️⃣ Get the related Subject
+        //         $subject = $curriculumSubject->subject;
+        //         if (!$subject) {
+        //             continue; // skip if no subject
+        //         }
+
+        //         // Get a random domain from that subject
+        //         $domain = $subject->domains()->inRandomOrder()->first();
+        //         if (!$domain) {
+        //             continue; // skip if no domain exists for subject
+        //         }
+
+        //         // Get todo — first from domain, fallback to subdomain
+        //         $todo = $domain->todos()->inRandomOrder()->first();
+
+        //         if (!$todo) {
+        //             $subDomain = $domain->subDomains()->with('todos')->inRandomOrder()->first();
+        //             if ($subDomain) {
+        //                 $todo = $subDomain->todos()->inRandomOrder()->first();
+        //             }
+        //         }
+
+        //         // If still no todo, skip
+        //         if (!$todo) {
+        //             continue;
+        //         }
+
+        //         // 6️⃣ Create ClassActivity now that we have a todo
+        //         $activity = ClassActivity::factory()->create([
+        //             'instructor_id'         => $instructor->id,
+        //             'curriculum_subject_id' => $curriculumSubject->id,
+        //             'lesson_id'             => null, // optional
+        //         ]);
+
+        //         $activity->todos()->attach($todo->id);
+
+        //         $activities->push($activity);
+        //     }
+
+        //     // 7️⃣ Assign created activities to random students
+        //     foreach ($activities as $activity) {
+        //         $eligibleStudents = $instructor->eligibleStudents($activity->curriculumSubject->curriculum)->get();
+        //         $students = $eligibleStudents->shuffle()->take(rand(3, 6));
+
+        //         foreach ($students as $student) {
+        //             StudentActivity::factory()->create([
+        //                 'student_id'           => $student->id,
+        //                 'activity_lesson_id'   => $activity->id,
+        //                 'activity_lesson_type' => ClassActivity::class,
+        //             ]);
+        //         }
+        //     }
+        // }
+
+
+        // // === Feeds ===
+        // $students->each(function ($student) {
+        //     Feed::factory()->create(['notifiable_id' => $student->id, 'group' => 'student']);
+        // });
+        // Feed::factory()->count(30)->create();
     }
 }

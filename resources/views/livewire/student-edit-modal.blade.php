@@ -3,7 +3,7 @@
         <section
             class="bg-black/40 fixed w-dvw h-dvh top-0 left-0 z-50 backdrop-blur-xs flex justify-center items-center overflow-y-auto p-10">
             <!-- first form -->
-            @if ($step === 3)
+            @if ($step === 1)
                 <div class="bg-card white p-8 rounded-4xl w-180 flex flex-col gap-8">
                     <div class="flex items-center gap-2">
                         <img src="{{ asset('images/form-icon.png') }}" class="h-8" alt="" />
@@ -323,7 +323,7 @@
             <!-- End of Second form -->
 
             <!-- Third form -->
-            @if ($step === 1)
+            @if ($step === 3)
                 <div class="bg-card p-8 rounded-4xl w-160 flex flex-col gap-8">
                     <div class="flex w-full items-center-safe justify-between">
                         <div class="flex items-center gap-2">

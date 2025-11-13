@@ -116,7 +116,7 @@
 
                     <div class="w-full p-8 flex flex-col gap-8">
                         <div class="flex items-start gap-4">
-                            <img src="{{ asset('images/game-icons/mario.jpeg') }}" alt=""
+                            <img src="{{ asset($act->path) }}" alt=""
                                 class="h-20 aspect-square object-cover rounded-3xl">
                             <div>
                                 <h1 class="font-semibold text-2xl w-full leading-7">{{ $act->name }}</h1>
@@ -134,9 +134,11 @@
                             <h1 class="text-xl font-semibold">Preview:</h1>
                             <div class="flex items-center gap-2 overflow-x-scroll overflow-y-hidden pb-4">
                                 @foreach ($act->gameImages as $image)
-                                    <img src="{{ asset($image->path) }}" alt=""
-                                        class="w-45 rounded-3xl col-span-2 row-span-2 cursor-pointer"
-                                        wire:click="showImagePreview('{{ $image->path }}')">
+                                    @if (!$loop->first)
+                                        <img src="{{ asset($image->path) }}" alt=""
+                                            class="w-45 rounded-3xl col-span-2 row-span-2 cursor-pointer"
+                                            wire:click="showImagePreview('{{ $image->path }}')">
+                                    @endif
                                 @endforeach
                             </div>
                         </div>
