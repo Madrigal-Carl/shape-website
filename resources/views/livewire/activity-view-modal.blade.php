@@ -64,7 +64,7 @@
                         <div class="grid grid-cols-2 gap-4">
                             @foreach ($studentsData as $stud)
                                 <div
-                                    class="flex flex-col gap-4 items-center bg-white rounded-3xl hover:bg-gray-300 cursor-pointer">
+                                    class="flex flex-col gap-4 items-center bg-card rounded-3xl hover:bg-gray-300 cursor-pointer">
                                     <div
                                         class="flex gap-2 items-start justify-between w-full transition-all p-4 duration-200">
                                         <div class="flex gap-2 items-center w-full">
