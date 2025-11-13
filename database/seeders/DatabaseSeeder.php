@@ -571,7 +571,7 @@ class DatabaseSeeder extends Seeder
                 'subjects' => [1, 10],
                 'specializations' => [1, 2, 3],
                 'images' => [
-                    'images/game-icons/game-posters/mario-kart-world-review-1.jpg',
+                    'images/game-icons/count-quest-icon.png',
                     'images/game-previews/count-quest/1.png',
                     'images/game-previews/count-quest/2.png',
                     'images/game-previews/count-quest/3.png',
@@ -587,7 +587,7 @@ class DatabaseSeeder extends Seeder
                 'subjects' => [1],
                 'specializations' => [2, 3],
                 'images' => [
-                    'images/game-icons/game-posters/mario-kart-world-review-1.jpg',
+                    'images/game-icons/finger-addition-icon.png',
                     'images/game-previews/finger-addition/1.png',
                     'images/game-previews/finger-addition/2.png',
                     'images/game-previews/finger-addition/3.png',
@@ -605,7 +605,7 @@ class DatabaseSeeder extends Seeder
                 'subjects' => [10],
                 'specializations' => [1],
                 'images' => [
-                    'images/game-icons/game-posters/mario-kart-world-review-1.jpg',
+                    'images/game-icons/fruit-subtraction-icon.png',
                     'images/game-previews/fruit-subtraction/1.png',
                     'images/game-previews/fruit-subtraction/2.png',
                     'images/game-previews/fruit-subtraction/3.png',
@@ -621,7 +621,7 @@ class DatabaseSeeder extends Seeder
                 'subjects' => [2, 8, 14],
                 'specializations' => [1],
                 'images' => [
-                    'images/game-icons/game-posters/mario-kart-world-review-1.jpg',
+                    'images/game-icons/objectify-icon.png',
                     'images/game-previews/objectify/1.png',
                     'images/game-previews/objectify/2.png',
                     'images/game-previews/objectify/3.png',
@@ -638,7 +638,7 @@ class DatabaseSeeder extends Seeder
                 'subjects' => [10],
                 'specializations' => [1],
                 'images' => [
-                    'images/game-icons/game-posters/mario-kart-world-review-1.jpg',
+                    'images/game-icons/fruit-addition-icon.png',
                     'images/game-previews/fruit-addition/1.png',
                     'images/game-previews/fruit-addition/2.png',
                     'images/game-previews/fruit-addition/3.png',
@@ -654,7 +654,7 @@ class DatabaseSeeder extends Seeder
                 'subjects' => [1],
                 'specializations' => [2, 3],
                 'images' => [
-                    'images/game-icons/game-posters/mario-kart-world-review-1.jpg',
+                    'images/game-icons/fruit-subtraction-icon.png',
                     'images/game-previews/finger-subtraction/1.png',
                     'images/game-previews/finger-subtraction/2.png',
                     'images/game-previews/finger-subtraction/3.png',
@@ -670,7 +670,7 @@ class DatabaseSeeder extends Seeder
                 'subjects' => [7, 4],
                 'specializations' => [2, 3],
                 'images' => [
-                    'images/game-icons/game-posters/mario-kart-world-review-1.jpg',
+                    'images/game-icons/sign-quest-icon.png',
                     'images/game-previews/sign-quest/1.png',
                     'images/game-previews/sign-quest/2.png',
                     'images/game-previews/sign-quest/3.png',
@@ -686,7 +686,7 @@ class DatabaseSeeder extends Seeder
                 'subjects' => [4, 7,],
                 'specializations' => [2, 3],
                 'images' => [
-                    'images/game-icons/game-posters/mario-kart-world-review-1.jpg',
+                    'images/game-icons/cast-spell-icon.png',
                     'images/game-previews/cast-a-spell/1.png',
                     'images/game-previews/cast-a-spell/2.png',
                     'images/game-previews/cast-a-spell/3.png',
@@ -703,7 +703,7 @@ class DatabaseSeeder extends Seeder
                 'subjects' => [1, 7],
                 'specializations' => [1, 2, 3],
                 'images' => [
-                    'images/game-icons/game-posters/mario-kart-world-review-1.jpg',
+                    'images/game-icons/number-quest-icon.png',
                     'images/game-previews/number-quest/1.png',
                     'images/game-previews/number-quest/2.png',
                     'images/game-previews/number-quest/3.png',
@@ -721,7 +721,7 @@ class DatabaseSeeder extends Seeder
                 'subjects' => [],
                 'specializations' => [],
                 'images' => [
-                    'images/game-icons/game-posters/mario-kart-world-review-1.jpg',
+                    'images/game-icons/care-for-yourself-icon.png',
                     'images/game-previews/care-for-yourself/1.png',
                     'images/game-previews/care-for-yourself/2.png',
                     'images/game-previews/care-for-yourself/3.png',
@@ -737,7 +737,7 @@ class DatabaseSeeder extends Seeder
                 'subjects' => [],
                 'specializations' => [],
                 'images' => [
-                    'images/game-icons/game-posters/mario-kart-world-review-1.jpg',
+                    'images/game-icons/sort-safari-icon.png',
                     'images/game-previews/sort-safari/1.png',
                     'images/game-previews/sort-safari/2.png',
                     'images/game-previews/sort-safari/3.png',
@@ -758,7 +758,7 @@ class DatabaseSeeder extends Seeder
                 'subjects' => [],
                 'specializations' => [],
                 'images' => [
-                    'images/game-icons/game-posters/mario-kart-world-review-1.jpg',
+                    'images/game-icons/the-fairly-multiflication.png',
                     'images/game-previews/the-fairy-multiflication/1.png',
                     'images/game-previews/the-fairy-multiflication/2.png',
                     'images/game-previews/the-fairy-multiflication/3.png',
