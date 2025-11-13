@@ -260,7 +260,7 @@ class LessonAddModal extends Component
                 'notifiable_id' => $student->id,
                 'group' => 'student',
                 'title' => 'New Lesson Created',
-                'message' => "A new lesson named '{$this->lesson_name}' has been to {$student->fullname}.",
+                'message' => "A new lesson named '{$this->lesson_name}' has been assigned to {$student->fullname}.",
             ]);
         }
 
