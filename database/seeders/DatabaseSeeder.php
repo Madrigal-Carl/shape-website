@@ -797,6 +797,30 @@ class DatabaseSeeder extends Seeder
                     'images/game-previews/shape-trace/5.png',
                 ],
             ],
+            [
+                'name' => 'Count to 100',
+                'path' => 'images/game-icons/game-posters/mario-kart-world-review-1.jpg',
+                'description' => 'Battle grammar monsters using your language skills.',
+                'todos' => [],
+                'subjects' => [],
+                'specializations' => [],
+                'images' => [
+                    'images/game-icons/game-posters/mario-kart-world-review-1.jpg',
+                    'images/game-previews/shape-trace/1.png',
+                ],
+            ],
+            [
+                'name' => 'Match Mania',
+                'path' => 'images/game-icons/game-posters/mario-kart-world-review-1.jpg',
+                'description' => 'Battle grammar monsters using your language skills.',
+                'todos' => [],
+                'subjects' => [],
+                'specializations' => [],
+                'images' => [
+                    'images/game-icons/game-posters/mario-kart-world-review-1.jpg',
+                    'images/game-previews/shape-trace/1.png',
+                ],
+            ],
         ];
 
         foreach ($games as $data) {
