@@ -140,6 +140,7 @@ class ApiController extends Controller
             $studentId = $request->input('student_id');
             $lastSyncTime = $request->input('last_sync_time');
             $lastSchoolYearId = $request->input('last_school_year_id');
+            $enrollment = Student::find($studentId)?->isEnrolledIn($schoolYear?->id);
             $reset = false;
             $newSchoolYearDetected = false;
 
@@ -159,16 +160,23 @@ class ApiController extends Controller
                 default => null
             };
 
+            $activeCurriculum = null;
+            if ($enrollment) {
+                $gradeLevelId = $enrollment->grade_level_id;
+
+                // Fetch the active curriculum for this grade level
+                $activeCurriculum = Curriculum::where('status', 'active')
+                    ->where('grade_level_id', $gradeLevelId)
+                    ->latest('updated_at')
+                    ->first();
+            }
+
             if ($lastSyncTime) {
                 $lastSync = Carbon::parse($lastSyncTime);
 
                 if ($quarterStart && $lastSync->lt($quarterStart)) {
                     $reset = true;
                 }
-
-                $activeCurriculum = Curriculum::where('status', 'active')
-                    ->latest('updated_at')
-                    ->first();
 
                 if ($activeCurriculum && $lastSync->lt(Carbon::parse($activeCurriculum->updated_at))) {
                     $reset = true;
