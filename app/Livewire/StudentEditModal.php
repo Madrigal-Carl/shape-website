@@ -125,6 +125,7 @@ class StudentEditModal extends Component
             'current_barangay'    => $this->current_barangay,
             'account_username'    => $this->account_username,
             'school_id'              => $this->school_id,
+            'background_grade_level'     => $this->background_grade_level,
             'last_school_year_completed' => $this->last_school_year_completed,
             'last_school_attended'   => $this->last_school_attended,
         ];
