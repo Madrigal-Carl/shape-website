@@ -243,7 +243,17 @@
                         </div>
                     </div>
                     <div class="flex flex-col gap-3">
-                        <h2 class="font-semibold text-xl">Current Address</h2>
+                        <div class="flex items-center justify-between w-full">
+                            <h2 class="font-semibold text-xl">Current Address</h2>
+                            <div class="flex items-center gap-2 w-fit p-2 hover:bg-card rounded-lg cursor-pointer">
+                                <label class="container w-fit">
+                                    <input type="checkbox" wire:model.live="copyPermanentToCurrent">
+                                    <div class="checkmark"></div>
+                                </label>
+                                <p class="w-full text-paragraph">Use Permanent Address</p>
+                            </div>
+                        </div>
+
                         <div class="flex items-center gap-2 w-full">
                             <div class="px-4 py-2 rounded-lg bg-white w-full">
                                 <select class="w-full outline-none text-paragraph" disabled>

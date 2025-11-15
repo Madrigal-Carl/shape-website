@@ -25,7 +25,7 @@ class InstructorEditModal extends Component
     // Instructor Info
     public $photo, $currentPhoto;
     public $license_number, $status = '', $first_name, $middle_name, $last_name, $birthdate, $sex = '';
-    public $showSpecializations = false;
+    public $showSpecializations = false, $copyPermanentToCurrent = false;
     public $showGradeLevels = false;
     public $selectedSpecializations = [];
     public $selectedGradeLevels = [];
@@ -47,6 +47,21 @@ class InstructorEditModal extends Component
     // For edit
     public $instructor_id;
     public $original = [];
+
+    public function updatedCopyPermanentToCurrent()
+    {
+        if ($this->copyPermanentToCurrent) {
+            $this->current_municipal = $this->permanent_municipal;
+            $this->current_barangay = $this->permanent_barangay;
+            $this->current_barangays = $this->permanent_barangays;
+        } else {
+            // Optional: clear current address when unchecked
+            $this->current_municipal = "";
+            $this->current_barangay = "";
+            $this->current_barangays = [];
+        }
+    }
+
 
     #[On('openModal')]
     public function openModal($id)

@@ -74,7 +74,7 @@ class Instructor extends Model
             'enrollments',
             'instructor_id',
             'student_id'
-        )->with('enrollments');
+        )->distinct()->with('enrollments');
     }
 
 

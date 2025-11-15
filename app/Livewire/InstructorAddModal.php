@@ -26,7 +26,7 @@ class InstructorAddModal extends Component
     // Instructor Info
     public $photo;
     public $license_number, $first_name, $middle_name, $last_name, $birthdate, $sex = '';
-    public $showSpecializations = false;
+    public $showSpecializations = false, $copyPermanentToCurrent = false;
     public $showGradeLevels = false;
     public $selectedSpecializations = [];
     public $selectedGradeLevels = [];
@@ -41,6 +41,21 @@ class InstructorAddModal extends Component
     public $account_username, $account_password;
 
     public $specializations, $gradeLevels;
+
+    public function updatedCopyPermanentToCurrent()
+    {
+        if ($this->copyPermanentToCurrent) {
+            $this->current_municipal = $this->permanent_municipal;
+            $this->current_barangay = $this->permanent_barangay;
+            $this->current_barangays = $this->permanent_barangays;
+        } else {
+            // Optional: clear current address when unchecked
+            $this->current_municipal = "";
+            $this->current_barangay = "";
+            $this->current_barangays = [];
+        }
+    }
+
 
     #[On('openModal')]
     public function openModal()

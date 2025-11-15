@@ -11,7 +11,7 @@ use App\Models\Specialization;
 
 class GameActivityHub extends Component
 {
-    public $isOpen = true;
+    public $isOpen = false;
     public $targetComponent = null;
     public $isOpenActivityView = false;
     public $activities = [], $specializations = [], $selectedSpecializations = [], $subjects, $selectedSubjects;

@@ -41,6 +41,12 @@ class StudentAddOldModal extends Component
     public function getFilteredStudentsProperty()
     {
         $last = SchoolYear::orderBy('fourth_quarter_end', 'desc')->first();
+        if ($last->hasEnded()) {
+            $schoolYear = $last;
+        } else {
+            $schoolYear = SchoolYear::orderBy('fourth_quarter_end', 'desc')->skip(1)->first();
+        }
+
         $instructor = Auth::user()->accountable;
 
         // Grade rank map
@@ -49,11 +55,6 @@ class StudentAddOldModal extends Component
             'kindergarten 2' => 2,
             'kindergarten 3' => 3,
             'grade 1'        => 4,
-            'grade 2'        => 5,
-            'grade 3'        => 6,
-            'grade 4'        => 7,
-            'grade 5'        => 8,
-            'grade 6'        => 9,
         ];
 
         // Instructor's assigned grade levels
@@ -70,8 +71,8 @@ class StudentAddOldModal extends Component
         $previousGradeLevelIds = GradeLevel::whereIn('name', $previousGradeLevels)->pluck('id');
 
         $query = Student::query()
-            ->whereHas('enrollments', function ($q) use ($last) {
-                $q->where('school_year_id', $last->id)
+            ->whereHas('enrollments', function ($q) use ($schoolYear) {
+                $q->where('school_year_id', $schoolYear->id)
                     ->where('status', 'qualified');
             })
             ->whereIn(
@@ -95,16 +96,16 @@ class StudentAddOldModal extends Component
 
                 $targetGradeLevelIds = GradeLevel::whereIn('name', $targetGradeLevels)->pluck('id');
 
-                $query->whereHas('enrollments', function ($q) use ($last, $targetGradeLevelIds) {
+                $query->whereHas('enrollments', function ($q) use ($schoolYear, $targetGradeLevelIds) {
                     $q->whereIn('grade_level_id', $targetGradeLevelIds)
-                        ->where('school_year_id', $last->id);
+                        ->where('school_year_id', $schoolYear->id);
                 });
             }
         } else {
             // When "All" is selected, show all one rank lower than instructor’s grade levels
-            $query->whereHas('enrollments', function ($q) use ($last, $previousGradeLevelIds) {
+            $query->whereHas('enrollments', function ($q) use ($schoolYear, $previousGradeLevelIds) {
                 $q->whereIn('grade_level_id', $previousGradeLevelIds)
-                    ->where('school_year_id', $last->id);
+                    ->where('school_year_id', $schoolYear->id);
             });
         }
 
@@ -120,8 +121,8 @@ class StudentAddOldModal extends Component
 
         $query->orderBy('first_name');
 
-        return $query->with(['enrollments' => function ($q) use ($last) {
-            $q->where('school_year_id', $last->id);
+        return $query->with(['enrollments' => function ($q) use ($schoolYear) {
+            $q->where('school_year_id', $schoolYear->id);
         }])->get();
     }
 

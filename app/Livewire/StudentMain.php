@@ -58,8 +58,13 @@ class StudentMain extends Component
             ->students()
             ->whereHas('enrollments', function ($q) {
                 $q->where('school_year_id', $this->school_year);
+
                 if ($this->grade_level && $this->grade_level !== 'all') {
                     $q->where('grade_level_id', $this->grade_level);
+                }
+
+                if ($this->status !== 'all') {
+                    $q->where('status', $this->status);
                 }
             })
             ->when($this->search, function ($query) {
@@ -69,10 +74,6 @@ class StudentMain extends Component
                         ->orWhere('last_name', 'like', '%' . $this->search . '%');
                 });
             })
-            ->when($this->status !== 'all', function ($query) {
-                $query->where('status', $this->status);
-            })
-
             ->when($this->disability && $this->disability !== 'all', function ($query) {
                 $specialization = Auth::user()->accountable
                     ->specializations()
@@ -84,7 +85,6 @@ class StudentMain extends Component
             })
             ->orderBy('created_at', 'desc')
             ->paginate(10);
-
         $this->grade_levels = Auth::user()->accountable->gradeLevels->sortBy('id')->values();
         $this->disabilities = Auth::user()->accountable->specializations;
         return view('livewire.student-main', compact('students'));

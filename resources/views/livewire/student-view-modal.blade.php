@@ -200,7 +200,7 @@
                                         {{ $student->isEnrolledIn($school_year)->educationRecord->school_id }}
                                     </p>
                                     <p class="text-paragraph">
-                                        {{ $student->isEnrolledIn($school_year)->educationRecord->gradeLevel->name }}
+                                        {{ ucwords($student->isEnrolledIn($school_year)->educationRecord->gradeLevel->name) }}
                                     </p>
                                     <p class="text-paragraph">
                                         {{ $student->isEnrolledIn($school_year)->educationRecord->school_year }}
