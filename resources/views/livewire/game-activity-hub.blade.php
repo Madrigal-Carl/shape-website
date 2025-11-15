@@ -22,7 +22,7 @@
                     <h1 class="font-semibold text-xl">Specialization:</h1>
                     <!--Categories-->
                     <div class="w-full flex items-center gap-2 gameCategories overflow-x-auto pb-2">
-                        @foreach ($specializations as $spec)
+                        @foreach ($this->orderedSpecializations as $spec)
                             <div wire:click="toggleSpecialization('{{ $spec->name }}')"
                                 class="w-fit shrink-0 flex items-center gap-2 px-4 py-2 rounded-xl cursor-pointer
                                     {{ in_array($spec->name, $selectedSpecializations, true) ? 'bg-blue-button text-white' : 'bg-white hover:bg-blue-button hover:text-white' }}">
@@ -38,7 +38,7 @@
                     <h1 class="font-semibold text-xl">Subjects:</h1>
                     <!-- Subject Categories-->
                     <div class="w-full flex items-center gap-2 gameCategories overflow-x-auto pb-2">
-                        @foreach ($subjects as $subj)
+                        @foreach ($this->orderedSubjects as $subj)
                             <div wire:click="toggleSubject({{ $subj->id }})"
                                 class="w-fit shrink-0 flex items-center gap-2 px-4 py-2 rounded-xl cursor-pointer
                                 {{ in_array($subj->id, $selectedSubjects ?? []) ? 'bg-blue-button text-white' : 'bg-white hover:bg-blue-button hover:text-white' }}">

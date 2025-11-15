@@ -14,7 +14,7 @@ class GameActivityHub extends Component
     public $isOpen = false;
     public $targetComponent = null;
     public $isOpenActivityView = false;
-    public $activities = [], $specializations = [], $selectedSpecializations = [], $subjects, $selectedSubjects;
+    public $activities = [], $specializations, $selectedSpecializations, $subjects, $selectedSubjects;
     public $act;
     public $isImagePreviewOpen = false;
     public $previewImage = null;
@@ -31,6 +31,19 @@ class GameActivityHub extends Component
         $this->previewImage = null;
     }
 
+    public function getOrderedSpecializationsProperty()
+    {
+        return $this->specializations->sortByDesc(function ($spec) {
+            return in_array($spec->name, $this->selectedSpecializations ?? []) ? 1 : 0;
+        });
+    }
+
+    public function getOrderedSubjectsProperty()
+    {
+        return $this->subjects->sortByDesc(function ($subj) {
+            return in_array($subj->id, $this->selectedSubjects ?? []) ? 1 : 0;
+        });
+    }
 
     #[On('openModal')]
     public function openModal($curriculumId = null, $subjectId = null)
