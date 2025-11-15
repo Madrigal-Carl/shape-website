@@ -498,36 +498,6 @@ class DatabaseSeeder extends Seeder
             'type' => 'current',
         ]);
 
-        $instructors = Instructor::factory()->count(2)->create();
-        $instructors->push($instructorTest);
-
-        $instructors->each(function ($instructor) use ($specializations, $instructorTest) {
-            $instructor->specializations()->attach(
-                $specializations->random()->pluck('id')->toArray()
-            );
-            Address::factory()->instructor()->create([
-                'owner_id' => $instructor->id,
-                'owner_type' => Instructor::class,
-                'type' => 'permanent',
-            ]);
-            Address::factory()->instructor()->create([
-                'owner_id' => $instructor->id,
-                'owner_type' => Instructor::class,
-                'type' => 'current',
-            ]);
-
-            $gradeLevels = GradeLevel::inRandomOrder()->take(rand(1, 3))->pluck('id');
-            $instructor->gradeLevels()->attach($gradeLevels);
-
-            // Extra instructor accounts
-            if ($instructor->id !== $instructorTest->id) {
-                Account::factory()->instructor($instructor)->create([
-                    'username' => strtolower($instructor->first_name . $instructor->id),
-                    'password' => 'password123',
-                ]);
-            }
-        });
-
         Subject::factory()->allSubjects();
         // Define the mapping of domains to subjects
         $domainSubjects = [

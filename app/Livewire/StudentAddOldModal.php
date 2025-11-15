@@ -71,9 +71,8 @@ class StudentAddOldModal extends Component
         $previousGradeLevelIds = GradeLevel::whereIn('name', $previousGradeLevels)->pluck('id');
 
         $query = Student::query()
-            ->whereHas('enrollments', function ($q) use ($schoolYear) {
-                $q->where('school_year_id', $schoolYear->id)
-                    ->where('status', 'qualified');
+            ->whereHas('enrollments', function ($q) use ($last) {
+                $q->where('school_year_id', $last->id);
             })
             ->whereIn(
                 'disability_type',
@@ -157,7 +156,6 @@ class StudentAddOldModal extends Component
             $currentLevelId = $latestEnrollment->grade_level_id;
             $gradeLevelIds = $this->grade_levels->pluck('id')->toArray();
             $currentIndex = array_search($currentLevelId, $gradeLevelIds);
-
             if ($currentIndex !== false && $currentIndex < count($gradeLevelIds) - 1) {
                 $nextLevelId = $gradeLevelIds[$currentIndex + 1];
 
@@ -185,7 +183,31 @@ class StudentAddOldModal extends Component
 
                 $registered++;
             } else {
-                $skipped++;
+                $prevRecord = $latestEnrollment->educationRecord;
+
+                $enrollment = Enrollment::create([
+                    'instructor_id'  => Auth::user()->accountable->id,
+                    'student_id'     => $student->id,
+                    'grade_level_id' => $currentLevelId, // SAME LEVEL
+                    'school_year_id' => now()->schoolYear()->id,
+                ]);
+
+                if ($prevRecord) {
+                    $enrollment->educationRecord()->create([
+                        'grade_level_id' => $prevRecord->grade_level_id,
+                        'school_id'      => $prevRecord->school_id,
+                        'school_year'    => $prevRecord->school_year,
+                        'school_name'    => $prevRecord->school_name,
+                    ]);
+                }
+
+                Feed::create([
+                    'group' => 'student',
+                    'title' => 'Student Re-Enrolled',
+                    'message' => "'{$student->fullname}' has been re-enrolled to the same grade level.",
+                ]);
+
+                $registered++;
             }
         }
 
