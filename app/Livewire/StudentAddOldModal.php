@@ -71,8 +71,8 @@ class StudentAddOldModal extends Component
         $previousGradeLevelIds = GradeLevel::whereIn('name', $previousGradeLevels)->pluck('id');
 
         $query = Student::query()
-            ->whereHas('enrollments', function ($q) use ($last) {
-                $q->where('school_year_id', $last->id);
+            ->whereHas('enrollments', function ($q) use ($schoolYear) {
+                $q->where('school_year_id', $schoolYear->id);
             })
             ->whereIn(
                 'disability_type',
@@ -138,9 +138,7 @@ class StudentAddOldModal extends Component
         foreach ($this->selectedStudents as $studentId) {
             $student = Student::find($studentId);
 
-            $currentEnrollment = $student->enrollments()
-                ->where('school_year_id', now()->schoolYear()->id)
-                ->first();
+            $currentEnrollment = $student->isEnrolledIn(now()->schoolYear()->id);
 
             if ($currentEnrollment) {
                 $skipped++;
@@ -154,8 +152,16 @@ class StudentAddOldModal extends Component
             }
 
             $currentLevelId = $latestEnrollment->grade_level_id;
+
+            if ($latestEnrollment->status !== 'qualified') {
+                $this->reenrollSameLevel($student, $latestEnrollment);
+                $registered++;
+                continue;
+            }
+
             $gradeLevelIds = $this->grade_levels->pluck('id')->toArray();
             $currentIndex = array_search($currentLevelId, $gradeLevelIds);
+
             if ($currentIndex !== false && $currentIndex < count($gradeLevelIds) - 1) {
                 $nextLevelId = $gradeLevelIds[$currentIndex + 1];
 
@@ -183,48 +189,51 @@ class StudentAddOldModal extends Component
 
                 $registered++;
             } else {
-                $prevRecord = $latestEnrollment->educationRecord;
-
-                $enrollment = Enrollment::create([
-                    'instructor_id'  => Auth::user()->accountable->id,
-                    'student_id'     => $student->id,
-                    'grade_level_id' => $currentLevelId, // SAME LEVEL
-                    'school_year_id' => now()->schoolYear()->id,
-                ]);
-
-                if ($prevRecord) {
-                    $enrollment->educationRecord()->create([
-                        'grade_level_id' => $prevRecord->grade_level_id,
-                        'school_id'      => $prevRecord->school_id,
-                        'school_year'    => $prevRecord->school_year,
-                        'school_name'    => $prevRecord->school_name,
-                    ]);
-                }
-
-                Feed::create([
-                    'group' => 'student',
-                    'title' => 'Student Re-Enrolled',
-                    'message' => "'{$student->fullname}' has been re-enrolled to the same grade level.",
-                ]);
-
+                // Qualified but already in final level → re-enroll instead
+                $this->reenrollSameLevel($student, $latestEnrollment);
                 $registered++;
             }
         }
 
         $this->closeModal();
 
-        if ($registered && $skipped) {
-            $message = "{$registered} student(s) registered successfully. {$skipped} student(s) could not be registered.";
-        } elseif ($registered) {
-            $message = "{$registered} student(s) registered successfully.";
-        } elseif ($skipped) {
-            $message = "No students were registered. {$skipped} student(s) could not be registered.";
-        } else {
-            $message = "No students selected.";
-        }
+        $message = match (true) {
+            $registered && $skipped => "{$registered} student(s) registered. {$skipped} skipped.",
+            $registered              => "{$registered} student(s) registered.",
+            $skipped                => "{$skipped} student(s) skipped.",
+            default                 => "No students selected.",
+        };
 
         $this->dispatch('swal-toast', icon: $registered ? 'success' : 'info', title: $message);
     }
+
+    private function reenrollSameLevel($student, $latestEnrollment)
+    {
+        $enrollment = Enrollment::create([
+            'instructor_id'  => Auth::user()->accountable->id,
+            'student_id'     => $student->id,
+            'grade_level_id' => $latestEnrollment->grade_level_id,
+            'school_year_id' => now()->schoolYear()->id,
+        ]);
+
+        $prevRecord = $latestEnrollment->educationRecord;
+
+        if ($prevRecord) {
+            $enrollment->educationRecord()->create([
+                'grade_level_id' => $prevRecord->grade_level_id,
+                'school_id'      => $prevRecord->school_id,
+                'school_year'    => $prevRecord->school_year,
+                'school_name'    => $prevRecord->school_name,
+            ]);
+        }
+
+        Feed::create([
+            'group' => 'student',
+            'title' => 'Student Re-Enrolled',
+            'message' => "'{$student->fullname}' has been re-enrolled to the same grade level.",
+        ]);
+    }
+
 
     public function canRegisterStudent()
     {
