@@ -52,8 +52,10 @@ class ReportHelper
             }
 
             // ----- GAME ACTIVITIES -----
-            foreach ($lesson->gameActivityLessons as $activity) {
-                if ($activity->todos->isEmpty()) continue;
+            foreach ($lesson->gameActivityLessons as $activityLesson) {
+                $activity = $activityLesson->gameActivity;
+
+                if (!$activity || $activity->todos->isEmpty()) continue;
 
                 foreach ($activity->todos as $todo) {
                     $todoKey = 't' . $todo->id;
@@ -222,8 +224,10 @@ class ReportHelper
             }
 
             // Game activities
-            foreach ($lesson->gameActivityLessons as $activity) {
-                if ($activity->todos->isEmpty()) continue;
+            foreach ($lesson->gameActivityLessons as $activityLesson) {
+                $activity = $activityLesson->gameActivity;
+
+                if (!$activity || $activity->todos->isEmpty()) continue;
 
                 foreach ($activity->todos as $todo) {
                     $todoKey = 't' . $todo->id;
