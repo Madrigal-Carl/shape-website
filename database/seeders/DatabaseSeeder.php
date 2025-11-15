@@ -821,6 +821,42 @@ class DatabaseSeeder extends Seeder
                     'images/game-previews/shape-trace/1.png',
                 ],
             ],
+            [
+                'name' => 'Emotion Test',
+                'path' => 'images/game-icons/game-posters/mario-kart-world-review-1.jpg',
+                'description' => 'Battle grammar monsters using your language skills.',
+                'todos' => [],
+                'subjects' => [],
+                'specializations' => [],
+                'images' => [
+                    'images/game-icons/game-posters/mario-kart-world-review-1.jpg',
+                    'images/game-previews/shape-trace/1.png',
+                ],
+            ],
+            [
+                'name' => 'Tracing Time',
+                'path' => 'images/game-icons/game-posters/mario-kart-world-review-1.jpg',
+                'description' => 'Battle grammar monsters using your language skills.',
+                'todos' => [],
+                'subjects' => [],
+                'specializations' => [],
+                'images' => [
+                    'images/game-icons/game-posters/mario-kart-world-review-1.jpg',
+                    'images/game-previews/shape-trace/1.png',
+                ],
+            ],
+            [
+                'name' => 'Balloon Pop',
+                'path' => 'images/game-icons/game-posters/mario-kart-world-review-1.jpg',
+                'description' => 'Battle grammar monsters using your language skills.',
+                'todos' => [],
+                'subjects' => [],
+                'specializations' => [],
+                'images' => [
+                    'images/game-icons/game-posters/mario-kart-world-review-1.jpg',
+                    'images/game-previews/shape-trace/1.png',
+                ],
+            ],
         ];
 
         foreach ($games as $data) {
