@@ -68,7 +68,9 @@ class StudentEditModal extends Component
         $this->account_username = $student->account->username;
         $this->account_password = $student->account->password;
         $this->default_password = str_replace('-', '', $student->birth_date) . '-' . strtolower(trim($student->last_name));
-        $defaultUsername = strtolower(trim($student->last_name . $student->first_name));
+        $lastName  = strtolower(str_replace(' ', '', trim($this->last_name)));
+        $firstName = strtolower(str_replace(' ', '', trim($this->first_name)));
+        $defaultUsername = strtolower(trim($lastName . $firstName));
         $this->account_username_changed = $this->account_username !== $defaultUsername;
         $this->account_password_changed = ! Hash::check($this->default_password, $student->account->password);
 
@@ -154,8 +156,8 @@ class StudentEditModal extends Component
         $student = Student::findOrFail($this->student_id);
 
         $birthdate = str_replace('-', '', $student->birth_date);
-        $lastName  = strtolower(trim($student->last_name));
-        $firstName = strtolower(trim($student->first_name));
+        $lastName  = strtolower(str_replace(' ', '', trim($this->last_name)));
+        $firstName = strtolower(str_replace(' ', '', trim($this->first_name)));
 
         $this->account_username = "{$lastName}{$firstName}";
         $this->account_password = "{$birthdate}-{$lastName}";

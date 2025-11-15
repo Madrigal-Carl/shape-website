@@ -113,8 +113,8 @@ class InstructorAddModal extends Component
     public function generateAccount()
     {
         $birthdate = str_replace('-', '', $this->birthdate);
-        $lastName  = strtolower(trim($this->last_name));
-        $firstName = strtolower(trim($this->first_name));
+        $lastName  = strtolower(str_replace(' ', '', trim($this->last_name)));
+        $firstName = strtolower(str_replace(' ', '', trim($this->first_name)));
 
         $this->account_username = "{$lastName}{$firstName}";
         $this->account_password = "{$birthdate}-{$lastName}";
