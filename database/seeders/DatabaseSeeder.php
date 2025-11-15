@@ -498,6 +498,14 @@ class DatabaseSeeder extends Seeder
             'type' => 'current',
         ]);
 
+        $gradeLevels = GradeLevel::inRandomOrder()->take(rand(1, 3))->pluck('id');
+        $instructorTest->gradeLevels()->attach($gradeLevels);
+
+        $instructorTest->specializations()->attach(
+            $specializations->random()->pluck('id')->toArray()
+        );
+
+
         Subject::factory()->allSubjects();
         // Define the mapping of domains to subjects
         $domainSubjects = [

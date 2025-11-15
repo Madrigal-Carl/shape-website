@@ -47,6 +47,10 @@ class StudentAddOldModal extends Component
             $schoolYear = SchoolYear::orderBy('fourth_quarter_end', 'desc')->skip(1)->first();
         }
 
+        if (!$schoolYear) {
+            return collect();
+        }
+
         $instructor = Auth::user()->accountable;
 
         // Grade rank map
