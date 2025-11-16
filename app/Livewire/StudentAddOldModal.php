@@ -204,9 +204,9 @@ class StudentAddOldModal extends Component
         $this->closeModal();
 
         $message = match (true) {
-            $registered && $skipped => "{$registered} student(s) registered. {$skipped} skipped.",
-            $registered              => "{$registered} student(s) registered.",
-            $skipped                => "{$skipped} student(s) skipped.",
+            $registered > 0 && $skipped > 0 => "{$registered} student(s) registered. {$skipped} skipped.",
+            $registered > 0              => "{$registered} student(s) registered.",
+            $skipped > 0                => "{$skipped} student(s) skipped.",
             default                 => "No students selected.",
         };
 
@@ -258,7 +258,7 @@ class StudentAddOldModal extends Component
         $firstQEnd = Carbon::parse($latestSY->first_quarter_end);
 
         if ($today->greaterThan($syEnd)) {
-            return true;
+            return false;
         }
 
         if ($today->between($syStart, $firstQEnd)) {
