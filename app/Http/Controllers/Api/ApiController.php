@@ -306,7 +306,7 @@ class ApiController extends Controller
                     ->when($lastSyncTime, fn($q) => $q->where('created_at', '>', Carbon::parse($lastSyncTime)))
                     ->get();
                 if ($newAwards->isNotEmpty()) {
-                    $newAwardees = Award::whereIn('student_award_id', $newAwards->pluck('id'))->get();
+                    $newAwardees = Award::whereIn('id', $newAwards->pluck('award_id'))->get();
                     if ($newAwardees->isNotEmpty()) $newAwardData = AwardResource::collection($newAwardees);
                 }
             }

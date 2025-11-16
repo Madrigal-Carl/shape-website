@@ -67,6 +67,7 @@ class AwardMain extends Component
         $this->awards = Award::withCount([
             'students as awardees_count' => function ($query) {
                 $query->where('student_awards.school_year_id', $this->school_year)
+                    ->whereNull('student_awards.deleted_at')
                     ->whereHas('enrollments', function ($enrollmentQuery) {
                         $enrollmentQuery->where('instructor_id', Auth::user()->accountable->id)
                             ->where('school_year_id', $this->school_year)
