@@ -413,29 +413,29 @@ class DatabaseSeeder extends Seeder
         }
 
         // === School Year ===
-        $first_quarter_start = Carbon::now()->startOfDay();
-        $first_quarter_end   = $first_quarter_start->copy()->addDays(6);
+        // $first_quarter_start = Carbon::now()->startOfDay();
+        // $first_quarter_end   = $first_quarter_start->copy()->addDays(6);
 
-        $second_quarter_start = $first_quarter_end->copy()->addDay();
-        $second_quarter_end   = $second_quarter_start->copy()->addDays(6);
+        // $second_quarter_start = $first_quarter_end->copy()->addDay();
+        // $second_quarter_end   = $second_quarter_start->copy()->addDays(6);
 
-        $third_quarter_start  = $second_quarter_end->copy()->addDay();
-        $third_quarter_end    = $third_quarter_start->copy()->addDays(6);
+        // $third_quarter_start  = $second_quarter_end->copy()->addDay();
+        // $third_quarter_end    = $third_quarter_start->copy()->addDays(6);
 
-        $fourth_quarter_start = $third_quarter_end->copy()->addDay();
-        $fourth_quarter_end   = $fourth_quarter_start->copy()->addDays(6);
+        // $fourth_quarter_start = $third_quarter_end->copy()->addDay();
+        // $fourth_quarter_end   = $fourth_quarter_start->copy()->addDays(6);
 
-        SchoolYear::create([
-            'name' => $first_quarter_start->format('Y') . "-" . $fourth_quarter_end->format('Y'),
-            'first_quarter_start'  => $first_quarter_start,
-            'first_quarter_end'    => $first_quarter_end,
-            'second_quarter_start' => $second_quarter_start,
-            'second_quarter_end'   => $second_quarter_end,
-            'third_quarter_start'  => $third_quarter_start,
-            'third_quarter_end'    => $third_quarter_end,
-            'fourth_quarter_start' => $fourth_quarter_start,
-            'fourth_quarter_end'   => $fourth_quarter_end,
-        ]);
+        // SchoolYear::create([
+        //     'name' => $first_quarter_start->format('Y') . "-" . $fourth_quarter_end->format('Y'),
+        //     'first_quarter_start'  => $first_quarter_start,
+        //     'first_quarter_end'    => $first_quarter_end,
+        //     'second_quarter_start' => $second_quarter_start,
+        //     'second_quarter_end'   => $second_quarter_end,
+        //     'third_quarter_start'  => $third_quarter_start,
+        //     'third_quarter_end'    => $third_quarter_end,
+        //     'fourth_quarter_start' => $fourth_quarter_start,
+        //     'fourth_quarter_end'   => $fourth_quarter_end,
+        // ]);
 
         // === Grade Levels ===
         $levels = [
@@ -481,29 +481,29 @@ class DatabaseSeeder extends Seeder
         ]);
 
         // === Instructors (3 total, including test account) ===
-        $instructorTest = Instructor::factory()->create();
+        // $instructorTest = Instructor::factory()->create();
 
-        Account::factory()->instructor($instructorTest)->create([
-            'username' => 'instructor',
-            'password' => 'instructor',
-        ]);
-        Address::factory()->instructor()->create([
-            'owner_id' => $instructorTest->id,
-            'owner_type' => Instructor::class,
-            'type' => 'permanent',
-        ]);
-        Address::factory()->instructor()->create([
-            'owner_id' => $instructorTest->id,
-            'owner_type' => Instructor::class,
-            'type' => 'current',
-        ]);
+        // Account::factory()->instructor($instructorTest)->create([
+        //     'username' => 'instructor',
+        //     'password' => 'instructor',
+        // ]);
+        // Address::factory()->instructor()->create([
+        //     'owner_id' => $instructorTest->id,
+        //     'owner_type' => Instructor::class,
+        //     'type' => 'permanent',
+        // ]);
+        // Address::factory()->instructor()->create([
+        //     'owner_id' => $instructorTest->id,
+        //     'owner_type' => Instructor::class,
+        //     'type' => 'current',
+        // ]);
 
-        $gradeLevels = GradeLevel::inRandomOrder()->take(rand(1, 3))->pluck('id');
-        $instructorTest->gradeLevels()->attach($gradeLevels);
+        // $gradeLevels = GradeLevel::inRandomOrder()->take(rand(1, 3))->pluck('id');
+        // $instructorTest->gradeLevels()->attach($gradeLevels);
 
-        $instructorTest->specializations()->attach(
-            $specializations->random()->pluck('id')->toArray()
-        );
+        // $instructorTest->specializations()->attach(
+        //     $specializations->random()->pluck('id')->toArray()
+        // );
 
 
         Subject::factory()->allSubjects();
