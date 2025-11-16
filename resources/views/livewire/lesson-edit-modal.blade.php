@@ -127,7 +127,8 @@
                 <div class="w-180 h-full Addlesson bg-card p-8 rounded-4xl relative">
                     <div class="Addlesson w-full h-[100%] flex flex-col pb-12 gap-8 self-center-safe overflow-y-auto">
                         <div class="flex flex-col gap-3">
-                            <h2 class="font-semibold text-xl">Interactive Video Lessons</h2>
+                            <h2 class="font-semibold text-xl">Interactive Video Lessons <span
+                                    class="italic text-base font-normal">(Optional)</span></h2>
                             <div class="flex flex-col gap-2 bg-white p-4 rounded-xl">
                                 {{-- Video Upload --}}
                                 <div class="flex flex-col gap-2">

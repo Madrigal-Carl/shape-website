@@ -221,11 +221,6 @@ class LessonAddModal extends Component
             return false;
         }
 
-        if (empty($this->uploadedVideos)) {
-            $this->dispatch('swal-toast', icon: 'error', title: 'Please upload at least one video or provide a YouTube link.');
-            return false;
-        }
-
         return true;
     }
 

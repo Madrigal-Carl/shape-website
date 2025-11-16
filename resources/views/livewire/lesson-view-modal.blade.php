@@ -71,40 +71,43 @@
                         <p class="text-sm text-paragraph text-justify">{{ $lesson->description }}</p>
                     </div>
 
-                    <div class="flex flex-col gap-3">
-                        <h2 class="font-medium text-lg">Interactive Video Lessons</h2>
-                        <div class="flex flex-col gap-2">
-                            <!-- Video Container -->
-                            <div class="grid grid-cols-2 gap-2">
-                                @foreach ($lesson->videos as $i => $video)
-                                    <div class="flex flex-col gap-2 relative group video-container-{{ $i }}">
-                                        <div class="flex flex-col items-center justify-center">
-                                            {{-- Thumbnail --}}
-                                            <img src="{{ $video->thumbnail ? asset('storage/' . $video->thumbnail) : asset('images/default-img-holder.png') }}"
-                                                alt=""
-                                                class="aspect-video w-full h-fit rounded-lg object-cover video-thumb-{{ $i }}">
-
-                                            {{-- Play button --}}
-                                            <button
-                                                onclick="playVideo({{ $i }}, '{{ 'storage/' . $video->url }}')"
-                                                class="absolute rounded-full cursor-pointer hover:scale-110 shadow-xl/40 z-10 playBtn-{{ $i }}">
-                                                <span
-                                                    class="material-symbols-rounded p-2 rounded-full text-white bg-black/35 backdrop-blur-[3px] shadow-white/70 shadow-inner playBtn">play_arrow</span>
-                                            </button>
-                                        </div>
-
+                    @if ($lesson->videos->count() > 0)
+                        <div class="flex flex-col gap-3">
+                            <h2 class="font-medium text-lg">Interactive Video Lessons</h2>
+                            <div class="flex flex-col gap-2">
+                                <!-- Video Container -->
+                                <div class="grid grid-cols-2 gap-2">
+                                    @foreach ($lesson->videos as $i => $video)
                                         <div
-                                            class="absolute bottom-0 bg-gradient-to-t from-black/80 via-black/0 to-black/0 w-full h-full rounded-lg">
-                                            <div class="h-full w-full flex items-end justify-between p-3">
-                                                <h1 class="text-white font-medium text-sm ml-1 w-full truncate">
-                                                    {{ $video->title }}</h1>
+                                            class="flex flex-col gap-2 relative group video-container-{{ $i }}">
+                                            <div class="flex flex-col items-center justify-center">
+                                                {{-- Thumbnail --}}
+                                                <img src="{{ $video->thumbnail ? asset('storage/' . $video->thumbnail) : asset('images/default-img-holder.png') }}"
+                                                    alt=""
+                                                    class="aspect-video w-full h-fit rounded-lg object-cover video-thumb-{{ $i }}">
+
+                                                {{-- Play button --}}
+                                                <button
+                                                    onclick="playVideo({{ $i }}, '{{ 'storage/' . $video->url }}')"
+                                                    class="absolute rounded-full cursor-pointer hover:scale-110 shadow-xl/40 z-10 playBtn-{{ $i }}">
+                                                    <span
+                                                        class="material-symbols-rounded p-2 rounded-full text-white bg-black/35 backdrop-blur-[3px] shadow-white/70 shadow-inner playBtn">play_arrow</span>
+                                                </button>
+                                            </div>
+
+                                            <div
+                                                class="absolute bottom-0 bg-gradient-to-t from-black/80 via-black/0 to-black/0 w-full h-full rounded-lg">
+                                                <div class="h-full w-full flex items-end justify-between p-3">
+                                                    <h1 class="text-white font-medium text-sm ml-1 w-full truncate">
+                                                        {{ $video->title }}</h1>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                @endforeach
+                                    @endforeach
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    @endif
 
                     <!-- Games -->
                     <div class="flex flex-col gap-3">

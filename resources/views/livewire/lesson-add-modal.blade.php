@@ -119,7 +119,8 @@
 
 
                         <div class="flex flex-col gap-3">
-                            <h2 class="font-semibold text-xl">Interactive Video Lessons</h2>
+                            <h2 class="font-semibold text-xl">Interactive Video Lessons <span
+                                    class="italic text-base font-normal">(Optional)</span></h2>
 
                             <div class="flex flex-col gap-2 bg-white p-4 rounded-xl">
                                 {{-- Video Upload --}}

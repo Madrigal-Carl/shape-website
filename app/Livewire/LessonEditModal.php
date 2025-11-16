@@ -15,7 +15,6 @@ use App\Models\ClassActivity;
 use Livewire\WithFileUploads;
 use FFMpeg\Coordinate\TimeCode;
 use App\Models\CurriculumSubject;
-use App\Models\GameActivityLesson;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
@@ -251,7 +250,6 @@ class LessonEditModal extends Component
         }
     }
 
-
     private function getYoutubeId($url)
     {
         preg_match(
@@ -298,11 +296,6 @@ class LessonEditModal extends Component
 
         if (empty($this->selected_activities) && empty($this->selected_f2f_activities)) {
             $this->dispatch('swal-toast', icon: 'error', title: 'You must add at least one Game or Class activity.');
-            return false;
-        }
-
-        if (empty($this->uploadedVideos)) {
-            $this->dispatch('swal-toast', icon: 'error', title: 'Please upload at least one video or provide a YouTube link.');
             return false;
         }
 
