@@ -104,8 +104,8 @@ class InstructorEditModal extends Component
         $this->default_password = $defaultPassword;
         $lastName  = strtolower(str_replace(' ', '', trim($this->last_name)));
         $firstName = strtolower(str_replace(' ', '', trim($this->first_name)));
-        $defaultUsername = strtolower(trim($lastName . $firstName));
-        $this->account_username_changed = $this->account_username !== $defaultUsername;
+        $baseUsername = "{$lastName}{$firstName}";
+        $this->account_username_changed = !preg_match("/^" . preg_quote($baseUsername, '/') . "\d*$/", $this->account_username);
         $this->account_password_changed = ! Hash::check($this->default_password, $instructor->account->password ?? '');
 
         // Store original for change detection
@@ -179,7 +179,16 @@ class InstructorEditModal extends Component
         $lastName  = strtolower(str_replace(' ', '', trim($this->last_name)));
         $firstName = strtolower(str_replace(' ', '', trim($this->first_name)));
 
-        $this->account_username = "{$lastName}{$firstName}";
+        $baseUsername = "{$lastName}{$firstName}";
+        $username = $baseUsername;
+
+        $counter = 1;
+        while (Account::where('username', $username)->exists()) {
+            $username = $baseUsername . $counter;
+            $counter++;
+        }
+
+        $this->account_username = $username;
         $this->account_password = "{$birthdate}-{$lastName}";
 
         $this->account_username_changed = false;

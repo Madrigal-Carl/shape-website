@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('lesson_id')->constrained()->onDelete('cascade');
             $table->string('url');
             $table->string('title');
-            $table->string('thumbnail')->nullable();
+            $table->string('thumbnail');
             $table->softDeletes();
             $table->timestamps();
         });

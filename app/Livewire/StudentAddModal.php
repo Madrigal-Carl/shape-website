@@ -4,16 +4,17 @@ namespace App\Livewire;
 
 use Carbon\Carbon;
 use App\Models\Feed;
-use App\Models\GradeLevel;
+use App\Models\Account;
 use App\Models\Student;
 use Livewire\Component;
+use App\Models\GradeLevel;
 use App\Models\SchoolYear;
 use Livewire\Attributes\On;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\ValidationException;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
+use Illuminate\Validation\ValidationException;
 use Spatie\LaravelImageOptimizer\Facades\ImageOptimizer;
 
 
@@ -49,11 +50,18 @@ class StudentAddModal extends Component
         $lastName  = strtolower(str_replace(' ', '', trim($this->last_name)));
         $firstName = strtolower(str_replace(' ', '', trim($this->first_name)));
 
-        $this->account_username = "{$lastName}{$firstName}";
+        $baseUsername = "{$lastName}{$firstName}";
+        $username = $baseUsername;
+
+        $counter = 1;
+        while (Account::where('username', $username)->exists()) {
+            $username = $baseUsername . $counter;
+            $counter++;
+        }
+
+        $this->account_username = $username;
         $this->account_password = "{$birthdate}-{$lastName}";
     }
-
-
 
     #[On('openModal')]
     public function openModal()

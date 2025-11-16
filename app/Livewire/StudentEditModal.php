@@ -2,18 +2,19 @@
 
 namespace App\Livewire;
 
-use App\Models\GradeLevel;
+use App\Models\Account;
 use App\Models\Student;
 use Livewire\Component;
+use App\Models\GradeLevel;
 use Livewire\Attributes\On;
 use Livewire\WithFileUploads;
-use Intervention\Image\ImageManager;
-use Intervention\Image\Drivers\Gd\Driver;
-use Spatie\ImageOptimizer\OptimizerChainFactory;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Intervention\Image\ImageManager;
 use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Drivers\Gd\Driver;
+use Spatie\ImageOptimizer\OptimizerChainFactory;
 
 class StudentEditModal extends Component
 {
@@ -70,8 +71,8 @@ class StudentEditModal extends Component
         $this->default_password = str_replace('-', '', $student->birth_date) . '-' . strtolower(trim($student->last_name));
         $lastName  = strtolower(str_replace(' ', '', trim($this->last_name)));
         $firstName = strtolower(str_replace(' ', '', trim($this->first_name)));
-        $defaultUsername = strtolower(trim($lastName . $firstName));
-        $this->account_username_changed = $this->account_username !== $defaultUsername;
+        $baseUsername = "{$lastName}{$firstName}";
+        $this->account_username_changed = !preg_match("/^" . preg_quote($baseUsername, '/') . "\d*$/", $this->account_username);
         $this->account_password_changed = ! Hash::check($this->default_password, $student->account->password);
 
         $this->guardian_first_name  = $student->guardian->first_name;
@@ -160,7 +161,16 @@ class StudentEditModal extends Component
         $lastName  = strtolower(str_replace(' ', '', trim($this->last_name)));
         $firstName = strtolower(str_replace(' ', '', trim($this->first_name)));
 
-        $this->account_username = "{$lastName}{$firstName}";
+        $baseUsername = "{$lastName}{$firstName}";
+        $username = $baseUsername;
+
+        $counter = 1;
+        while (Account::where('username', $username)->exists()) {
+            $username = $baseUsername . $counter;
+            $counter++;
+        }
+
+        $this->account_username = $username;
         $this->account_password = "{$birthdate}-{$lastName}";
 
         $this->account_username_changed = false;

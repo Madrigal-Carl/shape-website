@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('instructors', function (Blueprint $table) {
             $table->id();
             $table->string('license_number')->unique();
-            $table->string('path')->nullable();
+            $table->string('path');
             $table->string('first_name');
             $table->string('middle_name');
             $table->string('last_name');

@@ -116,7 +116,16 @@ class InstructorAddModal extends Component
         $lastName  = strtolower(str_replace(' ', '', trim($this->last_name)));
         $firstName = strtolower(str_replace(' ', '', trim($this->first_name)));
 
-        $this->account_username = "{$lastName}{$firstName}";
+        $baseUsername = "{$lastName}{$firstName}";
+        $username = $baseUsername;
+
+        $counter = 1;
+        while (Account::where('username', $username)->exists()) {
+            $username = $baseUsername . $counter;
+            $counter++;
+        }
+
+        $this->account_username = $username;
         $this->account_password = "{$birthdate}-{$lastName}";
     }
 

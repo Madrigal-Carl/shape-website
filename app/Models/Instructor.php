@@ -87,8 +87,8 @@ class Instructor extends Model
             ->whereIn('disability_type', $curriculum->specializations->pluck('name'));
     }
 
-    public function admin()
-    {
-        return $this->belongsTo(Admin::class);
-    }
+    // public function admin()
+    // {
+    //     return $this->belongsTo(Admin::class);
+    // }
 }
