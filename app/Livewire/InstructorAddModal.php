@@ -43,6 +43,7 @@ class InstructorAddModal extends Component
 
     public $specializations, $gradeLevels;
 
+
     public function updatedCopyPermanentToCurrent()
     {
         if ($this->copyPermanentToCurrent) {
@@ -56,7 +57,6 @@ class InstructorAddModal extends Component
             $this->current_barangays = [];
         }
     }
-
 
     #[On('openModal')]
     public function openModal()

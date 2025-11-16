@@ -152,7 +152,7 @@
                             <div class="px-4 py-2 rounded-lg bg-white w-full">
                                 <select name="" id="" class="w-full outline-none text-paragraph"
                                     wire:model.live="permanent_municipal">
-                                    <option value='' class="text-sm text-black" selected disabled>
+                                    <option value='' class="text-sm text-black" disabled>
                                         Municipal
                                     </option>
                                     @foreach ($municipalities as $municipality)
