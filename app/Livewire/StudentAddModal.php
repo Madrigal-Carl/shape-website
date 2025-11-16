@@ -301,6 +301,8 @@ class StudentAddModal extends Component
         ]);
 
         Feed::create([
+            'notifiable_id' => Auth::user()->accountable->id,
+            'notifiable_type' => get_class(Auth::user()->accountable),
             'group' => 'student',
             'title' => 'New Student Registered',
             'message' => "'{$student->fullname}' has been registered as a student.",

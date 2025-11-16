@@ -22,6 +22,16 @@
 </head>
 
 <body class="overflow-x-hidden ">
+    @if (!request()->routeIs('landing.page'))
+        <div id="desktop-only" class="hidden fixed inset-0 bg-white z-[9999]">
+            <div class="flex flex-col items-center justify-center p-6 text-center h-screen">
+                <img src="{{ asset('images/favicon.png') }}" class="w-20 mb-4 opacity-70">
+                <h1 class="text-2xl font-bold">Please use this website on a desktop device</h1>
+                <p class="text-gray-600 mt-2">This system is not available on small screens.</p>
+            </div>
+        </div>
+    @endif
+
     {{ $slot }}
     @livewireScripts
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
@@ -50,7 +60,21 @@
             });
         </script>
     @endif
+    <script>
+        function checkScreenSize() {
+            const overlay = document.getElementById('desktop-only');
+            if (overlay) {
+                if (window.innerWidth < 1024) {
+                    overlay.classList.remove('hidden');
+                } else {
+                    overlay.classList.add('hidden');
+                }
+            }
+        }
 
+        window.addEventListener('load', checkScreenSize);
+        window.addEventListener('resize', checkScreenSize);
+    </script>
 </body>
 
 </html>

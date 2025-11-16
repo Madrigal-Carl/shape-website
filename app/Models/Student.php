@@ -36,6 +36,11 @@ class Student extends Model
         return $this->morphMany(Address::class, 'owner');
     }
 
+    public function feeds()
+    {
+        return $this->morphMany(Feed::class, 'notifiable');
+    }
+
     public function permanentAddress()
     {
         return $this->morphOne(Address::class, 'owner')->where('type', 'permanent');

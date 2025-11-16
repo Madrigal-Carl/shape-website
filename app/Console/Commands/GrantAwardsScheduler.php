@@ -102,17 +102,16 @@ class GrantAwardsScheduler extends Command
             ->where('school_year_id', $schoolYearId)
             ->first();
 
+        $latestEnrollment = $student->enrollments()->latest()->first();
+        $instructor = $latestEnrollment?->instructor;
+
         if ($meetsCriteria) {
             if ($existingAward) {
                 // Restore if it was soft-deleted
                 if ($existingAward->trashed()) {
                     $existingAward->restore();
-                    Feed::create([
-                        'notifiable_id' => $student->id,
-                        'group' => 'award',
-                        'title' => "{$student->full_name} regained an award!",
-                        'message' => "{$student->full_name} has regained the '{$award->name}' award.",
-                    ]);
+
+                    $this->createAwardFeed($student, $award, 'regained');
                 }
                 // No need to recreate if it already exists and active
             } else {
@@ -121,27 +120,41 @@ class GrantAwardsScheduler extends Command
                     'award_id' => $award->id,
                     'school_year_id' => $schoolYearId,
                 ]);
-                Feed::create([
-                    'notifiable_id' => $student->id,
-                    'group' => 'award',
-                    'title' => "{$student->full_name} earned a new award!",
-                    'message' => "{$student->full_name} has been awarded the '{$award->name}' for outstanding performance.",
-                ]);
+
+                $this->createAwardFeed($student, $award, 'earned');
             }
         } else {
             // If criteria no longer met and award exists, soft delete it
             if ($existingAward && !$existingAward->trashed()) {
                 $existingAward->delete();
-                Feed::create([
-                    'notifiable_id' => $student->id,
-                    'group' => 'award',
-                    'title' => "Award revoked from {$student->full_name}",
-                    'message' => "The '{$award->name}' award has been revoked from {$student->full_name}.",
-                ]);
+
+                $this->createAwardFeed($student, $award, 'revoked');
             }
         }
     }
 
+    protected function createAwardFeed($student, $award, $action)
+    {
+        $titleMap = [
+            'earned' => "{$student->full_name} earned a new award!",
+            'regained' => "{$student->full_name} regained an award!",
+            'revoked' => "Award revoked from {$student->full_name}",
+        ];
+
+        $messageMap = [
+            'earned' => "{$student->full_name} has been awarded the '{$award->name}' for outstanding performance.",
+            'regained' => "{$student->full_name} has regained the '{$award->name}' award.",
+            'revoked' => "The '{$award->name}' award has been revoked from {$student->full_name}.",
+        ];
+
+        Feed::create([
+            'notifiable_id' => $student->id,
+            'notifiable_type' => get_class($student),
+            'group' => 'award',
+            'title' => $titleMap[$action],
+            'message' => $messageMap[$action],
+        ]);
+    }
 
     // Lesson Finisher: completed all activities assigned (from active curriculums)
     protected function getLessonFinisherIds($students, $schoolYear)

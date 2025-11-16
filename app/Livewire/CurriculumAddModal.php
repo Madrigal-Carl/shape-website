@@ -98,6 +98,8 @@ class CurriculumAddModal extends Component
         }
 
         Feed::create([
+            'notifiable_id' => Auth::user()->accountable->id,
+            'notifiable_type' => get_class(Auth::user()->accountable),
             'group' => 'curriculum',
             'title' => 'New Curriculum Created',
             'message' => "A new curriculum named '{$this->add_name}' has been created.",

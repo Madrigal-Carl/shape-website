@@ -170,6 +170,8 @@ class StudentAddOldModal extends Component
                 $nextLevelId = $gradeLevelIds[$currentIndex + 1];
 
                 Feed::create([
+                    'notifiable_id' => Auth::user()->accountable->id,
+                    'notifiable_type' => get_class(Auth::user()->accountable),
                     'group' => 'student',
                     'title' => 'New Student Enrolled',
                     'message' => "'{$student->fullname}' has been enrolled as a student.",
@@ -232,6 +234,8 @@ class StudentAddOldModal extends Component
         }
 
         Feed::create([
+            'notifiable_id' => Auth::user()->accountable->id,
+            'notifiable_type' => get_class(Auth::user()->accountable),
             'group' => 'student',
             'title' => 'Student Re-Enrolled',
             'message' => "'{$student->fullname}' has been re-enrolled to the same grade level.",

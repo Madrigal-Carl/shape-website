@@ -10,8 +10,14 @@ class Feed extends Model
     use HasFactory;
     protected $fillable = [
         'notifiable_id',
+        'notifiable_type',
         'group',
         'title',
         'message',
     ];
+
+    public function notifiable()
+    {
+        return $this->morphTo();
+    }
 }

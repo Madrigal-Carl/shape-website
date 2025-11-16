@@ -75,7 +75,10 @@ class StudentResource extends JsonResource
 
             $gameActivityLessons = GameActivityLesson::whereIn('lesson_id', $lessonIds)->get();
 
-            $feeds = Feed::where('notifiable_id', $this->id)->latest()->get();
+            $feeds = Feed::where('notifiable_id', $this->id)
+                ->where('notifiable_type', get_class($this))
+                ->latest()
+                ->get();
 
             $studentAwards = StudentAward::where('student_id', $this->id)
                 ->where('school_year_id', $schoolYear->id)

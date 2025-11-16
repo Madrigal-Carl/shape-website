@@ -252,10 +252,19 @@ class LessonAddModal extends Component
             ]);
 
             Feed::create([
-                'notifiable_id' => $student->id,
+                'notifiable_id' => Auth::user()->accountable->id,
+                'notifiable_type' => get_class(Auth::user()->accountable),
                 'group' => 'student',
                 'title' => 'New Lesson Created',
                 'message' => "A new lesson named '{$this->lesson_name}' has been assigned to {$student->fullname}.",
+            ]);
+
+            Feed::create([
+                'notifiable_id' => $student->id,
+                'notifiable_type' => get_class($student),
+                'group' => 'student',
+                'title' => 'New Lesson Assigned',
+                'message' => "A new lesson named '{$this->lesson_name}' has been assigned.",
             ]);
         }
 

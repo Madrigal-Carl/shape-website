@@ -102,6 +102,9 @@ class ApiController extends Controller
         $student = Student::find($studentId);
         $syncedIds = [];
 
+        $latestEnrollment = $student->enrollments()->latest()->first();
+        $instructor = $latestEnrollment?->instructor;
+
         foreach ($validated['activities'] as $activityData) {
             $activity = StudentActivity::where('student_id', $studentId)
                 ->where('activity_lesson_id', $activityData['activity_lesson_id'])
@@ -115,11 +118,25 @@ class ApiController extends Controller
                     'updated_at' => $activityData['updated_at'] ?? $activity->updated_at,
                 ]);
 
+                // Feed for the student
                 Feed::create([
+                    'notifiable_id' => $student->id,
+                    'notifiable_type' => get_class($student),
                     'group' => 'student',
-                    'title' => 'Activity Finished',
-                    'message' => "{$student->fullname} has completed the activity '{$activity->activityLesson->gameActivity->name}'.",
+                    'title' => 'Activity Updated',
+                    'message' => "You have marked the activity '{$activity->activityLesson->gameActivity->name}' as {$activityData['status']}.",
                 ]);
+
+                // Feed for the instructor (if exists)
+                if ($instructor) {
+                    Feed::create([
+                        'notifiable_id' => $instructor->id,
+                        'notifiable_type' => get_class($instructor),
+                        'group' => 'instructor',
+                        'title' => 'Student Activity Updated',
+                        'message' => "{$student->full_name} has marked the activity '{$activity->activityLesson->gameActivity->name}' as {$activityData['status']}.",
+                    ]);
+                }
 
                 $syncedIds[] = $activity->id;
             }
@@ -284,7 +301,8 @@ class ApiController extends Controller
                 if ($studentActivities->isNotEmpty()) $studentActivityData = StudentActivityResource::collection($studentActivities);
 
                 // Feeds
-                $feedsQuery = Feed::where('notifiable_id', $studentId);
+                $feedsQuery = Feed::where('notifiable_id', $studentId)
+                    ->where('notifiable_type', Student::class);
                 if ($lastSyncTime) {
                     $feedsQuery->where('created_at', '>', Carbon::parse($lastSyncTime));
                 }

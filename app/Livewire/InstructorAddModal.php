@@ -10,10 +10,11 @@ use App\Models\Instructor;
 use Livewire\Attributes\On;
 use Livewire\WithFileUploads;
 use App\Models\Specialization;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\ValidationException;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
+use Illuminate\Validation\ValidationException;
 use Spatie\ImageOptimizer\OptimizerChainFactory;
 
 
@@ -265,6 +266,8 @@ class InstructorAddModal extends Component
         ]);
 
         Feed::create([
+            'notifiable_id' => Auth::user()->accountable->id,
+            'notifiable_type' => get_class(Auth::user()->accountable),
             'group' => 'instructor',
             'title' => 'New Instructor Registered',
             'message' => "'{$instructor->fullname}' has been registered as a instructor.",

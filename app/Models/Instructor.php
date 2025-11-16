@@ -77,6 +77,10 @@ class Instructor extends Model
         )->distinct()->with('enrollments');
     }
 
+    public function feeds()
+    {
+        return $this->morphMany(Feed::class, 'notifiable');
+    }
 
     public function eligibleStudents(Curriculum $curriculum)
     {
