@@ -809,13 +809,13 @@ class DatabaseSeeder extends Seeder
             ],
             [
                 'name' => 'Emotion Test',
-                'path' => 'images/game-icons/game-posters/emotion-test.png',
+                'path' => 'images/game-iconsemotion-test.png',
                 'description' => 'Emotion Test is a social-emotional learning game designed for learners with autism, speech, and hearing disabilities. The game helps students use courteous expressions appropriately and recognize and express emotions in different situations. Through interactive activities and visual cues, it makes learning social skills engaging and accessible.',
                 'todos' => [34],
                 'subjects' => [12],
                 'specializations' => [1],
                 'images' => [
-                    'images/game-icons/game-posters/emotion-test.png',
+                    'images/game-icons/emotion-test.png',
                     'images/game-previews/emotion-test/1.png',
                     'images/game-previews/emotion-test/2.png',
                     'images/game-previews/emotion-test/3.png',
@@ -826,13 +826,13 @@ class DatabaseSeeder extends Seeder
             ],
             [
                 'name' => 'Tracing Time',
-                'path' => 'images/game-icons/game-posters/tracing-time.png',
+                'path' => 'images/game-icons/tracing-time.png',
                 'description' => 'Tracing Time (Name) is a language and literacy game designed for learners with autism. The game helps students trace lines and shapes and practice writing letters, numbers, and their own name correctly. With guided tracing activities and clear visuals, it makes learning writing skills fun and accessible.',
                 'todos' => [63, 64, 65, 67, 125],
                 'subjects' => [7, 8, 11],
                 'specializations' => [1],
                 'images' => [
-                    'images/game-icons/game-posters/tracing-time.png',
+                    'images/game-icons/tracing-time.png',
                     'images/game-previews/trace-time/1.png',
                     'images/game-previews/trace-time/2.png',
                     'images/game-previews/trace-time/3.png',
