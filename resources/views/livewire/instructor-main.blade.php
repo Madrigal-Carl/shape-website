@@ -47,7 +47,7 @@
     <!-- Teachers Directory -->
     <div class="mt-12 flex flex-col gap-4 min-h-[20%]">
         <div class="side flex items-center justify-between gap-2 mb-2">
-            <h1 class="text-4xl font-bold">Teachers Directory</h1>
+            <h1 class="text-4xl font-bold">Instructors Directory</h1>
             <div class="flex items-center gap-4">
                 <div
                     class="flex items-center bg-white py-3 px-5 rounded-full shadow-2xl/15 border-2 border-white hover:border-blue-button text-paragraph hover:bg-blue-button hover:text-white cursor-pointer">

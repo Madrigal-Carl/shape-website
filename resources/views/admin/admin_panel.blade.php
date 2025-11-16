@@ -1,7 +1,7 @@
 @php
     $sidebar = [
         ['name' => 'Dashboard', 'icon' => 'space_dashboard', 'content' => 'admin.dashboard'],
-        ['name' => 'Teacher', 'icon' => 'person', 'content' => 'admin.instructor'],
+        ['name' => 'Instructor', 'icon' => 'person', 'content' => 'admin.instructor'],
         ['name' => 'Profile', 'icon' => 'account_circle', 'content' => 'layouts.profile'],
     ];
 @endphp

@@ -75,13 +75,13 @@
 
             {{-- Buttons --}}
             <div class="flex items-center gap-2 lg:mt-6">
-                <button
+                <a href="{{ asset('application/shape.apk') }}"
                     class="flex items-center gap-2 text-white font-medium px-6 py-3 rounded-full bg-gradient-to-tr from-blue-button to-[#ea00ff] shadow-blue-button shadow-xl/30 hover:scale-105 cursor-pointer">
                     <span class="material-symbols-rounded">
                         android
                     </span>
                     <p class="text-xs lg:text-base">Download APK</p>
-                </button>
+                </a>
                 <button
                     class="flex items-center gap-2 bg-white text-paragraph font-medium px-6 py-3 rounded-full border-paragraph hover:bg-gradient-to-tr from-blue-button to-[#ea00ff] hover:scale-105 hover:text-white cursor-pointer">
                     <span class="material-symbols-rounded">

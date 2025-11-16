@@ -287,7 +287,6 @@
                                 <p class="w-full text-paragraph">Use Permanent Address</p>
                             </div>
                         </div>
-                        <h2 class="font-semibold text-xl">Current Address</h2>
                         <div class="flex items-center gap-2 w-full">
                             <div class="px-4 py-2 rounded-lg bg-white w-full">
                                 <select class="w-full outline-none text-paragraph" disabled>
