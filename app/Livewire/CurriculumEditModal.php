@@ -107,7 +107,7 @@ class CurriculumEditModal extends Component
         $curriculum = Curriculum::find($this->curriculum_id);
         $curriculum->update([
             'name' => $this->edit_name,
-            'grade_level' => $this->edit_grade_level,
+            'grade_level_id' => $this->edit_grade_level,
             'description' => $this->edit_description,
         ]);
 

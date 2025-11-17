@@ -22,7 +22,7 @@
                                     @foreach ($grade_levels as $grade)
                                         <option value="{{ $grade->id }}"
                                             class="text-sm {{ $grade->id === $edit_grade_level ? 'text-black' : 'text-paragraph' }}">
-                                            {{ $grade->name }}
+                                            {{ ucwords($grade->name) }}
                                         </option>
                                     @endforeach
                                 </select>
