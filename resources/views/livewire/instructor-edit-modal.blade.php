@@ -242,35 +242,33 @@
                         <h2 class="font-semibold text-xl">Permanent Address</h2>
                         <div class="flex items-center gap-2 w-full">
                             <div class="px-4 py-2 rounded-lg bg-white w-full">
-                                <select class="w-full outline-none text-paragraph" disabled>
-                                    <option value="marinduque" class="text-sm text-black" selected>
+                                <select name="" id="" class="w-full outline-none text-paragraph">
+                                    <option value="marinduque" class="text-sm text-black" selected disabled>
                                         Marinduque
                                     </option>
                                 </select>
                             </div>
                             <div class="px-4 py-2 rounded-lg bg-white w-full">
-                                <select class="w-full outline-none text-paragraph"
+                                <select name="" id="" class="w-full outline-none text-paragraph"
                                     wire:model.live="permanent_municipal">
-                                    <option value="" class="text-sm text-black" selected disabled>
+                                    <option value='' class="text-sm text-black" disabled>
                                         Municipal
                                     </option>
-                                    @foreach ($municipalities as $municipal)
-                                        <option value="{{ $municipal }}" class="text-sm text-paragraph">
-                                            {{ ucfirst($municipal) }}
-                                        </option>
+                                    @foreach ($municipalities as $municipality)
+                                        <option value="{{ $municipality }}" class="text-sm text-paragraph">
+                                            {{ ucwords($municipality) }}</option>
                                     @endforeach
                                 </select>
                             </div>
                             <div class="px-4 py-2 rounded-lg bg-white w-full">
-                                <select class="w-full outline-none text-paragraph"
-                                    wire:model.live="permanent_barangay">
-                                    <option value="" class="text-sm text-black" selected disabled>
+                                <select name="" id="" class="w-full outline-none text-paragraph"
+                                    wire:key="{{ $permanent_municipal }}" wire:model.live="permanent_barangay">
+                                    <option value="" class="text-sm text-black" disabled>
                                         Barangay
                                     </option>
-                                    @foreach ($permanent_barangays as $barangay)
-                                        <option value="{{ $barangay }}" class="text-sm text-paragraph">
-                                            {{ ucfirst($barangay) }}
-                                        </option>
+                                    @foreach ($permanent_barangays as $pbarangay)
+                                        <option value="{{ $pbarangay }}" class="text-sm text-paragraph">
+                                            {{ ucwords($pbarangay) }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -287,36 +285,36 @@
                                 <p class="w-full text-paragraph">Use Permanent Address</p>
                             </div>
                         </div>
+
                         <div class="flex items-center gap-2 w-full">
                             <div class="px-4 py-2 rounded-lg bg-white w-full">
-                                <select class="w-full outline-none text-paragraph" disabled>
-                                    <option value="marinduque" class="text-sm text-black" selected>
+                                <select name="" id="" class="w-full outline-none text-paragraph">
+                                    <option value="marinduque" class="text-sm text-black" selected disabled>
                                         Marinduque
                                     </option>
                                 </select>
                             </div>
                             <div class="px-4 py-2 rounded-lg bg-white w-full">
-                                <select class="w-full outline-none text-paragraph"
+                                <select name="" id="" class="w-full outline-none text-paragraph"
                                     wire:model.live="current_municipal">
-                                    <option value="" class="text-sm text-black" selected disabled>
+                                    <option value="" class="text-sm text-black" disabled>
                                         Municipal
                                     </option>
-                                    @foreach ($municipalities as $municipal)
-                                        <option value="{{ $municipal }}" class="text-sm text-paragraph">
-                                            {{ ucfirst($municipal) }}
-                                        </option>
+                                    @foreach ($municipalities as $municipality)
+                                        <option value="{{ $municipality }}" class="text-sm text-paragraph">
+                                            {{ ucwords($municipality) }}</option>
                                     @endforeach
                                 </select>
                             </div>
                             <div class="px-4 py-2 rounded-lg bg-white w-full">
-                                <select class="w-full outline-none text-paragraph" wire:model.live="current_barangay">
-                                    <option value="" class="text-sm text-black" selected disabled>
+                                <select name="" id="" class="w-full outline-none text-paragraph"
+                                    wire:key="{{ $current_municipal }}" wire:model.live="current_barangay">
+                                    <option value="" class="text-sm text-black" disabled>
                                         Barangay
                                     </option>
-                                    @foreach ($current_barangays as $barangay)
-                                        <option value="{{ $barangay }}" class="text-sm text-paragraph">
-                                            {{ ucfirst($barangay) }}
-                                        </option>
+                                    @foreach ($current_barangays as $cbarangay)
+                                        <option value="{{ $cbarangay }}" class="text-sm text-paragraph">
+                                            {{ ucwords($cbarangay) }}</option>
                                     @endforeach
                                 </select>
                             </div>
