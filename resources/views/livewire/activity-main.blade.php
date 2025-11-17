@@ -114,7 +114,7 @@
                                     Subject
                                 </th>
                                 <th class="px-4 pb-3 text-center font-semibold">
-                                    Assigned
+                                    Accomplished
                                 </th>
                                 <th class="px-4 pb-3 text-center font-semibold">Actions</th>
                             </tr>
@@ -140,7 +140,7 @@
                                         </p>
                                     </td>
                                     <td class="px-4 py-3 text-center text-paragraph">
-                                        {{ $activity->student_activities_count }}</td>
+                                        {{ $activity->student_finished_count }}</td>
                                     <td class="px-4 py-3 text-center text-paragraph">
                                         <div class="flex justify-center items-center gap-1 text-white">
                                             <button wire:click='openEditActivityModal({{ $activity->id }})'

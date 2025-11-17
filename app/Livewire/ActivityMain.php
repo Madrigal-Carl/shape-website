@@ -81,7 +81,9 @@ class ActivityMain extends Component
         $schoolYear = SchoolYear::find($this->school_year);
 
         $activities = ClassActivity::with('curriculumSubject.curriculum', 'curriculumSubject.subject')
-            ->withCount('studentActivities')
+            ->withCount(['studentActivities as student_finished_count' => function ($q) {
+                $q->where('status', 'finished');
+            }])
             ->where('instructor_id', Auth::user()->accountable->id)
             ->where('school_year_id', $this->school_year)
             ->whereHas('curriculumSubject.curriculum', function ($q) {
