@@ -110,6 +110,7 @@ class InstructorEditModal extends Component
 
         // Store original for change detection
         $this->original = [
+            'username' => $this->account_username,
             'license_number' => $this->license_number,
             'first_name' => $this->first_name,
             'middle_name' => $this->middle_name,
@@ -173,7 +174,7 @@ class InstructorEditModal extends Component
 
     public function resetAccount()
     {
-        $instructor = Instructor::findOrFail($this->instructor_id);
+        $instructor = Instructor::with('account')->findOrFail($this->instructor_id);
 
         $birthdate = str_replace('-', '', $instructor->birth_date);
         $lastName  = strtolower(str_replace(' ', '', trim($this->last_name)));
@@ -183,7 +184,7 @@ class InstructorEditModal extends Component
         $username = $baseUsername;
 
         $counter = 1;
-        while (Account::where('username', $username)->exists()) {
+        while (Account::where('username', $username)->where('id', '!=', $instructor->account->id)->exists()) {
             $username = $baseUsername . $counter;
             $counter++;
         }
@@ -269,6 +270,7 @@ class InstructorEditModal extends Component
 
         // Check if anything has changed
         $current = [
+            'username' => $this->account_username,
             'license_number' => $this->license_number,
             'status' => $this->status,
             'first_name' => $this->first_name,
@@ -361,6 +363,13 @@ class InstructorEditModal extends Component
                 'municipality' => $this->current_municipal,
                 'barangay' => $this->current_barangay,
                 'type' => 'current',
+            ]
+        );
+
+        $instructor->account->update(
+            [
+                'username' => $this->account_username,
+                'password' => $this->account_password ?: $instructor->account->password,
             ]
         );
 

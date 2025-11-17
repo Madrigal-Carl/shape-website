@@ -156,7 +156,7 @@ class StudentEditModal extends Component
 
     public function resetAccount()
     {
-        $student = Student::findOrFail($this->student_id);
+        $student = Student::with('account')->findOrFail($this->student_id);
 
         $birthdate = str_replace('-', '', $student->birth_date);
         $lastName  = strtolower(str_replace(' ', '', trim($this->last_name)));
@@ -166,7 +166,7 @@ class StudentEditModal extends Component
         $username = $baseUsername;
 
         $counter = 1;
-        while (Account::where('username', $username)->exists()) {
+        while (Account::where('username', $username)->where('id', '!=', $student->account->id)->exists()) {
             $username = $baseUsername . $counter;
             $counter++;
         }
