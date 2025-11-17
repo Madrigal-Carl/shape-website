@@ -61,7 +61,10 @@ class StudentResource extends JsonResource
                 ->with('lessonSubjectStudents.subject')
                 ->where('school_year_id', $schoolYear->id)
                 ->get()
-                ->filter(fn($lesson) => $lesson->isInQuarter($schoolYear, $currentQuarter));
+                ->filter(
+                    fn($lesson) => $lesson->isInQuarter($schoolYear, $currentQuarter) &&
+                        $lesson->gameActivityLessons->isNotEmpty()
+                );
 
             $videos = Video::whereIn('lesson_id', $lessonIds)->get();
 

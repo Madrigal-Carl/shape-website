@@ -257,7 +257,10 @@ class ApiController extends Controller
                     ->where('school_year_id', $schoolYear->id)
                     ->when($lastSyncTime, fn($q) => $q->where('updated_at', '>', Carbon::parse($lastSyncTime)))
                     ->get()
-                    ->filter(fn($lesson) => $lesson->isInQuarter($schoolYear, $currentQuarter));
+                    ->filter(
+                        fn($lesson) => $lesson->isInQuarter($schoolYear, $currentQuarter) &&
+                            $lesson->gameActivityLessons->isNotEmpty()
+                    );
                 if ($lessons->isNotEmpty()) {
                     $lessonData = LessonResource::collection($lessons);
                 }
