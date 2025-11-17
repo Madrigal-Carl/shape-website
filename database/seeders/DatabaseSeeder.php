@@ -809,7 +809,7 @@ class DatabaseSeeder extends Seeder
             ],
             [
                 'name' => 'Emotion Test',
-                'path' => 'images/game-iconsemotion-test.png',
+                'path' => 'images/game-icons/emotion-test.png',
                 'description' => 'Emotion Test is a social-emotional learning game designed for learners with autism, speech, and hearing disabilities. The game helps students use courteous expressions appropriately and recognize and express emotions in different situations. Through interactive activities and visual cues, it makes learning social skills engaging and accessible.',
                 'todos' => [34],
                 'subjects' => [12],
