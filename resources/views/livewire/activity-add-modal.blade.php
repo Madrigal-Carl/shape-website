@@ -17,9 +17,6 @@
                         <div class="flex flex-col gap-3">
                             <h2 class="font-semibold text-xl ">Activity Information</h2>
                             <div class="flex flex-col gap-2">
-                                <input type="text" placeholder="Activity Name" wire:model.live="activity_name"
-                                    class="px-4 py-2 rounded-lg bg-white placeholder-paragraph outline-none w-full" />
-
                                 <div class="px-4 py-2 rounded-lg bg-white">
                                     <select wire:model.live="grade_level" name="" id=""
                                         class="w-full outline-none text-paragraph">
@@ -48,6 +45,9 @@
                                         </select>
                                     </div>
                                 </div>
+
+                                <input type="text" placeholder="Activity Name" wire:model.live="activity_name"
+                                    class="px-4 py-2 rounded-lg bg-white placeholder-paragraph outline-none w-full" />
 
                                 <div class="flex items-center gap-2 w-full">
                                     <div class="px-4 py-2 rounded-lg bg-white w-full">

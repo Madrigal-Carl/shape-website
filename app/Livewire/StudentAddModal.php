@@ -130,8 +130,8 @@ class StudentAddModal extends Component
                     'guardian_first_name'  => 'required|max:35',
                     'guardian_middle_name' => 'nullable|max:35',
                     'guardian_last_name'   => 'required|max:35',
-                    'guardian_email'       => 'required|email|unique:guardians,email',
-                    'guardian_phone'       => 'nullable|digits:10|unique:guardians,phone_number',
+                    'guardian_email'       => 'nullable|email|unique:guardians,email',
+                    'guardian_phone'       => 'required|digits:10|unique:guardians,phone_number',
                 ], [
                     'permanent_municipal.required' => 'The permanent municipal is required.',
                     'permanent_barangay.required'  => 'The permanent barangay is required.',
@@ -142,9 +142,9 @@ class StudentAddModal extends Component
                     'guardian_middle_name.max'     => 'The guardian middle name is too long.',
                     'guardian_last_name.required'  => 'The guardian last name is required.',
                     'guardian_last_name.max'       => 'The guardian last name is too long.',
-                    'guardian_email.required'      => 'The guardian email is required.',
                     'guardian_email.email'         => 'The guardian email must be a valid email address.',
                     'guardian_email.unique'        => 'The guardian email already exists.',
+                    'guardian_phone.required'      => 'The guardian phone is required.',
                     'guardian_phone.digits'        => 'The guardian phone must be exactly 10 digits.',
                     'guardian_phone.unique'        => 'The guardian phone already exists.',
                 ]);
@@ -275,7 +275,7 @@ class StudentAddModal extends Component
             'first_name'   => $this->guardian_first_name,
             'middle_name'  => $this->guardian_middle_name,
             'last_name'    => $this->guardian_last_name,
-            'email'        => $this->guardian_email,
+            'email'        => $this->guardian_email ?: null,
             'phone_number' => $this->guardian_phone,
         ]);
 

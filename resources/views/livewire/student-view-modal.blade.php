@@ -251,7 +251,7 @@
                             </tbody>
                         </table>
                     </div>
-                    <div class="flex flex-col gap-8 bg-white p-6 rounded-2xl">
+                    {{-- <div class="flex flex-col gap-8 bg-white p-6 rounded-2xl">
                         <div class="flex flex-col gap-2 mb-4">
                             <h1 class="text-2xl font-semibold text-heading-dark">
                                 Student Performance
@@ -261,7 +261,6 @@
 
 
                         <div class="w-full grid grid-cols-2 gap-4">
-                            <!-- BarChart -->
                             <div class="flex flex-col gap-4">
                                 <div class="col-span-1 h-full bg-white rounded-2xl flex flex-col gap-4">
                                     <h1 class="text-xl font-semibold">Weekly Activities</h1>
@@ -300,7 +299,6 @@
                                 </div>
                             </div>
 
-                            {{-- Radar Graph --}}
                             <div class="col-span-1 h-full bg-white rounded-2xl flex flex-col gap-4">
                                 <h1 class="text-xl font-semibold">Student Performance Stats</h1>
                                 <div id="RadarChart" class="w-full" wire:ignore x-data="{}"
@@ -374,7 +372,6 @@
                         </div>
 
 
-                        <!-- LineChart -->
                         <div class="col-span-1 h-full bg-white rounded-2xl flex flex-col gap-4">
                             <h1 class="text-xl font-semibold">Lesson Progress Over Time</h1>
                             <div id="PerformanceLinechart" class="w-full" wire:ignore x-data="{}"
@@ -419,7 +416,7 @@
                             </div>
                         </div>
 
-                    </div>
+                    </div> --}}
                 </div>
 
 

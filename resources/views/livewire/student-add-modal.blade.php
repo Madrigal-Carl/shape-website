@@ -231,10 +231,10 @@
                                 class="px-4 py-2 rounded-lg bg-white placeholder-paragraph outline-none w-full" />
                             <input type="text" placeholder="Lastname" wire:model.live="guardian_last_name"
                                 class="px-4 py-2 rounded-lg bg-white placeholder-paragraph outline-none w-full" />
-                            <input type="email" name="" id="" placeholder="Email"
+                            <input type="email" name="" id="" placeholder="Email (Optional)"
                                 wire:model.live="guardian_email"
                                 class="px-4 py-2 rounded-lg bg-white placeholder-paragraph outline-none w-full" />
-                            <input type="text" name="" id="" placeholder="Phone no. (Optional)"
+                            <input type="text" name="" id="" placeholder="Phone no."
                                 wire:model.live="guardian_phone" maxlength="10"
                                 class="px-4 py-2 rounded-lg bg-white placeholder-paragraph outline-none w-full" />
                         </div>

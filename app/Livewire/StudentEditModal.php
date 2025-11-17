@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Hash;
 use Intervention\Image\ImageManager;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Drivers\Gd\Driver;
+use Illuminate\Validation\ValidationException;
 use Spatie\ImageOptimizer\OptimizerChainFactory;
 
 class StudentEditModal extends Component
@@ -78,7 +79,7 @@ class StudentEditModal extends Component
         $this->guardian_first_name  = $student->guardian->first_name;
         $this->guardian_middle_name = $student->guardian->middle_name;
         $this->guardian_last_name   = $student->guardian->last_name;
-        $this->guardian_email       = $student->guardian->email;
+        $this->guardian_email = optional($student->guardian)->email ?? '';
         $this->guardian_phone       = $student->guardian->phone_number;
 
         $permanent = $student->permanentAddress;
@@ -224,8 +225,8 @@ class StudentEditModal extends Component
                     'guardian_first_name'  => 'required|max:35',
                     'guardian_middle_name' => 'nullable|max:35',
                     'guardian_last_name'   => 'required|max:35',
-                    'guardian_email'       => 'required|email|unique:guardians,email,' . $this->student_id . ',student_id',
-                    'guardian_phone'       => 'nullable|digits:10|unique:guardians,phone_number,' . $this->student_id . ',student_id',
+                    'guardian_email'       => 'nullable|email|unique:guardians,email,' . $this->student_id . ',student_id',
+                    'guardian_phone'       => 'required|digits:10|unique:guardians,phone_number,' . $this->student_id . ',student_id',
                 ], [
                     'permanent_municipal.required' => 'The permanent municipal is required.',
                     'permanent_barangay.required'  => 'The permanent barangay is required.',
@@ -236,9 +237,9 @@ class StudentEditModal extends Component
                     'guardian_middle_name.max'     => 'The guardian middle name is too long.',
                     'guardian_last_name.required'  => 'The guardian last name is required.',
                     'guardian_last_name.max'       => 'The guardian last name is too long.',
-                    'guardian_email.required'      => 'The guardian email is required.',
                     'guardian_email.email'         => 'The guardian email must be a valid email address.',
                     'guardian_email.unique'        => 'The guardian email already exists.',
+                    'guardian_phone.required'      => 'The guardian phone is required.',
                     'guardian_phone.digits'        => 'The guardian phone must be exactly 10 digits.',
                     'guardian_phone.unique'        => 'The guardian phone already exists.',
                 ]);
@@ -259,7 +260,7 @@ class StudentEditModal extends Component
                     'last_school_attended.max'         => 'The school name is too long.',
                 ]);
             }
-        } catch (\Illuminate\Validation\ValidationException $e) {
+        } catch (ValidationException $e) {
             $message = $e->validator->errors()->first();
             $this->dispatch('swal-toast', icon: 'error', title: $message);
             return false;
@@ -386,7 +387,7 @@ class StudentEditModal extends Component
             'first_name' => $this->guardian_first_name,
             'middle_name' => $this->guardian_middle_name,
             'last_name'  => $this->guardian_last_name,
-            'email'      => $this->guardian_email,
+            'email'      => $this->guardian_email ?: null,
             'phone_number' => $this->guardian_phone,
         ]);
 

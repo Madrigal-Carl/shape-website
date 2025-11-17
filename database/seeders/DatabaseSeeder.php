@@ -481,29 +481,29 @@ class DatabaseSeeder extends Seeder
         ]);
 
         // === Instructors (3 total, including test account) ===
-        // $instructorTest = Instructor::factory()->create();
+        $instructorTest = Instructor::factory()->create();
 
-        // Account::factory()->instructor($instructorTest)->create([
-        //     'username' => 'instructor',
-        //     'password' => 'instructor',
-        // ]);
-        // Address::factory()->instructor()->create([
-        //     'owner_id' => $instructorTest->id,
-        //     'owner_type' => Instructor::class,
-        //     'type' => 'permanent',
-        // ]);
-        // Address::factory()->instructor()->create([
-        //     'owner_id' => $instructorTest->id,
-        //     'owner_type' => Instructor::class,
-        //     'type' => 'current',
-        // ]);
+        Account::factory()->instructor($instructorTest)->create([
+            'username' => 'instructor',
+            'password' => 'instructor',
+        ]);
+        Address::factory()->instructor()->create([
+            'owner_id' => $instructorTest->id,
+            'owner_type' => Instructor::class,
+            'type' => 'permanent',
+        ]);
+        Address::factory()->instructor()->create([
+            'owner_id' => $instructorTest->id,
+            'owner_type' => Instructor::class,
+            'type' => 'current',
+        ]);
 
-        // $gradeLevels = GradeLevel::inRandomOrder()->take(rand(1, 3))->pluck('id');
-        // $instructorTest->gradeLevels()->attach($gradeLevels);
+        $gradeLevels = GradeLevel::inRandomOrder()->take(rand(1, 3))->pluck('id');
+        $instructorTest->gradeLevels()->attach($gradeLevels);
 
-        // $instructorTest->specializations()->attach(
-        //     $specializations->random()->pluck('id')->toArray()
-        // );
+        $instructorTest->specializations()->attach(
+            $specializations->random()->pluck('id')->toArray()
+        );
 
 
         Subject::factory()->allSubjects();
@@ -921,40 +921,40 @@ class DatabaseSeeder extends Seeder
         // });
 
         // // === Students (20 per instructor) ===
-        // $instructors = Instructor::take(3)->get();
-        // $students = collect();
+        $instructors = Instructor::take(3)->get();
+        $students = collect();
 
-        // foreach ($instructors as $instructor) {
-        //     $students = $students->merge(
-        //         Student::factory()->count(20)->create()
-        //     );
-        // }
+        foreach ($instructors as $instructor) {
+            $students = $students->merge(
+                Student::factory()->count(20)->create()
+            );
+        }
 
-        // $students->each(function ($student) use ($instructors) {
-        //     $instructor = $instructors->random();
-        //     $gradeLevelId = $instructor->gradeLevels->random()->id;
+        $students->each(function ($student) use ($instructors) {
+            $instructor = $instructors->random();
+            $gradeLevelId = $instructor->gradeLevels->random()->id;
 
-        //     Account::factory()->student($student)->create([
-        //         'username' => strtolower($student->first_name . $student->id),
-        //         'password' => 'password123',
-        //     ]);
-        //     Guardian::factory()->create(['student_id' => $student->id]);
-        //     Enrollment::factory()->create([
-        //         'instructor_id' => $instructor->id,
-        //         'student_id'    => $student->id,
-        //         'grade_level_id' => $gradeLevelId,
-        //     ]);
-        //     Address::factory()->student()->create([
-        //         'owner_id' => $student->id,
-        //         'owner_type' => Student::class,
-        //         'type' => 'permanent',
-        //     ]);
-        //     Address::factory()->student()->create([
-        //         'owner_id' => $student->id,
-        //         'owner_type' => Student::class,
-        //         'type' => 'current',
-        //     ]);
-        // });
+            Account::factory()->student($student)->create([
+                'username' => strtolower($student->first_name . $student->id),
+                'password' => 'password123',
+            ]);
+            Guardian::factory()->create(['student_id' => $student->id]);
+            Enrollment::factory()->create([
+                'instructor_id' => $instructor->id,
+                'student_id'    => $student->id,
+                'grade_level_id' => $gradeLevelId,
+            ]);
+            Address::factory()->student()->create([
+                'owner_id' => $student->id,
+                'owner_type' => Student::class,
+                'type' => 'permanent',
+            ]);
+            Address::factory()->student()->create([
+                'owner_id' => $student->id,
+                'owner_type' => Student::class,
+                'type' => 'current',
+            ]);
+        });
 
         // // === Awards for students ===
         // $allAwards = Award::all();

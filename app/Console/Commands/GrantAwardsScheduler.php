@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Models\Feed;
 use App\Models\Award;
+use App\Models\Instructor;
 use App\Models\Student;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
@@ -102,9 +103,6 @@ class GrantAwardsScheduler extends Command
             ->where('school_year_id', $schoolYearId)
             ->first();
 
-        $latestEnrollment = $student->enrollments()->latest()->first();
-        $instructor = $latestEnrollment?->instructor;
-
         if ($meetsCriteria) {
             if ($existingAward) {
                 // Restore if it was soft-deleted
@@ -135,6 +133,10 @@ class GrantAwardsScheduler extends Command
 
     protected function createAwardFeed($student, $award, $action)
     {
+
+        $latestEnrollment = $student->enrollments()->latest()->first();
+        $instructor = Instructor::find($latestEnrollment?->instructor_id);
+
         $titleMap = [
             'earned' => "{$student->full_name} earned a new award!",
             'regained' => "{$student->full_name} regained an award!",
@@ -150,6 +152,14 @@ class GrantAwardsScheduler extends Command
         Feed::create([
             'notifiable_id' => $student->id,
             'notifiable_type' => get_class($student),
+            'group' => 'award',
+            'title' => $titleMap[$action],
+            'message' => $messageMap[$action],
+        ]);
+
+        Feed::create([
+            'notifiable_id' => $instructor->id,
+            'notifiable_type' => get_class($instructor),
             'group' => 'award',
             'title' => $titleMap[$action],
             'message' => $messageMap[$action],
