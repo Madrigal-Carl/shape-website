@@ -135,16 +135,6 @@ class LessonAddModal extends Component
             $oembedUrl = "https://www.youtube.com/oembed?url={$url}&format=json";
             $data = json_decode(file_get_contents($oembedUrl), true);
 
-            if (!empty($this->uploadedVideos)) {
-                $lastVideo = end($this->uploadedVideos);
-                $lastThumbnail = $lastVideo['thumbnail'] ?? null;
-
-                // Ensure it's a YouTube link (not uploaded video) and not empty
-                if ($lastThumbnail && str_contains($lastVideo['video'], 'youtube.com') || str_contains($lastVideo['video'], 'youtu.be')) {
-                    Storage::disk('public')->delete($lastThumbnail);
-                }
-            }
-
             // Download and save YouTube thumbnail locally
             $thumbnailUrl = "https://img.youtube.com/vi/{$videoId}/hqdefault.jpg";
             $thumbnailContents = file_get_contents($thumbnailUrl);
