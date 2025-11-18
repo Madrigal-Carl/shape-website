@@ -252,13 +252,25 @@ class LessonEditModal extends Component
 
     private function getYoutubeId($url)
     {
-        preg_match(
-            '/(?:youtube\.com\/(?:watch\?v=|shorts\/)|youtu\.be\/)([^\?&]+)/',
-            $url,
-            $matches
-        );
+        // Normalize URL
+        $url = trim($url);
 
-        return $matches[1] ?? null;
+        // For youtu.be links
+        if (preg_match('/youtu\.be\/([a-zA-Z0-9_-]+)/', $url, $matches)) {
+            return $matches[1];
+        }
+
+        // For youtube.com/watch?v= links
+        if (preg_match('/v=([a-zA-Z0-9_-]+)/', $url, $matches)) {
+            return $matches[1];
+        }
+
+        // For youtube.com/shorts/ links
+        if (preg_match('/shorts\/([a-zA-Z0-9_-]+)/', $url, $matches)) {
+            return $matches[1];
+        }
+
+        return null;
     }
 
     public function removeVideo($index)
