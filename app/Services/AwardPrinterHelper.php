@@ -34,26 +34,34 @@ class AwardPrinterHelper
 
         for ($page = 1; $page <= $pages; $page++) {
             for ($i = 1; $i <= $perPage; $i++) {
-                $placeholder = "image{$i}#{$page}";
+
+                $imagePlaceholder = "image{$i}#{$page}";
+                $namePlaceholder  = "name{$i}#{$page}";
+
                 $imageIndex++;
 
                 if ($imageIndex <= $awardeeCount) {
-                    $templateProcessor->setImageValue($placeholder, [
+
+                    // insert image
+                    $templateProcessor->setImageValue($imagePlaceholder, [
                         'path'   => $imageFullPath,
-                        'width'  => 220,
-                        'height' => 290,
+                        'width'  => 200,
+                        'height' => 270,
                         'ratio'  => false,
                     ]);
+
+                    // insert the awardee name
+                    $templateProcessor->setValue($namePlaceholder, $awardeeNames[$imageIndex - 1]);
                 } else {
-                    $templateProcessor->setValue($placeholder, '');
+                    // empty slots
+                    $templateProcessor->setValue($imagePlaceholder, '');
+                    $templateProcessor->setValue($namePlaceholder, '');
                 }
             }
         }
 
-        $lastPage = $pages;
         $awardeesList = implode("\n- ", $awardeeNames);
         $awardeesList = '- ' . $awardeesList;
-        $templateProcessor->setValue("awardees_names#{$lastPage}", $awardeesList);
 
         // Save & return
         $safeName = preg_replace('/[^A-Za-z0-9_\-]/', '_', $awardName);

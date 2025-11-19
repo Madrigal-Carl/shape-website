@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use Exception;
 use App\Models\Award;
 use Livewire\Component;
 use App\Models\Enrollment;
@@ -20,7 +21,7 @@ class AwardMain extends Component
         $this->school_years = SchoolYear::orderBy('name')->get();
     }
 
-    public function printAward($awardName, $awardeeCount)
+    public function printAward($awardName)
     {
         $awardImages = [
             'Activity Ace' => 'award-icons-printables/activity-ace-printable.png',
@@ -34,7 +35,7 @@ class AwardMain extends Component
         $imagePath = $awardImages[$awardName] ?? null;
 
         if (!$imagePath) {
-            throw new \Exception("No image found for award: $awardName");
+            throw new Exception("No image found for award: $awardName");
         }
 
         $awardees = Award::where('name', $awardName)
