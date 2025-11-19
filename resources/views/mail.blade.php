@@ -13,16 +13,18 @@
 
 <p style="font-family: Poppins, sans-serif; font-size: 15px;">
     We would like to inform you of the recent academic progress of
-    <strong>{{ $student->full_name }}</strong>. Please see the summary below:
+    <strong>{{ $student->full_name }}</strong> for Quarter {{ $quarter }}.
 </p>
 
 <ul style="font-family: Poppins, sans-serif; font-size: 15px; list-style: none; padding: 0;">
-    <li><em>Completed Activities:</em>
-        <strong style="color: green;">{{ $completed }}</strong>
-    </li>
-    <li><em>Remaining Activities:</em>
-        <strong style="color: red;">{{ $remaining }}</strong>
-    </li>
+    @foreach ($lessonProgress as $progress)
+        <li style="margin-bottom: 12px; padding: 10px; background: #f4f7fa; border-radius: 6px;">
+            <strong>{{ ucwords($progress['lesson_title']) }}</strong><br>
+            Completed: <strong style="color: green;">{{ $progress['completed'] }}</strong> /
+            {{ $progress['total'] }}<br>
+            Progress: <strong>{{ $progress['percentage'] }}%</strong>
+        </li>
+    @endforeach
 </ul>
 
 <p style="font-family: Poppins, sans-serif; font-size: 15px;">

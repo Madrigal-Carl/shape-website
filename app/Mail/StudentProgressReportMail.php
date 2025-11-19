@@ -18,14 +18,14 @@ class StudentProgressReportMail extends Mailable implements ShouldQueue
      * Create a new message instance.
      */
     public Student $student;
-    public int $completed;
-    public int $remaining;
+    public array $lessonProgress;
+    public int $quarter;
 
-    public function __construct(Student $student, int $completed, int $remaining)
+    public function __construct(Student $student, array $lessonProgress, int $quarter)
     {
-        $this->student   = $student;
-        $this->completed = $completed;
-        $this->remaining = $remaining;
+        $this->student = $student;
+        $this->lessonProgress = $lessonProgress;
+        $this->quarter = $quarter;
     }
 
     /**
@@ -47,8 +47,8 @@ class StudentProgressReportMail extends Mailable implements ShouldQueue
             view: 'mail',
             with: [
                 'student'   => $this->student,
-                'completed' => $this->completed,
-                'remaining' => $this->remaining,
+                'lessonProgress' => $this->lessonProgress,
+                'quarter' => $this->quarter,
             ],
         );
     }

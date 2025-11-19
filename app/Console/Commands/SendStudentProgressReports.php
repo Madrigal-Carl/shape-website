@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Lesson;
 use App\Models\Student;
 use App\Models\SchoolYear;
 use Illuminate\Console\Command;
@@ -45,12 +46,53 @@ class SendStudentProgressReports extends Command
                 continue;
             }
 
-            $completed = $student->completedActivitiesCount($currentSchoolYear->id);
-            $total     = $student->totalActivitiesCount($currentSchoolYear->id);
-            $remaining = max(0, $total - $completed);
+            $quarter = $currentSchoolYear->currentQuarter();
+
+            // Get all lessons assigned to the student for this school year
+            $lessons = $student->lessons()
+                ->with([
+                    'gameActivityLessons',
+                    'classActivities',
+                ])
+                ->where('school_year_id', $currentSchoolYear->id)
+                ->get();
+            $lessons = $lessons->filter(function ($lesson) use ($currentSchoolYear, $quarter) {
+                return $lesson->isInQuarter($currentSchoolYear, $quarter);
+            });
+
+            $lessonProgress = [];
+
+            foreach ($lessons as $lesson) {
+
+                // total activities
+                $totalActs =
+                    $lesson->gameActivityLessons->count() +
+                    $lesson->classActivities->count();
+
+                // completed activities for this specific lesson
+                $completedActs = $lesson->activityLessons->filter(function ($activity) use ($student) {
+                    return $activity->studentActivities()
+                        ->where('student_id', $student->id)
+                        ->where('status', 'finished')
+                        ->exists();
+                })->count();
+
+                $percentage = $totalActs > 0 ? round(($completedActs / $totalActs) * 100, 1) : 0;
+
+                $lessonProgress[] = [
+                    'lesson_title'   => $lesson->title,
+                    'completed'      => $completedActs,
+                    'total'          => $totalActs,
+                    'percentage'     => $percentage,
+                ];
+            }
 
             Mail::to($student->guardian->email)->queue(
-                new StudentProgressReportMail($student, $completed, $remaining)
+                new StudentProgressReportMail(
+                    $student,
+                    $lessonProgress,
+                    $quarter
+                )
             );
 
             $this->info("Sent report for {$student->full_name} to {$student->guardian->email}");
