@@ -113,13 +113,44 @@ class CurriculumEditModal extends Component
 
         $curriculum->specializations()->sync($this->selectedSpecializations);
 
-        $curriculum->curriculumSubjects()->delete();
-        $subjectIds = Subject::whereIn('name', $this->selectedSubjects)->pluck('id');
-        foreach ($subjectIds as $subjectId) {
+        $currentSubjectIds = $curriculum->curriculumSubjects()
+            ->pluck('subject_id')->toArray();
+        $newSubjectIds = Subject::whereIn('name', $this->selectedSubjects)
+            ->pluck('id')->toArray();
+        $allSubjects = CurriculumSubject::withTrashed()
+            ->where('curriculum_id', $curriculum->id)
+            ->get();
+        $softDeletedSubjects = $allSubjects
+            ->whereNotNull('deleted_at')
+            ->pluck('subject_id')
+            ->toArray();
+        $toAdd = array_diff($newSubjectIds, $allSubjects->pluck('subject_id')->toArray());
+        $toRemove = array_diff($currentSubjectIds, $newSubjectIds);
+        $toRestore = array_intersect($newSubjectIds, $softDeletedSubjects);
+        foreach ($toAdd as $subjectId) {
             CurriculumSubject::create([
                 'curriculum_id' => $curriculum->id,
                 'subject_id' => $subjectId,
             ]);
+        }
+        foreach ($toRemove as $subjectId) {
+            $cs = CurriculumSubject::where('curriculum_id', $curriculum->id)
+                ->where('subject_id', $subjectId)
+                ->first();
+            if ($cs) {
+                $cs->delete();
+                $cs->lessonSubjectStudents()->delete();
+            }
+        }
+        foreach ($toRestore as $subjectId) {
+            $cs = CurriculumSubject::withTrashed()
+                ->where('curriculum_id', $curriculum->id)
+                ->where('subject_id', $subjectId)
+                ->first();
+            if ($cs) {
+                $cs->restore();
+                $cs->lessonSubjectStudents()->withTrashed()->restore();
+            }
         }
 
         $this->dispatch('swal-toast', icon: 'success', title: 'Curriculum has been updated successfully.');
