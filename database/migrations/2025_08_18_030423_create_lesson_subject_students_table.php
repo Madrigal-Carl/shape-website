@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('curriculum_subject_id')->constrained()->onDelete('cascade');
             $table->foreignId('lesson_id')->constrained()->onDelete('cascade');
             $table->foreignId('student_id')->constrained()->onDelete('cascade');
+            $table->softDeletes();
             $table->timestamps();
             $table->unique(['curriculum_subject_id', 'student_id', 'lesson_id'], 'css_student_lesson_unique');
         });
