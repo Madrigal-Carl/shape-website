@@ -64,12 +64,23 @@ class ApiController extends Controller
             return response()->json(['success' => false, 'message' => 'Only student accounts can login here.'], 403);
         }
 
+        if ($account->tokens()->exists()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Account is already logged in.',
+            ], 403);
+        }
+
         $account->load(['accountable.enrollments']);
 
         // Only allow students enrolled in the current school year
         $currentSchoolYear = now()->schoolYear()?->id;
-        $isEnrolled = $account->accountable->enrollments->contains('school_year_id', $currentSchoolYear);
-
+        $isEnrolled = $account->accountable->enrollments
+            ->contains(
+                fn($e) =>
+                $e->school_year_id === $currentSchoolYear &&
+                    $e->status === 'active'
+            );
         if (!$isEnrolled) {
             return response()->json(['success' => false, 'message' => 'Student is not enrolled for the current school year.'], 403);
         }

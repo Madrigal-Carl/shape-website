@@ -25,7 +25,7 @@
                 <div class="flex items-center gap-2" wire:loading.class="invisible"
                     wire:target="openAddInstructorModal">
                     <span class="material-symbols-rounded">add</span>
-                    <p class="">Add Teacher</p>
+                    <p class="">Add Instructor</p>
                 </div>
                 <div wire:loading wire:target="openAddInstructorModal" role="status"
                     class="absolute flex items-center justify-center">

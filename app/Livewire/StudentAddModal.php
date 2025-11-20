@@ -182,7 +182,7 @@ class StudentAddModal extends Component
         $this->reset();
     }
 
-    public function canRegisterStudent()
+    public function isPassedEnrollment()
     {
         $today = Carbon::today();
 
@@ -211,10 +211,6 @@ class StudentAddModal extends Component
     {
         if (!$this->validateStep()) {
             return;
-        }
-
-        if (!$this->canRegisterStudent()) {
-            return $this->dispatch('swal-toast', icon: 'error', title: 'Enrollment period is closed.');
         }
 
         $path = null;
@@ -246,15 +242,16 @@ class StudentAddModal extends Component
             'last_name'     => $this->last_name,
             'sex'           => $this->sex,
             'birth_date'    => $this->birthdate,
-            'status'        => 'active',
             'disability_type' => $this->disability,
             'support_need'  => $this->description,
             'lrn'           => $this->lrn,
         ]);
 
+        $isPassedEnrollment = $this->isPassedEnrollment();
         $enrollment = $student->enrollments()->create([
             'instructor_id' => Auth::user()->accountable->id,
             'grade_level_id'   => $this->grade_level,
+            'status' => $isPassedEnrollment ? 'inactive' : 'active',
         ]);
 
         if (

@@ -38,7 +38,8 @@ class SendStudentProgressReports extends Command
 
         // get enrolled students this school year
         $students = Student::whereHas('enrollments', function ($q) use ($currentSchoolYear) {
-            $q->where('school_year_id', $currentSchoolYear->id);
+            $q->where('school_year_id', $currentSchoolYear->id)
+                ->where('status', 'active');
         })->with('guardian')->get();
 
         foreach ($students as $student) {

@@ -135,9 +135,7 @@ class StudentAddOldModal extends Component
         $registered = 0;
         $skipped = 0;
 
-        if (!$this->canRegisterStudent()) {
-            return $this->dispatch('swal-toast', icon: 'error', title: 'Enrollment period is closed.');
-        }
+        $isPassedEnrollment = $this->isPassedEnrollment();
 
         foreach ($this->selectedStudents as $studentId) {
             $student = Student::find($studentId);
@@ -183,6 +181,7 @@ class StudentAddOldModal extends Component
                     'student_id'     => $student->id,
                     'grade_level_id' => $nextLevelId,
                     'school_year_id' => now()->schoolYear()->id,
+                    'status' => $isPassedEnrollment ? 'inactive' : 'active',
                 ]);
 
                 // ✅ Create related education record
@@ -243,7 +242,7 @@ class StudentAddOldModal extends Component
     }
 
 
-    public function canRegisterStudent()
+    public function isPassedEnrollment()
     {
         $today = Carbon::today();
 

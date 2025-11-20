@@ -337,6 +337,7 @@ class LessonAddModal extends Component
             ->where('status', 'active')
             ->whereHas('enrollments', function ($query) {
                 $query->where('grade_level_id', $this->grade_level)
+                    ->where('status', 'active')
                     ->where('school_year_id', now()->schoolYear()->id);
             })
             ->whereIn(

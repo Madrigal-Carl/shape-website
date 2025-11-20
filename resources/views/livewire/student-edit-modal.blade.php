@@ -59,14 +59,12 @@
                                     @php
                                         $statuses = [
                                             'Active' => 'active',
-                                            'Inactive' => 'inactive',
                                             'Transferred' => 'transferred',
                                             'Dropped' => 'dropped',
                                         ];
 
                                         $classes = [
                                             'Active' => 'text-lime',
-                                            'Inactive' => 'text-paragraph',
                                             'Transferred' => 'text-yellowOrange',
                                             'Dropped' => 'text-danger',
                                         ];
