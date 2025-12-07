@@ -37,7 +37,7 @@ class AdminDashboardMain extends Component
         // Students: Exclude transferred, dropped
         $studentQuery = Student::whereHas('enrollments', function ($q) {
             $q->where('school_year_id', $this->school_year)
-                ->whereNotIn('status', ['transferred', 'dropped']);
+                ->where('status', ['active']);
         });
 
         $totalStudents = $studentQuery->count();
