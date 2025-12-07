@@ -214,44 +214,160 @@
                     @endif
 
                     <div class="flex flex-col bg-white rounded-2xl p-6 gap-4 ">
-                        <h1 class="text-2xl font-semibold text-heading-dark">Assigned Lessons</h1>
-                        <table class="table-auto border-collapse">
-                            <thead>
-                                <tr>
-                                    <th class="text-left font-semibold pb-2 text-lg">Lesson Name</th>
-                                    <th class="text-center font-semibold pb-2 text-lg">
-                                        No. of Videos
-                                    </th>
-                                    <th class="text-center font-semibold pb-2 text-lg">
-                                        No. of Activities
-                                    </th>
-                                    <th class="text-center font-semibold pb-2 text-lg">Status</th>
-                                </tr>
-                            </thead>
+                        <div class="flex items-center justify-between w-full">
+                            <h1 class="text-2xl font-semibold text-heading-dark">Assigned Lessons</h1>
+                            <!-- Action Buttons -->
+                            <div class="flex items-center gap-2">
+                                {{-- <button
+                            class="profile-button flex items-center bg-white py-2 px-5 rounded-full gap-2 text-paragraph cursor-pointer hover:text-white hover:bg-blue-button">
+                            <span class="material-symbols-rounded">save</span>
+                            <p class="text-sm">Export Form</p>
+                        </button> --}}
+                                <div
+                                    class="flex items-center bg-card py-2 px-5 rounded-full text-paragraph hover:bg-blue-button hover:text-white cursor-pointer">
+                                    <select name="" id="" class="w-max outline-none"
+                                        wire:model.live="Subjects">
+                                        <option value="1" class=" text-heading-dark">
+                                            Mathematics
+                                        </option>
 
-                            <tbody>
-                                @forelse ($filteredLessons as $lesson)
-                                    <tr>
-                                        <td class="text-left pt-2 text-paragraph">{{ $lesson->title }}</td>
-                                        <td class="text-center pt-2 text-paragraph">{{ $lesson->videos->count() }}
-                                        </td>
-                                        <td class="text-center pt-2 text-paragraph">
-                                            {{ $lesson->activity_lessons->count() }}</td>
-                                        <td class="text-center pt-2 text-paragraph">
-                                            {{ $lesson->isCompletedByStudent($student->id) ? 'Finished' : 'Unfinished' }}
-                                        </td>
-                                    </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="5" class="text-center py-4 text-gray-500">
-                                            No lessons found for this quarter.
-                                        </td>
-                                    </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
-                    </div>
-                    {{-- <div class="flex flex-col gap-8 bg-white p-6 rounded-2xl">
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- Lesson Container --}}
+                        <div class="w-full flex flex-col gap-2">
+                            {{-- Lessons --}}
+                            <div
+                                class="bg-card py-4 px-6 rounded-2xl flex flex-col items-center justify-between gap-4">
+                                <div class="w-full flex items-center justify-between">
+                                    <h1 class="text-xl font-semibold">Lesson Name</h1>
+                                    <p class="text-xl font-medium">60%</p>
+                                </div>
+                                {{-- Gamified Acts --}}
+                                <div class="w-full flex flex-col gap-2">
+                                    <h2 class="text-lg font-semibold text-heading-dark">Gamified Activities</h2>
+                                    <div class="w-full flex flex-col gap-2 border-l-2 pl-4 border-gray-300">
+                                        <div class="flex items-center justify-between">
+                                            <h1 class="text-md font-medium">Activity Name</h1>
+                                            <p
+                                                class="text-sm flex items-center bg-[#fce4e4] text-[#af0000] px-3 py-1 rounded-full">
+                                                incompleted</p>
+                                        </div>
+
+                                        <div class="flex items-center justify-between">
+                                            <h1 class="text-md font-medium">Activity Name</h1>
+                                            <p
+                                                class="text-sm flex items-center bg-[#D2FBD0] text-[#0D5F07] px-3 py-1 rounded-full">
+                                                completed</p>
+                                        </div>
+                                    </div>
+
+                                    {{-- If none --}}
+                                    {{-- <div class="w-full h-20 flex items-center justify-center">
+                                        <h1 class="text-md font-medium">No Activity Assigned.</h1>
+                                    </div> --}}
+                                </div>
+
+                                {{-- F2f Acts --}}
+                                <div class="w-full flex flex-col gap-2">
+                                    <h2 class="text-lg font-semibold text-heading-dark">F2f Activities</h2>
+                                    <div class="w-full flex flex-col gap-2 border-l-2 pl-4 border-gray-300">
+                                        <div class="flex items-center justify-between">
+                                            <h1 class="text-md font-medium">Activity Name</h1>
+                                            <p
+                                                class="text-sm flex items-center bg-[#fce4e4] text-[#af0000] px-3 py-1 rounded-full">
+                                                incompleted</p>
+                                        </div>
+
+                                        <div class="flex items-center justify-between">
+                                            <h1 class="text-md font-medium">Activity Name</h1>
+                                            <p
+                                                class="text-sm flex items-center bg-[#D2FBD0] text-[#0D5F07] px-3 py-1 rounded-full">
+                                                completed</p>
+                                        </div>
+                                    </div>
+
+                                    {{-- If none --}}
+                                    {{-- <div class="w-full h-20 flex items-center justify-center">
+                                        <h1 class="text-md font-medium">No Activity Assigned.</h1>
+                                    </div> --}}
+                                </div>
+                            </div>
+
+
+
+                            {{-- Lessons if not clicked --}}
+                            <div
+                                class="bg-card py-4 px-6 rounded-2xl flex flex-col items-center justify-between gap-4">
+                                <div class="w-full flex items-center justify-between">
+                                    <h1 class="text-xl font-semibold">Lesson Name</h1>
+                                    <p class="text-xl font-medium">60%</p>
+                                </div>
+                            </div>
+
+                            {{-- Lessons if not clicked --}}
+                            <div
+                                class="bg-card py-4 px-6 rounded-2xl flex flex-col items-center justify-between gap-4">
+                                <div class="w-full flex items-center justify-between">
+                                    <h1 class="text-xl font-semibold">Lesson Name</h1>
+                                    <p class="text-xl font-medium">60%</p>
+                                </div>
+                            </div>
+
+                            {{-- Lessons if not clicked --}}
+                            <div
+                                class="bg-card py-4 px-6 rounded-2xl flex flex-col items-center justify-between gap-4">
+                                <div class="w-full flex items-center justify-between">
+                                    <h1 class="text-xl font-semibold">Lesson Name</h1>
+                                    <p class="text-xl font-medium">60%</p>
+                                </div>
+                            </div>
+
+                            {{-- Lessons if not clicked --}}
+                            <div
+                                class="bg-card py-4 px-6 rounded-2xl flex flex-col items-center justify-between gap-4">
+                                <div class="w-full flex items-center justify-between">
+                                    <h1 class="text-xl font-semibold">Lesson Name</h1>
+                                    <p class="text-xl font-medium">60%</p>
+                                </div>
+                            </div>
+
+
+                        </div>
+
+                        <div class="rounded-full bg-white gap-1 p-2 w-fit self-center-safe flex items-center text-sm">
+                            <button class="cursor-pointer py-1 flex items-center px-3">
+                                <span class="material-symbols-outlined">
+                                    chevron_left
+                                </span>
+                            </button>
+                            <button class=" bg-blue-button text-white py-1 px-4 rounded-full cursor-pointer">1</button>
+                            <button
+                                class="py-1 px-4 hover:bg-blue-button rounded-full hover:text-white cursor-pointer">2</button>
+                            <button class="cursor-pointer py-1 flex items-center px-3">
+                                <span class="material-symbols-outlined">
+                                    chevron_right
+                                </span>
+                            </button>
+                        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                        {{-- <div class="flex flex-col gap-8 bg-white p-6 rounded-2xl">
                         <div class="flex flex-col gap-2 mb-4">
                             <h1 class="text-2xl font-semibold text-heading-dark">
                                 Student Performance
@@ -417,14 +533,14 @@
                         </div>
 
                     </div> --}}
+                    </div>
+
+
+
+
+
                 </div>
-
-
-
-
-
-            </div>
-            <!-- End of Third form -->
+                <!-- End of Third form -->
         </section>
     @endif
 </div>

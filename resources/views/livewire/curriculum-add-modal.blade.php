@@ -120,7 +120,41 @@
                             @endif
                             <textarea wire:model.live="add_description" name="" id="" maxlength="200"
                                 placeholder="Description (Optional)"
-                                class="p-4 rounded-lg bg-white placeholder-paragraph resize-none h-40 outline-none mb-18"></textarea>
+                                class="p-4 rounded-lg bg-white placeholder-paragraph resize-none h-40 outline-none"></textarea>
+                        </div>
+                    </div>
+                    <div class="flex flex-col gap-3 w-full mb-18">
+                        <h2 class="font-semibold text-xl">Set Legends Percentage</h2>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="flex flex-col gap-1 col-span-1">
+                                <p class="font-medium text-md">M - Mastered</p>
+                                <input type="number" placeholder="set %" wire:model.live="add_name"
+                                    class="px-4 py-2 rounded-lg bg-white placeholder-paragraph outline-none" />
+                            </div>
+
+                            <div class="flex flex-col gap-1 col-span-1">
+                                <p class="font-medium text-md">S - Satisfaction</p>
+                                <input type="number" placeholder="set %" wire:model.live="add_name"
+                                    class="px-4 py-2 rounded-lg bg-white placeholder-paragraph outline-none" />
+                            </div>
+
+                            <div class="flex flex-col gap-1 col-span-1">
+                                <p class="font-medium text-md">FS - Fair Satisfactory</p>
+                                <input type="number" placeholder="set %" wire:model.live="add_name"
+                                    class="px-4 py-2 rounded-lg bg-white placeholder-paragraph outline-none" />
+                            </div>
+
+                            <div class="flex flex-col gap-1 col-span-1">
+                                <p class="font-medium text-md">AIN - Addtional Instruction Needed</p>
+                                <input type="number" placeholder="set %" wire:model.live="add_name"
+                                    class="px-4 py-2 rounded-lg bg-white placeholder-paragraph outline-none" />
+                            </div>
+
+                            <div class="flex flex-col gap-1 col-span-1">
+                                <p class="font-medium text-md">NYI - Not Yet Introduced</p>
+                                <input type="number" placeholder="set %" wire:model.live="add_name"
+                                    class="px-4 py-2 rounded-lg bg-white placeholder-paragraph outline-none" />
+                            </div>
                         </div>
                     </div>
 
