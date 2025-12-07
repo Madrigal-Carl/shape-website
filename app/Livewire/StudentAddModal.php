@@ -251,7 +251,7 @@ class StudentAddModal extends Component
         $enrollment = $student->enrollments()->create([
             'instructor_id' => Auth::user()->accountable->id,
             'grade_level_id'   => $this->grade_level,
-            'status' => $isPassedEnrollment ? 'inactive' : 'active',
+            'status' => $isPassedEnrollment ? 'pending' : 'active',
         ]);
 
         if (

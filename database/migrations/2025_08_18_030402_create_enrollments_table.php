@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('school_year_id')->constrained()->onDelete('cascade');
             $table->foreignId('student_id')->constrained()->onDelete('cascade');
             $table->foreignId('grade_level_id')->constrained()->onDelete('cascade');
-            $table->enum('status', ['active', 'inactive', 'graduated', 'qualified', 'dropped', 'transferred'])->default('active');
+            $table->enum('status', ['active', 'pending', 'graduated', 'qualified', 'dropped', 'transferred'])->default('active');
             $table->timestamps();
         });
     }

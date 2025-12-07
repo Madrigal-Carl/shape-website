@@ -181,7 +181,7 @@ class StudentAddOldModal extends Component
                     'student_id'     => $student->id,
                     'grade_level_id' => $nextLevelId,
                     'school_year_id' => now()->schoolYear()->id,
-                    'status' => $isPassedEnrollment ? 'inactive' : 'active',
+                    'status' => $isPassedEnrollment ? 'pending' : 'active',
                 ]);
 
                 // ✅ Create related education record

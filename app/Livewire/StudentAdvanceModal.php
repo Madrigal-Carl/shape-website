@@ -136,7 +136,7 @@ class StudentAdvanceModal extends Component
 
     public function getFilteredStudentsProperty()
     {
-        $excludedStatuses = ['graduated', 'qualified', 'transferred', 'dropped', 'inactive'];
+        $excludedStatuses = ['graduated', 'qualified', 'transferred', 'dropped', 'pending'];
         $query = Auth::user()->accountable->students()
             ->whereHas('enrollments', function ($q) use ($excludedStatuses) {
                 $q->where('school_year_id', now()->schoolYear()->id)

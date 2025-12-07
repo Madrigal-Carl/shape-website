@@ -66,7 +66,7 @@
                             @php
                                 $statusStyles = [
                                     'active' => ['bg' => 'bg-[#D2FBD0]', 'text' => 'text-[#0D5F07]'],
-                                    'inactive' => ['bg' => 'bg-[#F7F7F7]', 'text' => 'text-[#3B3B3B]'],
+                                    'pending' => ['bg' => 'bg-[#F7F7F7]', 'text' => 'text-[#3B3B3B]'],
                                     'qualified' => ['bg' => 'bg-[#D2FBD0]', 'text' => 'text-[#0D5F07]'],
                                     'unqualified' => [
                                         'bg' => 'bg-[#F7F7F7]',

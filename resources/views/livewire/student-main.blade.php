@@ -169,8 +169,8 @@
                         <option value="active" class=" text-lime">
                             Active
                         </option>
-                        <option value="inactive" class=" text-paragraph">
-                            Inactive
+                        <option value="pending" class=" text-paragraph">
+                            Pending
                         </option>
                         <option value="qualified" class=" text-lime">
                             Qualified
@@ -246,7 +246,7 @@
                                                         'bg' => 'bg-[#F7F7F7]',
                                                         'text' => 'text-[#3B3B3B]',
                                                     ],
-                                                    'inactive' => ['bg' => 'bg-[#F7F7F7]', 'text' => 'text-[#3B3B3B]'],
+                                                    'pending' => ['bg' => 'bg-[#F7F7F7]', 'text' => 'text-[#3B3B3B]'],
                                                     'graduated' => ['bg' => 'bg-[#D0E8FF]', 'text' => 'text-[#004A9F]'],
                                                     'transferred' => [
                                                         'bg' => 'bg-[#F0E5C0]',
