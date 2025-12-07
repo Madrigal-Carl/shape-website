@@ -35,7 +35,12 @@ class InstructorMain extends Component
     {
         $specializations = Specialization::orderBy('name')->get();
 
-        $instructors = Instructor::with(['specializations', 'students'])
+        $currentSchoolYearId = now()->schoolYear()?->id;
+        $instructors = Instructor::with(['specializations'])
+            ->withCount(['enrollments as active_students_count' => function ($q) use ($currentSchoolYearId) {
+                $q->where('school_year_id', $currentSchoolYearId)
+                    ->where('status', 'active');
+            }])
             ->when($this->specialization !== 'all' && $this->specialization !== '', function ($query) {
                 $query->whereHas('specializations', function ($q) {
                     $q->where('id', $this->specialization);

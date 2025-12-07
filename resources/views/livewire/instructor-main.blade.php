@@ -100,7 +100,7 @@
                                         {{ $instructor->specializations->pluck('name')->map(fn($name) => ucwords(strtok($name, ' ')))->implode(', ') }}
                                     </td>
                                     <td class="px-4 py-3 text-center">
-                                        {{ $instructor->students->count() }}
+                                        {{ $instructor->active_students_count }}
                                     </td>
                                     <td class="px-4 py-3 text-center">
                                         <div class="flex justify-center items-center">

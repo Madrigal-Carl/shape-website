@@ -14,6 +14,12 @@ class Enrollment extends Model
         'grade_level_id',
         'status',
     ];
+
+    public function instructor()
+    {
+        return $this->belongsTo(Instructor::class);
+    }
+
     public function student()
     {
         return $this->belongsTo(Student::class);

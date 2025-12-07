@@ -62,7 +62,7 @@ class InstructorViewModal extends Component
         $students = collect();
         if ($this->instructor) {
             $students = $this->instructor->students()
-                ->with(['enrollments' => fn($q) => $q->where('school_year_id', $this->school_year)])
+                ->with(['enrollments' => fn($q) => $q->where('school_year_id', $this->school_year)->where('status', 'active')])
                 ->when(
                     $this->school_year,
                     fn($q) => $q->whereHas('enrollments', fn($sub) => $sub->where('school_year_id', $this->school_year))
