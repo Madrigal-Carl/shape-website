@@ -35,4 +35,9 @@ class Curriculum extends Model
     {
         return $this->belongsTo(GradeLevel::class);
     }
+
+    public function legends()
+    {
+        return $this->hasMany(CurriculumLegend::class);
+    }
 }

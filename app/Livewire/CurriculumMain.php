@@ -32,37 +32,56 @@ class CurriculumMain extends Component
 
     public function toggleStatus($id)
     {
-        $curriculum = Curriculum::where('instructor_id', Auth::user()->accountable->id)->findOrFail($id);
+        $curriculum = Curriculum::with('specializations')
+            ->where('instructor_id', Auth::user()->accountable->id)
+            ->findOrFail($id);
+
         if ($curriculum->status === 'inactive') {
+            $conflict = false;
+            foreach ($curriculum->specializations as $specialization) {
+                $activeCurriculum = $specialization->curriculums()
+                    ->where('status', 'active')
+                    ->where('curricula.id', '!=', $curriculum->id)
+                    ->where('instructor_id', Auth::user()->accountable->id)
+                    ->first();
+
+                if ($activeCurriculum) {
+                    $conflict = true;
+                    break;
+                }
+            }
+
+            if ($conflict) {
+                $this->dispatch('swal-toast', icon: 'error', title: 'Cannot activate. Another curriculum in the same specialization is already active.');
+                return;
+            }
+
             $curriculum->update(['status' => 'active']);
-            $this->dispatch(
-                'swal-toast',
-                icon: 'success',
-                title: 'Curriculum has been activated.'
-            );
+            $this->dispatch('swal-toast', icon: 'success', title: 'Curriculum has been activated.');
         } else {
             $curriculum->update(['status' => 'inactive']);
-            $this->dispatch(
-                'swal-toast',
-                icon: 'warning',
-                title: 'Curriculum has been deactivated.'
-            );
+            $this->dispatch('swal-toast', icon: 'warning', title: 'Curriculum has been deactivated.');
         }
     }
 
     public function isToggleDisabled($curriculum)
     {
         if ($curriculum->status === 'inactive') {
-            $activeCurriculum = Curriculum::where('instructor_id', Auth::user()->accountable->id)
-                ->where('grade_level_id', $curriculum->grade_level_id)
-                ->where('status', 'active')
-                ->first();
+            foreach ($curriculum->specializations as $specialization) {
+                $activeCurriculum = $specialization->curriculums()
+                    ->where('status', 'active')
+                    ->where('curricula.id', '!=', $curriculum->id) // prefix table name
+                    ->where('instructor_id', Auth::user()->accountable->id)
+                    ->first();
 
-            return $activeCurriculum ? true : false;
+                if ($activeCurriculum) {
+                    return true;
+                }
+            }
         }
+
         return false;
     }
-
 
     public function render()
     {

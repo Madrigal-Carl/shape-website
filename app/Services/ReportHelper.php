@@ -11,19 +11,20 @@ use PhpOffice\PhpWord\TemplateProcessor;
 
 class ReportHelper
 {
-    public function getAutismStudentActivities($studentId, $schoolYearId = null, $quarter = null)
+    public function getStudentActivities($studentId, $schoolYearId = null, $quarter = null)
     {
         $student = Student::with([
             'lessons.classActivities.todos',
             'lessons.gameActivityLessons.gameActivity.todos',
+            'lessons.lessonSubjectStudents.curriculumSubject.curriculum.legends'
         ])->findOrFail($studentId);
+
         $schoolYearId = $schoolYearId ?? now()->schoolYear()?->id;
         $schoolYear   = SchoolYear::findOrFail($schoolYearId);
+
         $results = [];
 
-        // Collect all activities from lessons up to the given quarter
         foreach ($student->lessons as $lesson) {
-            // Determine the lesson quarter
             $lessonQuarter = null;
             foreach ([1, 2, 3, 4] as $q) {
                 if ($lesson->isInQuarter($schoolYear, $q)) {
@@ -32,11 +33,21 @@ class ReportHelper
                 }
             }
 
-            // Skip if lesson not in a quarter or quarter beyond selected
-            if (!$lessonQuarter || ($quarter && $lessonQuarter > $quarter))
-                continue;
+            if (!$lessonQuarter || ($quarter && $lessonQuarter > $quarter)) continue;
 
-            // ----- CLASS ACTIVITIES -----
+            // --- Fetch curriculum legends for this lesson dynamically ---
+            $curriculumLegends = [];
+            $firstLessonSubject = $lesson->lessonSubjectStudents->first();
+            if ($firstLessonSubject && $firstLessonSubject->curriculumSubject) {
+                $curriculumLegends = $firstLessonSubject->curriculumSubject
+                    ->curriculum
+                    ->legends
+                    ->pluck('percentage', 'legend_key')
+                    ->toArray();
+                arsort($curriculumLegends); // Sort descending
+            }
+
+            // Class activities
             foreach ($lesson->classActivities as $activity) {
                 if ($activity->todos->isEmpty()) continue;
 
@@ -51,10 +62,9 @@ class ReportHelper
                 }
             }
 
-            // ----- GAME ACTIVITIES -----
+            // Game activities
             foreach ($lesson->gameActivityLessons as $activityLesson) {
                 $activity = $activityLesson->gameActivity;
-
                 if (!$activity || $activity->todos->isEmpty()) continue;
 
                 foreach ($activity->todos as $todo) {
@@ -69,7 +79,7 @@ class ReportHelper
             }
         }
 
-        // Aggregate results for each todo and quarter
+        // --- Aggregate results for all todos & quarters ---
         $final = [];
         $allTodos = Todo::pluck('id')->toArray();
 
@@ -77,7 +87,6 @@ class ReportHelper
             for ($q = 1; $q <= 4; $q++) {
                 $key = 't' . $todoId . '.q' . $q;
 
-                // Future quarters (beyond selected) remain blank
                 if ($quarter && $q > $quarter) {
                     $final[$key] = '';
                     continue;
@@ -85,29 +94,24 @@ class ReportHelper
 
                 $statuses = $results[$key] ?? [];
 
-                // 1️⃣ If no activities at all → NA (not blank)
+                // No activities → use lowest legend key as fallback
                 if (empty($statuses)) {
-                    $final[$key] = 'NA';
+                    $final[$key] = array_key_last($curriculumLegends);
                     continue;
                 }
 
-                // 2️⃣ Compute completion rate
-                $total = count($statuses);
-                $finishedCount = collect($statuses)->filter(fn($s) => $s === 'finished')->count();
-                $completionRate = $finishedCount / $total;
+                $completionRate = collect($statuses)->filter(fn($s) => $s === 'finished')->count() / count($statuses);
 
-                // 3️⃣ Assign performance rating
-                if ($completionRate >= 0.9) {
-                    $final[$key] = 'P';
-                } elseif ($completionRate >= 0.7) {
-                    $final[$key] = 'AP';
-                } elseif ($completionRate >= 0.4) {
-                    $final[$key] = 'D';
-                } elseif ($completionRate >= 0.2) {
-                    $final[$key] = 'B';
-                } else {
-                    $final[$key] = 'NO';
+                // --- Assign legend dynamically based on percentages ---
+                $assignedLegend = null;
+                foreach ($curriculumLegends as $legendKey => $percentage) {
+                    if ($completionRate * 100 >= $percentage) {
+                        $assignedLegend = $legendKey;
+                        break;
+                    }
                 }
+
+                $final[$key] = $assignedLegend ?? array_key_last($curriculumLegends);
             }
         }
 
@@ -129,7 +133,7 @@ class ReportHelper
         $studentFullName = $student->full_name ?? $student->name ?? 'N_A';
 
         // Get activities (this method already respects up-to-quarter logic)
-        $studentActivities = $reportHelper->getAutismStudentActivities($studentId, $schoolYearId, $quarter);
+        $studentActivities = $reportHelper->getStudentActivities($studentId, $schoolYearId, $quarter);
         $studentActivities['student_name'] = $studentFullName;
 
         // Load school year
@@ -179,112 +183,6 @@ class ReportHelper
         return response()->download($outputPath)->deleteFileAfterSend(true);
     }
 
-
-    public function getSpeechHearingStudentActivities($studentId, $schoolYearId = null, $quarter = null)
-    {
-        $student = Student::with([
-            'lessons.classActivities.todos',
-            'lessons.gameActivityLessons.gameActivity.todos',
-        ])->findOrFail($studentId);
-
-        $schoolYearId = $schoolYearId ?? now()->schoolYear()?->id;
-        $schoolYear   = SchoolYear::findOrFail($schoolYearId);
-
-        $results = [];
-
-        foreach ($student->lessons as $lesson) {
-            // Determine lesson quarter
-            $lessonQuarter = null;
-            foreach ([1, 2, 3, 4] as $q) {
-                if ($lesson->isInQuarter($schoolYear, $q)) {
-                    $lessonQuarter = $q;
-                    break;
-                }
-            }
-            if (!$lessonQuarter) continue;
-
-            // Skip if lesson quarter > requested quarter
-            if ($quarter && $lessonQuarter > $quarter) {
-                continue;
-            }
-
-            // Class activities
-            foreach ($lesson->classActivities as $activity) {
-                if ($activity->todos->isEmpty()) continue;
-
-                foreach ($activity->todos as $todo) {
-                    $todoKey = 't' . $todo->id;
-                    $field = $todoKey . '.q' . $lessonQuarter;
-
-                    $status = $student->activityStatus($activity);
-                    if ($status) {
-                        $results[$field][] = $status;
-                    }
-                }
-            }
-
-            // Game activities
-            foreach ($lesson->gameActivityLessons as $activityLesson) {
-                $activity = $activityLesson->gameActivity;
-
-                if (!$activity || $activity->todos->isEmpty()) continue;
-
-                foreach ($activity->todos as $todo) {
-                    $todoKey = 't' . $todo->id;
-                    $field = $todoKey . '.q' . $lessonQuarter;
-
-                    $status = $student->activityStatus($activity);
-                    if ($status) {
-                        $results[$field][] = $status;
-                    }
-                }
-            }
-        }
-
-        // --- Aggregate ratings ---
-        $final = [];
-        $allTodos = Todo::pluck('id')->toArray();
-
-        foreach ($allTodos as $todoId) {
-            for ($q = 1; $q <= 4; $q++) {
-                $key = 't' . $todoId . '.q' . $q;
-
-                // Skip future quarters
-                if ($quarter && $q > $quarter) {
-                    $final[$key] = '';
-                    continue;
-                }
-
-                $statuses = $results[$key] ?? [];
-                $total = count($statuses);
-
-                // If no activities at all → NYI
-                if ($total === 0) {
-                    $final[$key] = 'NYI';
-                    continue;
-                }
-
-                $finishedCount = collect($statuses)->filter(fn($s) => $s === 'finished')->count();
-                $completionRate = $total > 0 ? $finishedCount / $total : 0;
-
-                // Assign performance rating
-                if ($completionRate >= 0.9) {
-                    $final[$key] = 'M';
-                } elseif ($completionRate >= 0.7) {
-                    $final[$key] = 'S';
-                } elseif ($completionRate >= 0.4) {
-                    $final[$key] = 'FS';
-                } elseif ($completionRate >= 0.2) {
-                    $final[$key] = 'AIN';
-                } else {
-                    $final[$key] = 'AIN';
-                }
-            }
-        }
-
-        return $final;
-    }
-
     public function generateSpeechHearingReportCard($studentId, $schoolYearId = null, $quarter = null)
     {
         $templatePath = resource_path('templates/speech-hearing-report-card.docx');
@@ -300,7 +198,7 @@ class ReportHelper
         $studentFullName = $student->full_name ?? $student->name ?? 'N_A';
 
         // --- Get student activity ratings ---
-        $studentActivities = $reportHelper->getSpeechHearingStudentActivities($studentId, $schoolYearId, $quarter);
+        $studentActivities = $reportHelper->getStudentActivities($studentId, $schoolYearId, $quarter);
         $studentActivities['student_name'] = $studentFullName;
 
         // --- Load school year ---

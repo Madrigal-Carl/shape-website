@@ -122,41 +122,21 @@
                                 class="p-4 rounded-lg bg-white placeholder-paragraph resize-none h-40 outline-none">{{ $edit_description }}</textarea>
                         </div>
                     </div>
-
-                    <div class="flex flex-col gap-3 w-full mb-18">
-                        <h2 class="font-semibold text-xl">Set Legends Percentage</h2>
-                        <div class="grid grid-cols-2 gap-4">
-                            <div class="flex flex-col gap-1 col-span-1">
-                                <p class="font-medium text-md">M - Mastered</p>
-                                <input type="number" placeholder="set %" wire:model.live="add_name"
-                                    class="px-4 py-2 rounded-lg bg-white placeholder-paragraph outline-none" />
-                            </div>
-
-                            <div class="flex flex-col gap-1 col-span-1">
-                                <p class="font-medium text-md">S - Satisfaction</p>
-                                <input type="number" placeholder="set %" wire:model.live="add_name"
-                                    class="px-4 py-2 rounded-lg bg-white placeholder-paragraph outline-none" />
-                            </div>
-
-                            <div class="flex flex-col gap-1 col-span-1">
-                                <p class="font-medium text-md">FS - Fair Satisfactory</p>
-                                <input type="number" placeholder="set %" wire:model.live="add_name"
-                                    class="px-4 py-2 rounded-lg bg-white placeholder-paragraph outline-none" />
-                            </div>
-
-                            <div class="flex flex-col gap-1 col-span-1">
-                                <p class="font-medium text-md">AIN - Addtional Instruction Needed</p>
-                                <input type="number" placeholder="set %" wire:model.live="add_name"
-                                    class="px-4 py-2 rounded-lg bg-white placeholder-paragraph outline-none" />
-                            </div>
-
-                            <div class="flex flex-col gap-1 col-span-1">
-                                <p class="font-medium text-md">NYI - Not Yet Introduced</p>
-                                <input type="number" placeholder="set %" wire:model.live="add_name"
-                                    class="px-4 py-2 rounded-lg bg-white placeholder-paragraph outline-none" />
+                    @if (!empty($this->legends))
+                        <div class="flex flex-col gap-3 w-full mb-18">
+                            <h2 class="font-semibold text-xl">Set Legends Percentage</h2>
+                            <div class="grid grid-cols-2 gap-4">
+                                @foreach ($this->legends as $key => $label)
+                                    <div class="flex flex-col gap-1 col-span-1">
+                                        <p class="font-medium text-md">{{ $key }} - {{ ucwords($label) }}</p>
+                                        <input type="number" placeholder="set %"
+                                            wire:model.live="legendPercentages.{{ $key }}"
+                                            class="px-4 py-2 rounded-lg bg-white placeholder-paragraph outline-none" />
+                                    </div>
+                                @endforeach
                             </div>
                         </div>
-                    </div>
+                    @endif
 
                     <div wire:loading wire:target="editCurriculum"
                         class="bg-black/10 fixed top-0 left-0 w-dvw h-dvh z-50 flex justify-center items-center backdrop-blur-sm">

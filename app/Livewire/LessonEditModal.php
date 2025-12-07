@@ -340,11 +340,21 @@ class LessonEditModal extends Component
             ->first();
 
         foreach ($this->students as $student) {
-            $lesson->lessonSubjectStudents()->create([
-                'student_id' => $student->id,
-                'curriculum_subject_id' => $curriculumSubject->id,
-                'lesson_id'  => $lesson->id,
-            ]);
+            $existing = $lesson->lessonSubjectStudents()->withTrashed()
+                ->where('student_id', $student->id)
+                ->where('curriculum_subject_id', $curriculumSubject->id)
+                ->where('lesson_id', $lesson->id)
+                ->first();
+
+            if ($existing) {
+                $existing->restore();
+            } else {
+                $lesson->lessonSubjectStudents()->create([
+                    'student_id' => $student->id,
+                    'curriculum_subject_id' => $curriculumSubject->id,
+                    'lesson_id'  => $lesson->id,
+                ]);
+            }
         }
 
         // Update videos
