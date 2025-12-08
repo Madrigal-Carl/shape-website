@@ -6,14 +6,20 @@ use App\Models\Student;
 use Livewire\Component;
 use App\Models\SchoolYear;
 use Livewire\Attributes\On;
+use Livewire\WithPagination;
 use App\Services\ReportHelper;
+use Livewire\WithoutUrlPagination;
 
 class StudentViewModal extends Component
 {
+    use WithPagination, WithoutUrlPagination;
+
     public $isOpen = false;
     public $student_id = null;
+    public $subject = '';
     public $school_year = null;
     public $student, $quarter;
+    public $openLesson = null;
 
     #[On('openModal')]
     public function openModal($id, $school_year)
@@ -27,10 +33,6 @@ class StudentViewModal extends Component
             'guardian',
             'permanentAddress',
             'currentAddress',
-            'lessons.schoolYear',
-            'lessons.videos',
-            'lessons.gameActivityLessons',
-            'lessons.classActivities',
         ])->find($id);
     }
 
@@ -81,32 +83,90 @@ class StudentViewModal extends Component
         $this->isOpen = false;
         $this->student_id = null;
         $this->school_year = null;
+        // $this->subject = '';
+    }
+
+    public function getSubjectsProperty()
+    {
+        if (!$this->student) return collect();
+
+        $subjects = $this->student->lessons
+            ->flatMap(function ($lesson) {
+                return $lesson->lessonSubjectStudents
+                    ->map(fn($lss) => $lss->subject)
+                    ->filter(); // remove null
+            })
+            ->unique('id') // only unique subjects
+            ->values();
+
+        return $subjects;
+    }
+
+    public function toggleLesson($lessonId)
+    {
+        $this->openLesson = $this->openLesson === $lessonId ? null : $lessonId;
     }
 
     public function render()
     {
-        $filteredLessons = collect();
-
-        if ($this->student) {
-            $schoolYearModel = SchoolYear::find($this->school_year);
-
-            $filteredLessons = $this->student->lessons
-                ->filter(function ($lesson) use ($schoolYearModel) {
-                    if ($lesson->school_year_id != $this->school_year) {
-                        return false;
-                    }
-                    if (!$lesson->isInQuarter($schoolYearModel, (int) $this->quarter)) {
-                        return false;
-                    }
-                    $hasActiveCurriculum = $lesson->lessonSubjectStudents
-                        ->where('student_id', $this->student->id)
-                        ->filter(fn($lss) => $lss->curriculum?->status === 'active')
-                        ->isNotEmpty();
-
-                    return $hasActiveCurriculum;
-                });
+        if (!$this->student) {
+            return view('livewire.student-view-modal', [
+                'filteredLessons' => collect()
+            ]);
         }
 
-        return view('livewire.student-view-modal', compact('filteredLessons'));
+        $schoolYear = SchoolYear::find($this->school_year);
+
+        // Get lessons with pagination first
+        $lessonsQuery = $this->student->lessons()
+            ->with(['gameActivityLessons.gameActivity', 'classActivities'])
+            ->where('school_year_id', $this->school_year)
+            ->whereHas('lessonSubjectStudents', function ($query) {
+                $query->where('student_id', $this->student->id)
+                    ->whereHas('curriculumSubject', function ($q) {
+                        $q->whereHas('curriculum', fn($q2) => $q2->where('status', 'active'));
+                    });
+
+                if ($this->subject) {
+                    $query->whereHas('curriculumSubject', function ($q) {
+                        $q->where('subject_id', $this->subject);
+                    });
+                }
+            });
+
+        // Paginate first
+        $paginatedLessons = $lessonsQuery->paginate(5);
+
+        // Then filter by quarter (preserve pagination)
+        $filteredLessonsCollection = $paginatedLessons->getCollection()
+            ->filter(fn($lesson) => $lesson->isInQuarter($schoolYear, (int)$this->quarter))
+            ->values();
+
+        // Replace the collection in the paginator with the filtered one
+        $paginatedLessons->setCollection($filteredLessonsCollection);
+
+        // Add progress percentage + activity grouping
+        $paginatedLessons->getCollection()->transform(function ($lesson) {
+            $totalActs = $lesson->gameActivityLessons->count() + $lesson->classActivities->count();
+            $completed = 0;
+
+            foreach ($lesson->gameActivityLessons as $act) {
+                if ($this->student->activityStatus($act) === 'finished') $completed++;
+            }
+            foreach ($lesson->classActivities as $act) {
+                if ($this->student->activityStatus($act) === 'finished') $completed++;
+            }
+
+            return [
+                'model' => $lesson,
+                'game_activities' => $lesson->gameActivityLessons,
+                'class_activities' => $lesson->classActivities,
+                'percent' => $totalActs ? round(($completed / $totalActs) * 100) : 0,
+            ];
+        });
+
+        return view('livewire.student-view-modal', [
+            'filteredLessons' => $paginatedLessons
+        ]);
     }
 }

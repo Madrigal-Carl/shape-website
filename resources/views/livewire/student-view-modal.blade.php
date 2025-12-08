@@ -213,332 +213,170 @@
                         </div>
                     @endif
 
-                    <div class="flex flex-col bg-white rounded-2xl p-6 gap-4 ">
-                        <div class="flex items-center justify-between w-full">
-                            <h1 class="text-2xl font-semibold text-heading-dark">Assigned Lessons</h1>
-                            <!-- Action Buttons -->
-                            <div class="flex items-center gap-2">
-                                {{-- <button
-                            class="profile-button flex items-center bg-white py-2 px-5 rounded-full gap-2 text-paragraph cursor-pointer hover:text-white hover:bg-blue-button">
-                            <span class="material-symbols-rounded">save</span>
-                            <p class="text-sm">Export Form</p>
-                        </button> --}}
+
+                    @if (!$filteredLessons->isEmpty())
+                        <div class="flex flex-col bg-white rounded-2xl p-6 gap-4 ">
+                            <div class="flex items-center justify-between w-full">
+                                <h1 class="text-2xl font-semibold text-heading-dark">Assigned Lessons</h1>
+                                <!-- Action Buttons -->
+                                <div class="flex items-center gap-2">
+                                    <div
+                                        class="flex items-center bg-card py-2 px-5 rounded-full text-paragraph hover:bg-blue-button hover:text-white cursor-pointer">
+                                        <select class="w-max outline-none" wire:model.live="subject">
+                                            <option value="">All Subjects</option>
+                                            @foreach ($this->subjects as $subject)
+                                                <option value="{{ $subject->id }}">{{ ucwords($subject->name) }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{-- Lesson Container --}}
+                            <div class="w-full flex flex-col gap-2">
+
+                                {{-- Lessons --}}
+                                @foreach ($filteredLessons as $lessonData)
+                                    @php
+                                        $lessonId = $lessonData['model']->id;
+                                        $isOpen = $openLesson === $lessonId;
+                                    @endphp
+
+                                    <div class="bg-card py-4 px-6 rounded-2xl flex flex-col gap-4">
+
+                                        {{-- Header (Clickable Accordion Trigger) --}}
+                                        <div class="w-full flex items-center justify-between cursor-pointer"
+                                            wire:click="toggleLesson({{ $lessonId }})">
+
+                                            <h1 class="text-xl font-semibold">
+                                                {{ ucwords($lessonData['model']->title) }}
+                                            </h1>
+
+                                            <div class="flex items-center gap-3">
+                                                <p class="text-xl font-medium">{{ $lessonData['percent'] }}%</p>
+
+                                                {{-- Arrow --}}
+                                                <svg class="w-6 h-6 transition-transform duration-300 {{ $isOpen ? 'rotate-180' : '' }}"
+                                                    fill="none" stroke="currentColor" stroke-width="2"
+                                                    viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="M19 9l-7 7-7-7" />
+                                                </svg>
+                                            </div>
+                                        </div>
+
+                                        {{-- COLLAPSIBLE CONTENT --}}
+                                        @if ($isOpen)
+                                            <div class="mt-2 flex flex-col gap-6">
+
+                                                {{-- Gamified Activities --}}
+                                                <div class="w-full flex flex-col gap-2">
+                                                    <h2 class="text-lg font-semibold text-heading-dark">Gamified
+                                                        Activities
+                                                    </h2>
+
+                                                    <div
+                                                        class="w-full flex flex-col gap-2 border-l-2 pl-4 border-gray-300">
+                                                        @forelse ($lessonData['game_activities'] as $game)
+                                                            <div class="flex items-center justify-between">
+                                                                <h1 class="text-md font-medium">
+                                                                    {{ $game->gameActivity->name ?? 'Activity' }}</h1>
+
+                                                                @if ($student->activityStatus($game) === 'finished')
+                                                                    <p
+                                                                        class="text-sm flex items-center bg-[#D2FBD0] text-[#0D5F07] px-3 py-1 rounded-full">
+                                                                        completed
+                                                                    </p>
+                                                                @else
+                                                                    <p
+                                                                        class="text-sm flex items-center bg-[#fce4e4] text-[#af0000] px-3 py-1 rounded-full">
+                                                                        incomplete
+                                                                    </p>
+                                                                @endif
+                                                            </div>
+                                                        @empty
+                                                            <div class="w-full h-12 flex items-center justify-center">
+                                                                <h1 class="text-md font-medium">No Activity Assigned.
+                                                                </h1>
+                                                            </div>
+                                                        @endforelse
+                                                    </div>
+                                                </div>
+
+                                                {{-- F2F Activities --}}
+                                                <div class="w-full flex flex-col gap-2">
+                                                    <h2 class="text-lg font-semibold text-heading-dark">F2F Activities
+                                                    </h2>
+
+                                                    <div
+                                                        class="w-full flex flex-col gap-2 border-l-2 pl-4 border-gray-300">
+
+                                                        @forelse ($lessonData['class_activities'] as $act)
+                                                            <div class="flex items-center justify-between">
+                                                                <h1 class="text-md font-medium">{{ $act->name }}
+                                                                </h1>
+
+                                                                @if ($student->activityStatus($act) === 'finished')
+                                                                    <p
+                                                                        class="text-sm flex items-center bg-[#D2FBD0] text-[#0D5F07] px-3 py-1 rounded-full">
+                                                                        completed
+                                                                    </p>
+                                                                @else
+                                                                    <p
+                                                                        class="text-sm flex items-center bg-[#fce4e4] text-[#af0000] px-3 py-1 rounded-full">
+                                                                        incomplete
+                                                                    </p>
+                                                                @endif
+                                                            </div>
+                                                        @empty
+                                                            <div class="w-full h-12 flex items-center justify-center">
+                                                                <h1 class="text-md font-medium">No Activity Assigned.
+                                                                </h1>
+                                                            </div>
+                                                        @endforelse
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        @endif
+                                    </div>
+                                @endforeach
+                            </div>
+
+                            @if ($filteredLessons->lastPage() > 1)
                                 <div
-                                    class="flex items-center bg-card py-2 px-5 rounded-full text-paragraph hover:bg-blue-button hover:text-white cursor-pointer">
-                                    <select name="" id="" class="w-max outline-none"
-                                        wire:model.live="Subjects">
-                                        <option value="1" class=" text-heading-dark">
-                                            Mathematics
-                                        </option>
+                                    class="rounded-full bg-white gap-1 p-2 w-fit self-center-safe flex items-center text-sm">
 
-                                    </select>
+                                    {{-- Previous --}}
+                                    <button wire:click="previousPage" wire:loading.attr="disabled"
+                                        class="cursor-pointer py-1 flex items-center px-3 {{ $filteredLessons->onFirstPage() ? 'opacity-40 cursor-default' : '' }}">
+                                        <span class="material-symbols-outlined">
+                                            chevron_left
+                                        </span>
+                                    </button>
+
+                                    {{-- Page Numbers --}}
+                                    @for ($i = 1; $i <= $filteredLessons->lastPage(); $i++)
+                                        <button wire:click="gotoPage({{ $i }})"
+                                            class="py-1 px-4 rounded-full cursor-pointer
+                                        {{ $i == $filteredLessons->currentPage() ? 'bg-blue-button text-white' : 'hover:bg-blue-button hover:text-white' }}">
+                                            {{ $i }}
+                                        </button>
+                                    @endfor
+
+                                    {{-- Next --}}
+                                    <button wire:click="nextPage" wire:loading.attr="disabled"
+                                        class="cursor-pointer py-1 flex items-center px-3 {{ $filteredLessons->currentPage() == $filteredLessons->lastPage() ? 'opacity-40 cursor-default' : '' }}">
+                                        <span class="material-symbols-outlined">
+                                            chevron_right
+                                        </span>
+                                    </button>
+
                                 </div>
-                            </div>
+                            @endif
                         </div>
-
-                        {{-- Lesson Container --}}
-                        <div class="w-full flex flex-col gap-2">
-                            {{-- Lessons --}}
-                            <div
-                                class="bg-card py-4 px-6 rounded-2xl flex flex-col items-center justify-between gap-4">
-                                <div class="w-full flex items-center justify-between">
-                                    <h1 class="text-xl font-semibold">Lesson Name</h1>
-                                    <p class="text-xl font-medium">60%</p>
-                                </div>
-                                {{-- Gamified Acts --}}
-                                <div class="w-full flex flex-col gap-2">
-                                    <h2 class="text-lg font-semibold text-heading-dark">Gamified Activities</h2>
-                                    <div class="w-full flex flex-col gap-2 border-l-2 pl-4 border-gray-300">
-                                        <div class="flex items-center justify-between">
-                                            <h1 class="text-md font-medium">Activity Name</h1>
-                                            <p
-                                                class="text-sm flex items-center bg-[#fce4e4] text-[#af0000] px-3 py-1 rounded-full">
-                                                incompleted</p>
-                                        </div>
-
-                                        <div class="flex items-center justify-between">
-                                            <h1 class="text-md font-medium">Activity Name</h1>
-                                            <p
-                                                class="text-sm flex items-center bg-[#D2FBD0] text-[#0D5F07] px-3 py-1 rounded-full">
-                                                completed</p>
-                                        </div>
-                                    </div>
-
-                                    {{-- If none --}}
-                                    {{-- <div class="w-full h-20 flex items-center justify-center">
-                                        <h1 class="text-md font-medium">No Activity Assigned.</h1>
-                                    </div> --}}
-                                </div>
-
-                                {{-- F2f Acts --}}
-                                <div class="w-full flex flex-col gap-2">
-                                    <h2 class="text-lg font-semibold text-heading-dark">F2f Activities</h2>
-                                    <div class="w-full flex flex-col gap-2 border-l-2 pl-4 border-gray-300">
-                                        <div class="flex items-center justify-between">
-                                            <h1 class="text-md font-medium">Activity Name</h1>
-                                            <p
-                                                class="text-sm flex items-center bg-[#fce4e4] text-[#af0000] px-3 py-1 rounded-full">
-                                                incompleted</p>
-                                        </div>
-
-                                        <div class="flex items-center justify-between">
-                                            <h1 class="text-md font-medium">Activity Name</h1>
-                                            <p
-                                                class="text-sm flex items-center bg-[#D2FBD0] text-[#0D5F07] px-3 py-1 rounded-full">
-                                                completed</p>
-                                        </div>
-                                    </div>
-
-                                    {{-- If none --}}
-                                    {{-- <div class="w-full h-20 flex items-center justify-center">
-                                        <h1 class="text-md font-medium">No Activity Assigned.</h1>
-                                    </div> --}}
-                                </div>
-                            </div>
-
-
-
-                            {{-- Lessons if not clicked --}}
-                            <div
-                                class="bg-card py-4 px-6 rounded-2xl flex flex-col items-center justify-between gap-4">
-                                <div class="w-full flex items-center justify-between">
-                                    <h1 class="text-xl font-semibold">Lesson Name</h1>
-                                    <p class="text-xl font-medium">60%</p>
-                                </div>
-                            </div>
-
-                            {{-- Lessons if not clicked --}}
-                            <div
-                                class="bg-card py-4 px-6 rounded-2xl flex flex-col items-center justify-between gap-4">
-                                <div class="w-full flex items-center justify-between">
-                                    <h1 class="text-xl font-semibold">Lesson Name</h1>
-                                    <p class="text-xl font-medium">60%</p>
-                                </div>
-                            </div>
-
-                            {{-- Lessons if not clicked --}}
-                            <div
-                                class="bg-card py-4 px-6 rounded-2xl flex flex-col items-center justify-between gap-4">
-                                <div class="w-full flex items-center justify-between">
-                                    <h1 class="text-xl font-semibold">Lesson Name</h1>
-                                    <p class="text-xl font-medium">60%</p>
-                                </div>
-                            </div>
-
-                            {{-- Lessons if not clicked --}}
-                            <div
-                                class="bg-card py-4 px-6 rounded-2xl flex flex-col items-center justify-between gap-4">
-                                <div class="w-full flex items-center justify-between">
-                                    <h1 class="text-xl font-semibold">Lesson Name</h1>
-                                    <p class="text-xl font-medium">60%</p>
-                                </div>
-                            </div>
-
-
-                        </div>
-
-                        <div class="rounded-full bg-white gap-1 p-2 w-fit self-center-safe flex items-center text-sm">
-                            <button class="cursor-pointer py-1 flex items-center px-3">
-                                <span class="material-symbols-outlined">
-                                    chevron_left
-                                </span>
-                            </button>
-                            <button class=" bg-blue-button text-white py-1 px-4 rounded-full cursor-pointer">1</button>
-                            <button
-                                class="py-1 px-4 hover:bg-blue-button rounded-full hover:text-white cursor-pointer">2</button>
-                            <button class="cursor-pointer py-1 flex items-center px-3">
-                                <span class="material-symbols-outlined">
-                                    chevron_right
-                                </span>
-                            </button>
-                        </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                        {{-- <div class="flex flex-col gap-8 bg-white p-6 rounded-2xl">
-                        <div class="flex flex-col gap-2 mb-4">
-                            <h1 class="text-2xl font-semibold text-heading-dark">
-                                Student Performance
-                            </h1>
-                            <p class="text-paragraph">Overview of student's lesson progress and quiz scores.</p>
-                        </div>
-
-
-                        <div class="w-full grid grid-cols-2 gap-4">
-                            <div class="flex flex-col gap-4">
-                                <div class="col-span-1 h-full bg-white rounded-2xl flex flex-col gap-4">
-                                    <h1 class="text-xl font-semibold">Weekly Activities</h1>
-                                    <div id="PerformanceBarchart" class="w-full" wire:ignore x-data="{}"
-                                        x-init="() => {
-                                            var options = {
-                                                series: [
-                                                    { name: 'Net Profit', data: [44, 55, 57, 56, 61, 58, 63, 60, 66] },
-                                                    { name: 'Revenue', data: [76, 85, 101, 98, 87, 105, 91, 114, 94] },
-                                                    { name: 'Free Cash Flow', data: [35, 41, 36, 26, 45, 48, 52, 53, 41] }
-                                                ],
-                                                chart: {
-                                                    type: 'bar',
-                                                    height: 350,
-                                                    toolbar: { show: false },
-                                                },
-                                                plotOptions: {
-                                                    bar: {
-                                                        horizontal: false,
-                                                        columnWidth: '55%',
-                                                        borderRadius: 5,
-                                                        borderRadiusApplication: 'end',
-                                                    },
-                                                },
-                                                dataLabels: { enabled: false },
-                                                stroke: { show: true, width: 2, colors: ['transparent'] },
-                                                xaxis: { categories: ['Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct'] },
-                                                fill: { opacity: 1 },
-                                                tooltip: { y: { formatter: val => `${val}%` } },
-                                            };
-
-                                            var chart = new ApexCharts(document.querySelector('#PerformanceBarchart'), options);
-                                            chart.render();
-                                        }">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-span-1 h-full bg-white rounded-2xl flex flex-col gap-4">
-                                <h1 class="text-xl font-semibold">Student Performance Stats</h1>
-                                <div id="RadarChart" class="w-full" wire:ignore x-data="{}"
-                                    x-init="() => {
-                                        var options = {
-                                            series: [{
-                                                name: 'Average Score',
-                                                data: [44, 55, 13, 43, 22, 43, 22]
-                                            }],
-                                            plotOptions: {
-                                                radar: {
-                                                    polygons: {
-                                                        strokeColor: '#e8e8e8',
-                                                        fill: {
-                                                            colors: ['#f8f8f8', '#fff']
-                                                        }
-                                                    }
-                                                }
-                                            },
-                                            chart: {
-                                                height: 410,
-                                                type: 'radar',
-                                                toolbar: { show: false }
-                                            },
-                                            xaxis: {
-                                                categories: [
-                                                    'Self-Help',
-                                                    'Social',
-                                                    'Numeracy',
-                                                    'Literacy',
-                                                    'Motor',
-                                                    'Pre-Vocational',
-                                                    'Vocational'
-                                                ]
-                                            },
-                                            dataLabels: {
-                                                enabled: true,
-                                                background: {
-                                                    enabled: true,
-                                                    borderRadius: 2,
-                                                }
-                                            },
-                                            fill: {
-                                                opacity: 0.3, // adjust transparency
-                                                colors: ['#247BFF'] // bg color
-                                            },
-                                            stroke: {
-                                                colors: ['#247BFF'], //  outline color
-                                                width: 2
-                                            },
-                                            markers: {
-                                                size: 4,
-                                                colors: ['#247BFF'], // marker color
-                                                strokeColors: '#fff',
-                                                strokeWidth: 2
-                                            },
-                                            responsive: [{
-                                                breakpoint: 500,
-                                                options: {
-                                                    chart: { height: 300 },
-                                                    legend: { position: 'bottom' }
-                                                }
-                                            }]
-                                        };
-
-                                        var chart = new ApexCharts(document.querySelector('#RadarChart'), options);
-                                        chart.render();
-                                    }">
-                                </div>
-                            </div>
-                        </div>
-
-
-                        <div class="col-span-1 h-full bg-white rounded-2xl flex flex-col gap-4">
-                            <h1 class="text-xl font-semibold">Lesson Progress Over Time</h1>
-                            <div id="PerformanceLinechart" class="w-full" wire:ignore x-data="{}"
-                                x-init="() => {
-                                    var options = {
-                                        series: [{
-                                                name: 'Series 1',
-                                                data: [31, 40, 28, 51, 42, 109, 100],
-                                            },
-                                            {
-                                                name: 'Series 2',
-                                                data: [11, 32, 45, 32, 34, 52, 41],
-                                            },
-                                        ],
-                                        chart: {
-                                            type: 'area',
-                                            height: 350,
-                                            toolbar: { show: false },
-                                        },
-                                        dataLabels: { enabled: false },
-                                        stroke: { curve: 'smooth' },
-                                        xaxis: {
-                                            type: 'datetime',
-                                            categories: [
-                                                '2018-09-19T00:00:00.000Z',
-                                                '2018-09-19T01:30:00.000Z',
-                                                '2018-09-19T02:30:00.000Z',
-                                                '2018-09-19T03:30:00.000Z',
-                                                '2018-09-19T04:30:00.000Z',
-                                                '2018-09-19T05:30:00.000Z',
-                                                '2018-09-19T06:30:00.000Z',
-                                            ],
-                                        },
-                                        tooltip: {
-                                            x: { format: 'dd/MM/yy HH:mm' },
-                                        },
-                                    };
-
-                                    var chart = new ApexCharts(document.querySelector('#PerformanceLinechart'), options);
-                                    chart.render();
-                                }">
-                            </div>
-                        </div>
-
-                    </div> --}}
-                    </div>
-
-
-
-
-
+                    @endif
                 </div>
                 <!-- End of Third form -->
         </section>
