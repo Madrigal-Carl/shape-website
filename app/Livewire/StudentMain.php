@@ -2,9 +2,7 @@
 
 namespace App\Livewire;
 
-use App\Models\Student;
 use Livewire\Component;
-use App\Models\Enrollment;
 use App\Models\SchoolYear;
 use Livewire\WithPagination;
 use Livewire\WithoutUrlPagination;
@@ -40,6 +38,11 @@ class StudentMain extends Component
     public function openAddOldStudentModal()
     {
         $this->dispatch('openModal')->to('student-add-old-modal');
+    }
+
+    public function openClassRecordModal()
+    {
+        $this->dispatch('openModal')->to('class-record-modal');
     }
 
     public function openEditStudentModal($id)
