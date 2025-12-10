@@ -34,8 +34,8 @@ class ClassRecordModal extends Component
                 'selectedDisability' => 'required',
                 'grade_level_id' => 'required',
             ], [
-                'selectedDisability.required' => 'Name is required.',
-                'grade_level_id.required' => 'Name is required.',
+                'selectedDisability.required' => 'Disability is required.',
+                'grade_level_id.required' => 'Grade level is required.',
             ]);
         } catch (ValidationException $e) {
             $message = $e->validator->errors()->first();
