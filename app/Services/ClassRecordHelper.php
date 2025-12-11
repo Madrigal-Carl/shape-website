@@ -2,8 +2,9 @@
 
 namespace App\Services;
 
-use App\Models\Instructor;
 use App\Models\Student;
+use App\Models\GradeLevel;
+use App\Models\Instructor;
 use App\Models\SchoolYear;
 use App\Models\Specialization;
 use PhpOffice\PhpWord\TemplateProcessor;
@@ -12,6 +13,10 @@ class ClassRecordHelper
 {
     public function generateClassRecord($instructorId, $disabilityId, $gradeLevelId)
     {
+
+        // --- Find grade level ---
+        $gradeLevel = GradeLevel::findOrFail($gradeLevelId);
+
         // --- Find specialization ---
         $spec = Specialization::findOrFail($disabilityId);
 
@@ -35,6 +40,7 @@ class ClassRecordHelper
 
         // --- Static fields ---
         $template->setValue('school_year', $latestSY->name);
+        $template->setValue('grade_level', ucwords($gradeLevel->name));
         $template->setValue('disability_type', ucwords($spec->name));
         $template->setValue('instructor', $this->getInstructorName($instructorId));
 
